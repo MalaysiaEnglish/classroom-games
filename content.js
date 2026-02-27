@@ -264,7 +264,7 @@ window.CUSTOM_CONTENT = {
   { word: "GEOMETRY", topic: "Intermediate" },
   { word: "STATISTICS", topic: "Intermediate" },
   { word: "ASTRONOMY", topic: "Intermediate" },
-[
+
   { word: "PHOTOSYNTHESIS", topic: "Advanced" },
   { word: "THERMODYNAMICS", topic: "Advanced" },
   { word: "HYPOTHESIS", topic: "Advanced" },
