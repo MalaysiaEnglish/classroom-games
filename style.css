@@ -81,6 +81,10 @@ button:active { transform: translateY(0); filter: brightness(0.95); }
 #newGame    { background: #0f766e; border-color: var(--accent); }
 #rollAll    { background: var(--safe); border-color: #4ade80; color: #000; }
 
+/* ── Global select/option dark fix ───────────────────────── */
+select        { background: #1a2a38; color: white; }
+select option { background: #1a2a38; color: white; }
+
 .controls input,
 .controls select {
   padding: 7px 12px;

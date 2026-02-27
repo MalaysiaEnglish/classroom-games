@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Noughts & Crosses</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../content.js" onerror="console.log('No content.js')"></script>
+  <style>
+    /* ── Setup ───────────────────────────────────────────── */
+    .nc-setup        { display:flex; flex-direction:column; align-items:center; gap:20px; max-width:560px; margin:0 auto; }
+    .picker-label    { font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:7px; }
+    .mode-cards      { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; width:100%; }
+    .mode-card {
+      flex:1; min-width:200px; max-width:240px;
+      border:2px solid var(--glass-border); border-radius:14px;
+      padding:18px; background:var(--glass); cursor:pointer;
+      transition:all 0.2s; text-align:center;
+    }
+    .mode-card:hover   { background:var(--glass-hi); }
+    .mode-card.active  { border-color:var(--accent); background:rgba(0,201,167,0.12); }
+    .mode-card .mc-icon{ font-size:2.4rem; margin-bottom:6px; }
+    .mode-card h3      { font-size:1rem; font-weight:800; margin-bottom:4px; }
+    .mode-card p       { font-size:0.78rem; color:var(--text-dim); line-height:1.5; }
+
+    /* Team name inputs */
+    .team-inputs { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; width:100%; }
+    .team-input-group { display:flex; flex-direction:column; gap:6px; flex:1; min-width:160px; max-width:220px; }
+    .team-input-group label { font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; }
+    .team-symbol { font-size:1.6rem; text-align:center; margin-bottom:2px; }
+
+    /* Question source toggle */
+    .source-tabs { display:flex; gap:6px; }
+    .source-tab {
+      flex:1; padding:8px 14px; border-radius:8px;
+      border:1px solid var(--glass-border); background:var(--glass);
+      color:var(--text-dim); font-weight:700; font-size:0.85rem;
+      cursor:pointer; text-align:center; transition:all 0.2s;
+    }
+    .source-tab.active { background:var(--glass-hi); color:white; border-color:var(--accent); }
+
+    /* Content.js filter row */
+    .filter-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .filter-row select { padding:8px 12px; border-radius:8px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.08); color:white; font-size:0.88rem; flex:1; }
+    .filter-row label  { font-size:0.8rem; color:var(--text-dim); white-space:nowrap; }
+
+    /* Manual question entry */
+    .q-list { display:flex; flex-direction:column; gap:6px; max-height:200px; overflow-y:auto; margin:8px 0; }
+    .q-item { display:flex; align-items:center; gap:8px; background:var(--glass); border:1px solid var(--glass-border); border-radius:8px; padding:8px 12px; font-size:0.88rem; }
+    .q-item .q-clue  { flex:1; font-weight:700; }
+    .q-item .q-ans   { color:var(--text-dim); font-size:0.78rem; }
+    .q-item .btn-del { background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:1.1rem; padding:0 4px; }
+    .q-item .btn-del:hover { color:#ef4444; }
+    .add-q-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .add-q-row input { flex:1; min-width:120px; padding:8px 10px; border-radius:8px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.08); color:white; font-size:0.88rem; }
+
+    /* ── Game ────────────────────────────────────────────── */
+    .nc-game         { display:none; flex-direction:column; align-items:center; gap:14px; }
+    .nc-game.active  { display:flex; }
+
+    /* Status bar */
+    .nc-status {
+      font-size:clamp(1rem,2.5vw,1.3rem); font-weight:800;
+      padding:10px 24px; border-radius:12px;
+      background:var(--glass-hi); border:1px solid var(--glass-border);
+      text-align:center; letter-spacing:0.03em; transition:color 0.3s;
+    }
+
+    /* Score strip */
+    .nc-scores { display:flex; gap:12px; justify-content:center; width:100%; }
+    .nc-score-card {
+      flex:1; max-width:180px; text-align:center;
+      background:var(--glass); border:2px solid var(--glass-border);
+      border-radius:12px; padding:10px 14px; transition:all 0.3s;
+    }
+    .nc-score-card.active-turn { border-color:var(--accent); background:var(--glass-hi); }
+    .nc-score-card.winner      { border-color:var(--accent2); background:rgba(247,183,49,0.12); }
+    .nc-score-card .card-sym   { font-size:2rem; line-height:1.2; }
+    .nc-score-card .card-name  { font-weight:800; font-size:0.88rem; margin-top:2px; }
+    .nc-score-card .card-wins  { font-size:1.1rem; font-weight:900; color:var(--accent); }
+    .nc-score-card .card-wlabel{ font-size:0.65rem; color:var(--text-dim); }
+
+    /* The board */
+    .nc-board {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:8px; width:100%; max-width:480px;
+    }
+    .nc-cell {
+      aspect-ratio:1; border-radius:16px; cursor:pointer;
+      background:var(--glass); border:2px solid var(--glass-border);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      transition:all 0.2s; position:relative; overflow:hidden;
+      padding:8px;
+    }
+    .nc-cell:hover:not(.taken) { background:var(--glass-hi); border-color:var(--accent); transform:scale(1.03); }
+    .nc-cell.taken    { cursor:default; }
+    .nc-cell.x-cell   { background:rgba(239,68,68,0.18);  border-color:#ef4444; }
+    .nc-cell.o-cell   { background:rgba(0,201,167,0.18);  border-color:var(--accent); }
+    .nc-cell.win-cell { animation:winPulse 0.6s ease infinite alternate; }
+    @keyframes winPulse {
+      from { filter:brightness(1); }
+      to   { filter:brightness(1.5) drop-shadow(0 0 12px currentColor); }
+    }
+
+    /* Symbol stamped on cell */
+    .cell-sym {
+      font-size:clamp(1.8rem,8vw,3.5rem); font-weight:900; line-height:1;
+      animation:stampIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes stampIn {
+      from { transform:scale(0) rotate(-15deg); opacity:0; }
+      to   { transform:scale(1) rotate(0deg); opacity:1; }
+    }
+
+    /* Keyword clue on cell */
+    .cell-clue {
+      font-size:clamp(0.65rem,2.2vw,1rem); font-weight:800;
+      text-align:center; line-height:1.3; color:white;
+      word-break:break-word; padding:2px;
+    }
+    .cell-num {
+      font-size:clamp(0.55rem,1.5vw,0.72rem); color:var(--accent);
+      font-weight:700; margin-bottom:2px;
+    }
+
+    /* Question popup */
+    .nc-qpanel {
+      width:100%; max-width:480px;
+      background:var(--glass-hi); border:2px solid var(--accent);
+      border-radius:16px; padding:18px 20px; text-align:center;
+      animation:slideUp 0.3s ease both;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .qp-label { font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:6px; }
+    .qp-clue  { font-size:clamp(1.2rem,4vw,2rem); font-weight:900; margin-bottom:4px; }
+    .qp-hint  { font-size:0.82rem; color:var(--text-dim); margin-bottom:14px; }
+    .qp-btns  { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    .qp-correct { padding:10px 28px; border-radius:10px; border:none; background:#22c55e; color:white; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.2s; }
+    .qp-correct:hover { background:#16a34a; transform:scale(1.04); }
+    .qp-wrong   { padding:10px 28px; border-radius:10px; border:none; background:rgba(239,68,68,0.25); border:1px solid #ef4444; color:#ef4444; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.2s; }
+    .qp-wrong:hover { background:rgba(239,68,68,0.4); }
+    .qp-cancel  { padding:10px 18px; border-radius:10px; border:1px solid var(--glass-border); background:var(--glass); color:var(--text-dim); font-weight:700; font-size:0.88rem; cursor:pointer; }
+
+    /* Round controls */
+    .nc-round-ctrl { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+
+    /* Win overlay */
+    .nc-win-overlay {
+      position:fixed; inset:0; z-index:500;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      background:rgba(0,0,0,0.75); animation:fadeIn 0.4s ease both;
+    }
+    .win-box {
+      background:var(--glass-hi); border:2px solid var(--accent2);
+      border-radius:20px; padding:32px 40px; text-align:center;
+      animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn {
+      from { transform:scale(0.5); opacity:0; }
+      to   { transform:scale(1); opacity:1; }
+    }
+    .win-box .w-emoji { font-size:4rem; }
+    .win-box h2 { font-size:clamp(1.6rem,5vw,2.8rem); font-weight:900; color:var(--accent2); margin:8px 0; }
+    .win-box p  { color:var(--text-dim); margin-bottom:18px; }
+      select, select option { background: #1a2a38 !important; color: white !important; }
+  </style>
+</head>
+
+<body class="hangman-page">
+  <h1>⭕ Noughts &amp; Crosses</h1>
+
+  <div class="controls">
+    <button id="newGameBtn">New Game</button>
+    <button onclick="document.documentElement.requestFullscreen?.()">Fullscreen</button>
+    <button onclick="window.location.href='../index.html'">Home</button>
+  </div>
+
+  <div class="game-wrapper">
+
+    <!-- ══ SETUP ══════════════════════════════════════════════ -->
+    <div id="setupScreen" class="nc-setup">
+
+      <!-- Mode selector -->
+      <div style="width:100%;">
+        <div class="picker-label" style="text-align:center;">Choose Mode</div>
+        <div class="mode-cards">
+          <div class="mode-card active" id="modeSimple" onclick="setMode('simple')">
+            <div class="mc-icon">⭕</div>
+            <h3>Simple</h3>
+            <p>Classic noughts &amp; crosses. Teams click a square to claim it.</p>
+          </div>
+          <div class="mode-card" id="modeQuestion" onclick="setMode('question')">
+            <div class="mc-icon">❓</div>
+            <h3>Questions</h3>
+            <p>Each square has a clue. Answer correctly to claim it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team names -->
+      <div style="width:100%;">
+        <div class="picker-label" style="text-align:center;">Team Names</div>
+        <div class="team-inputs">
+          <div class="team-input-group">
+            <div class="team-symbol" style="color:#ef4444;">✕</div>
+            <label style="color:#ef4444;">Team X</label>
+            <input type="text" id="nameX" value="Team X" style="padding:9px 12px;border-radius:8px;border:1px solid rgba(239,68,68,0.5);background:rgba(239,68,68,0.08);color:white;font-size:0.95rem;text-align:center;">
+          </div>
+          <div class="team-input-group">
+            <div class="team-symbol" style="color:var(--accent);">〇</div>
+            <label style="color:var(--accent);">Team O</label>
+            <input type="text" id="nameO" value="Team O" style="padding:9px 12px;border-radius:8px;border:1px solid rgba(0,201,167,0.5);background:rgba(0,201,167,0.08);color:white;font-size:0.95rem;text-align:center;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Question setup (hidden in simple mode) -->
+      <div id="questionSetup" style="width:100%; display:none;">
+        <div class="picker-label" style="text-align:center;">Questions</div>
+        <div class="source-tabs" style="margin-bottom:12px;">
+          <div class="source-tab active" id="srcContent" onclick="setSource('content')">From content.js</div>
+          <div class="source-tab" id="srcManual" onclick="setSource('manual')">Type my own</div>
+        </div>
+
+        <!-- Content.js source -->
+        <div id="contentSrc">
+          <div class="filter-row" style="margin-bottom:8px;">
+            <label>Topic:</label>
+            <select id="qTopic" onchange="previewContentQs()">
+              <option value="">All topics</option>
+            </select>
+          </div>
+          <div id="contentPreview" style="font-size:0.82rem; color:var(--text-dim); padding:8px 0;">
+            Loading…
+          </div>
+        </div>
+
+        <!-- Manual source -->
+        <div id="manualSrc" style="display:none;">
+          <div class="q-list" id="qList"></div>
+          <div class="add-q-row">
+            <input type="text" id="newClue" placeholder="Clue / keyword (shown on square)">
+            <input type="text" id="newAns"  placeholder="Answer (optional, for teacher ref)">
+            <button onclick="addQuestion()" style="padding:9px 16px;background:var(--accent);color:#000;border:none;border-radius:8px;font-weight:800;cursor:pointer;white-space:nowrap;">+ Add</button>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-dim);margin-top:6px;">Need exactly 9 questions for a full board — or fewer and they'll be repeated/shuffled.</div>
+        </div>
+      </div>
+
+      <button id="startBtn" style="font-size:1.1rem;padding:14px 48px;background:var(--accent);color:#000;border:none;border-radius:12px;font-weight:900;cursor:pointer;letter-spacing:0.05em;">
+        ▶ START GAME
+      </button>
+    </div>
+
+    <!-- ══ GAME ════════════════════════════════════════════════ -->
+    <div id="gameScreen" class="nc-game">
+
+      <div class="nc-status" id="statusBar">Ready</div>
+
+      <div class="nc-scores">
+        <div class="nc-score-card active-turn" id="cardX">
+          <div class="card-sym" style="color:#ef4444;">✕</div>
+          <div class="card-name" id="nameDisplayX">Team X</div>
+          <div class="card-wins" id="winsX">0</div>
+          <div class="card-wlabel">wins</div>
+        </div>
+        <div class="nc-score-card" id="cardO">
+          <div class="card-sym" style="color:var(--accent);">〇</div>
+          <div class="card-name" id="nameDisplayO">Team O</div>
+          <div class="card-wins" id="winsO">0</div>
+          <div class="card-wlabel">wins</div>
+        </div>
+      </div>
+
+      <!-- Question panel (shown when a square is clicked in Q mode) -->
+      <div id="qPanel" class="nc-qpanel" style="display:none;">
+        <div class="qp-label">Question</div>
+        <div class="qp-clue" id="qPanelClue">—</div>
+        <div class="qp-hint" id="qPanelHint"></div>
+        <div class="qp-btns">
+          <button class="qp-correct" onclick="answerCorrect()">✓ Correct</button>
+          <button class="qp-wrong"   onclick="answerWrong()">✗ Wrong</button>
+          <button class="qp-cancel"  onclick="cancelQ()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="nc-board" id="board"></div>
+
+      <div class="nc-round-ctrl">
+        <button onclick="newRound()" style="padding:9px 22px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);color:white;font-weight:700;cursor:pointer;">🔄 New Round</button>
+        <button onclick="showSetup()" style="padding:9px 22px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-dim);font-weight:700;cursor:pointer;">⚙ Setup</button>
+      </div>
+    </div>
+
+  </div><!-- game-wrapper -->
+
+  <!-- Win overlay -->
+  <div id="winOverlay" class="nc-win-overlay" style="display:none;">
+    <div class="win-box">
+      <div class="w-emoji" id="winEmoji">🎉</div>
+      <h2 id="winMsg">Team X Wins!</h2>
+      <p id="winSub">Round over</p>
+      <button onclick="newRound()" style="padding:11px 32px;background:var(--accent);color:#000;border:none;border-radius:10px;font-weight:900;cursor:pointer;font-size:1rem;margin-right:8px;">Next Round</button>
+      <button onclick="showSetup()" style="padding:11px 24px;background:var(--glass);border:1px solid var(--glass-border);color:white;border-radius:10px;font-weight:700;cursor:pointer;font-size:1rem;">New Game</button>
+    </div>
+  </div>
+
+  <script>
+    // ── State ──────────────────────────────────────────────
+    let mode = 'simple';          // 'simple' | 'question'
+    let qSource = 'content';      // 'content' | 'manual'
+    let currentPlayer = 'X';      // 'X' | 'O'
+    let board = Array(9).fill(''); // '' | 'X' | 'O'
+    let questions = [];            // [{clue, ans}] — 9 items for the board
+    let manualQs = [];             // teacher-typed questions
+    let pendingCell = -1;          // cell index awaiting answer
+    let winsX = 0, winsO = 0;
+    let gameOver = false;
+
+    const SYMBOLS = { X: '✕', O: '〇' };
+    const COLORS  = { X: '#ef4444', O: 'var(--accent)' };
+
+    // ── Setup UI ───────────────────────────────────────────
+    function setMode(m) {
+      mode = m;
+      document.getElementById('modeSimple').classList.toggle('active',   m==='simple');
+      document.getElementById('modeQuestion').classList.toggle('active', m==='question');
+      document.getElementById('questionSetup').style.display = m==='question' ? 'block' : 'none';
+    }
+
+    function setSource(s) {
+      qSource = s;
+      document.getElementById('srcContent').classList.toggle('active', s==='content');
+      document.getElementById('srcManual').classList.toggle('active',  s==='manual');
+      document.getElementById('contentSrc').style.display = s==='content' ? 'block' : 'none';
+      document.getElementById('manualSrc').style.display  = s==='manual'  ? 'block' : 'none';
+    }
+
+    // ── Load content.js topics ─────────────────────────────
+    function loadTopics() {
+      const sel = document.getElementById('qTopic');
+      sel.innerHTML = '<option value="">All topics</option>';
+      if (!window.CUSTOM_CONTENT?.words?.length && !window.CUSTOM_CONTENT?.sentences?.length) {
+        document.getElementById('contentPreview').textContent = 'No content.js found — use "Type my own" instead.';
+        return;
+      }
+      // Combine words and sentences as possible clues
+      const allItems = [
+        ...(window.CUSTOM_CONTENT.words     || []).map(w => ({clue: w.word,  ans: '', topic: w.topic})),
+        ...(window.CUSTOM_CONTENT.sentences || []).map(s => ({clue: s.text,  ans: s.correct ? '✓ Correct' : '✗ Wrong', topic: s.topic})),
+      ];
+      const topics = [...new Set(allItems.map(i => i.topic).filter(Boolean))].sort();
+      topics.forEach(t => {
+        const opt = document.createElement('option'); opt.value = t; opt.textContent = t; sel.appendChild(opt);
+      });
+      previewContentQs();
+    }
+
+    function previewContentQs() {
+      const topic = document.getElementById('qTopic').value;
+      const allItems = [
+        ...(window.CUSTOM_CONTENT?.words     || []).map(w => ({clue: w.word, ans:'', topic:w.topic})),
+        ...(window.CUSTOM_CONTENT?.sentences || []).map(s => ({clue: s.text, ans: s.correct?'✓ Correct':'✗ Wrong', topic:s.topic})),
+      ];
+      const filtered = allItems.filter(i => !topic || i.topic === topic);
+      document.getElementById('contentPreview').textContent =
+        filtered.length
+          ? `${filtered.length} item${filtered.length!==1?'s':''} available — 9 will be selected randomly for the board.`
+          : 'No items match this filter.';
+    }
+
+    // ── Manual questions ───────────────────────────────────
+    function addQuestion() {
+      const clue = document.getElementById('newClue').value.trim();
+      const ans  = document.getElementById('newAns').value.trim();
+      if (!clue) return;
+      manualQs.push({clue, ans});
+      document.getElementById('newClue').value = '';
+      document.getElementById('newAns').value  = '';
+      renderManualQs();
+    }
+
+    function removeQ(i) { manualQs.splice(i,1); renderManualQs(); }
+
+    function renderManualQs() {
+      document.getElementById('qList').innerHTML = manualQs.map((q,i) => `
+        <div class="q-item">
+          <span class="q-clue">${q.clue}</span>
+          <span class="q-ans">${q.ans}</span>
+          <button class="btn-del" onclick="removeQ(${i})">×</button>
+        </div>`).join('');
+    }
+
+    // ── Build 9 questions for board ────────────────────────
+    function buildBoardQuestions() {
+      let pool = [];
+      if (qSource === 'manual') {
+        pool = [...manualQs];
+      } else {
+        const topic = document.getElementById('qTopic').value;
+        pool = [
+          ...(window.CUSTOM_CONTENT?.words     || []).map(w => ({clue:w.word, ans:'', topic:w.topic})),
+          ...(window.CUSTOM_CONTENT?.sentences || []).map(s => ({clue:s.text, ans:s.correct?'✓ Correct':'✗ Wrong', topic:s.topic})),
+        ].filter(i => !topic || i.topic === topic);
+      }
+      if (!pool.length) {
+        // Fallback placeholder
+        pool = Array(9).fill(null).map((_,i) => ({clue:`Question ${i+1}`, ans:''}));
+      }
+      // Shuffle pool, then tile to 9
+      pool = shuffle([...pool]);
+      const result = [];
+      for (let i = 0; i < 9; i++) result.push(pool[i % pool.length]);
+      return shuffle(result);
+    }
+
+    function shuffle(arr) {
+      for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+      return arr;
+    }
+
+    // ── Start / reset ──────────────────────────────────────
+    document.getElementById('startBtn').onclick = () => {
+      if (mode === 'question' && qSource === 'manual' && manualQs.length === 0) {
+        alert('Please add at least one question, or switch to content.js source.');
+        return;
+      }
+      winsX = 0; winsO = 0;
+      document.getElementById('nameDisplayX').textContent = document.getElementById('nameX').value || 'Team X';
+      document.getElementById('nameDisplayO').textContent = document.getElementById('nameO').value || 'Team O';
+      document.getElementById('winsX').textContent = '0';
+      document.getElementById('winsO').textContent = '0';
+      document.getElementById('setupScreen').style.display = 'none';
+      document.getElementById('gameScreen').classList.add('active');
+      newRound();
+    };
+    document.getElementById('newGameBtn').onclick = showSetup;
+
+    function showSetup() {
+      document.getElementById('winOverlay').style.display = 'none';
+      document.getElementById('setupScreen').style.display = 'flex';
+      document.getElementById('gameScreen').classList.remove('active');
+    }
+
+    function newRound() {
+      board = Array(9).fill('');
+      currentPlayer = 'X';
+      pendingCell = -1;
+      gameOver = false;
+      document.getElementById('winOverlay').style.display = 'none';
+      document.getElementById('qPanel').style.display = 'none';
+      if (mode === 'question') questions = buildBoardQuestions();
+      renderBoard();
+      updateStatus();
+      updateScoreCards();
+    }
+
+    // ── Render board ───────────────────────────────────────
+    function renderBoard() {
+      const el = document.getElementById('board');
+      el.innerHTML = '';
+      board.forEach((val, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'nc-cell';
+        cell.id = `cell-${i}`;
+
+        if (val) {
+          cell.classList.add('taken', val==='X'?'x-cell':'o-cell');
+          cell.innerHTML = `<div class="cell-sym" style="color:${COLORS[val]}">${SYMBOLS[val]}</div>`;
+        } else if (mode === 'question') {
+          const q = questions[i];
+          const displayClue = q.clue.length > 40 ? q.clue.slice(0,38)+'…' : q.clue;
+          cell.innerHTML = `
+            <div class="cell-num">${i+1}</div>
+            <div class="cell-clue">${displayClue}</div>
+          `;
+          cell.onclick = () => openQuestion(i);
+        } else {
+          cell.innerHTML = `<div style="font-size:2rem;opacity:0.15;">${i+1}</div>`;
+          cell.onclick = () => claimCell(i);
+        }
+        el.appendChild(cell);
+      });
+    }
+
+    // ── Simple mode — claim cell directly ─────────────────
+    function claimCell(i) {
+      if (gameOver || board[i]) return;
+      board[i] = currentPlayer;
+      playStamp();
+      renderBoard();
+      const result = checkWin();
+      if (!result) { switchPlayer(); updateStatus(); }
+    }
+
+    // ── Question mode ──────────────────────────────────────
+    function openQuestion(i) {
+      if (gameOver || board[i] || pendingCell !== -1) return;
+      pendingCell = i;
+      const q = questions[i];
+      document.getElementById('qPanelClue').textContent = q.clue;
+      document.getElementById('qPanelHint').textContent = q.ans ? `Answer: ${q.ans}` : '';
+      document.getElementById('qPanel').style.display = 'block';
+      // Highlight the selected cell
+      document.querySelectorAll('.nc-cell').forEach(c => c.style.outline='none');
+      const cellEl = document.getElementById(`cell-${i}`);
+      if (cellEl) cellEl.style.outline = `3px solid ${COLORS[currentPlayer]}`;
+    }
+
+    function answerCorrect() {
+      if (pendingCell === -1) return;
+      board[pendingCell] = currentPlayer;
+      pendingCell = -1;
+      document.getElementById('qPanel').style.display = 'none';
+      playStamp();
+      renderBoard();
+      const result = checkWin();
+      if (!result) { switchPlayer(); updateStatus(); }
+    }
+
+    function answerWrong() {
+      pendingCell = -1;
+      document.getElementById('qPanel').style.display = 'none';
+      document.querySelectorAll('.nc-cell').forEach(c => c.style.outline='none');
+      playWrong();
+      switchPlayer();
+      updateStatus();
+    }
+
+    function cancelQ() {
+      pendingCell = -1;
+      document.getElementById('qPanel').style.display = 'none';
+      document.querySelectorAll('.nc-cell').forEach(c => c.style.outline='none');
+    }
+
+    // ── Win detection ──────────────────────────────────────
+    const WIN_LINES = [
+      [0,1,2],[3,4,5],[6,7,8],  // rows
+      [0,3,6],[1,4,7],[2,5,8],  // cols
+      [0,4,8],[2,4,6],           // diagonals
+    ];
+
+    function checkWin() {
+      for (const [a,b,c] of WIN_LINES) {
+        if (board[a] && board[a]===board[b] && board[b]===board[c]) {
+          const winner = board[a];
+          highlightWin([a,b,c]);
+          if (winner==='X') winsX++; else winsO++;
+          updateScoreCards(winner);
+          setTimeout(()=>showWin(winner), 600);
+          gameOver = true;
+          return true;
+        }
+      }
+      // Draw
+      if (board.every(v=>v)) {
+        setTimeout(()=>showDraw(), 400);
+        gameOver = true;
+        return true;
+      }
+      return false;
+    }
+
+    function highlightWin(cells) {
+      cells.forEach(i => {
+        const el = document.getElementById(`cell-${i}`);
+        if (el) el.classList.add('win-cell');
+      });
+    }
+
+    function showWin(p) {
+      const name = p==='X'
+        ? document.getElementById('nameX').value || 'Team X'
+        : document.getElementById('nameO').value || 'Team O';
+      document.getElementById('winEmoji').textContent = p==='X' ? '✕' : '〇';
+      document.getElementById('winEmoji').style.color = COLORS[p];
+      document.getElementById('winMsg').textContent = `${name} Wins!`;
+      document.getElementById('winSub').textContent =
+        `Score: ${document.getElementById('nameX').value||'Team X'} ${winsX} – ${winsO} ${document.getElementById('nameO').value||'Team O'}`;
+      document.getElementById('winOverlay').style.display = 'flex';
+      playWin();
+    }
+
+    function showDraw() {
+      document.getElementById('winEmoji').textContent = '🤝';
+      document.getElementById('winEmoji').style.color = 'white';
+      document.getElementById('winMsg').textContent = "It's a Draw!";
+      document.getElementById('winSub').textContent =
+        `Score: ${document.getElementById('nameX').value||'Team X'} ${winsX} – ${winsO} ${document.getElementById('nameO').value||'Team O'}`;
+      document.getElementById('winOverlay').style.display = 'flex';
+      playDraw();
+    }
+
+    // ── Status & score ─────────────────────────────────────
+    function switchPlayer() { currentPlayer = currentPlayer==='X' ? 'O' : 'X'; }
+
+    function updateStatus(msg) {
+      const name = currentPlayer==='X'
+        ? document.getElementById('nameX').value || 'Team X'
+        : document.getElementById('nameO').value || 'Team O';
+      const el = document.getElementById('statusBar');
+      el.textContent = msg || `${SYMBOLS[currentPlayer]} ${name}'s turn`;
+      el.style.color = COLORS[currentPlayer];
+    }
+
+    function updateScoreCards(justWon) {
+      ['X','O'].forEach(p => {
+        const card = document.getElementById(`card${p}`);
+        card.classList.toggle('active-turn', p===currentPlayer && !gameOver);
+        card.classList.toggle('winner', p===justWon);
+        card.style.borderColor = p===currentPlayer && !gameOver ? COLORS[p] : '';
+      });
+      document.getElementById('winsX').textContent = winsX;
+      document.getElementById('winsO').textContent = winsO;
+    }
+
+    // ── Audio ──────────────────────────────────────────────
+    let actx = null;
+    function ac() { if (!actx) actx = new (window.AudioContext||window.webkitAudioContext)(); return actx; }
+
+    function playStamp() {
+      const ctx=ac(), t=ctx.currentTime;
+      const o=ctx.createOscillator(); o.type='sine';
+      o.frequency.setValueAtTime(currentPlayer==='X'?220:330, t);
+      o.frequency.exponentialRampToValueAtTime(currentPlayer==='X'?110:180, t+0.12);
+      const g=ctx.createGain(); g.gain.setValueAtTime(0.4,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.18);
+    }
+
+    function playWrong() {
+      const ctx=ac(), t=ctx.currentTime;
+      [330,280].forEach((f,i)=>{
+        const st=t+i*0.12;
+        const o=ctx.createOscillator(); o.type='sawtooth'; o.frequency.value=f;
+        const g=ctx.createGain(); g.gain.setValueAtTime(0.25,st); g.gain.exponentialRampToValueAtTime(0.001,st+0.15);
+        o.connect(g); g.connect(ctx.destination); o.start(st); o.stop(st+0.15);
+      });
+    }
+
+    function playWin() {
+      const ctx=ac();
+      [523,659,784,1047].forEach((f,i)=>{
+        const t=ctx.currentTime+i*0.14;
+        const o=ctx.createOscillator(); o.type='triangle'; o.frequency.value=f;
+        const g=ctx.createGain(); g.gain.setValueAtTime(0.35,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+        o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.4);
+      });
+    }
+
+    function playDraw() {
+      const ctx=ac(), t=ctx.currentTime;
+      const o=ctx.createOscillator(); o.type='triangle';
+      o.frequency.setValueAtTime(440,t); o.frequency.setValueAtTime(330,t+0.2);
+      const g=ctx.createGain(); g.gain.setValueAtTime(0.3,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.5);
+    }
+
+    // ── Init ───────────────────────────────────────────────
+    loadTopics();
+    document.getElementById('newClue').addEventListener('keydown', e=>{ if(e.key==='Enter') addQuestion(); });
+  </script>
+</body>
+</html>

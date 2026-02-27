@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battleships</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .bs-setup        { display:flex; flex-direction:column; align-items:center; gap:18px; }
+    .bs-game         { display:none; flex-direction:column; align-items:center; gap:12px; width:100%; }
+    .bs-game.active  { display:flex; }
+    .picker-row      { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .picker-label    { font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); text-align:center; margin-bottom:6px; }
+    .bs-status {
+      font-size:clamp(1rem,2.5vw,1.35rem); font-weight:800; text-align:center;
+      padding:10px 20px; border-radius:12px;
+      background:var(--glass-hi); border:1px solid var(--glass-border);
+      min-width:260px; letter-spacing:0.03em;
+    }
+    .bs-tabs { display:flex; gap:5px; flex-wrap:wrap; justify-content:center; }
+    .bs-tab {
+      padding:7px 16px; border-radius:10px 10px 0 0;
+      border:1px solid var(--glass-border); border-bottom:none;
+      background:var(--glass); color:var(--text-dim);
+      font-weight:700; cursor:pointer; font-size:0.88rem; transition:all 0.2s;
+    }
+    .bs-tab.active  { background:var(--glass-hi); color:white; border-color:var(--accent); }
+    .bs-tab.done    { opacity:0.4; }
+    .bs-tab .tab-fleet { font-size:0.68rem; display:block; line-height:1.3; }
+    .bs-panel {
+      background:var(--glass); border:1px solid var(--glass-border);
+      border-radius:0 14px 14px 14px; padding:14px;
+      width:100%; max-width:600px;
+    }
+    .bs-grid-wrap { overflow-x:auto; }
+    .bs-grid { display:grid; gap:2px; min-width:240px; margin:0 auto; }
+    .bs-label {
+      display:flex; align-items:center; justify-content:center;
+      font-size:clamp(0.55rem,1.4vw,0.75rem); font-weight:700; color:var(--text-dim);
+    }
+    .bs-cell {
+      border-radius:3px; cursor:pointer; position:relative; overflow:hidden;
+      transition:transform 0.1s, filter 0.15s;
+      border:1px solid rgba(255,255,255,0.1); aspect-ratio:1;
+    }
+    .bs-cell.sea {
+      background:linear-gradient(160deg,#0a3d6b 0%,#0e5a9e 50%,#1a7bc4 100%);
+    }
+    .bs-cell.sea::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,0.12) 50%,transparent 70%);
+      animation:seaShimmer 2.5s ease-in-out infinite;
+      animation-delay:calc(var(--d,0) * 80ms);
+    }
+    @keyframes seaShimmer {
+      0%,100% { opacity:0; transform:translateX(-100%); }
+      50%      { opacity:1; transform:translateX(100%); }
+    }
+    .bs-cell.sea:hover:not(.fired) { transform:scale(1.1); filter:brightness(1.4); z-index:2; }
+    .bs-cell.fired { cursor:default; }
+    .bs-cell.miss {
+      background:radial-gradient(circle at center,#0d2a46 30%,#071929 100%) !important;
+    }
+    .bs-cell.hit {
+      background:radial-gradient(circle at 40% 40%,#fbbf24 0%,#f97316 30%,#dc2626 65%,#7f1d1d 100%) !important;
+      animation:flicker 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes flicker {
+      from { filter:brightness(1) drop-shadow(0 0 4px #f97316); }
+      to   { filter:brightness(1.35) drop-shadow(0 0 12px #fbbf24); }
+    }
+    .bs-cell.sunk {
+      background:radial-gradient(circle at center,#451a03 0%,#1c0a02 60%,#0a0502 100%) !important;
+      animation:none !important;
+    }
+    .bs-cell.sunk::after {
+      content:''; position:absolute; inset:0;
+      background:repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(255,255,255,0.04) 3px,rgba(255,255,255,0.04) 6px);
+    }
+    .cell-icon {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-size:clamp(0.65rem,2.2vw,1.25rem);
+      animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; z-index:1;
+    }
+    @keyframes popIn {
+      from { transform:scale(0) rotate(-30deg); opacity:0; }
+      to   { transform:scale(1) rotate(0deg); opacity:1; }
+    }
+    #bangOverlay {
+      position:fixed; inset:0; z-index:1000;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      pointer-events:none; opacity:0;
+    }
+    #bangOverlay.show { animation:bangPop 1.5s ease forwards; }
+    @keyframes bangPop {
+      0%   { opacity:0; transform:scale(0.3); }
+      18%  { opacity:1; transform:scale(1.2); }
+      70%  { opacity:1; transform:scale(1); }
+      100% { opacity:0; transform:scale(0.85); }
+    }
+    #bangOverlay.show.hit-bang::before {
+      content:''; position:fixed; inset:0;
+      background:radial-gradient(circle,rgba(255,120,0,0.35) 0%,transparent 70%);
+      animation:shockwave 0.5s ease-out both;
+    }
+    @keyframes shockwave {
+      from { transform:scale(0.1); opacity:1; }
+      to   { transform:scale(3); opacity:0; }
+    }
+    .bang-emoji { font-size:clamp(5rem,20vw,12rem); line-height:1; filter:drop-shadow(0 0 30px rgba(255,120,0,0.9)); }
+    .bang-text  { font-size:clamp(1.6rem,5vw,3.2rem); font-weight:900; letter-spacing:0.12em; margin-top:8px; text-shadow:0 0 24px currentColor; }
+    .bang-sub   { font-size:clamp(1rem,3vw,1.6rem); font-weight:700; opacity:0.85; margin-top:4px; }
+    #bombEl {
+      position:fixed; left:50%; top:-80px; transform:translateX(-50%);
+      font-size:clamp(2.5rem,8vw,5rem); z-index:999; pointer-events:none; opacity:0;
+    }
+    #bombEl.drop { animation:bombDrop 0.55s cubic-bezier(0.4,0,1,1) forwards; }
+    @keyframes bombDrop {
+      0%   { opacity:1; top:-60px; transform:translateX(-50%) rotate(0deg); }
+      100% { opacity:1; top:45vh;  transform:translateX(-50%) rotate(15deg); }
+    }
+    #sunkBanner {
+      position:fixed; top:80px; left:50%;
+      transform:translateX(-50%) translateY(-140px);
+      background:linear-gradient(135deg,#92400e,#f59e0b);
+      color:white; font-weight:900; font-size:clamp(1rem,3vw,1.7rem);
+      padding:14px 32px; border-radius:50px;
+      box-shadow:0 8px 32px rgba(245,158,11,0.7);
+      z-index:998; white-space:nowrap;
+      transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #sunkBanner.show { transform:translateX(-50%) translateY(0); }
+    .bs-fleet { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
+    .bs-ship-pip { font-size:1.4rem; transition:all 0.4s; filter:drop-shadow(0 0 6px rgba(0,201,167,0.5)); }
+    .bs-ship-pip.sunk { opacity:0.2; filter:grayscale(1); transform:scale(0.8); }
+    .bs-scores { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; width:100%; }
+    .bs-score-card {
+      flex:1; min-width:80px; max-width:140px;
+      background:var(--glass); border:1px solid var(--glass-border);
+      border-radius:10px; padding:7px 10px; text-align:center; transition:all 0.3s;
+    }
+    .bs-score-card.current { background:var(--glass-hi); }
+    .bs-score-card.winner  { background:rgba(247,183,49,0.15); border-color:var(--accent2); }
+    .sc-name  { font-weight:800; font-size:0.82rem; }
+    .sc-hits  { font-size:1.3rem; font-weight:900; color:var(--accent); }
+    .sc-label { font-size:0.65rem; color:var(--text-dim); }
+    .bs-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .bs-miss-btn {
+      padding:9px 22px; border-radius:10px;
+      background:rgba(96,165,250,0.15); border:1px solid #60a5fa;
+      color:#60a5fa; font-weight:800; font-size:0.9rem; cursor:pointer;
+      transition:all 0.2s; letter-spacing:0.05em;
+    }
+    .bs-miss-btn:hover { background:rgba(96,165,250,0.3); }
+    .bs-win { text-align:center; padding:30px 20px; animation:fadeIn 0.6s ease both; }
+    .bs-win .win-emoji { font-size:clamp(3rem,10vw,6rem); }
+    .bs-win h2 { font-size:clamp(1.8rem,5vw,3rem); font-weight:900; color:var(--accent2); margin:10px 0; }
+    .bs-win p  { color:var(--text-dim); }
+  </style>
+</head>
+
+<body class="hangman-page">
+  <h1>🚢 Battleships</h1>
+  <div class="controls">
+    <button id="newGameBtn">New Game</button>
+    <button onclick="document.documentElement.requestFullscreen?.()">Fullscreen</button>
+    <button onclick="window.location.href='../index.html'">Home</button>
+  </div>
+
+  <div class="game-wrapper">
+
+    <!-- SETUP -->
+    <div id="setupScreen" class="bs-setup">
+      <div style="text-align:center;">
+        <div style="font-size:4.5rem;margin-bottom:6px;">🚢</div>
+        <p style="color:var(--text-dim);font-size:0.92rem;max-width:480px;line-height:1.6;">
+          Each team gets their own hidden fleet. Click a square to fire a shot.<br>
+          <strong style="color:white;">Hit</strong> — fire again! &nbsp;
+          <strong style="color:#60a5fa;">Miss</strong> — next team's turn.
+        </p>
+      </div>
+      <div>
+        <div class="picker-label">Number of Teams</div>
+        <div class="picker-row" id="teamCountPicker">
+          <button class="controls-btn hm-selected" data-n="2">2</button>
+          <button class="controls-btn" data-n="3">3</button>
+          <button class="controls-btn" data-n="4">4</button>
+          <button class="controls-btn" data-n="5">5</button>
+        </div>
+      </div>
+      <div>
+        <div class="picker-label">Grid Size</div>
+        <div class="picker-row" id="gridSizePicker">
+          <button class="controls-btn" data-g="6">6×6<small style="display:block;font-size:0.65rem;opacity:0.7;">Quick</small></button>
+          <button class="controls-btn" data-g="8">8×8<small style="display:block;font-size:0.65rem;opacity:0.7;">Medium</small></button>
+          <button class="controls-btn hm-selected" data-g="10">10×10<small style="display:block;font-size:0.65rem;opacity:0.7;">Standard</small></button>
+        </div>
+      </div>
+      <button id="startBtn" style="font-size:1.1rem;padding:14px 48px;background:var(--accent);color:#000;border:none;border-radius:12px;font-weight:900;cursor:pointer;letter-spacing:0.05em;margin-top:6px;">
+        ⚓ SET SAIL
+      </button>
+    </div>
+
+    <!-- GAME -->
+    <div id="gameScreen" class="bs-game">
+      <div class="bs-status" id="statusBar">Ready</div>
+      <div class="bs-scores" id="scoreStrip"></div>
+      <div class="bs-actions">
+        <button class="bs-miss-btn" onclick="teacherMiss()">💧 Teacher Says Miss</button>
+      </div>
+      <div class="bs-tabs" id="teamTabs"></div>
+      <div class="bs-panel">
+        <div class="bs-grid-wrap">
+          <div class="bs-grid" id="mainGrid"></div>
+        </div>
+        <div class="bs-fleet" id="fleetStatus"></div>
+      </div>
+    </div>
+
+    <!-- WIN -->
+    <div id="winScreen" style="display:none;">
+      <div class="bs-win">
+        <div class="win-emoji">🏆</div>
+        <h2 id="winMsg">Team 1 Wins!</h2>
+        <p id="winDetail"></p>
+        <button onclick="showSetup()" style="margin-top:20px;padding:12px 36px;background:var(--accent);color:#000;border:none;border-radius:12px;font-weight:900;cursor:pointer;font-size:1rem;">Play Again</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- OVERLAYS -->
+  <div id="bombEl">💣</div>
+  <div id="bangOverlay">
+    <div class="bang-emoji" id="bangEmoji">💥</div>
+    <div class="bang-text"  id="bangText">HIT!</div>
+    <div class="bang-sub"   id="bangSub"></div>
+  </div>
+  <div id="sunkBanner">Ship Sunk!</div>
+
+  <script>
+    const TEAM_COLORS = ['#00c9a7','#f7b731','#e74c3c','#a29bfe','#fd79a8'];
+    const TEAM_NAMES  = ['Team 1','Team 2','Team 3','Team 4','Team 5'];
+    const COL_LABELS  = 'ABCDEFGHIJ'.split('');
+    const FLEETS = {
+      6:  [['Cruiser',3,'🚢'],['Destroyer',2,'⛵'],['Patrol',2,'🛥️']],
+      8:  [['Battleship',4,'⛴️'],['Cruiser',3,'🚢'],['Destroyer',2,'⛵'],['Patrol',2,'🛥️']],
+      10: [['Carrier',5,'🛳️'],['Battleship',4,'⛴️'],['Cruiser',3,'🚢'],['Submarine',3,'🤿'],['Destroyer',2,'⛵']],
+    };
+
+    // ── Audio ──────────────────────────────────────────────
+    let actx = null;
+    function ac() {
+      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      return actx;
+    }
+
+    function playWhistle(cb) {
+      const ctx = ac(), t = ctx.currentTime;
+      const o = ctx.createOscillator(); o.type = 'sawtooth';
+      o.frequency.setValueAtTime(1600, t);
+      o.frequency.exponentialRampToValueAtTime(160, t+0.5);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.22, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t+0.52);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t+0.55);
+      setTimeout(cb, 520);
+    }
+
+    function playExplosion() {
+      const ctx = ac(), t = ctx.currentTime;
+      const buf = ctx.createBuffer(1, ctx.sampleRate*0.8, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.18));
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const filt = ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=900;
+      const g = ctx.createGain(); g.gain.setValueAtTime(1.5,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.8);
+      src.connect(filt); filt.connect(g); g.connect(ctx.destination); src.start(t);
+      const boom = ctx.createOscillator(); boom.type='sine';
+      boom.frequency.setValueAtTime(90,t); boom.frequency.exponentialRampToValueAtTime(22,t+0.6);
+      const bg = ctx.createGain(); bg.gain.setValueAtTime(1.0,t); bg.gain.exponentialRampToValueAtTime(0.001,t+0.6);
+      boom.connect(bg); bg.connect(ctx.destination); boom.start(t); boom.stop(t+0.6);
+    }
+
+    function playSplash() {
+      const ctx = ac(), t = ctx.currentTime;
+      const buf = ctx.createBuffer(1, ctx.sampleRate*0.5, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.06))*(1-i/(d.length*0.5));
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const g = ctx.createGain(); g.gain.setValueAtTime(0.7,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+      const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1200;
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5000;
+      src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(ctx.destination); src.start(t);
+      const o = ctx.createOscillator(); o.type='sine';
+      o.frequency.setValueAtTime(280,t); o.frequency.exponentialRampToValueAtTime(80,t+0.3);
+      const og = ctx.createGain(); og.gain.setValueAtTime(0.3,t); og.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+      o.connect(og); og.connect(ctx.destination); o.start(t); o.stop(t+0.3);
+    }
+
+    function playSunk() {
+      const ctx = ac(), t = ctx.currentTime;
+      [220,175,140,100].forEach((freq,i) => {
+        const st = t+i*0.22;
+        const o = ctx.createOscillator(); o.type='sawtooth';
+        o.frequency.setValueAtTime(freq,st); o.frequency.exponentialRampToValueAtTime(freq*0.55,st+0.3);
+        const g = ctx.createGain(); g.gain.setValueAtTime(0.4,st); g.gain.exponentialRampToValueAtTime(0.001,st+0.35);
+        o.connect(g); g.connect(ctx.destination); o.start(st); o.stop(st+0.35);
+      });
+    }
+
+    function playWin() {
+      const ctx = ac();
+      [523,659,784,1047,1319].forEach((f,i) => {
+        const t = ctx.currentTime+i*0.16;
+        const o = ctx.createOscillator(); o.type='triangle'; o.frequency.value=f;
+        const g = ctx.createGain(); g.gain.setValueAtTime(0.4,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.45);
+        o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.45);
+      });
+    }
+
+    // ── State ──────────────────────────────────────────────
+    let numTeams=2, gridSize=10, currentTeam=0;
+    let teams=[], viewingTeam=0, busy=false;
+    let selTeams=2, selGrid=10;
+
+    document.querySelectorAll('#teamCountPicker button').forEach(b => {
+      b.onclick = () => {
+        document.querySelectorAll('#teamCountPicker button').forEach(x=>x.classList.remove('hm-selected'));
+        b.classList.add('hm-selected'); selTeams=+b.dataset.n;
+      };
+    });
+    document.querySelectorAll('#gridSizePicker button').forEach(b => {
+      b.onclick = () => {
+        document.querySelectorAll('#gridSizePicker button').forEach(x=>x.classList.remove('hm-selected'));
+        b.classList.add('hm-selected'); selGrid=+b.dataset.g;
+      };
+    });
+    document.getElementById('startBtn').onclick = startGame;
+    document.getElementById('newGameBtn').onclick = showSetup;
+
+    function showSetup() {
+      document.getElementById('setupScreen').style.display = 'flex';
+      document.getElementById('gameScreen').classList.remove('active');
+      document.getElementById('winScreen').style.display = 'none';
+    }
+
+    function placeShips(size) {
+      const fleet = FLEETS[size];
+      const grid = Array(size).fill(null).map(()=>Array(size).fill(0));
+      const ships = [];
+      for (const [name,len,emoji] of fleet) {
+        let ok=false, attempts=0;
+        while (!ok && attempts++<600) {
+          const horiz = Math.random()>0.5;
+          const r = Math.floor(Math.random()*(horiz?size:size-len+1));
+          const c = Math.floor(Math.random()*(horiz?size-len+1:size));
+          let fits=true; const cells=[];
+          for (let i=0;i<len;i++) {
+            const rr=horiz?r:r+i, cc=horiz?c+i:c;
+            if (grid[rr]?.[cc]) { fits=false; break; }
+            cells.push([rr,cc]);
+          }
+          if (fits) {
+            cells.forEach(([rr,cc])=>grid[rr][cc]=1);
+            ships.push({name,len,emoji,cells,hits:0,sunk:false});
+            ok=true;
+          }
+        }
+      }
+      return {grid,ships};
+    }
+
+    function startGame() {
+      numTeams=selTeams; gridSize=selGrid;
+      currentTeam=0; viewingTeam=0;
+      teams = Array.from({length:numTeams},(_,i)=>{
+        const {grid,ships} = placeShips(gridSize);
+        return {name:TEAM_NAMES[i],color:TEAM_COLORS[i],grid,ships,fired:new Set(),hits:0,done:false};
+      });
+      document.getElementById('setupScreen').style.display='none';
+      document.getElementById('winScreen').style.display='none';
+      document.getElementById('gameScreen').classList.add('active');
+      buildTabs(); buildScoreStrip(); showTeam(0); updateStatus();
+    }
+
+    function buildTabs() {
+      const tabs = document.getElementById('teamTabs');
+      tabs.innerHTML='';
+      teams.forEach((t,i)=>{
+        const b=document.createElement('button');
+        b.className='bs-tab'+(i===0?' active':'');
+        b.id=`tab-${i}`;
+        b.onclick=()=>showTeam(i);
+        b.innerHTML=`${t.name}<span class="tab-fleet">${fleetPips(i)}</span>`;
+        tabs.appendChild(b);
+      });
+    }
+
+    function fleetPips(i) { return teams[i].ships.map(s=>s.sunk?'💀':s.emoji).join(''); }
+
+    function updateTabs() {
+      teams.forEach((t,i)=>{
+        const el=document.getElementById(`tab-${i}`);
+        if (!el) return;
+        el.className='bs-tab'+(i===viewingTeam?' active':'')+(t.done?' done':'');
+        el.innerHTML=`${t.name}<span class="tab-fleet">${fleetPips(i)}</span>`;
+      });
+    }
+
+    function buildScoreStrip() {
+      const strip=document.getElementById('scoreStrip');
+      strip.innerHTML='';
+      teams.forEach((t,i)=>{
+        const c=document.createElement('div');
+        c.className='bs-score-card'+(i===0?' current':'');
+        c.id=`score-${i}`;
+        c.innerHTML=`<div class="sc-name" style="color:${t.color}">${t.name}</div>
+          <div class="sc-hits" id="hits-${i}">0</div>
+          <div class="sc-label">hits</div>`;
+        strip.appendChild(c);
+      });
+    }
+
+    function updateScoreStrip() {
+      teams.forEach((t,i)=>{
+        const c=document.getElementById(`score-${i}`);
+        if (!c) return;
+        c.className='bs-score-card'+(i===currentTeam?' current':'')+(t.done?' winner':'');
+        c.style.borderColor=i===currentTeam?t.color:'';
+        document.getElementById(`hits-${i}`).textContent=t.hits;
+      });
+    }
+
+    function showTeam(idx) {
+      viewingTeam=idx; updateTabs(); renderGrid(idx); renderFleet(idx);
+    }
+
+    function renderGrid(ti) {
+      const team=teams[ti], G=gridSize;
+      const grid=document.getElementById('mainGrid');
+      grid.style.gridTemplateColumns=`24px repeat(${G},1fr)`;
+      grid.style.gridTemplateRows=`24px repeat(${G},1fr)`;
+      const avail = Math.min(window.innerWidth-60, 560);
+      const cellSize = Math.min(48, Math.floor((avail-28)/(G)));
+      grid.style.maxWidth=(28+G*(cellSize+2))+'px';
+      grid.innerHTML='';
+      grid.appendChild(document.createElement('div'));
+      COL_LABELS.slice(0,G).forEach(l=>{
+        const el=document.createElement('div'); el.className='bs-label'; el.textContent=l; grid.appendChild(el);
+      });
+      for (let r=0;r<G;r++) {
+        const rl=document.createElement('div'); rl.className='bs-label'; rl.textContent=r+1; grid.appendChild(rl);
+        for (let c=0;c<G;c++) {
+          const cell=document.createElement('div');
+          cell.className='bs-cell sea';
+          cell.style.setProperty('--d',r*G+c);
+          const key=`${r},${c}`, state=team.grid[r][c];
+          if (team.fired.has(key)) {
+            cell.classList.add('fired');
+            if (state===2) { cell.classList.add('miss'); cell.innerHTML='<div class="cell-icon">💧</div>'; }
+            else if (state===3) { cell.classList.add('hit'); cell.innerHTML='<div class="cell-icon">🔥</div>'; }
+            else if (state===4) { cell.classList.add('sunk'); cell.innerHTML='<div class="cell-icon">💀</div>'; }
+          }
+          if (ti===currentTeam && !team.fired.has(key) && !team.done) {
+            cell.onclick=()=>fire(ti,r,c);
+          }
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    function renderFleet(ti) {
+      document.getElementById('fleetStatus').innerHTML =
+        teams[ti].ships.map(s=>`<span class="bs-ship-pip${s.sunk?' sunk':''}" title="${s.name} (${s.len})">${s.emoji}</span>`).join('');
+    }
+
+    function fire(ti,r,c) {
+      if (busy||ti!==currentTeam) return;
+      busy=true;
+      const team=teams[ti], key=`${r},${c}`;
+      team.fired.add(key);
+      const isShip=team.grid[r][c]===1;
+      dropBomb(()=>{
+        if (isShip) {
+          team.grid[r][c]=3; team.hits++;
+          let sunkShip=null;
+          for (const ship of team.ships) {
+            if (!ship.sunk && ship.cells.every(([sr,sc])=>team.fired.has(`${sr},${sc}`))) {
+              ship.sunk=true; sunkShip=ship;
+              ship.cells.forEach(([sr,sc])=>{team.grid[sr][sc]=4;});
+            }
+          }
+          showTeam(ti); updateScoreStrip();
+          playExplosion();
+          if (sunkShip) {
+            playSunk();
+            showBang('💥','SHIP SUNK!',`${sunkShip.emoji} ${sunkShip.name}!`,'#f59e0b',true);
+            showSunkBanner(`${sunkShip.emoji} ${sunkShip.name} Sunk!`);
+          } else {
+            showBang('💥','HIT!','Fire again! 🎯','#ef4444',true);
+          }
+          if (team.ships.every(s=>s.sunk)) {
+            team.done=true;
+            setTimeout(()=>{ checkWin(); busy=false; },1700);
+          } else {
+            setTimeout(()=>{ updateStatus(`${team.name} — HIT! Fire again! 🎯`); updateTabs(); busy=false; },1600);
+          }
+        } else {
+          team.grid[r][c]=2; showTeam(ti);
+          playSplash();
+          showBang('💧','MISS!','Next team fires…','#60a5fa',false);
+          setTimeout(()=>{ nextTeam(); busy=false; },1500);
+        }
+      });
+    }
+
+    function teacherMiss() {
+      if (busy) return;
+      playSplash();
+      showBang('💧','MISS!','Teacher decision','#60a5fa',false);
+      setTimeout(()=>nextTeam(),1500);
+    }
+
+    function dropBomb(cb) {
+      playWhistle(()=>{});
+      const el=document.getElementById('bombEl');
+      el.classList.remove('drop'); void el.offsetWidth; el.classList.add('drop');
+      setTimeout(()=>{ el.classList.remove('drop'); cb(); },540);
+    }
+
+    function nextTeam() {
+      let next=(currentTeam+1)%numTeams, loops=0;
+      while (teams[next].done && loops++<numTeams) next=(next+1)%numTeams;
+      currentTeam=next; viewingTeam=next;
+      updateTabs(); updateScoreStrip(); showTeam(next); updateStatus();
+    }
+
+    function updateStatus(msg) {
+      const el=document.getElementById('statusBar');
+      el.textContent=msg||`${teams[currentTeam].name} — pick a square to fire!`;
+      el.style.color=teams[currentTeam].color;
+    }
+
+    function checkWin() {
+      const winner=teams.find(t=>t.done);
+      if (!winner) return;
+      playWin(); updateTabs();
+      const others=[...teams].filter(t=>t!==winner).sort((a,b)=>b.hits-a.hits);
+      document.getElementById('winMsg').textContent=`${winner.name} Wins! 🎉`;
+      document.getElementById('winDetail').textContent=
+        `Fleet destroyed with ${winner.hits} hits! `+others.map(t=>`${t.name}: ${t.hits} hits`).join(' · ');
+      document.getElementById('gameScreen').classList.remove('active');
+      document.getElementById('winScreen').style.display='block';
+    }
+
+    function showBang(emoji,text,sub,color,isHit) {
+      const el=document.getElementById('bangOverlay');
+      document.getElementById('bangEmoji').textContent=emoji;
+      document.getElementById('bangText').textContent=text;
+      document.getElementById('bangText').style.color=color;
+      document.getElementById('bangSub').textContent=sub;
+      el.className=isHit?'show hit-bang':'show';
+      setTimeout(()=>el.className='',1500);
+    }
+
+    function showSunkBanner(text) {
+      const el=document.getElementById('sunkBanner');
+      el.textContent=text; el.classList.add('show');
+      setTimeout(()=>el.classList.remove('show'),2500);
+    }
+
+    window.addEventListener('resize',()=>{
+      if (document.getElementById('gameScreen').classList.contains('active')) renderGrid(viewingTeam);
+    });
+  </script>
+</body>
+</html>
