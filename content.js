@@ -9,7 +9,7 @@
    topic:  the grammar point or theme  (e.g. "passive voice")
 
    
-   In Grammar Auction, filter by topic AND/OR year before starting.
+   In Grammar Auction, filter by topic AND/OR year before starting..
    In Hangman, your custom words appear as extra word lists.
    ================================================================ */
 
