@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE ROAD NOT TAKEN — Class Adventure</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --cream: #fdf6e8;
+  --parchment: #f5e8c8;
+  --brown-dark: #2c1a0e;
+  --brown-mid: #5c3d1e;
+  --brown-light: #8b5e3c;
+  --forest: #2d5a27;
+  --forest-light: #4a8c42;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --red: #8b1a1a;
+  --blue: #1a4a6b;
+  --shadow: rgba(44,26,14,0.15);
+  --ink: #1a0e05;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  font-family: 'Lora', Georgia, serif;
+  color: var(--ink);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgba(180,140,80,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(45,90,39,0.08) 0%, transparent 50%);
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--brown-dark);
+  color: var(--cream);
+  text-align: center;
+  padding: 22px 20px 18px;
+  border-bottom: 4px solid var(--gold);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.3);
+}
+header .pre {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--gold-light);
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2.6rem);
+  color: var(--cream);
+  line-height: 1.1;
+}
+header h1 span {
+  color: var(--gold-light);
+  font-style: italic;
+}
+.header-meta {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.timer-display {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(212,160,23,0.4);
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 0.9rem;
+  color: var(--gold-light);
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1px;
+}
+.scene-count {
+  font-size: 0.78rem;
+  color: rgba(245,230,200,0.6);
+  font-style: italic;
+}
+
+/* ── MAIN WRAPPER ── */
+.wrapper {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ── PATH TRACKER ── */
+.path-tracker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+  align-items: center;
+  min-height: 28px;
+}
+.path-crumb {
+  background: var(--parchment);
+  border: 1px solid rgba(92,61,30,0.25);
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  color: var(--brown-light);
+  font-style: italic;
+}
+.path-arrow {
+  color: var(--brown-light);
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+/* ── SCENE CARD ── */
+.scene-card {
+  background: #fff;
+  border: 2px solid var(--parchment);
+  border-radius: 6px;
+  padding: 36px 42px;
+  box-shadow: 0 4px 24px var(--shadow), 0 1px 4px rgba(0,0,0,0.06);
+  animation: slideIn 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.scene-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--forest), var(--gold), var(--forest));
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.scene-emoji {
+  font-size: 3rem;
+  text-align: center;
+  display: block;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.scene-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--brown-dark);
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+.scene-text {
+  font-size: 1.22rem;
+  line-height: 1.85;
+  color: var(--ink);
+}
+.scene-text em { color: var(--forest); font-style: italic; }
+.scene-text strong { color: var(--brown-mid); font-weight: 600; }
+
+/* ── POEM QUOTE ── */
+.poem-quote {
+  border-left: 4px solid var(--gold);
+  padding: 12px 18px;
+  margin: 20px 0;
+  background: var(--parchment);
+  font-style: italic;
+  color: var(--brown-mid);
+  font-size: 1.1rem;
+  border-radius: 0 4px 4px 0;
+}
+.poem-quote cite {
+  display: block;
+  font-size: 0.82rem;
+  margin-top: 6px;
+  color: var(--brown-light);
+  font-style: normal;
+}
+
+/* ── FREEZE MOMENT ── */
+.freeze-box {
+  background: linear-gradient(135deg, #fff8e6, #fffbf0);
+  border: 2px solid var(--gold);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 22px 0;
+  position: relative;
+}
+.freeze-box::before {
+  content: '❄️ FREEZE MOMENT';
+  position: absolute;
+  top: -11px;
+  left: 16px;
+  background: var(--gold);
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 2px 10px;
+  border-radius: 3px;
+}
+.freeze-box p {
+  font-size: 1.1rem;
+  color: var(--brown-mid);
+  line-height: 1.7;
+}
+.freeze-box .discuss-qs {
+  margin-top: 12px;
+  list-style: none;
+}
+.freeze-box .discuss-qs li {
+  font-size: 1.05rem;
+  color: var(--brown-dark);
+  padding: 6px 0;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.5;
+}
+.freeze-box .discuss-qs li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: bold;
+}
+.freeze-continue {
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  padding: 9px 22px;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 14px;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  display: block;
+}
+.freeze-continue:hover { background: var(--gold-light); transform: scale(1.02); }
+
+/* ── PUZZLE BOX ── */
+.puzzle-box {
+  background: linear-gradient(135deg, #f0f7ee, #e8f5e4);
+  border: 2px solid var(--forest-light);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 22px 0;
+  position: relative;
+}
+.puzzle-box::before {
+  content: '🧩 PUZZLE — SOLVE IT FIRST!';
+  position: absolute;
+  top: -11px;
+  left: 16px;
+  background: var(--forest);
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 2px 10px;
+  border-radius: 3px;
+}
+.puzzle-question {
+  font-size: 1.15rem;
+  color: var(--brown-dark);
+  font-weight: 600;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.puzzle-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.puzzle-opt {
+  background: #fff;
+  border: 2px solid rgba(74,140,66,0.3);
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-family: 'Lora', serif;
+  font-size: 1.05rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  color: var(--ink);
+}
+.puzzle-opt:hover { border-color: var(--forest-light); background: #f0f7ee; }
+.puzzle-opt.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+.puzzle-opt.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+.puzzle-feedback {
+  font-size: 1rem;
+  margin-top: 8px;
+  font-style: italic;
+  min-height: 24px;
+  color: var(--forest);
+}
+
+/* ── CHOICES ── */
+.choices-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 28px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.choices-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--parchment);
+}
+.choices { display: flex; flex-direction: column; gap: 12px; }
+
+.choice-btn {
+  background: var(--cream);
+  border: 2px solid var(--parchment);
+  color: var(--ink);
+  padding: 16px 22px;
+  font-family: 'Lora', serif;
+  font-size: 1.12rem;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 5px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  line-height: 1.5;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.choice-btn:hover {
+  background: var(--parchment);
+  border-color: var(--forest-light);
+  transform: translateX(5px);
+  box-shadow: -4px 0 0 var(--forest-light), 0 3px 10px var(--shadow);
+}
+.choice-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+.choice-icon {
+  font-size: 1.3rem;
+  min-width: 28px;
+  padding-top: 1px;
+}
+.choice-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--forest);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* ── ENDING ── */
+.ending-banner {
+  text-align: center;
+  padding: 14px 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+.ending-good  { background: #d4edda; border: 2px solid #28a745; color: #155724; }
+.ending-weird { background: #fff3cd; border: 2px solid var(--gold); color: #856404; }
+.ending-bad   { background: #f8d7da; border: 2px solid #dc3545; color: #721c24; }
+
+.restart-btn {
+  background: var(--brown-dark);
+  color: var(--cream);
+  border: none;
+  padding: 14px 36px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  display: block;
+  margin: 20px auto 0;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  box-shadow: 0 3px 10px var(--shadow);
+}
+.restart-btn:hover { background: var(--brown-mid); transform: scale(1.03); }
+
+/* ── DIVIDER ── */
+hr.forest-divider {
+  border: none;
+  border-top: 2px solid var(--parchment);
+  margin: 24px 0;
+}
+
+/* ── DISCUSSION FOOTER ── */
+.discussion-card {
+  background: var(--brown-dark);
+  color: var(--cream);
+  border-radius: 6px;
+  padding: 32px 40px;
+  margin-top: 32px;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+.discussion-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--gold-light);
+  margin-bottom: 20px;
+  text-align: center;
+}
+.dq {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  display: flex;
+  gap: 14px;
+}
+.dq:last-child { border-bottom: none; }
+.dq-num {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold-light);
+  font-size: 1.2rem;
+  min-width: 28px;
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pre">✦ Based on the poem by Robert Frost (1916) ✦</div>
+  <h1>The Road Not Taken <span>— But We're Taking It Anyway</span></h1>
+  <div class="header-meta">
+    <div class="timer-display" id="timerDisplay">⏱ 00:00</div>
+    <div class="scene-count" id="sceneCount">Scenes visited: 0</div>
+    <div class="scene-count" id="endingCount">Endings found: 0 / 10</div>
+  </div>
+</header>
+
+<div class="wrapper">
+  <div class="path-tracker" id="pathTracker"></div>
+  <div id="game"></div>
+  <div class="discussion-card" id="discussionCard" style="display:none">
+    <h2>📖 Discussion Questions — Link Back to Frost</h2>
+    <div class="dq"><span class="dq-num">1</span><span>Frost says both paths <em>"had worn them really about the same."</em> Were the paths in our adventure truly different — or did they lead to similar lessons?</span></div>
+    <div class="dq"><span class="dq-num">2</span><span>The speaker says he <em>"shall be telling this with a sigh / Somewhere ages and ages hence."</em> Is the sigh happy, sad, or something more complicated? What kind of sigh did your adventure give you?</span></div>
+    <div class="dq"><span class="dq-num">3</span><span>The famous final line: <em>"And that has made all the difference."</em> Do you think it really did? Or is it a story the speaker is telling himself?</span></div>
+    <div class="dq"><span class="dq-num">4</span><span>Which character — Gerald, Kevin, Brenda, Margaret, the Wizard — best represents the idea of the <em>"road not taken"</em>? Why?</span></div>
+    <div class="dq"><span class="dq-num">5</span><span>Have you ever made a choice and then later convinced yourself it was the <em>right</em> one — even if you're not sure? That's exactly what Frost's poem might be about.</span></div>
+    <div class="dq"><span class="dq-num">6</span><span>The poem was written in 1916. Does the idea of standing at a fork and overthinking it feel modern? What would Frost have made of the phone in the forest?</span></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  TIMER & STATE
+// ═══════════════════════════════════════════════════════════════
+let timerStart = Date.now();
+let sceneVisited = 0;
+let endingsFound = new Set();
+const TOTAL_ENDINGS = 10;
+
+setInterval(() => {
+  const elapsed = Math.floor((Date.now() - timerStart) / 1000);
+  const m = String(Math.floor(elapsed / 60)).padStart(2,'0');
+  const s = String(elapsed % 60).padStart(2,'0');
+  document.getElementById('timerDisplay').textContent = `⏱ ${m}:${s}`;
+}, 1000);
+
+function updateMeta() {
+  sceneVisited++;
+  document.getElementById('sceneCount').textContent = `Scenes visited: ${sceneVisited}`;
+  document.getElementById('endingCount').textContent = `Endings found: ${endingsFound.size} / ${TOTAL_ENDINGS}`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  STORY DATA
+// ═══════════════════════════════════════════════════════════════
+const scenes = {
+
+// ────────────────────────────────────────────────────────────────
+// OPENING
+// ────────────────────────────────────────────────────────────────
+start: {
+  emoji: '🌳',
+  title: 'Two Roads Diverged…',
+  text: `You are standing in a wood. A <em>yellow</em> wood — well, more of a suspicious orangey-brown, and it smells faintly of old trainers and adventure.<br><br>
+Before you, the path splits into two. One road bends <strong>left</strong>, curling into deep shadow between ancient oaks. The other curves <strong>right</strong>, dappled with sunlight and the distant sound of something that is either birdsong or a very cheerful ringtone.<br><br>
+Behind you, a squirrel is sitting bolt upright, staring at you. It has been doing this for some time. It shows no signs of stopping.`,
+  quote: { text: 'Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveller, long I stood…', cite: '— Robert Frost, "The Road Not Taken" (1916)' },
+  freeze: {
+    prompt: 'Before we choose — let\'s think like Frost for a moment.',
+    questions: [
+      'What does it feel like to stand at a fork not knowing what\'s down each path?',
+      'Have you ever put off making a choice? What happened?',
+      'Why do you think Frost chose a fork in a WOOD rather than, say, a crossroads in a city?'
+    ]
+  },
+  choices: [
+    { icon:'⬅️', label:'GO LEFT', text:'Take the shadowy left path — it looks dramatic and mysterious', next:'leftPath' },
+    { icon:'➡️', label:'GO RIGHT', text:'Take the sunlit right path toward the mysterious noise', next:'rightPath' },
+    { icon:'🧍', label:'OVERTHINK', text:'Stand here and carefully analyse both paths for 20+ minutes', next:'overthink' },
+  ]
+},
+
+// ────────────────────────────────────────────────────────────────
+// LEFT BRANCH — THE GNOME WORLD
+// ────────────────────────────────────────────────────────────────
+leftPath: {
+  emoji: '🌑',
+  title: 'The Shadowy Path',
+  text: `The left path curves into deep shade. Spooky? Yes. Atmospheric? Absolutely. Does it smell of mystery and ancient magic?<br><br>
+<em>No. It smells of prawn cocktail crisps.</em><br><br>
+Following the smell, you stumble into a clearing where a gnome sits on a tree stump eating said crisps. He looks up. You look down. A very long silence follows.<br><br>
+<strong>"Oi,"</strong> he says. <strong>"You lost?"</strong>`,
+  puzzle: {
+    question: '🧩 The gnome looks you up and down and says: "Before I help anyone, they must answer me this: In Frost\'s poem, the speaker looks down both paths. What does he see at the end of them?" — What\'s the answer?',
+    options: [
+      { text: 'A village and a castle', correct: false, feedback: 'Nope! Think about what the path looks like up close…' },
+      { text: 'He cannot see the end — the path bends away into undergrowth', correct: true, feedback: '✅ Correct! "And having perhaps the better claim / Because it was grassy and wanted wear" — he can only see a little way, not the destination.' },
+      { text: 'A signpost reading "THIS WAY"', correct: false, feedback: 'Sadly no. Frost offers no such convenience.' },
+      { text: 'Both paths lead to the same town', correct: false, feedback: 'Not quite — though that IS what he suspects. The point is he can\'t actually tell.' },
+    ]
+  },
+  choices: [
+    { icon:'🙋', label:'ASK FOR HELP', text:'"Yes, completely lost. Who are you?"', next:'gnomeHelp' },
+    { icon:'🙅', label:'PLAY IT COOL', text:'"Absolutely not. I meant to end up exactly here."', next:'gnomeSuspicious' },
+    { icon:'🤌', label:'GRAB A CRISP', text:'Ignore the gnome. Grab a crisp. It\'s prawn cocktail.', next:'gnomeAngry' },
+  ]
+},
+
+gnomeHelp: {
+  emoji: '🗺️',
+  title: 'Gerald, Guardian of the East Clearing',
+  text: `The gnome introduces himself as <strong>Gerald</strong>. He pulls a crumpled map from inside his hat. It is drawn on the back of a pizza box.<br><br>
+<strong>"These woods,"</strong> he says, tapping his nose, <strong>"are enchanted. Every choice you make echoes forward. Like a stone dropped in a pond. Or a spelling mistake in a class WhatsApp group."</strong><br><br>
+He explains that somewhere in the forest, a dragon named <strong>Kevin</strong> has stolen his prize-winning recipe book: <em>Gnome Cuisine: 300 Recipes for the Modern Forest Dweller</em>, 4th edition.<br><br>
+<strong>"Kevin isn't evil,"</strong> says Gerald. <strong>"He's just extremely food-motivated. Like a labrador with scales and fire breath."</strong><br><br>
+Two paths lead from Gerald's clearing. One glows with orange light. The other hums with a sound like something enormous snoring.`,
+  freeze: {
+    prompt: 'A quick Frost parallel before you move on.',
+    questions: [
+      'Gerald says "every choice echoes forward." Does Frost\'s speaker believe the same thing?',
+      'Kevin took the recipe book for his OWN reasons. Do you ever judge people\'s choices without knowing why they made them?',
+      'If the woods are enchanted and every path means something — why does Frost NOT tell us where the paths lead?'
+    ]
+  },
+  choices: [
+    { icon:'🔥', label:'ORANGE GLOW', text:'Head toward the warm orange light — that must be Kevin', next:'dragonPath' },
+    { icon:'😴', label:'THE SNORING', text:'Investigate whatever is making that enormous snoring sound', next:'giantPath' },
+  ]
+},
+
+gnomeSuspicious: {
+  emoji:'🤨',
+  title:'Gerald Narrows His Eyes',
+  text:`Gerald stares at you. He eats another crisp without breaking eye contact. It takes a long time. He seems to have a lot of crisps.<br><br>
+<strong>"Right,"</strong> he says finally. <strong>"You 'meant' to end up in MY clearing. Uninvited. Touching nothing. Very convincing."</strong><br><br>
+He stands up. He is <em>surprisingly tall</em> for a gnome. <strong>"I am Gerald. These crisps are NOT for sharing."</strong><br><br>
+He pauses. <strong>"…Unless you do me a favour."</strong>`,
+  choices: [
+    { icon:'✅', label:'WHAT FAVOUR?', text:'"Fine. What do you need, Gerald?"', next:'gnomeHelp' },
+    { icon:'🏃', label:'LEG IT', text:'Run back to the fork in the road immediately', next:'backtofork' },
+  ]
+},
+
+gnomeAngry: {
+  emoji:'😡',
+  title:'Prawn Cocktail Consequences',
+  text:`You reach for a crisp. Gerald moves with supernatural speed and slaps your hand away.<br><br>
+<strong>"THOSE ARE MINE!"</strong><br><br>
+A nearby badger looks over from a distance. It shakes its head very slowly. It walks away. Even the badger is embarrassed for you.<br><br>
+Gerald stands. He is surprisingly tall. <strong>"You now have two options: leave, or help me with my quest. If you reach for another crisp, it becomes one option."</strong>`,
+  choices: [
+    { icon:'🙏', label:'APOLOGISE', text:'"I\'m deeply sorry Gerald. Tell me about the quest."', next:'gnomeHelp' },
+    { icon:'🏃', label:'SCARPER', text:'Sprint back to the fork as fast as possible', next:'backtofork' },
+  ]
+},
+
+// ────────────────────────────────────────────────────────────────
+// DRAGON PATH
+// ────────────────────────────────────────────────────────────────
+dragonPath: {
+  emoji:'🐉',
+  title:'Kevin the Dragon',
+  text:`Following the glow, you find <strong>Kevin</strong> — a medium-sized dragon lying on a pile of cookbooks. He has reading glasses on. He looks up, pulls them off quickly, and pretends to have been doing something else.<br><br>
+<em>"I wasn't reading those,"</em> he says unconvincingly. <em>"I was just… using them as a pillow."</em><br><br>
+He fidgets. <strong>"Okay FINE. Do you know this gnome has a five-star mushroom risotto recipe? I've been trying to cook it but I keep — "</strong><br><br>
+He gestures at a very scorched pan.<br><br>
+<strong>"— setting things on fire. Which, yes, I know. Ironic."</strong>`,
+  puzzle: {
+    question: '🧩 Kevin says: "Tell you what — I\'ll consider returning the book if you can answer me this. Frost wrote that one path was \'grassy and wanted wear.\' What does \'wanted wear\' mean?" Kevin taps his claw impatiently.',
+    options: [
+      { text: 'It was broken and needed repairing', correct: false, feedback: 'Not quite. Think about what "wear" means when applied to a path people walk on.' },
+      { text: 'It had not been walked on much — it was less used', correct: true, feedback: '✅ Exactly right! "Wanted wear" = it wanted / lacked the wearing-down that comes from many footsteps. So it appeared less travelled.' },
+      { text: 'It was fashionable and trendy', correct: false, feedback: 'Ha! Wrong century. "Wanted" here is old-fashioned for "lacked."' },
+      { text: 'It was overgrown with weeds', correct: false, feedback: 'Close — but not quite. The path was simply less used, not specifically weedy.' },
+    ]
+  },
+  choices: [
+    { icon:'🍳', label:'TEACH HIM', text:'Spend time teaching Kevin to cook with controlled flames', next:'kevinCook' },
+    { icon:'📋', label:'NEGOTIATE', text:'Suggest Kevin copies the recipe before returning the book', next:'kevinTrade' },
+    { icon:'🗣️', label:'JUST TALK', text:'"Kevin — why does cooking mean so much to you?"', next:'dragonTalk' },
+  ]
+},
+
+dragonTalk: {
+  emoji:'💬',
+  title:'Kevin Opens Up',
+  text:`You sit on a nearby boulder. Kevin blinks. No one has ever just… asked him.<br><br>
+<strong>"The truth?"</strong> he says quietly. <strong>"The other dragons think I'm weird. They breathe fire to DESTROY things. I want to use mine to… create things. Food. Warmth."</strong><br><br>
+He looks at his claws. <strong>"They took the road of pillaging and burning. I didn't. And I suppose that has made all the difference — just not the kind everyone expected."</strong><br><br>
+He hands you the recipe book without another word.`,
+  freeze: {
+    prompt: 'Kevin just accidentally quoted Frost. Let\'s sit with that.',
+    questions: [
+      '"I took a different road from everyone else, and it made all the difference." Does Frost\'s poem feel more like Kevin — or more like Gerald?',
+      'Is Kevin brave for being different, or just… unusual? Is there a difference?',
+      'Have you ever felt like the odd one out for liking something others found strange?'
+    ]
+  },
+  choices: [
+    { icon:'🤝', label:'RETURN BOOK', text:'Take the book back to Gerald and tell him what Kevin said', next:'kevinFriendEnding' },
+    { icon:'🍴', label:'HELP COOK', text:'Stay and help Kevin make the risotto anyway — he deserves it', next:'kevinCook' },
+  ]
+},
+
+kevinCook: {
+  emoji:'🍄',
+  title:'The Cooking Lesson',
+  text:`You spend an hour teaching Kevin that <em>"medium heat"</em> means thinking gentle thoughts. Not vengeful ones. Definitely not thoughts about the last knight who tried to slay him.<br><br>
+The mushroom risotto is magnificent.<br><br>
+Kevin cries a little. You politely pretend not to notice. He slides the recipe book across to you with a note tucked inside: <em>"Dear Gerald, please come to dinner. I'll cook. — Kevin 🐉"</em><br><br>
+Gerald reads the note. He sniffs loudly. <strong>"Well. A dragon who can do proper risotto is worth knowing, I suppose."</strong><br><br>
+He offers you the entire bag of crisps. You have earned them.`,
+  endingType:'good',
+  endingLabel:'🏆 GOOD ENDING: The Culinary Resolution',
+  endingId:'e_cook',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork and try a different path',next:'restart'}]
+},
+
+kevinTrade: {
+  emoji:'📝',
+  title:'The Great Recipe Treaty',
+  text:`Kevin agrees immediately. You help him copy the risotto recipe onto a piece of bark (Kevin has surprisingly neat handwriting for someone with claws — he's been practising).<br><br>
+The recipe book goes back to Gerald. He examines it for damage, finds none, and declares the mission <em>"acceptable."</em><br><br>
+He gives you one crisp. You take it. It's prawn cocktail.<br><br>
+Walking back through the woods later, you pass Kevin's cave. The smell of perfectly cooked risotto drifts out. You hear him humming.<br><br>
+<em>Two roads, two outcomes, everyone happy. Not bad.</em>`,
+  endingType:'good',
+  endingLabel:'🏆 GOOD ENDING: The Diplomat',
+  endingId:'e_trade',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork and explore another path',next:'restart'}]
+},
+
+kevinFriendEnding: {
+  emoji:'🤜🤛',
+  title:'The Road Kevin Took',
+  text:`You return the book to Gerald and tell him what Kevin said — about choosing a different path from the other dragons.<br><br>
+Gerald is quiet for a long moment. <strong>"Hm."</strong><br><br>
+Then: <strong>"He's right, you know. I chose gnome cooking over gnome warring. My whole family thought I was peculiar."</strong><br><br>
+He looks at the book in his hands. <strong>"Perhaps I should go and see Kevin."</strong><br><br>
+A week later, deep in the forest, Kevin and Gerald are running a Saturday evening supper club. The waiting list is three months long. The squirrel manages the bookings.<br><br>
+<em>Every road not taken makes space for a better one.</em>`,
+  endingType:'good',
+  endingLabel:'🏆 BEST ENDING: The Point of the Poem',
+  endingId:'e_friend',
+  quote:{ text:'"I shall be telling this with a sigh / Somewhere ages and ages hence"', cite:'— Frost (but in this case: a happy sigh)' },
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork and find more endings',next:'restart'}]
+},
+
+// ────────────────────────────────────────────────────────────────
+// GIANT PATH
+// ────────────────────────────────────────────────────────────────
+giantPath: {
+  emoji:'💤',
+  title:'The Sleeping Giant',
+  text:`The path leads to a hillside where a giant is asleep against a cliff. She's wearing dungarees and has a sign around her neck that reads: <em>"DO NOT WAKE. Grumpy before noon."</em><br><br>
+It is 11:58 AM.<br><br>
+Near her enormous left hand: a <strong>glowing golden key</strong>. Definitely important.<br><br>
+Near her right hand: a <strong>bag of Haribo</strong>. Almost certainly hers.<br><br>
+The snoring is genuinely impressive. Like a tuba playing a slow waltz.`,
+  freeze: {
+    prompt: 'You have two minutes of real time. Use them.',
+    questions: [
+      'If you had to describe this giant in three words — what are they, and why?',
+      'She\'s left a sign telling you NOT to wake her. Does that make the choice to wake her feel different? What\'s the difference between a rule and good advice?',
+      'What do you think the key opens? Take actual guesses — we\'ll come back to this.'
+    ]
+  },
+  choices: [
+    { icon:'🔑', label:'TAKE THE KEY', text:'Very, very quietly try to take the golden key', next:'takeKey' },
+    { icon:'⏰', label:'WAIT FOR NOON', text:'Wait two minutes until noon, then try talking to her', next:'giantAwake' },
+    { icon:'🍬', label:'TAKE THE HARIBO', text:'The key seems risky. But the Haribo is RIGHT THERE.', next:'takeHaribo' },
+    { icon:'🏃', label:'ABSOLUTELY NOT', text:'Nope. Walk quietly backwards. Go back to the fork.', next:'backtofork' },
+  ]
+},
+
+takeKey: {
+  emoji:'😬',
+  title:'Operation: Very Quiet Theft',
+  text:`Slowly. Carefully. Each step placed like you\'re defusing a bomb.<br><br>
+Your hand closes around the key. It is warm and it <em>hums</em>.<br><br>
+Then one enormous eye opens.<br><br>
+It is bloodshot. It is very awake. It is looking directly at you.<br><br>
+A long pause that feels like a geological era.<br><br>
+<strong>"Did you,"</strong> she says, slowly, <strong>"just nick my key?"</strong>`,
+  choices: [
+    { icon:'😅', label:'RETURN IT', text:'"I\'m so sorry, I thought — actually I have no excuse. Here." Hand it back.', next:'brendaForgives' },
+    { icon:'🤥', label:'DENY IT', text:'"What key? This key? This is MY key. I brought this key."', next:'brendaDenial' },
+    { icon:'🏃', label:'RUN', text:'Just run. Run immediately. No explanation.', next:'runEnding' },
+  ]
+},
+
+takeHaribo: {
+  emoji:'🍬',
+  title:'Priorities',
+  text:`You reach for the Haribo instead.<br><br>
+The rustling of the bag wakes the giant instantly.<br><br>
+She looks at the bag in your hand. She looks at you. You look at her. She looks at the bag again.<br><br>
+<strong>"…Cola bottles?"</strong> she says, more hopeful than angry.<br><br>
+<strong>"I'll allow it,"</strong> she adds. <strong>"But sit DOWN, I don\'t like people hovering."</strong><br><br>
+You sit. You share the Haribo. She introduces herself as <strong>Brenda</strong>. This is going surprisingly well.`,
+  choices: [
+    { icon:'💬', label:'CHAT WITH BRENDA', text:'"So Brenda — what\'s the deal with this forest?"', next:'brendaFriend' },
+    { icon:'🔑', label:'ASK ABOUT THE KEY', text:'"That\'s a very impressive golden key, Brenda. What does it open?"', next:'brendaKey' },
+  ]
+},
+
+giantAwake: {
+  emoji:'☀️',
+  title:'Good Morning, Brenda',
+  text:`At exactly noon, the giant stretches with a foghorn-like yawn and opens her eyes. She looks down. You look up.<br><br>
+<strong>"Oh!"</strong> she says, sounding genuinely delighted. <strong>"A visitor! I'm Brenda. People usually see the sign and leg it."</strong><br><br>
+She reaches for her Haribo. <strong>"Want one? I've got cola bottles. Obviously."</strong><br><br>
+You accept. You sit together. Brenda, it turns out, is extremely good company.`,
+  choices: [
+    { icon:'💬', label:'TALK', text:'"What IS this place, Brenda? And what\'s with the forest?"', next:'brendaFriend' },
+    { icon:'🔑', label:'ASK THE KEY', text:'"I have to ask about the glowing golden key…"', next:'brendaKey' },
+  ]
+},
+
+brendaForgives: {
+  emoji:'🤦',
+  title:'Awkward Recovery',
+  text:`Brenda takes the key back. She squints at you for some time.<br><br>
+<strong>"Your key looked just like my giant glowing golden key."</strong><br><br>
+A silence. <strong>"Right. Well."</strong> She pops a cola bottle. <strong>"I respect the commitment of the attempt. Sit down. Have a sweet. We say no more about it."</strong><br><br>
+You sit with Brenda. She is actually excellent company once the criminal incident is behind you. Eventually she points you toward a sunlit glade at the heart of the forest.<br><br>
+<em>Not the entrance you planned, but a good one nonetheless.</em>`,
+  endingType:'weird',
+  endingLabel:'✨ AWKWARD-BUT-FINE ENDING: Theft, Forgiven',
+  endingId:'e_forgive',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Try another path — there are more endings to find',next:'restart'}]
+},
+
+brendaDenial: {
+  emoji:'😂',
+  title:'The Least Convincing Lie',
+  text:`Brenda stares at you.<br><br>
+<strong>"That key,"</strong> she says, <strong>"is glowing. It is warm. It hums. It has the letter B engraved on it — for Brenda. That is MY key."</strong><br><br>
+You look at the key. The letter B is glowing particularly brightly, as if it too is unimpressed.<br><br>
+<strong>"I admire the audacity,"</strong> says Brenda. <strong>"That's actually my favourite quality in a person. Hand it over and I'll show you something worth seeing."</strong>`,
+  choices: [
+    { icon:'🔑', label:'HAND IT OVER', text:'Give it back and follow Brenda', next:'brendaKey' },
+  ]
+},
+
+brendaFriend: {
+  emoji:'🌄',
+  title:'The View from Brenda\'s Shoulder',
+  text:`Brenda lifts you onto her shoulder — carefully, she clarifies, she\'s not a monster — and you see the entire forest spread below like a living map.<br><br>
+Every path is visible. Every fork. Every choice you didn\'t take.<br><br>
+<strong>"Funny thing about this wood,"</strong> says Brenda. <strong>"Everyone's always fussing about which path. Most of them end up in the same glade eventually. Just with different stories about how they got there."</strong><br><br>
+She sets you down in the golden glade at the heart of the forest.<br><br>
+<em>You feel, for the first time all day, completely un-lost.</em>`,
+  endingType:'good',
+  endingLabel:'🏆 GOOD ENDING: The Bigger Picture',
+  endingId:'e_brenda',
+  quote:{ text:'"Oh, I kept the first for another day!\nYet knowing how way leads on to way,\nI doubted if I should ever come back."', cite:'— Frost (but Brenda knows you\'ll find your way)' },
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork and explore more paths',next:'restart'}]
+},
+
+brendaKey: {
+  emoji:'🔑',
+  title:'The Door at the Heart of the Forest',
+  text:`Brenda holds the key up. It catches the light and scatters gold across the trees.<br><br>
+<strong>"This opens a door at the heart of the forest. Most people are too scared to look for it. They stand at the fork, pick a path in a panic, and never go deep enough."</strong><br><br>
+She holds it out to you. <strong>"You waited. You were patient. You deserve it more than most."</strong><br><br>
+The path glows ahead. Not ominously — warmly. The door opens onto a meadow full of golden light and the smell of possibility.<br><br>
+And, faintly, of prawn cocktail crisps.`,
+  endingType:'good',
+  endingLabel:'🏆 BEST ENDING: The Door at the Heart',
+  endingId:'e_key',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork — there are more endings to discover',next:'restart'}]
+},
+
+// ────────────────────────────────────────────────────────────────
+// RIGHT BRANCH — THE PHONE IN THE FOREST
+// ────────────────────────────────────────────────────────────────
+rightPath: {
+  emoji:'📱',
+  title:'The Right Path',
+  text:`You follow the right-hand path. The sound gets clearer. It is <em>definitely</em> not birdsong.<br><br>
+It is the chorus of <strong>"Eye of the Tiger"</strong> by Survivor, coming from a smartphone sitting alone on a tree stump. No one around. Just the phone, glowing in the dappled light.<br><br>
+The screen shows a notification: <strong>📲 One message from: THE FOREST.</strong><br><br>
+The song loops. A squirrel in a nearby tree watches you with the quiet authority of someone who has seen this happen before.`,
+  puzzle: {
+    question: '🧩 Before you touch anything — the squirrel holds up a tiny sign that reads: "Frost writes \'I doubted if I should ever come back.\' What does this tell us about his choice?" What\'s the right interpretation?',
+    options: [
+      { text: 'He was planning to come back and try the other path later', correct: false, feedback: 'He says he DOUBTED he\'d come back — meaning he didn\'t really expect to.' },
+      { text: 'He knew that life moves forward — you rarely get to revisit old choices', correct: true, feedback: '✅ Yes! "Way leads on to way" — life keeps moving. The other path isn\'t really an option anymore. This is the emotional heart of the poem.' },
+      { text: 'He was scared of the forest and wanted to leave', correct: false, feedback: 'Not quite — the regret is about life choices, not literal fear of a path.' },
+      { text: 'He chose the wrong path and was upset about it', correct: false, feedback: 'Interestingly, the poem never says he made the WRONG choice — just a choice. That ambiguity is the whole point.' },
+    ]
+  },
+  choices: [
+    { icon:'📲', label:'READ MESSAGE', text:'Open the notification from The Forest', next:'forestMessage' },
+    { icon:'🙈', label:'IGNORE IT', text:'You never read notifications. Why start now?', next:'ignorePhone' },
+    { icon:'💃', label:'DANCE', text:'Eye of the Tiger is playing. This is not a choice. You dance.', next:'danceEnding' },
+  ]
+},
+
+forestMessage: {
+  emoji:'📨',
+  title:'You Have One Message',
+  text:`You open the message. It reads:<br><br>
+<em>"Hi! Thanks for choosing the right path 😊 This is The Forest (enchanted, est. circa 1200 AD). Quick heads-up: the path ahead splits again. Left leads to a Wizard's cottage with free Wi-Fi and deep wisdom. Right leads to a portal to 1987. Both are valid life choices. We are a forest, not your careers advisor."</em><br><br>
+There is a thumbs-up emoji. Then a leaf emoji. Then seventeen more leaf emojis because The Forest got carried away.<br><br>
+Two glowing signs materialise on the path ahead.`,
+  choices: [
+    { icon:'🧙', label:'THE WIZARD', text:'Follow signs to the Wizard\'s Cottage (free Wi-Fi!)', next:'wizardPath' },
+    { icon:'📺', label:'PORTAL: 1987', text:'Step through the portal. What could go wrong?', next:'portalPath' },
+  ]
+},
+
+ignorePhone: {
+  emoji:'🙈',
+  title:'The Notification Builds Up',
+  text:`You walk past the phone. Very principled. Very disciplined.<br><br>
+The phone buzzes. You ignore it.<br><br>
+It buzzes eleven more times in three seconds. You keep walking.<br><br>
+It begins playing sad violin music. Then, quietly, it begins to guilt-trip you in text messages visible from six metres away:<br><br>
+<em>"it's fine"</em><br>
+<em>"no really it's fine"</em><br>
+<em>"i just had something IMPORTANT to tell you"</em><br>
+<em>"about your FUTURE"</em><br>
+<em>"but it's FINE"</em><br><br>
+<strong>The Forest has the emotional range of a teenager.</strong>`,
+  choices: [
+    { icon:'😤', label:'FINE FINE FINE', text:'"FINE. I\'ll read it." — Go back and open the message', next:'forestMessage' },
+    { icon:'🚶', label:'KEEP WALKING', text:'Resist. You are stronger than a forest\'s guilt trip.', next:'deepWoods' },
+  ]
+},
+
+deepWoods: {
+  emoji:'🌿',
+  title:'The Phone-Free Path',
+  text:`You press on. The music fades. The guilt-trip fades. The forest grows quieter and <em>greener</em>.<br><br>
+After a while you reach a mossy stone bridge over a stream. Underneath it — as one does — a troll is knitting. She looks up.<br><br>
+<strong>"Oh good,"</strong> she says. <strong>"A visitor. I don't suppose you know how to purl two together? I've been stuck on this row for six months."</strong><br><br>
+Her name, she explains, is <strong>Margaret</strong>. She's been living under this bridge since 1987, which she describes as <em>"a year with extremely good music but terrible attitudes toward trolls."</em>`,
+  puzzle: {
+    question: '🧩 Margaret says: "I\'ll let you cross if you can tell me: In the poem, Frost says he took the path \'less traveled by.\' But earlier he said BOTH paths were basically the same. So is he — ?"',
+    options: [
+      { text: 'Contradicting himself — and that\'s the whole point', correct: true, feedback: '✅ Brilliant! The speaker constructs a story AFTERWARD to make his choice feel meaningful. "I took the road less traveled" is a retrospective narrative, not an objective fact. Many critics think this is what the poem is actually about.' },
+      { text: 'Lying on purpose to seem interesting', correct: false, feedback: 'Not exactly lying — more like a very human tendency to make our choices feel special in hindsight.' },
+      { text: 'Talking about a completely different path from earlier in the poem', correct: false, feedback: 'No — it\'s the same fork. The inconsistency is intentional and meaningful.' },
+      { text: 'Just bad at describing things', correct: false, feedback: 'Ha! Frost was actually very precise. The "contradiction" is carefully constructed.' },
+    ]
+  },
+  choices: [
+    { icon:'🧶', label:'I KNOW KNITTING', text:'"Actually — my nan taught me. Move over, Margaret."', next:'trollHelp' },
+    { icon:'🤷', label:'I DO NOT', text:'"I genuinely have no idea what purl two together means."', next:'trollHonest' },
+  ]
+},
+
+trollHelp: {
+  emoji:'🧶',
+  title:'Unexpected Skills',
+  text:`You do, in fact, know how to knit. Your nan taught you at age nine. You never once imagined it would matter.<br><br>
+You sort out Margaret's decreasing pattern in twenty minutes. She is so grateful she gives you a hand-knitted map of the forest — every path marked, every character noted, every fork labelled.<br><br>
+With it, you find the golden glade in twelve minutes flat.<br><br>
+<em>Your nan's skills. Your adventure's reward.</em><br><br>
+As you step into the sunlit clearing, you think about all the strange roads that led here — and how none of them felt like the right one until you were already through.`,
+  endingType:'good',
+  endingLabel:'🏆 GOOD ENDING: Nan\'s Knitting Saves the Day',
+  endingId:'e_knit',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork and try another route',next:'restart'}]
+},
+
+trollHonest: {
+  emoji:'🤷',
+  title:'Radical Honesty, Immediate Results',
+  text:`<strong>"I have absolutely no idea,"</strong> you say.<br><br>
+Margaret sighs. <strong>"Nobody does anymore."</strong><br><br>
+Then she brightens. <strong>"Can you look it up?"</strong><br><br>
+You can. A YouTube tutorial, six minutes long. Margaret watches it on your phone. She purls two together immediately. She does it again. She gasps with delight.<br><br>
+She is crying. Genuinely crying. Six months on this row.<br><br>
+<strong>"Technology and trolls,"</strong> she whispers. <strong>"Who knew."</strong><br><br>
+She lets you cross the bridge. The golden glade is just ahead, lit by the most spectacular sunset you've ever seen.`,
+  endingType:'good',
+  endingLabel:'🏆 GOOD ENDING: Honest + Resourceful',
+  endingId:'e_troll',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork — more endings await',next:'restart'}]
+},
+
+danceEnding: {
+  emoji:'🕺',
+  title:'Eye of the Tiger',
+  text:`You start dancing.<br><br>
+The squirrel watches for three seconds. Then it joins in.<br><br>
+A badger appears from nowhere. It is an excellent dancer. Two deer emerge from the trees with a level of rhythm that seems unreasonable for deer.<br><br>
+The phone battery dies mid-chorus. The forest goes silent.<br><br>
+All the animals scatter, slightly embarrassed. You stand alone in the woods, breathing hard.<br><br>
+No quest completed. No wizard consulted. No gnome assisted.<br><br>
+<strong>But you danced in a forest with a badger and two deer. And that has made all the difference.</strong>`,
+  endingType:'weird',
+  endingLabel:'💃 CHAOTIC ENDING: No Regrets',
+  endingId:'e_dance',
+  quote:{ text:'"And that has made all the difference."', cite:'— Frost (definitely about this)' },
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Try again and maybe make a decision this time',next:'restart'}]
+},
+
+// ────────────────────────────────────────────────────────────────
+// WIZARD PATH
+// ────────────────────────────────────────────────────────────────
+wizardPath: {
+  emoji:'🧙',
+  title:"The Wizard's Cottage",
+  text:`The cottage is small, slightly crooked, and has a doormat reading <em>"COME BACK WITH A WARRANT."</em><br><br>
+You knock. The door opens. A wizard, approximately 900 years old, wearing badger slippers, peers out.<br><br>
+<strong>"A traveller! I've been expecting someone. Or was it Tuesday? Time gets slippery at my age."</strong><br><br>
+He beckons you in. It smells of old books and good tea. The Wi-Fi password is taped to the fridge: <strong>GandalfIsOverrated2024</strong>`,
+  freeze: {
+    prompt: 'The wizard has been waiting for you. Before you do anything else —',
+    questions: [
+      'If a 900-year-old wizard has been "expecting you" — what does that suggest about fate vs. choice? Did you freely choose this path, or were you meant to come here?',
+      'Frost\'s speaker makes a choice and later gives it meaning. If the wizard already expected you, does YOUR choice still have meaning?',
+      'What do you expect the wizard to know? What question would YOU ask a 900-year-old?'
+    ]
+  },
+  choices: [
+    { icon:'📶', label:'GET ON WI-FI', text:'Connect to the Wi-Fi. Priorities first.', next:'wifiEnding' },
+    { icon:'🔮', label:'TALK TO THE WIZARD', text:'"What did you want to show me?"', next:'wizardQuest' },
+    { icon:'☕', label:'HAVE SOME TEA', text:'Accept the tea. Good decisions start with tea.', next:'wizardTea' },
+  ]
+},
+
+wifiEnding: {
+  emoji:'😬',
+  title:'The Powerful Pull of Connectivity',
+  text:`You connect. Forty-seven notifications. Three group chats. Two emails. One video of a cat.<br><br>
+You look up forty-five minutes later. The wizard is still sitting across from you, holding his tea, watching you patiently. He does not look surprised. He looks like someone who has seen this before. Possibly many times.<br><br>
+<strong>"Done?"</strong><br><br>
+<em>You feel a very specific kind of shame.</em><br><br>
+<strong>"You came through an enchanted forest,"</strong> says the wizard quietly. <strong>"You made a dozen choices. You met creatures with stories. And you're going to remember… a group chat?"</strong><br><br>
+You put the phone face-down.<br><br>
+<strong>"Good,"</strong> he says. <strong>"Now. Tea?"</strong>`,
+  endingType:'weird',
+  endingLabel:'📱 RELATABLE ENDING: The Modern Curse',
+  endingId:'e_wifi',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Try again. Maybe talk to the wizard this time.',next:'restart'}]
+},
+
+wizardTea: {
+  emoji:'☕',
+  title:'A Very Good Cup of Tea',
+  text:`The tea is outstanding. You don't know what's in it. You don't ask.<br><br>
+Over the next hour, the wizard — whose name is Aldric, if you're wondering — explains the forest over several cups.<br><br>
+<strong>"Most people who come through here,"</strong> he says, <strong>"are in too much of a hurry. They pick a path, rush to the end, and then they go home and tell everyone they took the road less travelled."</strong><br><br>
+He sips his tea. <strong>"But you stopped. You listened. You had a cup of tea in a cottage with a very old man. That, I assure you, is the road less travelled in 2025."</strong><br><br>
+You laugh. He refills your cup.`,
+  endingType:'good',
+  endingLabel:'☕ COSY ENDING: The Quiet Choice',
+  endingId:'e_tea',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork and try something louder',next:'restart'}]
+},
+
+wizardQuest: {
+  emoji:'📜',
+  title:"Aldric's Theory",
+  text:`The wizard — Aldric — talks for some time. He has been thinking about Frost's poem for approximately 600 years and has opinions.<br><br>
+<strong>"The path not taken,"</strong> he says, <strong>"isn't about regret. It's about the stories we tell ourselves afterward. We say: <em>'I took the bold road, the unusual road, and it changed everything.'</em> But Frost knows — and the careful reader knows — that both roads were the same. The difference isn't in the road."</strong><br><br>
+He taps the table. <strong>"The difference is in the telling."</strong><br><br>
+He closes his very old, very battered copy of Frost. <strong>"What story will you tell about today?"</strong>`,
+  endingType:'good',
+  endingLabel:'📚 WISEST ENDING: The Point of the Poem',
+  endingId:'e_wizard',
+  quote:{ text:'"I shall be telling this with a sigh / Somewhere ages and ages hence:\nTwo roads diverged in a wood, and I —\nI took the one less traveled by,\nAnd that has made all the difference."', cite:'— Robert Frost' },
+  freeze: {
+    prompt: 'This is the ending — but it\'s also the beginning of the discussion.',
+    questions: [
+      'Aldric says "the difference is in the telling." Do you agree? Does making meaning out of a choice AFTER the fact make it less real?',
+      'If you were Frost\'s speaker, looking back on today\'s adventure "ages and ages hence" — what would you say about the path you chose?',
+      'What does the poem mean to you NOW, at the end, that it didn\'t at the start?'
+    ]
+  },
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Return to the fork and find the remaining endings',next:'restart'}]
+},
+
+// ────────────────────────────────────────────────────────────────
+// PORTAL 1987
+// ────────────────────────────────────────────────────────────────
+portalPath: {
+  emoji:'📺',
+  title:'Welcome to 1987',
+  text:`You step through the portal and land on a suburban street.<br><br>
+Everything is aggressively 1987: enormous hair. Fluorescent shell suits. A car with a cassette player. A child on a BMX who stares at you with profound suspicion.<br><br>
+No smartphone signal. No Google Maps. No way home that you can immediately identify.<br><br>
+A woman in a pink shell suit walks past. <strong>"You alright, love? You look confused."</strong><br><br>
+<strong>"I'm from the future,"</strong> you say.<br><br>
+She considers this. <strong>"Right. Lovely. Want a cup of tea?"</strong><br><br>
+You think about all the choices that led to this moment.`,
+  endingType:'bad',
+  endingLabel:'⏳ WILD ENDING: Wrong Turn Through Time',
+  endingId:'e_1987',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Try again — probably go to the wizard next time',next:'restart'}]
+},
+
+// ────────────────────────────────────────────────────────────────
+// OVERTHINK BRANCH
+// ────────────────────────────────────────────────────────────────
+overthink: {
+  emoji:'🧠',
+  title:'Analysis Paralysis',
+  text:`You begin to carefully analyse both paths.<br><br>
+The left path has approximately 23% more shadow. The right path has 14% more audible noise. You consider the philosophical implications of this data. You wonder what Frost would do. You wonder what Frost had for breakfast. You wonder whether breakfast choices also have long-term consequences.<br><br>
+You have been standing here for <strong>forty-five minutes</strong>.<br><br>
+The squirrel is now sat beside you, also staring at the paths, apparently caught up in your indecision spiral.<br><br>
+A robin lands on a branch and says, very quietly: <strong>"Mate. Just… pick one."</strong>`,
+  freeze: {
+    prompt: 'This is actually a very important classroom moment.',
+    questions: [
+      'Frost ALSO stood at the fork for a long time — he "looked down one as far as I could." Is overthinking a choice the same as caring about it?',
+      'Is it better to choose carefully and slowly, or quickly and commit? Does it depend on the choice?',
+      'Have you ever missed an opportunity because you took too long deciding? What happened?'
+    ]
+  },
+  choices: [
+    { icon:'⬅️', label:'GO LEFT', text:'"You\'re right, robin. Left it is." — The shadowy path', next:'leftPath' },
+    { icon:'➡️', label:'GO RIGHT', text:'"RIGHT! I choose right!" — The sunlit path', next:'rightPath' },
+    { icon:'🐿️', label:'ASK THE SQUIRREL', text:'Ask the squirrel for its professional opinion', next:'squirrelAdvice' },
+  ]
+},
+
+squirrelAdvice: {
+  emoji:'🐿️',
+  title:'The Squirrel Has Spoken',
+  text:`The squirrel turns to face you with an expression of absolute, crushing disdain.<br><br>
+It raises one tiny paw.<br><br>
+It points — slowly, deliberately, with full eye contact — to the <strong>right</strong>.<br><br>
+It holds this for three seconds.<br><br>
+It scurries up a tree. It is done with this.<br><br>
+The robin exhales. <strong>"The squirrel has spoken."</strong>`,
+  choices: [
+    { icon:'➡️', label:'TRUST THE SQUIRREL', text:'The squirrel knows. Take the right path.', next:'rightPath' },
+    { icon:'⬅️', label:'DEFY THE SQUIRREL', text:'You are not going to be told what to do by a rodent. Take the left path.', next:'leftPath' },
+  ]
+},
+
+// ────────────────────────────────────────────────────────────────
+// MISC / UTILITY
+// ────────────────────────────────────────────────────────────────
+runEnding: {
+  emoji:'🚌',
+  title:'The Strategic Retreat',
+  text:`You run. You run like you have never run before. The ground shakes behind you — probably just your own terrible decisions echoing forward.<br><br>
+You burst out of the forest onto a road. A normal road. With a bus stop. The number 47 is due in six minutes.<br><br>
+You take the bus home.<br><br>
+You never speak of this again.<br><br>
+<em>Some roads, you eventually learn, were very reasonably not taken.</em>`,
+  endingType:'bad',
+  endingLabel:'🚌 ANTICLIMACTIC ENDING: Bus Home',
+  endingId:'e_run',
+  choices:[{icon:'🔄',label:'PLAY AGAIN',text:'Try again with slightly more courage',next:'restart'}]
+},
+
+backtofork: {
+  emoji:'🔄',
+  title:'Back to the Beginning',
+  text:`You make your way back to the fork. The squirrel is still there. It gives you a look that communicates <em>really?</em> with impressive clarity for an animal that cannot speak.<br><br>
+You straighten up. You look left. You look right.<br><br>
+<strong>This time, you choose properly.</strong>`,
+  choices: [
+    { icon:'⬅️', label:'GO LEFT', text:'The shadowy left path — gnomes, dragons, giants', next:'leftPath' },
+    { icon:'➡️', label:'GO RIGHT', text:'The sunlit right path — phones, wizards, 1987', next:'rightPath' },
+  ]
+},
+
+}; // end scenes
+
+// ═══════════════════════════════════════════════════════════════
+//  PUZZLE ENGINE
+// ═══════════════════════════════════════════════════════════════
+let puzzleSolved = false;
+let freezeShown = false;
+
+function buildPuzzle(puzzle, afterId) {
+  puzzleSolved = false;
+  let html = `<div class="puzzle-box">
+    <div class="puzzle-question">${puzzle.question}</div>
+    <div class="puzzle-options" id="puzzleOpts">`;
+  puzzle.options.forEach((opt, i) => {
+    html += `<button class="puzzle-opt" onclick="checkPuzzle(${i}, '${afterId}')" id="popt_${i}">${opt.text}</button>`;
+  });
+  html += `</div><div class="puzzle-feedback" id="puzzleFeedback"></div></div>`;
+  return html;
+}
+
+function checkPuzzle(idx, afterId) {
+  if (puzzleSolved) return;
+  const scene = scenes[afterId];
+  const puzzle = scene.puzzle;
+  const opt = puzzle.options[idx];
+  const btn = document.getElementById(`popt_${idx}`);
+  const fb = document.getElementById('puzzleFeedback');
+
+  if (opt.correct) {
+    puzzleSolved = true;
+    btn.classList.add('correct');
+    fb.textContent = opt.feedback;
+    fb.style.color = '#155724';
+    // Unlock choices
+    document.querySelectorAll('.choice-btn').forEach(b => b.disabled = false);
+    document.getElementById('choicesUnlocked').style.display = 'block';
+    document.getElementById('choicesLocked').style.display = 'none';
+  } else {
+    btn.classList.add('wrong');
+    btn.disabled = true;
+    fb.textContent = opt.feedback;
+    fb.style.color = '#721c24';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  FREEZE ENGINE
+// ═══════════════════════════════════════════════════════════════
+function buildFreeze(freeze, sceneId) {
+  let qs = freeze.questions.map(q => `<li>${q}</li>`).join('');
+  return `<div class="freeze-box">
+    <p>${freeze.prompt}</p>
+    <ul class="discuss-qs">${qs}</ul>
+    <button class="freeze-continue" onclick="showChoicesAfterFreeze('${sceneId}')">✅ Discussion done — show the choices</button>
+  </div>
+  <div id="choices_${sceneId}" style="display:none"></div>`;
+}
+
+function showChoicesAfterFreeze(sceneId) {
+  document.getElementById(`choices_${sceneId}`).style.display = 'block';
+  document.querySelector('.freeze-continue').disabled = true;
+  document.querySelector('.freeze-continue').textContent = '✅ Discussed!';
+  document.getElementById(`choices_${sceneId}`).scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PATH TRACKING
+// ═══════════════════════════════════════════════════════════════
+let pathHistory = [];
+const crumbNames = {
+  start:'The Fork', leftPath:'Left Path', rightPath:'Right Path', overthink:'The Overthink',
+  gnomeHelp:'Gerald', gnomeSuspicious:'Gerald (suspicious)', gnomeAngry:'Gerald (crispy)',
+  dragonPath:'Kevin', dragonTalk:'Kevin (talk)', kevinCook:'Cooking', kevinTrade:'Trade',
+  kevinFriendEnding:'Friends', giantPath:'Brenda asleep', giantAwake:'Brenda (noon)',
+  takeKey:'Key Theft', takeHaribo:'Haribo Theft', brendaFriend:'Brenda\'s shoulder',
+  brendaKey:'The Key', brendaForgives:'Forgiven', brendaDenial:'Caught Lying',
+  forestMessage:'Forest Message', ignorePhone:'Ignored Phone', deepWoods:'Deep Woods',
+  trollHelp:'Margaret (knit)', trollHonest:'Margaret (honest)', danceEnding:'Danced',
+  wizardPath:'Wizard', wifiEnding:'Wi-Fi', wizardTea:'Tea', wizardQuest:'Aldric\'s Theory',
+  portalPath:'1987', squirrelAdvice:'Squirrel Oracle', runEnding:'Bus Home', backtofork:'Back to Fork'
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════════════
+function renderScene(id) {
+  if (id === 'restart') {
+    pathHistory = [];
+    document.getElementById('pathTracker').innerHTML = '';
+    renderScene('start');
+    window.scrollTo({top:0, behavior:'smooth'});
+    return;
+  }
+
+  const scene = scenes[id];
+  if (!scene) { console.warn('Missing scene:', id); return; }
+
+  pathHistory.push(id);
+  updateMeta();
+
+  // Track endings
+  if (scene.endingId) {
+    endingsFound.add(scene.endingId);
+    document.getElementById('endingCount').textContent = `Endings found: ${endingsFound.size} / ${TOTAL_ENDINGS}`;
+    document.getElementById('discussionCard').style.display = 'block';
+  }
+
+  // Path breadcrumbs
+  const tracker = document.getElementById('pathTracker');
+  tracker.innerHTML = pathHistory.map((p,i) => {
+    const name = crumbNames[p] || p;
+    const isLast = i === pathHistory.length - 1;
+    return `<span class="path-crumb" style="${isLast ? 'background:#d4f0c8;border-color:#28a745;color:#155724' : ''}">${name}</span>${!isLast ? '<span class="path-arrow">›</span>' : ''}`;
+  }).join('');
+
+  const hasPuzzle = !!scene.puzzle;
+  const hasFreeze = !!scene.freeze;
+
+  let html = `<div class="scene-card">`;
+
+  // Ending badge
+  if (scene.endingType) {
+    const cls = {good:'ending-good',weird:'ending-weird',bad:'ending-bad'}[scene.endingType];
+    html += `<div class="ending-banner ${cls}">${scene.endingLabel}</div>`;
+  }
+
+  html += `<span class="scene-emoji">${scene.emoji}</span>`;
+  html += `<div class="scene-title">${scene.title}</div>`;
+  html += `<div class="scene-text">${scene.text}</div>`;
+
+  if (scene.quote) {
+    html += `<div class="poem-quote">${scene.quote.text.replace(/\n/g,'<br>')}<cite>${scene.quote.cite}</cite></div>`;
+  }
+
+  // Puzzle (locks choices until solved)
+  if (hasPuzzle) {
+    html += buildPuzzle(scene.puzzle, id);
+  }
+
+  // Freeze moment (hides choices until teacher clicks)
+  if (hasFreeze && !hasPuzzle) {
+    html += buildFreeze(scene.freeze, id);
+    // Choices go inside the freeze-reveal div
+    html += `</div>`; // close scene-card
+
+    // Build choices separately for freeze reveal
+    const game = document.getElementById('game');
+    game.innerHTML = html;
+
+    // Now build choices HTML and put inside freeze reveal div
+    let choicesHTML = buildChoicesHTML(scene, id, hasPuzzle);
+    document.getElementById(`choices_${id}`).innerHTML = choicesHTML;
+
+    window.scrollTo({top:0, behavior:'smooth'});
+    return;
+  }
+
+  // Normal choices (or puzzle-locked choices)
+  if (hasPuzzle) {
+    // Show locked state first, unlock after correct answer
+    html += `
+    <div id="choicesLocked" style="margin-top:20px;padding:14px 18px;background:#fff3cd;border:2px dashed var(--gold);border-radius:5px;text-align:center;font-style:italic;color:var(--brown-mid);font-size:1.05rem;">
+      🔒 Answer the puzzle correctly to unlock the choices…
+    </div>
+    <div id="choicesUnlocked" style="display:none">
+      <div class="choices-header">Make your choice</div>
+      <div class="choices">`;
+    scene.choices.forEach(choice => {
+      if (choice.next === 'restart') {
+        html += `<button class="restart-btn" onclick="renderScene('restart')">↺ Start Again</button>`;
+      } else {
+        html += `<button class="choice-btn" disabled onclick="renderScene('${choice.next}')">
+          <span class="choice-icon">${choice.icon}</span>
+          <div><span class="choice-label">${choice.label}</span>${choice.text}</div>
+        </button>`;
+      }
+    });
+    html += `</div></div>`;
+  } else {
+    html += buildChoicesHTML(scene, id, false);
+  }
+
+  html += `</div>`;
+
+  document.getElementById('game').innerHTML = html;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function buildChoicesHTML(scene, id, hasPuzzle) {
+  if (!scene.choices) return '';
+  let html = `<div class="choices-header">Make your choice</div><div class="choices">`;
+  scene.choices.forEach(choice => {
+    if (choice.next === 'restart') {
+      html += `<button class="restart-btn" onclick="renderScene('restart')">↺ Start Again from the Fork</button>`;
+    } else {
+      html += `<button class="choice-btn" onclick="renderScene('${choice.next}')">
+        <span class="choice-icon">${choice.icon}</span>
+        <div><span class="choice-label">${choice.label}</span>${choice.text}</div>
+      </button>`;
+    }
+  });
+  html += `</div>`;
+  return html;
+}
+
+// Start!
+renderScene('start');
+</script>
+
+</body>
+</html>
