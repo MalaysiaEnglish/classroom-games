@@ -88,6 +88,36 @@ window.CUSTOM_CONTENT = {
     { text: "Life is a journey with no map.",                  correct: true,  topic: "Figurative Language" },
     { text: "The old house groaned under the weight of its memories.", correct: true, topic: "Figurative Language" },
 
+    // ── S6/U6 — Unbelievable Stories: 2nd Conditional ─────────
+    { text: "If Violet worked on a different ship, she would survive.",             correct: true,  topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+    { text: "If the Titanic had more lifeboats, fewer people would die.",           correct: false, topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+    { text: "If I were the captain, I would slow down near the icebergs.",          correct: true,  topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+    { text: "If you would study, you would pass the exam.",                        correct: false, topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+    { text: "If the Britannic wasn't a hospital ship, more people would have died.", correct: false, topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+    { text: "She would swim to safety if she knew how to swim.",                    correct: true,  topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+    { text: "If you ate rotten food, you would get sick.",                          correct: true,  topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+    { text: "She would go to jail if she steal that car.",                          correct: false, topic: "S6/U6 – 2nd Conditional", stage: 6, unit: 6 },
+
+    // ── S6/U6 — Unbelievable Stories: 3rd Conditional ─────────
+    { text: "If the clergy hadn't been terrible, they wouldn't have made people angry.",           correct: true,  topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+    { text: "If the council hadn't constructed a stage, fewer people would have died.",            correct: true,  topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+    { text: "If the government had paid attention, mental health wouldn't have got worse.",        correct: true,  topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+    { text: "If the music hadn't been played faster, fifteen people wouldn't have died.",          correct: true,  topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+    { text: "If they gave St Vitus a coin, they would have stopped dancing.",                     correct: false, topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+    { text: "If they had banned music earlier, people wouldn't have danced until they fainted.",   correct: true,  topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+    { text: "If I hadn't spent all my money, I would have had enough for the ticket.",             correct: true,  topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+    { text: "If the food wasn't disgusting, it wouldn't have made people sick.",                   correct: false, topic: "S6/U6 – 3rd Conditional", stage: 6, unit: 6 },
+
+    // ── S6/U6 — Unbelievable Stories: Mixed Conditionals ──────
+    { text: "If they weren't argumentative, they wouldn't have fallen out.",                      correct: true,  topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+    { text: "If he wasn't fit, he didn't finish the race.",                                       correct: false, topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+    { text: "If my grandfather hadn't won a gold medal, we wouldn't live in a big house.",        correct: true,  topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+    { text: "If Lorz hadn't cheated, nobody would like him.",                                     correct: false, topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+    { text: "If I spoke English, I would have asked for directions.",                              correct: true,  topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+    { text: "If they hadn't closed the bowling alley, we would go there tonight.",                 correct: true,  topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+    { text: "If there had been a doctor on the plane, the man wouldn't have died.",                correct: true,  topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+    { text: "If she was taller, she might have become a model.",                                   correct: false, topic: "S6/U6 – Mixed Conditionals", stage: 6, unit: 6 },
+
   ],
 
   words: [
@@ -322,7 +352,46 @@ window.CUSTOM_CONTENT = {
   { word: "MULTIPLICATION", topic: "Advanced" },
   { word: "REVOLUTIONARY", topic: "Advanced" },
   { word: "CONSEQUENTIAL", topic: "Advanced" },
-  { word: "UNCONVENTIONAL", topic: "Advanced" }
+  { word: "UNCONVENTIONAL", topic: "Advanced" },
+
+  // ── S6/U6 — Unbelievable Stories: Beginner ────────────────
+  { word: "HULL",           topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "STERN",          topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "BOW",            topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "DECK",           topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "ANCHOR",         topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "RUDDER",         topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "PROPELLER",      topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "LIFEBOAT",       topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "ICEBERG",        topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "PLAGUE",         topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "CURSE",          topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "MARATHON",       topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "PODIUM",         topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "SPECTACLE",      topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "COMMITTEE",      topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "BOUNTY",         topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "HARVEST",        topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+  { word: "VETERAN",        topic: "S6/U6 Beginner", stage: 6, unit: 6 },
+
+  // ── S6/U6 — Unbelievable Stories: Intermediate / Advanced ─
+  { word: "BULKHEAD",       topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "TRANSATLANTIC",  topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "SIMULTANEOUSLY", topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "DEHYDRATION",    topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "DEVASTATION",    topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "IMPENDING",      topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "PASTORAL",       topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "HOARDING",       topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "HYPERBOLE",      topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "INVULNERABILITY",topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "EXAGGERATED",    topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "SARCASTICALLY",  topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "UNDISPUTED",     topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "SKIRMISH",       topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "OPTIMISTICALLY", topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "COMPREHENDING",  topic: "S6/U6 Advanced", stage: 6, unit: 6 },
+  { word: "HAEMORRHAGING",  topic: "S6/U6 Advanced", stage: 6, unit: 6 }
   ]
 
 };
