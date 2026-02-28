@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Curse Story Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a0f00;
+      --parchment: #e8d5a3;
+      --parchment-dark: #c9a96e;
+      --blood: #8b1a1a;
+      --blood-bright: #c0392b;
+      --ember: #d4520a;
+      --smoke: #3d2b1f;
+      --gold: #b8860b;
+      --ghost: rgba(232, 213, 163, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0804;
+      font-family: 'Crimson Text', serif;
+      color: var(--parchment);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background — flickering embers */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 100%, #2a0d00 0%, transparent 70%),
+        radial-gradient(ellipse 30% 20% at 20% 80%, #1a0500 0%, transparent 60%),
+        radial-gradient(ellipse 30% 20% at 80% 85%, #150400 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Particle embers */
+    .embers {
+      position: fixed; inset: 0; pointer-events: none; z-index: 1;
+      overflow: hidden;
+    }
+    .ember {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--ember);
+      box-shadow: 0 0 6px 2px #d4520a88;
+      animation: rise linear infinite;
+      opacity: 0;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      10%  { opacity: 1; }
+      80%  { opacity: 0.6; }
+      100% { transform: translateY(-120vh) translateX(var(--drift)) scale(0.2); opacity: 0; }
+    }
+
+    .container {
+      position: relative; z-index: 2;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .title-main {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      color: var(--blood-bright);
+      text-shadow:
+        0 0 20px #8b1a1a,
+        0 0 40px #5a0f0f,
+        2px 2px 0 #000;
+      letter-spacing: 2px;
+      line-height: 1;
+      animation: flicker 4s ease-in-out infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; text-shadow: 0 0 20px #8b1a1a, 0 0 40px #5a0f0f, 2px 2px 0 #000; }
+      92%       { opacity: 1; }
+      93%       { opacity: 0.7; text-shadow: 0 0 8px #8b1a1a; }
+      94%       { opacity: 1; }
+      96%       { opacity: 0.85; }
+      97%       { opacity: 1; }
+    }
+
+    .title-sub {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--parchment-dark);
+      margin-top: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 18px 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--blood), transparent);
+    }
+    .divider-icon { color: var(--blood); font-size: 1.2rem; }
+
+    /* Stage cards */
+    .stage {
+      background: linear-gradient(135deg, rgba(26,15,0,0.9), rgba(45,20,5,0.85));
+      border: 1px solid rgba(184,134,11,0.25);
+      border-radius: 4px;
+      padding: 24px 28px;
+      margin-bottom: 22px;
+      position: relative;
+      box-shadow:
+        inset 0 1px 0 rgba(184,134,11,0.1),
+        0 4px 20px rgba(0,0,0,0.5);
+      transition: border-color 0.3s;
+    }
+    .stage:hover { border-color: rgba(184,134,11,0.4); }
+
+    /* Corner runes */
+    .stage::before {
+      content: attr(data-rune);
+      position: absolute; top: 8px; right: 12px;
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 1.4rem;
+      color: rgba(184,134,11,0.3);
+    }
+
+    .stage-number {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 0.85rem;
+      color: var(--blood);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .stage h2 {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--parchment);
+      margin-bottom: 14px;
+      font-weight: normal;
+    }
+
+    .stage p.prompt {
+      font-style: italic;
+      color: var(--parchment-dark);
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    /* Choice buttons */
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .choice-btn {
+      background: rgba(139, 26, 26, 0.15);
+      border: 1px solid rgba(139,26,26,0.4);
+      color: var(--parchment);
+      padding: 7px 16px;
+      border-radius: 2px;
+      font-family: 'Crimson Text', serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .choice-btn:hover {
+      background: rgba(139, 26, 26, 0.4);
+      border-color: var(--blood-bright);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(139,26,26,0.3);
+    }
+    .choice-btn.selected {
+      background: rgba(139, 26, 26, 0.6);
+      border-color: var(--blood-bright);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(192,57,43,0.4);
+    }
+
+    /* Text inputs */
+    .curse-input {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(184,134,11,0.25);
+      border-radius: 2px;
+      color: var(--parchment);
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .curse-input:focus { border-color: var(--gold); }
+    .curse-input::placeholder { color: rgba(232,213,163,0.3); font-style: italic; }
+
+    select.curse-input {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b8860b' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 500px) { .input-row { grid-template-columns: 1fr; } }
+
+    label.field-label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--parchment-dark);
+      margin-bottom: 5px;
+      letter-spacing: 1px;
+      font-style: italic;
+    }
+
+    .field-group { margin-bottom: 10px; }
+
+    /* The generated story scroll */
+    #scroll-section {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .scroll-wrap {
+      background: linear-gradient(160deg, #c9a96e 0%, #b8912a 40%, #c9a96e 70%, #a07820 100%);
+      border-radius: 6px;
+      padding: 4px;
+      box-shadow:
+        0 0 40px rgba(184,134,11,0.3),
+        0 20px 60px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .scroll-inner {
+      background: linear-gradient(160deg, #f5e6c0 0%, #ede0b0 50%, #f0e2b5 100%);
+      border-radius: 4px;
+      padding: 36px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Aged paper texture */
+    .scroll-inner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(139,100,20,0.04) 29px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .scroll-title {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--blood);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .scroll-subtitle {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--smoke);
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    #story-output {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--ink);
+      line-height: 1.85;
+      position: relative;
+      z-index: 1;
+    }
+
+    #story-output p { margin-bottom: 1.1em; }
+
+    #story-output .highlight {
+      color: var(--blood);
+      font-weight: 600;
+    }
+
+    #story-output .grammar-note {
+      background: rgba(139,26,26,0.08);
+      border-left: 3px solid var(--blood);
+      padding: 10px 14px;
+      margin: 14px 0;
+      font-style: italic;
+      font-size: 0.95em;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Writing task area */
+    .writing-section {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px dashed rgba(139,100,20,0.4);
+    }
+
+    .writing-section h3 {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.15rem;
+      color: var(--smoke);
+      margin-bottom: 12px;
+    }
+
+    .sentence-frame {
+      background: rgba(139,26,26,0.05);
+      border: 1px solid rgba(139,26,26,0.15);
+      border-radius: 3px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+
+    .sentence-frame .frame-label {
+      font-size: 0.8rem;
+      color: var(--blood);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .sentence-frame .frame-text {
+      font-style: italic;
+      color: var(--smoke);
+      line-height: 1.6;
+    }
+
+    .sentence-frame .blank {
+      display: inline-block;
+      min-width: 120px;
+      border-bottom: 1px solid var(--blood);
+      color: var(--blood);
+      font-style: normal;
+    }
+
+    /* Buttons */
+    .btn-summon {
+      display: block;
+      width: 100%;
+      margin: 28px 0 0;
+      padding: 16px;
+      background: linear-gradient(135deg, #6b0f0f, #8b1a1a, #6b0f0f);
+      border: 1px solid var(--blood-bright);
+      color: var(--parchment);
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.3s;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-summon::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+    .btn-summon:hover::before { transform: translateX(100%); }
+    .btn-summon:hover {
+      background: linear-gradient(135deg, #8b1a1a, #c0392b, #8b1a1a);
+      box-shadow: 0 0 30px rgba(192,57,43,0.5), 0 0 60px rgba(139,26,26,0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-reset {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid rgba(184,134,11,0.4);
+      color: var(--parchment-dark);
+      font-family: 'Crimson Text', serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover {
+      border-color: var(--gold);
+      color: var(--parchment);
+    }
+
+    .print-btn {
+      display: inline-block;
+      margin-top: 10px;
+      margin-left: 10px;
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid rgba(139,26,26,0.4);
+      color: var(--blood-bright);
+      font-family: 'Crimson Text', serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .print-btn:hover { border-color: var(--blood-bright); background: rgba(139,26,26,0.1); }
+
+    /* Progress bar */
+    .progress-bar {
+      display: flex; gap: 6px; margin-bottom: 30px; justify-content: center;
+    }
+    .progress-pip {
+      width: 28px; height: 4px;
+      background: rgba(184,134,11,0.2);
+      border-radius: 2px;
+      transition: background 0.4s;
+    }
+    .progress-pip.done { background: var(--blood); }
+    .progress-pip.active { background: var(--gold); }
+
+    @media print {
+      body { background: white; color: black; }
+      .container { max-width: 100%; }
+      .stage, header, .btn-summon, .btn-reset, .print-btn, .progress-bar, .embers { display: none !important; }
+      #scroll-section { display: block !important; }
+      .scroll-wrap { background: none; padding: 0; box-shadow: none; }
+      .scroll-inner { background: none; padding: 10px; }
+      #story-output, .writing-section { color: black; }
+      .scroll-title, .sentence-frame .frame-label { color: darkred; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating embers -->
+<div class="embers" id="embers"></div>
+
+<div class="container">
+  <header>
+    <div class="title-main">The Curse Keeper</div>
+    <div class="title-sub">A Story Building Scroll — Stage 6 · Unit 6 · Lesson 2</div>
+    <div class="divider"><span class="divider-icon">☽</span></div>
+    <p style="font-style:italic; color:var(--parchment-dark); font-size:1rem; max-width:540px; margin:0 auto; line-height:1.6;">
+      Every curse has a beginning. Build yours — then write its story using the Third Conditional.
+    </p>
+  </header>
+
+  <!-- Progress pips -->
+  <div class="progress-bar" id="progress-bar">
+    <div class="progress-pip active"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+  </div>
+
+  <!-- STAGE 1: The Origin -->
+  <div class="stage" data-rune="ᚱ" id="stage-1">
+    <div class="stage-number">Chapter I</div>
+    <h2>The Origin — When & Where did the curse begin?</h2>
+    <p class="prompt">Like the Dancing Plague of 1518, great curses are born from great misery. Choose a time and place for yours.</p>
+    <div class="input-row">
+      <div class="field-group">
+        <label class="field-label">Year</label>
+        <select class="curse-input" id="year">
+          <option value="">— Choose a year —</option>
+          <option value="793 AD">793 AD</option>
+          <option value="1066">1066</option>
+          <option value="1215">1215</option>
+          <option value="1348">1348 (Black Death era)</option>
+          <option value="1492">1492</option>
+          <option value="1518">1518 (The Dancing Plague)</option>
+          <option value="1666">1666</option>
+          <option value="1789">1789</option>
+          <option value="1832">1832</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Setting</label>
+        <select class="curse-input" id="setting">
+          <option value="">— Choose a place —</option>
+          <option value="a crumbling monastery">A crumbling monastery</option>
+          <option value="a fog-soaked harbour town">A fog-soaked harbour town</option>
+          <option value="a village on the edge of a cursed forest">A village at the forest's edge</option>
+          <option value="a royal palace rotting from within">A royal palace, rotting from within</option>
+          <option value="a crossroads where three roads met">A crossroads where three roads met</option>
+          <option value="a town square with a broken fountain">A town square with a broken fountain</option>
+          <option value="a walled city under siege">A walled city under siege</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2: The Wronged One -->
+  <div class="stage" data-rune="ᚹ" id="stage-2">
+    <div class="stage-number">Chapter II</div>
+    <h2>The Wronged One — Who cast the curse, and why?</h2>
+    <p class="prompt">Curses are born from injustice. Someone was wronged. Choose your curse-caster and their reason.</p>
+    <div class="field-group">
+      <label class="field-label">The curse was cast by…</label>
+      <div class="choices" id="caster-choices">
+        <button class="choice-btn" data-group="caster" data-value="an elderly healer, cast out by the town">an exiled healer</button>
+        <button class="choice-btn" data-group="caster" data-value="a grieving mother whose child was taken">a grieving mother</button>
+        <button class="choice-btn" data-group="caster" data-value="a disgraced priest who had lost his faith">a disgraced priest</button>
+        <button class="choice-btn" data-group="caster" data-value="a forgotten saint, ignored for too long">a forgotten saint</button>
+        <button class="choice-btn" data-group="caster" data-value="a masked stranger who appeared one winter night">a masked stranger</button>
+        <button class="choice-btn" data-group="caster" data-value="the land itself, poisoned by greed">the land itself</button>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Their reason was…</label>
+      <div class="choices" id="reason-choices">
+        <button class="choice-btn" data-group="reason" data-value="the people had grown too greedy">greed of the people</button>
+        <button class="choice-btn" data-group="reason" data-value="the clergy had grown corrupt and cruel">corrupt clergy</button>
+        <button class="choice-btn" data-group="reason" data-value="an innocent person was unjustly punished">unjust punishment</button>
+        <button class="choice-btn" data-group="reason" data-value="a sacred promise was broken">a broken promise</button>
+        <button class="choice-btn" data-group="reason" data-value="children had been taken from their families">families torn apart</button>
+        <button class="choice-btn" data-group="reason" data-value="years of suffering had gone unnoticed">suffering ignored</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: The Power -->
+  <div class="stage" data-rune="ᛏ" id="stage-3">
+    <div class="stage-number">Chapter III</div>
+    <h2>The Power — What does the curse do?</h2>
+    <p class="prompt">The Dancing Plague made people dance until they died. What dark power does your curse carry?</p>
+    <div class="field-group">
+      <label class="field-label">The curse causes…</label>
+      <div class="choices" id="power-choices">
+        <button class="choice-btn" data-group="power" data-value="uncontrollable laughter that could not be stopped">unstoppable laughter</button>
+        <button class="choice-btn" data-group="power" data-value="an endless sleep from which no one could wake">endless sleep</button>
+        <button class="choice-btn" data-group="power" data-value="all voices to fall silent — no one could speak">a vow of silence</button>
+        <button class="choice-btn" data-group="power" data-value="everyone to forget someone they loved">stolen memories</button>
+        <button class="choice-btn" data-group="power" data-value="crops to wither and harvests to fail">failing harvests</button>
+        <button class="choice-btn" data-group="power" data-value="anyone who lied to feel terrible pain">pain from lies</button>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:10px;">
+      <label class="field-label">It spreads by…</label>
+      <div class="choices" id="spread-choices">
+        <button class="choice-btn" data-group="spread" data-value="touch">touch</button>
+        <button class="choice-btn" data-group="spread" data-value="hearing a certain sound">a sound</button>
+        <button class="choice-btn" data-group="spread" data-value="drinking from the town's well">the well</button>
+        <button class="choice-btn" data-group="spread" data-value="entering a certain building">a building</button>
+        <button class="choice-btn" data-group="spread" data-value="being seen by the afflicted">eye contact</button>
+        <button class="choice-btn" data-group="spread" data-value="dreaming">dreaming</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 4: The Attempt to Break It -->
+  <div class="stage" data-rune="ᚢ" id="stage-4">
+    <div class="stage-number">Chapter IV</div>
+    <h2>The Solution — How did they try to break it?</h2>
+    <p class="prompt">The townspeople of Strasbourg tried music, prayer, and a 50kg wax statue. What did your people try?</p>
+    <div class="field-group">
+      <label class="field-label">First, the people tried…</label>
+      <div class="choices" id="attempt1-choices">
+        <button class="choice-btn" data-group="attempt1" data-value="building a great bonfire in the town square">a great bonfire</button>
+        <button class="choice-btn" data-group="attempt1" data-value="hiring musicians to play day and night">hiring musicians</button>
+        <button class="choice-btn" data-group="attempt1" data-value="ordering everyone to stay indoors">a lockdown</button>
+        <button class="choice-btn" data-group="attempt1" data-value="praying at the cathedral for seven days">seven days of prayer</button>
+        <button class="choice-btn" data-group="attempt1" data-value="consulting a foreign doctor">a foreign doctor</button>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:10px;">
+      <label class="field-label">This failed because…</label>
+      <div class="choices" id="fail-choices">
+        <button class="choice-btn" data-group="fail" data-value="it made things worse">it made things worse</button>
+        <button class="choice-btn" data-group="fail" data-value="nobody truly believed it would work">nobody believed</button>
+        <button class="choice-btn" data-group="fail" data-value="the leaders were too proud to admit the real cause">leaders were too proud</button>
+        <button class="choice-btn" data-group="fail" data-value="the wrong people were blamed">wrong people blamed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 5: The Resolution -->
+  <div class="stage" data-rune="ᛖ" id="stage-5">
+    <div class="stage-number">Chapter V</div>
+    <h2>The End — How was the curse finally broken?</h2>
+    <p class="prompt">What sacrifice, act of justice, or unexpected miracle ended the suffering?</p>
+    <div class="field-group">
+      <label class="field-label">The curse was broken when…</label>
+      <div class="choices" id="end-choices">
+        <button class="choice-btn" data-group="end" data-value="a child offered the curse-caster the one thing they had always wanted">a child gave a gift</button>
+        <button class="choice-btn" data-group="end" data-value="the town leader publicly confessed their wrongdoing">a public confession</button>
+        <button class="choice-btn" data-group="end" data-value="an act of great kindness broke the cycle of cruelty">an act of kindness</button>
+        <button class="choice-btn" data-group="end" data-value="the oldest tree in the forest was cut down — and something was found inside">a tree was cut down</button>
+        <button class="choice-btn" data-group="end" data-value="a stranger arrived with knowledge the town had forgotten">a stranger arrived</button>
+        <button class="choice-btn" data-group="end" data-value="the last person affected by the curse chose to forgive">someone chose to forgive</button>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:10px;">
+      <label class="field-label">Your curse title (optional — give it a name)</label>
+      <input type="text" class="curse-input" id="curse-title" placeholder="e.g. The Silence of St. Crispin…">
+    </div>
+  </div>
+
+  <!-- STAGE 6: Author name -->
+  <div class="stage" data-rune="ᚾ" id="stage-6">
+    <div class="stage-number">Chapter VI</div>
+    <h2>The Author — Sign your name to the scroll</h2>
+    <p class="prompt">Every curse-keeper must be known.</p>
+    <input type="text" class="curse-input" id="author-name" placeholder="Your name…" style="max-width:300px;">
+  </div>
+
+  <button class="btn-summon" id="summon-btn" onclick="generateScroll()">
+    ⚗ Summon the Scroll ⚗
+  </button>
+
+  <!-- The generated scroll -->
+  <div id="scroll-section">
+    <div class="scroll-wrap">
+      <div class="scroll-inner">
+        <div class="scroll-title" id="scroll-title">The Curse of …</div>
+        <div class="scroll-subtitle" id="scroll-author">As told by …</div>
+        <div class="divider" style="margin-bottom:20px;">
+          <div class="divider-icon" style="color:#8b1a1a;">✦</div>
+        </div>
+        <div id="story-output"></div>
+        <div class="writing-section" id="writing-task"></div>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="resetAll()">↩ Start Again</button>
+    <button class="print-btn" onclick="window.print()">🖨 Print Scroll</button>
+  </div>
+</div>
+
+<script>
+  // Generate floating embers
+  const emberContainer = document.getElementById('embers');
+  for (let i = 0; i < 18; i++) {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    e.style.cssText = `
+      left: ${Math.random() * 100}%;
+      bottom: ${Math.random() * 20}%;
+      animation-duration: ${5 + Math.random() * 8}s;
+      animation-delay: ${Math.random() * 6}s;
+      --drift: ${(Math.random() - 0.5) * 80}px;
+      width: ${2 + Math.random() * 3}px;
+      height: ${2 + Math.random() * 3}px;
+    `;
+    emberContainer.appendChild(e);
+  }
+
+  // Choice button logic
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.dataset.group;
+      document.querySelectorAll(`.choice-btn[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      updateProgress();
+    });
+  });
+
+  function getChoice(group) {
+    const sel = document.querySelector(`.choice-btn[data-group="${group}"].selected`);
+    return sel ? sel.dataset.value : null;
+  }
+
+  const STAGES = ['year','setting','caster','reason','power','spread','attempt1','fail','end'];
+  function updateProgress() {
+    const filled = STAGES.filter(s => {
+      if (s === 'year' || s === 'setting') {
+        const el = document.getElementById(s);
+        return el && el.value;
+      }
+      return getChoice(s);
+    }).length;
+    const pips = document.querySelectorAll('.progress-pip');
+    const score = Math.floor((filled / STAGES.length) * 6);
+    pips.forEach((p, i) => {
+      p.classList.remove('done', 'active');
+      if (i < score) p.classList.add('done');
+      else if (i === score) p.classList.add('active');
+    });
+  }
+
+  document.querySelectorAll('select.curse-input').forEach(s => {
+    s.addEventListener('change', updateProgress);
+  });
+
+  function generateScroll() {
+    const year     = document.getElementById('year').value;
+    const setting  = document.getElementById('setting').value;
+    const caster   = getChoice('caster');
+    const reason   = getChoice('reason');
+    const power    = getChoice('power');
+    const spread   = getChoice('spread');
+    const attempt1 = getChoice('attempt1');
+    const fail     = getChoice('fail');
+    const end      = getChoice('end');
+    const titleInput = document.getElementById('curse-title').value.trim();
+    const author   = document.getElementById('author-name').value.trim() || 'an unknown keeper';
+
+    if (!year || !setting || !caster || !reason || !power || !spread || !attempt1 || !fail || !end) {
+      document.getElementById('summon-btn').style.animation = 'shake 0.4s ease';
+      setTimeout(() => document.getElementById('summon-btn').style.animation = '', 500);
+      alert('The scroll is incomplete — complete all choices before summoning!');
+      return;
+    }
+
+    const title = titleInput || `The Curse of ${setting.split(' ').slice(-1)[0].replace('.','')}`;
+    document.getElementById('scroll-title').textContent = title;
+    document.getElementById('scroll-author').textContent = `As told by ${author}`;
+
+    // Build the narrative story with grammar notes
+    const story = `
+      <p>In the year <span class="highlight">${year}</span>, in <span class="highlight">${setting}</span>, 
+      a terrible darkness descended upon the people — a curse unlike any they had known.</p>
+
+      <p>It had been summoned by <span class="highlight">${caster}</span>. The reason was not 
+      difficult to understand: <span class="highlight">${reason}</span> had poisoned the town 
+      for years, and now the land itself demanded payment.</p>
+
+      <div class="grammar-note">
+        <strong>Third Conditional:</strong> 
+        "If <span class="highlight">${caster}</span> <em>hadn't been</em> wronged, 
+        the curse <em>would never have been</em> cast."
+        — This tells us what <em>could have been avoided</em>.
+      </div>
+
+      <p>The curse brought with it <span class="highlight">${power}</span>. 
+      No one was safe. It spread through <span class="highlight">${spread}</span>, 
+      moving silently from person to person until the town could speak of nothing else.</p>
+
+      <p>In desperation, the people turned to <span class="highlight">${attempt1}</span>. 
+      It seemed, at first, that it might help. But it failed — for <span class="highlight">${fail}</span>. 
+      The suffering continued.</p>
+
+      <div class="grammar-note">
+        <strong>Third Conditional:</strong>
+        "If the people <em>hadn't tried</em> ${attempt1}, the curse <em>might have ended</em> sooner."
+        — Notice how we judge past decisions differently in hindsight.
+      </div>
+
+      <p>In the end, it was <span class="highlight">${end}</span> that broke the hold of the curse. 
+      The darkness lifted as suddenly as it had arrived — leaving behind only silence, 
+      and the memory of what the town had brought upon itself.</p>
+
+      <p style="font-style:italic; color:var(--smoke);">And so the people of ${setting} learned 
+      that curses do not arrive without reason — and they do not leave without a price.</p>
+    `;
+
+    document.getElementById('story-output').innerHTML = story;
+
+    // Writing task — personalised sentence frames using their choices
+    const task = `
+      <h3>✍ Now Write Your Version</h3>
+      <p style="font-style:italic; margin-bottom:16px; color:var(--smoke); font-size:0.95em;">
+        Use the Third Conditional to write about your curse. 
+        The sentence frames below use <em>your</em> choices as starting points.
+      </p>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 1 — The Cause</div>
+        <div class="frame-text">If <span class="blank">${caster}</span> hadn't been wronged, 
+        <span class="blank">_________________________________</span>.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 2 — The Spread</div>
+        <div class="frame-text">If the curse <span class="blank">hadn't spread through ${spread}</span>, 
+        the people <span class="blank">_________________________________</span>.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 3 — The Failed Attempt</div>
+        <div class="frame-text">If <span class="blank">${fail}</span>, 
+        <span class="blank">${attempt1}</span> <span class="blank">_________________________________</span>.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 4 — The Resolution</div>
+        <div class="frame-text">If <span class="blank">_________________________________</span>, 
+        <span class="blank">${end}</span> would never have happened.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 5 — Your Own</div>
+        <div class="frame-text">Write your own Third Conditional sentence about your curse story:<br>
+        <span class="blank" style="min-width:90%; display:block; margin-top:8px;">_________________________________</span></div>
+      </div>
+    `;
+
+    document.getElementById('writing-task').innerHTML = task;
+
+    const scrollSection = document.getElementById('scroll-section');
+    scrollSection.style.display = 'block';
+    scrollSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Mark all pips done
+    document.querySelectorAll('.progress-pip').forEach(p => {
+      p.classList.remove('active');
+      p.classList.add('done');
+    });
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('select.curse-input').forEach(s => s.value = '');
+    document.getElementById('curse-title').value = '';
+    document.getElementById('author-name').value = '';
+    document.getElementById('scroll-section').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('.progress-pip').forEach((p, i) => {
+      p.classList.remove('done', 'active');
+      if (i === 0) p.classList.add('active');
+    });
+  }
+</script>
+</body>
+</html>
