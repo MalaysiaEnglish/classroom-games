@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Sorter — History of Language Revision</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700&family=DM+Mono:wght@500&display=swap');
+
+:root {
+  --bg:       #0b0c10;
+  --surface:  #13151a;
+  --border:   rgba(255,255,255,0.08);
+  --text:     #eef0f4;
+  --dim:      rgba(238,240,244,0.45);
+  --gold:     #f5c842;
+  --flash:    #00e5b0;
+
+  /* Round colours */
+  --r1: #3b7dd8;
+  --r2: #d84040;
+  --r3: #d88b3b;
+
+  /* Team colours */
+  --t0:#00e5b0; --t1:#f5c842; --t2:#ff6b6b;
+  --t3:#a78bfa; --t4:#38bdf8; --t5:#fb923c;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  display:flex; flex-direction:column;
+}
+
+/* ── NOISE TEXTURE OVERLAY ───────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed; inset:0; pointer-events:none; z-index:1000;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.4;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:8px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0; gap:12px;
+}
+.logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.4rem; letter-spacing:0.08em;
+  color:var(--gold);
+}
+.hbtns{display:flex;gap:8px;}
+.hbtn{
+  padding:5px 14px; border-radius:5px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.06);
+  color:var(--text); font-family:'DM Sans',sans-serif;
+  font-size:0.78rem; font-weight:600; cursor:pointer;
+  transition:all 0.15s;
+}
+.hbtn:hover{background:rgba(255,255,255,0.14);}
+
+/* ── SETUP ───────────────────────────────────────────────── */
+#setup{
+  flex:1; overflow-y:auto;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:24px; padding:24px 16px;
+}
+.setup-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,6vw,3.5rem);
+  letter-spacing:0.06em; color:var(--gold);
+  text-align:center; line-height:1;
+}
+.setup-sub{color:var(--dim);font-size:0.88rem;text-align:center;margin-top:4px;}
+
+.teams-grid{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:10px; width:100%; max-width:560px;
+}
+@media(max-width:500px){.teams-grid{grid-template-columns:repeat(2,1fr);}}
+.team-card{
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:10px; padding:10px 12px;
+  transition:border-color 0.2s;
+}
+.team-card.on{border-color:var(--tc);}
+.team-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.team-card input{
+  flex:1; background:none; border:none;
+  color:var(--text); font-family:'DM Sans',sans-serif;
+  font-size:0.88rem; font-weight:600; outline:none; min-width:0;
+}
+.team-tog{
+  width:20px;height:20px;border-radius:4px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.05);
+  cursor:pointer; font-size:0.7rem; color:var(--dim);
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; flex-shrink:0;
+}
+.team-tog.on{background:var(--tc);color:#000;border-color:var(--tc);}
+
+.round-cards{
+  display:flex; gap:12px; flex-wrap:wrap;
+  justify-content:center; width:100%; max-width:620px;
+}
+.round-card{
+  flex:1; min-width:160px; max-width:200px;
+  border-radius:12px; padding:14px 16px;
+  border:2px solid transparent;
+  background:rgba(255,255,255,0.04);
+  cursor:pointer; transition:all 0.2s;
+  text-align:center;
+}
+.round-card:hover{transform:translateY(-2px);}
+.round-card.selected{border-color:var(--rc);}
+.rc-emoji{font-size:2rem;margin-bottom:6px;}
+.rc-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.08em;}
+.rc-desc{font-size:0.72rem;color:var(--dim);margin-top:4px;line-height:1.4;}
+
+.start-btn{
+  padding:14px 52px; font-size:1.1rem; font-weight:700;
+  background:var(--gold); color:#000; border:none;
+  border-radius:10px; cursor:pointer;
+  font-family:'DM Sans',sans-serif; letter-spacing:0.06em;
+  transition:all 0.2s; box-shadow:0 4px 24px rgba(245,200,66,0.35);
+}
+.start-btn:hover{transform:scale(1.04);box-shadow:0 6px 32px rgba(245,200,66,0.5);}
+
+/* ── GAME SCREEN ─────────────────────────────────────────── */
+#game{flex:1;display:none;flex-direction:column;overflow:hidden;}
+
+/* Score bar */
+#scorebar{
+  display:flex; gap:6px; padding:6px 10px;
+  background:rgba(0,0,0,0.4); border-bottom:1px solid var(--border);
+  flex-wrap:wrap; flex-shrink:0;
+}
+.schip{
+  display:flex; align-items:center; gap:6px;
+  background:rgba(255,255,255,0.05);
+  border:1.5px solid transparent;
+  border-radius:8px; padding:5px 12px;
+  transition:all 0.3s; cursor:default;
+}
+.schip-dot{width:9px;height:9px;border-radius:50%;}
+.schip-name{font-weight:700;font-size:0.8rem;}
+.schip-score{font-size:1rem;font-weight:900;color:var(--gold);margin-left:2px;}
+
+/* Round header */
+#roundbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 16px; flex-shrink:0;
+  border-bottom:1px solid var(--border);
+}
+.rbar-left{display:flex;align-items:center;gap:10px;}
+.rbar-badge{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.85rem; letter-spacing:0.12em;
+  padding:3px 10px; border-radius:4px;
+  background:var(--rc,var(--r1)); color:#000;
+}
+.rbar-name{font-size:0.95rem;font-weight:700;}
+.rbar-prog{font-size:0.8rem;color:var(--dim);}
+
+/* Categories strip */
+#catstrip{
+  display:flex; gap:8px; padding:8px 12px;
+  flex-shrink:0; flex-wrap:wrap;
+  border-bottom:1px solid var(--border);
+}
+.catpill{
+  padding:6px 16px; border-radius:20px;
+  font-weight:700; font-size:0.82rem;
+  border:2px solid var(--cc);
+  color:var(--cc); background:transparent;
+  letter-spacing:0.03em; transition:all 0.3s;
+}
+.catpill.flash{
+  background:var(--cc); color:#000;
+  transform:scale(1.1);
+  box-shadow:0 0 20px var(--cc);
+}
+
+/* Main arena */
+#arena{
+  flex:1; display:flex; align-items:center;
+  justify-content:center; position:relative;
+  overflow:hidden;
+}
+
+/* Background glow */
+#arena::before{
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 50%, rgba(245,200,66,0.04) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.card-wrap{
+  perspective:1000px;
+  width:min(90vw,600px);
+}
+.item-card{
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:20px;
+  padding:clamp(24px,5vh,48px) clamp(20px,5vw,60px);
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  transform-origin:center;
+  transition:transform 0.15s ease, border-color 0.3s;
+  position:relative; overflow:hidden;
+}
+.item-card::before{
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.03) 0%,transparent 60%);
+  pointer-events:none;
+}
+.item-card.correct{
+  border-color:var(--flash);
+  box-shadow:0 0 0 4px rgba(0,229,176,0.25), 0 20px 60px rgba(0,0,0,0.5);
+  animation:correctPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.item-card.wrong{
+  border-color:#ff6b6b;
+  animation:wrongShake 0.4s ease;
+}
+@keyframes correctPop{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+  100%{transform:scale(1);}
+}
+@keyframes wrongShake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-8px);}
+  40%{transform:translateX(8px);}
+  60%{transform:translateX(-6px);}
+  80%{transform:translateX(6px);}
+}
+@keyframes cardIn{
+  from{transform:scale(0.85) translateY(20px);opacity:0;}
+  to{transform:scale(1) translateY(0);opacity:1;}
+}
+.card-new{animation:cardIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;}
+
+.item-label{
+  font-size:0.65rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.18em; color:var(--dim); margin-bottom:14px;
+}
+.item-main{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,12vw,7rem);
+  letter-spacing:0.04em; line-height:1;
+  color:var(--text);
+  text-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+.item-main.small{font-size:clamp(1.8rem,6vw,3.5rem);}
+.item-hint{
+  font-size:0.82rem; color:var(--dim);
+  margin-top:10px; font-style:italic;
+  opacity:0; transition:opacity 0.3s;
+}
+.item-hint.show{opacity:1;}
+
+/* Answer revealed */
+.item-answer{
+  margin-top:14px;
+  font-size:1rem; font-weight:700;
+  color:var(--flash);
+  opacity:0; transition:opacity 0.3s;
+  font-family:'DM Mono',monospace;
+}
+.item-answer.show{opacity:1;}
+
+/* Controls */
+#controls{
+  display:flex; gap:8px; padding:10px 12px;
+  border-top:1px solid var(--border); flex-shrink:0;
+  flex-wrap:wrap; justify-content:center; align-items:center;
+}
+.team-award{
+  padding:8px 14px; border-radius:8px;
+  border:1.5px solid var(--tc);
+  background:transparent; color:var(--tc);
+  font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:0.82rem;
+  cursor:pointer; transition:all 0.2s;
+  display:flex; align-items:center; gap:6px;
+}
+.team-award:hover{background:rgba(255,255,255,0.07);}
+.team-award:active{transform:scale(0.96);}
+.team-award .tdot{width:8px;height:8px;border-radius:50%;}
+
+.ctrl-sep{width:1px;height:32px;background:var(--border);}
+
+.ctrl-btn{
+  padding:8px 18px; border-radius:8px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.06);
+  color:var(--text); font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.82rem; cursor:pointer; transition:all 0.2s;
+}
+.ctrl-btn:hover{background:rgba(255,255,255,0.14);}
+.ctrl-btn.gold{background:var(--gold);color:#000;border-color:var(--gold);}
+.ctrl-btn.gold:hover{background:#e6b820;}
+
+/* Round intro overlay */
+.round-intro{
+  position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,0.92);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:16px;
+  animation:fadeIn 0.3s ease;
+}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.ri-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1rem,3vw,1.4rem);
+  letter-spacing:0.2em; color:var(--dim);
+}
+.ri-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.5rem,8vw,5rem);
+  letter-spacing:0.06em;
+  text-align:center;
+}
+.ri-cats{
+  display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+  margin:8px 0;
+}
+.ri-cat{
+  padding:6px 16px; border-radius:16px;
+  font-weight:700; font-size:0.85rem;
+  border:2px solid var(--cc); color:var(--cc);
+}
+.ri-desc{
+  color:var(--dim); font-size:0.92rem;
+  text-align:center; max-width:440px; line-height:1.6;
+}
+.ri-btn{
+  padding:13px 44px; border-radius:10px;
+  background:var(--gold); color:#000;
+  font-weight:700; font-size:1rem;
+  border:none; cursor:pointer; margin-top:8px;
+  font-family:'DM Sans',sans-serif;
+  transition:all 0.2s;
+}
+.ri-btn:hover{transform:scale(1.04);}
+
+/* Win overlay */
+.win-ov{
+  position:fixed; inset:0; z-index:600;
+  background:rgba(0,0,0,0.9);
+  display:flex; align-items:center; justify-content:center;
+}
+.win-box{
+  background:var(--surface);
+  border:2px solid var(--gold);
+  border-radius:20px; padding:36px 48px;
+  text-align:center; max-width:480px; width:90%;
+  animation:cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.win-trophy{font-size:4rem;margin-bottom:8px;}
+.win-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.5rem; color:var(--gold); margin-bottom:4px;
+}
+.win-name{font-size:1.4rem;font-weight:900;margin-bottom:20px;}
+.final-list{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+.final-row{
+  display:flex; align-items:center; gap:10px;
+  background:rgba(255,255,255,0.05);
+  border-radius:8px; padding:8px 14px;
+}
+.final-row.top{background:rgba(245,200,66,0.1);border:1px solid var(--gold);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚡ Language Sorter</div>
+  <div class="hbtns">
+    <button class="hbtn" onclick="showSetup()">⚙ Setup</button>
+    <button class="hbtn" onclick="document.documentElement.requestFullscreen?.()">⛶ Full</button>
+    <button class="hbtn" onclick="location.href='../index.html'">← Home</button>
+  </div>
+</header>
+
+<!-- ══ SETUP ══════════════════════════════════════════════ -->
+<div id="setup">
+  <div>
+    <div class="setup-title">LANGUAGE SORTER</div>
+    <p class="setup-sub">Quickfire revision · Up to 6 teams · Shout the category!</p>
+  </div>
+
+  <div style="width:100%;max-width:580px;">
+    <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--flash);margin-bottom:10px;">Teams</div>
+    <div class="teams-grid" id="teamsGrid"></div>
+  </div>
+
+  <div style="width:100%;max-width:640px;">
+    <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--flash);margin-bottom:10px;">Choose rounds to play</div>
+    <div class="round-cards" id="roundCards"></div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">▶ START</button>
+</div>
+
+<!-- ══ GAME ════════════════════════════════════════════════ -->
+<div id="game">
+  <div id="scorebar"></div>
+  <div id="roundbar">
+    <div class="rbar-left">
+      <div class="rbar-badge" id="rbadge">R1</div>
+      <div class="rbar-name"  id="rname"></div>
+    </div>
+    <div class="rbar-prog" id="rprog"></div>
+  </div>
+  <div id="catstrip"></div>
+  <div id="arena">
+    <div class="card-wrap">
+      <div class="item-card" id="itemCard">
+        <div class="item-label" id="itemLabel"></div>
+        <div class="item-main"  id="itemMain"></div>
+        <div class="item-hint"  id="itemHint"></div>
+        <div class="item-answer" id="itemAnswer"></div>
+      </div>
+    </div>
+  </div>
+  <div id="controls"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════════════
+
+const ROUNDS = [
+  {
+    id:'origins',
+    name:'Where Does It Come From?',
+    emoji:'🌍',
+    color:'#3b7dd8',
+    desc:'A word flashes up — shout which language it comes from!',
+    cats:['Latin','Old Norse','Anglo-Saxon','French','Malay','German'],
+    catColors:['#e07b39','#39b8e0','#5db85d','#c068d8','#e03939','#e0c339'],
+    items:[
+      // Latin
+      {w:'FLORA',     cat:'Latin',      hint:'From L. flos — flower'},
+      {w:'FLORID',    cat:'Latin',      hint:'From L. floridus — flowery'},
+      {w:'SUBMARINE', cat:'Latin',      hint:'Sub = under, mare = sea'},
+      {w:'TELESCOPE', cat:'Latin',      hint:'Tele (Greek) + scope — but adopted via Latin'},
+      {w:'MICROSCOPE',cat:'Latin',      hint:'Micro = small (Greek/Latin)'},
+      {w:'HOMICIDE',  cat:'Latin',      hint:'-cide = kill (Latin)'},
+      {w:'BIOLOGY',   cat:'Latin',      hint:'-ology = study (Greek/Latin)'},
+      {w:'FLOTILLA',  cat:'Latin',      hint:'From L. flotare — to float'},
+      // Old Norse
+      {w:'ANGER',     cat:'Old Norse',  hint:'Viking invaders brought this word'},
+      {w:'SKILL',     cat:'Old Norse',  hint:'Old Norse: skil — distinction'},
+      {w:'ILL',       cat:'Old Norse',  hint:'Old Norse: illr — bad'},
+      {w:'RAISE',     cat:'Old Norse',  hint:'Paired with Anglo-Saxon "rear"'},
+      {w:'KNIFE',     cat:'Old Norse',  hint:'Old Norse: knifr'},
+      {w:'SKY',       cat:'Old Norse',  hint:'Old Norse: ský — cloud'},
+      // Anglo-Saxon
+      {w:'CRAFT',     cat:'Anglo-Saxon',hint:'Paired with Old Norse "skill"'},
+      {w:'REAR',      cat:'Anglo-Saxon',hint:'Paired with Old Norse "raise"'},
+      {w:'SICK',      cat:'Anglo-Saxon',hint:'Paired with Old Norse "ill"'},
+      {w:'WRATH',     cat:'Anglo-Saxon',hint:'Paired with Old Norse "anger"'},
+      {w:'HAND',      cat:'Anglo-Saxon',hint:'From Beowulf — manu/hand'},
+      {w:'BLOOD',     cat:'Anglo-Saxon',hint:'From Beowulf — blod'},
+      // French
+      {w:'BEEF',      cat:'French',     hint:'Normans ate boeuf — peasants raised cows'},
+      {w:'PORK',      cat:'French',     hint:'French: porc — pig meat'},
+      {w:'JUSTICE',   cat:'French',     hint:'Norman French brought legal vocabulary'},
+      {w:'CASTLE',    cat:'French',     hint:'French: castel — Norman buildings'},
+      {w:'LANGUAGE',  cat:'French',     hint:'French: langue — tongue/speech'},
+      // Malay
+      {w:'ORANGUTAN', cat:'Malay',      hint:'Orang = person, utan = forest'},
+      {w:'AMOK',      cat:'Malay',      hint:'Mengamuk — wild frenzy'},
+      {w:'BAMBOO',    cat:'Malay',      hint:'Buluh in Malay'},
+      {w:'RATTAN',    cat:'Malay',      hint:'Rotan — the plant'},
+      {w:'GECKO',     cat:'Malay',      hint:'From Malay/Javanese gekok'},
+      {w:'KETCHUP',   cat:'Malay',      hint:'From Malay kicap — soy sauce'},
+      // German
+      {w:'APPLE',     cat:'German',     hint:'German: Apfel (pf→p)'},
+      {w:'PEPPER',    cat:'German',     hint:'German: Pfeffer (ff→p)'},
+      {w:'MILK',      cat:'German',     hint:'German: Milch (ch→k)'},
+      {w:'FISH',      cat:'German',     hint:'German: Fisch (sch→sh)'},
+      {w:'SHARK',     cat:'German',     hint:'German: Scharf (sch→sh)'},
+      {w:'CHIMPANZEE',cat:'German',     hint:'German: Schimpanse (sch→ch)'},
+    ]
+  },
+  {
+    id:'slang',
+    name:'What Does It Mean?',
+    emoji:'💬',
+    color:'#d84040',
+    desc:'Text abbreviations and slang flash up — shout what they mean!',
+    cats:['Laugh out loud','Got to go','Before','See you','Are','As soon as possible','By the way','To','Are you OK?','Please','Sorry','Weekend','Good','Old slang'],
+    catColors:['#e07b39','#39b8e0','#5db85d','#c068d8','#e03939','#e0c339','#39e0a0','#e039b8','#6088e0','#e06060','#a0e039','#e0a039','#39c8e0','#9060e0'],
+    items:[
+      {w:'LOL',   cat:'Laugh out loud',    hint:'Classic text abbreviation'},
+      {w:'G2G',   cat:'Got to go',         hint:'Number replaces "to"'},
+      {w:'B4',    cat:'Before',            hint:'Number sounds like "for"'},
+      {w:'CU',    cat:'See you',           hint:'Letters sound it out'},
+      {w:'R',     cat:'Are',               hint:'Single letter stands in'},
+      {w:'ASAP',  cat:'As soon as possible',hint:'Initials only'},
+      {w:'BTW',   cat:'By the way',        hint:'Initials only'},
+      {w:'2',     cat:'To',               hint:'Number as word'},
+      {w:'RUOK',  cat:'Are you OK?',       hint:'Letters sound it out'},
+      {w:'PLS',   cat:'Please',            hint:'Vowel dropped'},
+      {w:'SRY',   cat:'Sorry',             hint:'Vowels dropped'},
+      {w:'WKND',  cat:'Weekend',           hint:'Vowels dropped'},
+      {w:'COOL',  cat:'Good',              hint:'Slang from 1950s — still popular'},
+      {w:'WICKED',cat:'Good',              hint:'Meaning flipped — 1980s–90s'},
+      {w:'SICK',  cat:'Good',              hint:'Modern slang — meaning flipped'},
+      {w:'RAD',   cat:'Good',              hint:'Short for radical — 1980s'},
+      {w:'GROOVY',cat:'Old slang',         hint:'1960s–70s — your parents might know it'},
+      {w:'HIP',   cat:'Old slang',         hint:'1950s–60s slang'},
+      {w:'TUBULAR',cat:'Old slang',        hint:'Surfer slang — 1980s'},
+      {w:'GNARLY',cat:'Old slang',         hint:'Surfer slang — 1980s'},
+      {w:'BOSS',  cat:'Good',              hint:'1960s–70s slang'},
+      {w:'SWEET', cat:'Good',              hint:'Late 1990s–2000s'},
+      {w:'DEF',   cat:'Good',              hint:'Hip hop slang — 1980s–90s'},
+      {w:'TIGHT', cat:'Good',              hint:'Late 1990s–2000s'},
+    ]
+  },
+  {
+    id:'symbols',
+    name:'What Does It Mean?',
+    emoji:'🔣',
+    color:'#d88b3b',
+    desc:'A symbol or sign flashes up — shout what it communicates!',
+    cats:['Toxic','Flammable','Warning','Explosive','Danger to Environment','Corrosive','Compressed Gas','No Entry','Stop','OK / Good'],
+    catColors:['#e03939','#ff8c00','#e0c339','#e05858','#5db85d','#9060e0','#39b8e0','#e03939','#e03939','#5db85d'],
+    items:[
+      {w:'☠',   cat:'Toxic',                  hint:'Skull and crossbones — hazard sign'},
+      {w:'⚠',   cat:'Warning',                hint:'Exclamation mark in triangle'},
+      {w:'💥',   cat:'Explosive',              hint:'Bomb/explosion symbol'},
+      {w:'🌿',   cat:'Danger to Environment',  hint:'Tree and water — chemical hazard'},
+      {w:'🔥',   cat:'Flammable',              hint:'Flame symbol — fire risk'},
+      {w:'🧪',   cat:'Corrosive',              hint:'Liquid eating through surfaces'},
+      {w:'🔒',   cat:'No Entry',               hint:'Lock symbol — do not enter'},
+      {w:'✋',   cat:'Stop',                   hint:'Hand raised — universal stop signal'},
+      {w:'👍',   cat:'OK / Good',              hint:'Thumbs up — universal approval'},
+      {w:'🆗',   cat:'OK / Good',              hint:'Letters in box — all fine'},
+      {w:'⛽',   cat:'Flammable',              hint:'Fuel pump — flammable liquid'},
+      {w:'💀',   cat:'Toxic',                  hint:'Skull alone — poison/death'},
+      {w:'🚫',   cat:'No Entry',               hint:'Circle with line through — prohibited'},
+      {w:'🛢',   cat:'Compressed Gas',         hint:'Cylinder — pressurised container'},
+      {w:'🌡',   cat:'Warning',                hint:'Temperature warning symbol'},
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════════════════════
+//  TEAM CONFIG
+// ══════════════════════════════════════════════════════════════
+const TC = ['#00e5b0','#f5c842','#ff6b6b','#a78bfa','#38bdf8','#fb923c'];
+const TNAMES = ['Team 1','Team 2','Team 3','Team 4','Team 5','Team 6'];
+let teamCfg = TNAMES.map((n,i)=>({name:n,color:TC[i],on:i<3}));
+let selectedRounds = [0,1,2]; // all on by default
+
+function buildSetup(){
+  // teams
+  const tg = document.getElementById('teamsGrid'); tg.innerHTML='';
+  teamCfg.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='team-card'+(t.on?' on':'');
+    d.style.setProperty('--tc',t.color);
+    d.innerHTML=`<div class="team-dot" style="background:${t.color}"></div>
+      <input type="text" value="${t.name}" onchange="teamCfg[${i}].name=this.value">
+      <div class="team-tog${t.on?' on':''}" style="--tc:${t.color}" onclick="toggleTeam(${i})">${t.on?'✓':'+'}</div>`;
+    tg.appendChild(d);
+  });
+  // rounds
+  const rc = document.getElementById('roundCards'); rc.innerHTML='';
+  ROUNDS.forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className='round-card'+(selectedRounds.includes(i)?' selected':'');
+    d.style.setProperty('--rc',r.color);
+    d.innerHTML=`<div class="rc-emoji">${r.emoji}</div>
+      <div class="rc-name" style="color:${r.color}">${r.name}</div>
+      <div class="rc-desc">${r.desc}</div>`;
+    d.onclick=()=>{
+      if(selectedRounds.includes(i)) selectedRounds=selectedRounds.filter(x=>x!==i);
+      else selectedRounds.push(i);
+      buildSetup();
+    };
+    rc.appendChild(d);
+  });
+}
+
+function toggleTeam(i){
+  const on=teamCfg.filter(t=>t.on);
+  if(teamCfg[i].on&&on.length<=2)return;
+  teamCfg[i].on=!teamCfg[i].on;
+  buildSetup();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════════════════════════════
+let teams=[], rounds=[], roundIdx=0, itemIdx=0, scores={};
+let hintShown=false, answerShown=false;
+
+function startGame(){
+  teams=teamCfg.filter(t=>t.on).map(t=>({...t}));
+  if(teams.length<2){alert('Enable at least 2 teams.');return;}
+  if(!selectedRounds.length){alert('Select at least one round.');return;}
+  rounds=selectedRounds.map(i=>({
+    ...ROUNDS[i],
+    items:shuffle([...ROUNDS[i].items])
+  }));
+  roundIdx=0; itemIdx=0;
+  teams.forEach(t=>scores[t.name]=0);
+  document.getElementById('setup').style.display='none';
+  document.getElementById('game').style.display='flex';
+  document.getElementById('game').style.flexDirection='column';
+  showRoundIntro();
+}
+
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function showSetup(){
+  document.getElementById('game').style.display='none';
+  const w=document.getElementById('winOverlay');
+  if(w)w.remove();
+  document.getElementById('setup').style.display='flex';
+  buildSetup();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  ROUND INTRO
+// ══════════════════════════════════════════════════════════════
+function showRoundIntro(){
+  const r=rounds[roundIdx];
+  const el=document.createElement('div');
+  el.className='round-intro';
+  el.style.setProperty('--rc',r.color);
+  // Build cats display — only unique cats that appear in items
+  const usedCats=[...new Set(r.items.map(x=>x.cat))];
+  const catPills=usedCats.map((c,i)=>{
+    const col=r.catColors[r.cats.indexOf(c)]||r.color;
+    return `<div class="ri-cat" style="--cc:${col};border-color:${col};color:${col}">${c}</div>`;
+  }).join('');
+  el.innerHTML=`
+    <div class="ri-num">ROUND ${roundIdx+1} OF ${rounds.length}</div>
+    <div class="ri-title" style="color:${r.color}">${r.emoji} ${r.name}</div>
+    <div class="ri-cats">${catPills}</div>
+    <div class="ri-desc">${r.desc}</div>
+    <button class="ri-btn" onclick="this.closest('.round-intro').remove(); renderRound();">Let's Go!</button>`;
+  document.body.appendChild(el);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RENDER ROUND
+// ══════════════════════════════════════════════════════════════
+function renderRound(){
+  const r=rounds[roundIdx];
+  document.getElementById('game').style.setProperty('--rc',r.color);
+
+  // Round bar
+  document.getElementById('rbadge').textContent=`R${roundIdx+1}`;
+  document.getElementById('rbadge').style.background=r.color;
+  document.getElementById('rname').textContent=`${r.emoji} ${r.name}`;
+
+  // Cat strip — unique cats in this round's items
+  const strip=document.getElementById('catstrip'); strip.innerHTML='';
+  const usedCats=[...new Set(r.items.map(x=>x.cat))];
+  usedCats.forEach(c=>{
+    const col=r.catColors[r.cats.indexOf(c)]||r.color;
+    const p=document.createElement('div');
+    p.className='catpill'; p.id='cat-'+c.replace(/\s+/g,'-');
+    p.style.setProperty('--cc',col);
+    p.textContent=c;
+    strip.appendChild(p);
+  });
+
+  renderScores();
+  showItem();
+}
+
+function renderScores(){
+  const bar=document.getElementById('scorebar'); bar.innerHTML='';
+  teams.forEach(t=>{
+    const c=document.createElement('div');
+    c.className='schip'; c.id='chip-'+t.name;
+    c.innerHTML=`<div class="schip-dot" style="background:${t.color}"></div>
+      <span class="schip-name">${t.name}</span>
+      <span class="schip-score">${scores[t.name]}</span>`;
+    bar.appendChild(c);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SHOW ITEM
+// ══════════════════════════════════════════════════════════════
+function showItem(){
+  const r=rounds[roundIdx];
+  const item=r.items[itemIdx];
+  hintShown=false; answerShown=false;
+
+  // Progress
+  document.getElementById('rprog').textContent=`${itemIdx+1} / ${r.items.length}`;
+
+  // Card
+  const card=document.getElementById('itemCard');
+  card.className='item-card card-new';
+  card.style.borderColor='var(--border)';
+
+  document.getElementById('itemLabel').textContent=r.emoji+' '+r.name.toUpperCase();
+  const main=document.getElementById('itemMain');
+  main.textContent=item.w;
+  main.className='item-main'+(item.w.length>10?' small':'');
+
+  document.getElementById('itemHint').textContent=item.hint||'';
+  document.getElementById('itemHint').classList.remove('show');
+  document.getElementById('itemAnswer').textContent='✓ '+item.cat;
+  document.getElementById('itemAnswer').classList.remove('show');
+
+  buildControls();
+
+  // Remove animation class after it plays
+  setTimeout(()=>card.classList.remove('card-new'),400);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CONTROLS
+// ══════════════════════════════════════════════════════════════
+function buildControls(){
+  const ctrl=document.getElementById('controls'); ctrl.innerHTML='';
+
+  // Team award buttons
+  teams.forEach(t=>{
+    const b=document.createElement('button');
+    b.className='team-award'; b.style.setProperty('--tc',t.color);
+    b.innerHTML=`<div class="tdot" style="background:${t.color}"></div>+1 ${t.name}`;
+    b.onclick=()=>awardPoint(t.name);
+    ctrl.appendChild(b);
+  });
+
+  const sep=()=>{const s=document.createElement('div');s.className='ctrl-sep';ctrl.appendChild(s);};
+  sep();
+
+  // Hint
+  const hb=document.createElement('button');
+  hb.className='ctrl-btn'; hb.textContent='💡 Hint';
+  hb.onclick=()=>{
+    document.getElementById('itemHint').classList.add('show');
+    hb.disabled=true; hb.style.opacity='0.4';
+  };
+  ctrl.appendChild(hb);
+
+  // Reveal
+  const rb=document.createElement('button');
+  rb.className='ctrl-btn'; rb.textContent='👁 Reveal';
+  rb.onclick=()=>{
+    document.getElementById('itemAnswer').classList.add('show');
+    flashCategory(rounds[roundIdx].items[itemIdx].cat);
+  };
+  ctrl.appendChild(rb);
+
+  sep();
+
+  // Skip / Next
+  const nb=document.createElement('button');
+  nb.className='ctrl-btn gold'; nb.textContent='Next →';
+  nb.onclick=advanceItem;
+  ctrl.appendChild(nb);
+}
+
+function awardPoint(name){
+  scores[name]=(scores[name]||0)+1;
+  renderScores();
+  // Pulse the chip
+  const chip=document.getElementById('chip-'+name);
+  if(chip){
+    chip.style.borderColor=teams.find(t=>t.name===name).color;
+    chip.style.background='rgba(245,200,66,0.12)';
+    setTimeout(()=>{chip.style.borderColor='transparent';chip.style.background='';},600);
+  }
+  playCorrect();
+  flashCorrect();
+}
+
+function flashCorrect(){
+  const card=document.getElementById('itemCard');
+  card.classList.add('correct');
+  setTimeout(()=>card.classList.remove('correct'),500);
+}
+
+function flashCategory(cat){
+  const id='cat-'+cat.replace(/\s+/g,'-');
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.classList.add('flash');
+  setTimeout(()=>el.classList.remove('flash'),700);
+}
+
+function advanceItem(){
+  const r=rounds[roundIdx];
+  itemIdx++;
+  if(itemIdx>=r.items.length){
+    // End of round
+    roundIdx++;
+    itemIdx=0;
+    if(roundIdx>=rounds.length){showWin();return;}
+    showRoundIntro();
+  } else {
+    showItem();
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  WIN
+// ══════════════════════════════════════════════════════════════
+function showWin(){
+  const sorted=[...teams].sort((a,b)=>scores[b.name]-scores[a.name]);
+  const winner=sorted[0];
+  const el=document.createElement('div');
+  el.className='win-ov'; el.id='winOverlay';
+  const rows=sorted.map((t,i)=>`
+    <div class="final-row${i===0?' top':''}">
+      <div style="width:9px;height:9px;border-radius:50%;background:${t.color}"></div>
+      <div style="flex:1;font-weight:700">${t.name}</div>
+      <div style="font-size:1.2rem;font-weight:900;color:var(--gold)">${scores[t.name]}</div>
+    </div>`).join('');
+  el.innerHTML=`<div class="win-box">
+    <div class="win-trophy">🏆</div>
+    <div class="win-title">GAME OVER</div>
+    <div class="win-name" style="color:${winner.color}">${winner.name} wins!</div>
+    <div class="final-list">${rows}</div>
+    <button class="start-btn" onclick="showSetup()">Play Again</button>
+  </div>`;
+  document.body.appendChild(el);
+  playWin();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  AUDIO
+// ══════════════════════════════════════════════════════════════
+let actx=null;
+function ac(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+function playCorrect(){
+  const ctx=ac();[523,659,784].forEach((f,i)=>{
+    const t=ctx.currentTime+i*0.08;
+    const o=ctx.createOscillator();o.type='triangle';o.frequency.value=f;
+    const g=ctx.createGain();g.gain.setValueAtTime(0.25,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+    o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+0.2);
+  });
+}
+function playWin(){
+  const ctx=ac();[523,659,784,1047,1319].forEach((f,i)=>{
+    const t=ctx.currentTime+i*0.12;
+    const o=ctx.createOscillator();o.type='triangle';o.frequency.value=f;
+    const g=ctx.createGain();g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+    o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+0.35);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+buildSetup();
+</script>
+</body>
+</html>
