@@ -190,35 +190,33 @@
                            window.CUSTOM_CONTENT.words &&
                            window.CUSTOM_CONTENT.words.length > 0;
 
+    // Always load built-in word lists as a base
+    Object.assign(wordLists, BUILT_IN);
+
     if (hasCustomWords) {
-      // Group custom words by topic → one category per topic
+      // Group custom words by topic → one category per topic, added on top of built-ins
       const groups = {};
       window.CUSTOM_CONTENT.words.forEach(w => {
         const key  = w.topic || 'Custom';
-        const label = key;
-        if (!groups[key]) groups[key] = { label, words: [] };
+        if (!groups[key]) groups[key] = { label: key, words: [] };
         groups[key].words.push(w.word);
       });
       Object.entries(groups).forEach(([key, cat]) => {
         const safeKey = 'custom_' + key.toLowerCase().replace(/[^a-z0-9]/g, '_');
         wordLists[safeKey] = cat;
       });
-    } else {
-      // No custom content — fall back to built-in word lists
-      Object.assign(wordLists, BUILT_IN);
     }
 
-    // Try to load wordlists.json to supplement/override (only works with a local server)
+    // Try to load wordlists.json to add any extra lists (non-destructive merge)
     fetch('../wordlists.json')
       .then(r => r.json())
       .then(data => {
-        // Merge JSON on top of built-ins
         Object.assign(wordLists, data);
         selList = '';
         buildCategoryPicker();
       })
       .catch(() => {
-        // JSON not available — built-ins already loaded above, just build picker
+        // JSON not available — use what we have
         selList = '';
         buildCategoryPicker();
       });

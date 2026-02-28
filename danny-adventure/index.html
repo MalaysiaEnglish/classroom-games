@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danny & Dad — A New Adventure</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --cream: #fdf6e8;
+  --parchment: #f5e8c8;
+  --brown-dark: #2c1a0e;
+  --brown-mid: #5c3d1e;
+  --brown-light: #8b5e3c;
+  --forest: #2d5a27;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --red: #8b1a1a;
+  --blue: #1a4a6b;
+  --ink: #1a0e05;
+  --shadow: rgba(44,26,14,0.15);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  background:var(--cream);
+  font-family:'Lora',Georgia,serif;
+  color:var(--ink);
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at 0% 0%,rgba(180,140,80,0.12) 0%,transparent 50%),
+    radial-gradient(ellipse at 100% 100%,rgba(45,90,39,0.08) 0%,transparent 50%);
+}
+
+/* ── HEADER ── */
+header {
+  background:var(--brown-dark); color:var(--cream);
+  text-align:center; padding:18px 20px 14px;
+  border-bottom:4px solid var(--gold);
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 3px 16px rgba(0,0,0,0.3);
+}
+header .pre { font-style:italic; font-size:0.82rem; color:var(--gold-light); letter-spacing:3px; margin-bottom:3px; }
+header h1 { font-family:'Playfair Display',serif; font-size:clamp(1.4rem,4vw,2.4rem); line-height:1.1; }
+header h1 span { color:var(--gold-light); font-style:italic; }
+.header-meta { margin-top:8px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap; font-size:0.8rem; color:rgba(253,246,232,0.7); }
+.header-btn {
+  background:rgba(184,134,11,0.25); border:1px solid var(--gold-light);
+  color:var(--cream); padding:4px 14px; border-radius:4px;
+  font-family:'Lora',serif; font-size:0.78rem; cursor:pointer; transition:all 0.2s;
+  text-decoration:none; display:inline-block;
+}
+.header-btn:hover { background:rgba(184,134,11,0.45); }
+
+/* ── MAIN ── */
+main { max-width:720px; margin:0 auto; padding:24px 16px 60px; }
+
+/* ── SCENE CARD ── */
+.scene-card {
+  background:var(--parchment);
+  border:1px solid rgba(139,94,60,0.3);
+  border-radius:3px;
+  box-shadow:0 4px 20px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.6);
+  padding:28px 32px;
+  margin-bottom:20px;
+  position:relative;
+  animation:pageIn 0.5s ease both;
+}
+@keyframes pageIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+.scene-card::before {
+  content:''; position:absolute; top:6px; left:6px; right:6px; bottom:6px;
+  border:1px solid rgba(184,134,11,0.2); border-radius:2px; pointer-events:none;
+}
+
+/* Scene header */
+.scene-chapter {
+  font-size:0.68rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.2em; color:var(--brown-light); margin-bottom:4px;
+}
+.scene-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.3rem,3vw,1.8rem);
+  color:var(--brown-dark); margin-bottom:16px; line-height:1.2;
+}
+.scene-emoji { font-size:2.4rem; margin-bottom:10px; display:block; }
+
+/* Prose */
+.scene-text { line-height:1.85; font-size:clamp(0.92rem,2.2vw,1.02rem); color:#2a1a0a; }
+.scene-text p { margin-bottom:14px; }
+.scene-text p:last-child { margin-bottom:0; }
+.scene-text .dialogue { color:var(--blue); font-style:italic; }
+.scene-text .dad-speech { color:var(--forest); font-style:italic; font-weight:600; }
+.scene-text .hazell-speech { color:var(--red); font-style:italic; }
+.scene-text strong { color:var(--brown-dark); }
+.scene-text .aside {
+  display:block; margin:12px 0; padding:10px 16px;
+  background:rgba(184,134,11,0.1); border-left:3px solid var(--gold);
+  font-style:italic; font-size:0.92rem; color:var(--brown-mid);
+  border-radius:0 4px 4px 0;
+}
+
+/* ── CHOICES ── */
+.choices { display:flex; flex-direction:column; gap:10px; margin-top:22px; }
+.choice-btn {
+  background:white; border:2px solid var(--brown-light);
+  border-radius:6px; padding:13px 18px;
+  font-family:'Lora',serif; font-size:0.95rem; color:var(--brown-dark);
+  cursor:pointer; text-align:left; transition:all 0.2s;
+  box-shadow:0 2px 6px var(--shadow);
+  display:flex; align-items:flex-start; gap:10px;
+}
+.choice-btn:hover { background:var(--parchment); border-color:var(--gold); transform:translateX(4px); box-shadow:0 4px 12px var(--shadow); }
+.choice-letter {
+  background:var(--brown-dark); color:var(--gold-light);
+  font-family:'Playfair Display',serif; font-weight:900;
+  width:26px; height:26px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.85rem; flex-shrink:0; margin-top:1px;
+}
+.choice-text { flex:1; line-height:1.5; }
+
+/* ── ENDING CARD ── */
+.ending-card {
+  text-align:center; padding:36px 32px;
+}
+.ending-badge {
+  display:inline-block; padding:6px 20px; border-radius:20px;
+  font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em;
+  margin-bottom:14px;
+}
+.ending-good  .ending-badge { background:rgba(45,90,39,0.15); color:var(--forest); border:1px solid var(--forest); }
+.ending-bad   .ending-badge { background:rgba(139,26,26,0.12); color:var(--red); border:1px solid var(--red); }
+.ending-silly .ending-badge { background:rgba(184,134,11,0.15); color:var(--gold); border:1px solid var(--gold); }
+.ending-emoji { font-size:3.5rem; display:block; margin-bottom:10px; }
+.ending-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.4rem,4vw,2rem); color:var(--brown-dark); margin-bottom:14px;
+}
+.restart-btn {
+  margin-top:20px; padding:12px 36px;
+  background:var(--brown-dark); color:var(--gold-light);
+  border:2px solid var(--gold); border-radius:6px;
+  font-family:'Lora',serif; font-size:1rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+}
+.restart-btn:hover { background:var(--brown-mid); transform:scale(1.03); }
+
+/* ── PROGRESS ── */
+.progress-bar-wrap { background:rgba(139,94,60,0.15); border-radius:4px; height:6px; margin-bottom:20px; overflow:hidden; }
+.progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:4px; transition:width 0.5s ease; }
+
+/* Score strip */
+.score-strip {
+  display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+  margin-bottom:16px;
+}
+.score-pip {
+  background:white; border:1px solid rgba(139,94,60,0.3);
+  border-radius:20px; padding:4px 14px;
+  font-size:0.8rem; color:var(--brown-mid); font-style:italic;
+}
+.score-pip span { font-weight:700; color:var(--brown-dark); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pre">A Choose Your Own Adventure</div>
+  <h1>Danny &amp; Dad's <span>Brilliant Secret</span></h1>
+  <div class="header-meta">
+    <span id="sceneCounter">Scene 1</span>
+    <a class="header-btn" href="../index.html">← Games</a>
+    <button class="header-btn" onclick="restart()">Restart</button>
+  </div>
+</header>
+
+<main>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar" style="width:5%"></div></div>
+  <div id="scoreStrip" class="score-strip"></div>
+  <div id="storyContainer"></div>
+</main>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  STORY DATA
+// ══════════════════════════════════════════════════════════════
+const STORY = {
+
+  start: {
+    chapter: 'Chapter One',
+    title: 'The Extraordinary Smell',
+    emoji: '🔧',
+    progress: 5,
+    text: `
+      <p>It is a perfectly ordinary Tuesday evening at the filling station. Dad is humming to himself in the workshop, and you — Danny — are sitting on an upturned oil drum eating a cheese sandwich, when something extraordinary happens.</p>
+      <p>You notice a smell.</p>
+      <p>It is not the usual smell of engine oil and petrol and dad's terrible instant coffee. It is something quite different. Something that smells remarkably like... <strong>cake</strong>.</p>
+      <p>You follow your nose to the back of the workshop, where Dad is crouched over a small wooden box with a very guilty expression on his face.</p>
+      <p><span class="dad-speech">"Ah,"</span> he says. <span class="dad-speech">"Danny, my boy. You weren't supposed to see that."</span></p>
+      <p>Inside the box are forty-seven perfectly iced cupcakes.</p>
+      <p>They have tiny sugar flowers on top. Some of them have little bees made of marzipan. Your father, who once rebuilt a tractor engine using only a paperclip and a piece of wire, has apparently also been making <strong>marzipan bees</strong>.</p>
+    `,
+    choices: [
+      { text: 'Ask Dad what on earth is going on', next: 'askDad' },
+      { text: 'Immediately eat one of the cupcakes', next: 'eatCake' },
+      { text: 'Pretend you have seen nothing and walk away whistling', next: 'whistleAway' },
+    ]
+  },
+
+  askDad: {
+    chapter: 'Chapter One',
+    title: 'The Secret is Revealed',
+    emoji: '🎂',
+    progress: 15,
+    text: `
+      <p>Dad straightens up slowly, with the look of a man who has been caught doing something brilliantly silly.</p>
+      <p><span class="dad-speech">"Well,"</span> he says, <span class="dad-speech">"you may as well know. I have been secretly entering the Great Buckinghamshire Village Bake-Off competition for three years. Under a false name."</span></p>
+      <p><span class="dialogue">"Under what name?"</span> you ask.</p>
+      <p><span class="dad-speech">"Doris Plumsworth."</span></p>
+      <p>There is a very long silence.</p>
+      <p><span class="dialogue">"You've been entering a baking competition as <em>Doris Plumsworth</em>?"</span></p>
+      <p><span class="dad-speech">"She has won it twice,"</span> Dad says, with considerable dignity. <span class="dad-speech">"This year she intends to win again. Except that Mr Victor Hazell has also entered, and he has hired a professional French chef to bake for him, which I consider to be <em>completely</em> against the spirit of the thing."</span></p>
+      <span class="aside">You think about your father for a moment. He can fix any engine in the world, he can make a pheasant sleep, and now it turns out he bakes magnificent cupcakes in secret. He is, without doubt, the most extraordinary person you have ever met.</span>
+      <p>The competition is tomorrow. Hazell's chef is said to be making a seven-tier chocolate tower. Dad — or rather, Doris — needs a plan.</p>
+    `,
+    choices: [
+      { text: 'Help Dad think of a cunning plan to win fairly', next: 'fairPlan' },
+      { text: 'Suggest sneaking into Hazell\'s kitchen to see what you\'re up against', next: 'sneakIn' },
+      { text: 'Volunteer to distract Hazell yourself while Dad bakes', next: 'distract' },
+    ]
+  },
+
+  eatCake: {
+    chapter: 'Chapter One',
+    title: 'A Terrible Mistake',
+    emoji: '😬',
+    progress: 12,
+    text: `
+      <p>The cupcake is in your mouth before Dad can say a single word.</p>
+      <p>It is, without question, the finest thing you have ever tasted. There is buttercream. There is jam. There is something that might be a hint of cinnamon.</p>
+      <p>Unfortunately, you have also just eaten the special <strong>competition entry sample</strong> that Dad needed to show the judges first thing tomorrow morning to prove his bake was consistent.</p>
+      <p><span class="dad-speech">"That,"</span> says Dad, very quietly, <span class="dad-speech">"was the one I was going to show Mrs Clipstone at registration."</span></p>
+      <p>Dad is not angry. He never gets properly angry. But he does make a face that suggests that eating the sample cupcake was perhaps not the greatest decision in the history of the filling station.</p>
+      <p><span class="dialogue">"Sorry,"</span> you say, with your mouth still full. <span class="dialogue">"It was exceptional."</span></p>
+      <p><span class="dad-speech">"Yes, well,"</span> says Dad. <span class="dad-speech">"We shall have to bake another one. Tonight. Together."</span></p>
+    `,
+    choices: [
+      { text: 'Agree enthusiastically — baking with Dad sounds brilliant', next: 'bakeNight' },
+      { text: 'Eat a second cupcake while Dad is not looking', next: 'eatSecond' },
+    ]
+  },
+
+  whistleAway: {
+    chapter: 'A Brief Detour',
+    title: 'The Art of Pretending',
+    emoji: '🎵',
+    progress: 10,
+    text: `
+      <p>You turn on your heel and walk away, whistling in what you hope is a casual manner.</p>
+      <p>Your whistling is, unfortunately, not very good. It sounds less like a carefree boy and more like a kettle with a blocked spout.</p>
+      <p><span class="dad-speech">"Danny,"</span> says Dad.</p>
+      <p>You whistle louder.</p>
+      <p><span class="dad-speech">"Danny, I can see you."</span></p>
+      <p>The whistling continues.</p>
+      <p><span class="dad-speech">"You're still in the workshop. You've just turned to face the wall."</span></p>
+      <p>There is, you realise, no elegant way out of this situation. You turn back around.</p>
+      <span class="aside">Some plans are better in theory than in practice. This was one of those plans.</span>
+    `,
+    choices: [
+      { text: 'Give up pretending and ask Dad what\'s going on', next: 'askDad' },
+    ]
+  },
+
+  fairPlan: {
+    chapter: 'Chapter Two',
+    title: 'The Secret Ingredient',
+    emoji: '✨',
+    progress: 28,
+    text: `
+      <p>You sit together at the little table in the caravan with mugs of hot chocolate, and you think.</p>
+      <p><span class="dialogue">"What makes Doris Plumsworth's cupcakes special?"</span> you ask.</p>
+      <p><span class="dad-speech">"Ah,"</span> says Dad, and his eyes go bright. <span class="dad-speech">"That is the question. And the answer is: she uses <em>wildflower honey</em>. From bees that live in the hedgerow just past Hazell's Wood. There's nothing else like it."</span></p>
+      <p><span class="dialogue">"Then you need more of it."</span></p>
+      <p><span class="dad-speech">"The problem,"</span> Dad says, <span class="dad-speech">"is that the bees are on Hazell's land. And Hazell has put up a new fence with a sign that says: <em>TRESPASSERS WILL BE REPORTED, PROSECUTED, AND ALSO LAUGHED AT.</em>"</span></p>
+      <p>You think about this.</p>
+      <p>The bees don't know about the fence. Bees never do. And there is more than one way to get honey.</p>
+    `,
+    choices: [
+      { text: 'Suggest asking old Mr Corrado the beekeeper for advice', next: 'beekeeper' },
+      { text: 'Sneak past the fence at dawn — bees don\'t bite if you\'re quiet', next: 'dawnMission' },
+      { text: 'Have a brilliant idea involving the caravan, a hosepipe, and gravity', next: 'hosepipe' },
+    ]
+  },
+
+  sneakIn: {
+    chapter: 'Chapter Two',
+    title: 'Operation Kitchen Spy',
+    emoji: '🕵️',
+    progress: 26,
+    text: `
+      <p>Hazell's manor house is big, white, and surrounded by gravel that crunches like a bag of crisps. Getting close without being heard would require the skills of a ninja, or at very least someone wearing socks.</p>
+      <p>You and Dad creep across the gravel in your socks. It still crunches.</p>
+      <p>Through the kitchen window you can see the French chef — a small man with an enormous moustache — constructing what appears to be a chocolate tower the height of a toddler. He is muttering to himself and consulting seventeen different notebooks.</p>
+      <p><span class="dad-speech">"Good heavens,"</span> Dad whispers. <span class="dad-speech">"That's a lot of chocolate."</span></p>
+      <p>Then the chef reaches into his pocket and pulls out a bottle with a skull-and-crossbones label.</p>
+      <p><span class="dialogue">"What's in that bottle?"</span> you whisper.</p>
+      <p>Dad squints. <span class="dad-speech">"I believe... that says <em>Extract of Brussels Sprout</em>."</span></p>
+      <p>The chef is cheating. He is going to secretly add the extract to <em>all the other entries</em> — sneaking around the hall before judging begins and ruining everyone else's bakes. Hazell's tower, untouched, would be the only edible thing on the table.</p>
+    `,
+    choices: [
+      { text: 'Tell Mrs Clipstone the judge what you saw', next: 'tellJudge' },
+      { text: 'Swap the sprout extract for something nicer when the chef isn\'t looking', next: 'swap' },
+      { text: 'Tell Dad — he will know exactly what to do', next: 'dadKnows' },
+    ]
+  },
+
+  distract: {
+    chapter: 'Chapter Two',
+    title: 'The Grand Distraction',
+    emoji: '🎪',
+    progress: 26,
+    text: `
+      <p>You have volunteered to distract Mr Victor Hazell.</p>
+      <p>This, you now realise, requires having some idea of <em>how</em> to distract Mr Victor Hazell.</p>
+      <p>Hazell is a large, red-faced man who owns the biggest house in the county and considers himself better than everyone else, which he most certainly is not. He wears a flat cap and drives a shining silver car and has never once said thank you to anyone.</p>
+      <p>You think about what might distract such a man.</p>
+      <span class="aside">Your dad once told you: the best way to distract a pompous man is to flatter him until he forgets what day it is.</span>
+    `,
+    choices: [
+      { text: 'Tell Hazell you\'ve heard a journalist is coming to write about his estate', next: 'journalist' },
+      { text: 'Challenge Hazell to a game of conkers — loudly, in front of his staff', next: 'conkers' },
+      { text: 'Release the caravan\'s pet rabbit near his vegetable garden', next: 'rabbit' },
+    ]
+  },
+
+  bakeNight: {
+    chapter: 'The Midnight Bake',
+    title: 'Flour Everywhere',
+    emoji: '🌙',
+    progress: 30,
+    text: `
+      <p>You bake together until midnight. There is flour on the ceiling. There is butter in your hair. Dad somehow has an entire egg on his elbow and does not appear to notice.</p>
+      <p>The caravan has never smelled so wonderful.</p>
+      <p>By eleven o'clock you have produced six new cupcakes, and Dad declares four of them to be excellent, one to be very good, and one to be <em>"a bit lopsided but full of character."</em></p>
+      <p>You fall asleep in your chair and Dad carries you to your bunk. In the morning, the competition cupcakes are lined up perfectly on the windowsill, and Dad is already dressed in his cleanest overalls.</p>
+      <p><span class="dad-speech">"Ready?"</span> he says, grinning.</p>
+      <p>You are absolutely ready.</p>
+    `,
+    choices: [
+      { text: 'Head to the village hall for the competition', next: 'competitionDay' },
+    ]
+  },
+
+  eatSecond: {
+    chapter: 'A Short Chapter',
+    title: 'No Regrets',
+    emoji: '🧁',
+    progress: 18,
+    ending: 'bad',
+    endingBadge: 'Ending: The Hungry One',
+    endingTitle: 'You Ate All Forty-Seven',
+    text: `
+      <p>You eat a second cupcake. Then a third. Dad is explaining the situation, but the cupcakes are really very good.</p>
+      <p>By the time Dad finishes talking, twenty-two cupcakes have disappeared.</p>
+      <p>Dad looks at the box. He looks at you. He looks at the box again.</p>
+      <p><span class="dad-speech">"Danny,"</span> he says, very slowly, <span class="dad-speech">"how many have you eaten?"</span></p>
+      <p><span class="dialogue">"Somewhere between six and twenty-two,"</span> you say honestly.</p>
+      <p>Dad starts to laugh. He laughs until he has to sit on the floor. Then he makes a pot of tea and you eat the rest of the cupcakes together, and nobody wins the baking competition, but you have an absolutely magnificent evening, and that, when you think about it, is really rather more important.</p>
+      <span class="aside">THE END — Not every adventure ends with a victory. Some end with stomach ache and a very happy father.</span>
+    `
+  },
+
+  beekeeper: {
+    chapter: 'Chapter Three',
+    title: 'Old Corrado\'s Advice',
+    emoji: '🐝',
+    progress: 40,
+    text: `
+      <p>Mr Corrado is ninety-one years old and has kept bees for seventy years. He lives in a cottage at the end of a muddy lane and is perfectly delighted to see you.</p>
+      <p><span class="dialogue">"The wildflower bees near Hazell's hedge,"</span> you explain. <span class="dialogue">"We need some of their honey."</span></p>
+      <p>Mr Corrado nods slowly. <span class="dialogue">"Ah yes. Beautiful bees, those. Very musical. If you hum to them — the right tune, mind you — they'll follow you like a dog."</span></p>
+      <p><span class="dad-speech">"Which tune?"</span> says Dad.</p>
+      <p><span class="dialogue">"Six Seven — the Burna Boy one,"</span> says Mr Corrado without hesitation.</p>
+      <p>There is a short pause.</p>
+      <p><span class="dad-speech">"Does that actually work?"</span></p>
+      <p><span class="dialogue">"I have absolutely no idea,"</span> Mr Corrado admits cheerfully. <span class="dialogue">"But it might. I once got a whole swarm to follow me to the post office by whistling the theme from Coronation Street. Mind you, that might have been a coincidence."</span></p>
+      <p>He offers you both a biscuit. The biscuit is also, suspiciously, honey-flavoured.</p>
+    `,
+    choices: [
+      { text: 'Try humming Colonel Bogey and see what happens', next: 'colonelBogey' },
+      { text: 'Politely thank Mr Corrado and think of a different plan', next: 'dawnMission' },
+    ]
+  },
+
+  dawnMission: {
+    chapter: 'Chapter Three',
+    title: 'Dawn at the Hedge',
+    emoji: '🌅',
+    progress: 42,
+    text: `
+      <p>You wake at four in the morning. The sky is the colour of a bruised plum. Dad is already awake — he is almost always already awake, as if sleeping is something he only does occasionally out of politeness.</p>
+      <p>You walk together through the wet grass to Hazell's fence. The sign says: <em>TRESPASSERS WILL BE REPORTED, PROSECUTED, AND ALSO LAUGHED AT.</em></p>
+      <p><span class="dad-speech">"The bees are on the other side of that hedge,"</span> Dad says quietly. <span class="dad-speech">"And the honey is in the hollow of the old oak."</span></p>
+      <p>The fence has a gap in it. A small gap. A Danny-sized gap.</p>
+      <p>Dad looks at the gap. He looks at you. He looks enormously guilty.</p>
+      <p><span class="dad-speech">"I wouldn't ask you to—"</span></p>
+      <p><span class="dialogue">"I'm already going,"</span> you say.</p>
+    `,
+    choices: [
+      { text: 'Squeeze through the gap and head for the oak tree', next: 'oakTree' },
+      { text: 'Suggest a distraction — get Hazell out of bed first', next: 'wakeHazell' },
+    ]
+  },
+
+  hosepipe: {
+    chapter: 'An Unusual Plan',
+    title: 'The Hosepipe Scheme',
+    emoji: '🌊',
+    progress: 35,
+    text: `
+      <p>Your plan, as you explain it to Dad, involves positioning the caravan on the slight hill above Hazell's hedgerow, running a hosepipe down to where the bees are, and then... you lose confidence at this point.</p>
+      <p><span class="dad-speech">"And then what?"</span> says Dad.</p>
+      <p><span class="dialogue">"I'm not entirely sure,"</span> you admit. <span class="dialogue">"The hosepipe part felt very important at the time."</span></p>
+      <p>Dad nods very seriously, as though you have said something profound.</p>
+      <p><span class="dad-speech">"I once fixed a 1962 Land Rover using only a hosepipe and a piece of string,"</span> he says, <span class="dad-speech">"so I am not one to dismiss hosepipe-based thinking. However, in this case, I think perhaps we try something else first."</span></p>
+    `,
+    choices: [
+      { text: 'Try the dawn mission instead', next: 'dawnMission' },
+      { text: 'Ask Mr Corrado the beekeeper', next: 'beekeeper' },
+    ]
+  },
+
+  colonelBogey: {
+    chapter: 'Chapter Four',
+    title: 'The Musical Bees',
+    emoji: '🎺',
+    progress: 52,
+    text: `
+      <p>Dad begins humming Six Seven at the hedge — quietly at first, then with more confidence. You stand slightly behind him, ready to run.</p>
+      <p>For a moment, nothing happens.</p>
+      <p>Then one bee appears. It hovers in front of Dad's nose.</p>
+      <p>Dad hums the chorus louder. Another bee arrives. Then six more. Then what can only be described as <em>a considerable number</em> of bees, all hovering around Dad in a sort of excitable cloud, bobbing in time with the music.</p>
+      <p><span class="dad-speech">"Extraordinary,"</span> Dad murmurs, not stopping the humming.</p>
+      <p>The bees drift down the lane and into the hedgerow, and when you follow them carefully, you find they have led you directly to a hollow tree absolutely stuffed with honeycomb.</p>
+      <p>Mr Corrado is either a genius or extremely lucky. You make a mental note to tell your friends that Burna Boy is also, apparently, popular with bees. Possibly both.</p>
+    `,
+    choices: [
+      { text: 'Carefully collect just enough honey for the cupcakes', next: 'honeyGot' },
+    ]
+  },
+
+  oakTree: {
+    chapter: 'Chapter Four',
+    title: 'Inside the Fence',
+    emoji: '🌳',
+    progress: 50,
+    text: `
+      <p>The grass on Hazell's side of the fence is the same as the grass on your side, which seems somehow unfair. Hazell has always acted as if his ground was made of better stuff.</p>
+      <p>The oak tree is magnificent. Ancient and knobbly and hollow at the base, and inside there is more honeycomb than you have ever seen. The bees watch you with what feels like professional interest.</p>
+      <p>You take just enough for the cupcakes. Not more. That feels important.</p>
+      <p>Then, halfway back to the fence, you hear gravel crunching. Then a very loud, very cross voice.</p>
+      <p><span class="hazell-speech">"WHAT IN BLAZES—"</span></p>
+      <p>It is Mr Victor Hazell. In his dressing gown. He looks like an angry red sofa.</p>
+    `,
+    choices: [
+      { text: 'Run. Just run.', next: 'theRun' },
+      { text: 'Stand your ground and explain politely that you were borrowing honey', next: 'politeExplain' },
+      { text: 'Release the bees in Hazell\'s direction (accidentally on purpose)', next: 'beeRelease' },
+    ]
+  },
+
+  theRun: {
+    chapter: 'Chapter Four',
+    title: 'The Great Escape',
+    emoji: '💨',
+    progress: 60,
+    text: `
+      <p>You run.</p>
+      <p>You have never run so fast in your life. The honey jar is tucked under your arm like a rugby ball. Behind you, Hazell is shouting things that would make Mrs Clipstone faint.</p>
+      <p>You squeeze through the Danny-sized gap. You sprint across the wet field. You vault the gate at the bottom of the lane, which is something you have never done before and will probably never manage again.</p>
+      <p>Dad is waiting by the workshop, and when he sees the honey jar and your enormous grin, he laughs so hard he spills his terrible instant coffee all down his overalls.</p>
+      <p><span class="dad-speech">"Did he see your face?"</span></p>
+      <p><span class="dialogue">"I don't think so."</span></p>
+      <p><span class="dad-speech">"Good,"</span> says Dad. <span class="dad-speech">"Let's bake."</span></p>
+    `,
+    choices: [
+      { text: 'Bake the final cupcakes and head to the competition', next: 'competitionDay' },
+    ]
+  },
+
+  politeExplain: {
+    chapter: 'Chapter Four',
+    title: 'A Very Awkward Conversation',
+    emoji: '😅',
+    progress: 58,
+    text: `
+      <p><span class="dialogue">"Good morning, Mr Hazell,"</span> you say, as calmly as you can. <span class="dialogue">"I was borrowing some honey. Just a small amount. For a baking competition."</span></p>
+      <p>Hazell stares at you. His face goes through several colours.</p>
+      <p><span class="hazell-speech">"A <em>baking</em> competition,"</span> he repeats.</p>
+      <p><span class="dialogue">"Yes. You're entering it yourself, I believe?"</span></p>
+      <p>Something complicated happens on Hazell's face. He cannot very well report a child for stealing honey for a baking competition — not when he himself is entering. The newspapers would have a field day.</p>
+      <p><span class="hazell-speech">"Take your honey and GET OFF MY LAND,"</span> he says, which is, for Victor Hazell, practically a warm welcome.</p>
+      <span class="aside">You walk back to the gap in the fence. You do not run. Running would suggest you were afraid, and you are not afraid. Well. Not very.</span>
+    `,
+    choices: [
+      { text: 'Head back to Dad and bake the final cupcakes', next: 'honeyGot' },
+    ]
+  },
+
+  beeRelease: {
+    chapter: 'Chapter Four',
+    title: 'The Bees Decide',
+    emoji: '🐝',
+    progress: 56,
+    text: `
+      <p>You do not release the bees on purpose. What happens is that you stumble slightly, and the honeycomb wobbles, and the bees — who have been watching Hazell's shouting with growing irritation — make their own decision.</p>
+      <p>Hazell runs. He runs remarkably quickly for a large man in a dressing gown. The bees do not sting him — they are not angry bees, merely opinionated ones — but they do accompany him loudly across his lawn and into his rose garden.</p>
+      <p>You slip through the fence.</p>
+      <p>From somewhere in the distance you hear: <span class="hazell-speech">"GET AWAY FROM ME, YOU WRETCHED INSECTS!"</span></p>
+      <p>The birds in the hedgerow take this as a signal to start singing very loudly. It is a beautiful morning.</p>
+    `,
+    choices: [
+      { text: 'Get home to Dad and the cupcakes', next: 'honeyGot' },
+    ]
+  },
+
+  honeyGot: {
+    chapter: 'Chapter Five',
+    title: 'The Final Bake',
+    emoji: '🧁',
+    progress: 68,
+    text: `
+      <p>The honey goes into the batter. Dad stirs it in with enormous concentration, the tip of his tongue between his teeth the way it always is when he is doing something that matters.</p>
+      <p>The caravan fills up with the most wonderful smell in the world — warm honey and butter and something that makes you feel that everything is going to be all right.</p>
+      <p><span class="dad-speech">"Doris Plumsworth,"</span> Dad says softly, sliding the tray into the oven, <span class="dad-speech">"is going to give it her absolute best shot."</span></p>
+      <p>You look at your father in his oil-stained overalls with flour on his nose, and you think: <em>there is no one in the world quite like him.</em></p>
+    `,
+    choices: [
+      { text: 'Head to the competition', next: 'competitionDay' },
+    ]
+  },
+
+  tellJudge: {
+    chapter: 'Chapter Three',
+    title: 'A Word with Mrs Clipstone',
+    emoji: '👩‍⚖️',
+    progress: 40,
+    text: `
+      <p>Mrs Clipstone is the head judge, the headmistress of the village school, and a woman who takes baking extremely seriously. She has a clipboard with six different coloured pens, which tells you everything you need to know.</p>
+      <p>You tell her what you saw through the kitchen window. The Brussels sprout extract. The bottle with the skull and crossbones.</p>
+      <p>Mrs Clipstone writes it down in red pen. This is a good sign. Red pen means <em>serious matter.</em></p>
+      <p><span class="dialogue">"If this is true,"</span> she says, <span class="dialogue">"then Mr Hazell will be disqualified. But we would need proof."</span></p>
+    `,
+    choices: [
+      { text: 'Offer to get the bottle as evidence', next: 'getBottle' },
+      { text: 'Suggest Mrs Clipstone does a surprise kitchen inspection', next: 'inspection' },
+    ]
+  },
+
+  swap: {
+    chapter: 'Chapter Three',
+    title: 'The Great Swap',
+    emoji: '🔄',
+    progress: 38,
+    text: `
+      <p>While the French chef disappears upstairs for his hourly break, you and Dad creep back to the kitchen window. It is open just enough.</p>
+      <p>Dad boosts you up. You reach inside and swap the skull-and-crossbones bottle for a bottle of vanilla extract from your pocket.</p>
+      <p>The chef returns. He picks up the new bottle, sniffs it, shrugs in a very French manner, and adds it to his chocolate tower.</p>
+      <p>The chocolate tower will now taste of vanilla.</p>
+      <p>This is either brilliant or the most chaotic plan you have ever been involved in. Possibly both.</p>
+      <span class="aside">You cannot help feeling rather good about this. It has all the elements of an excellent adventure: a cunning plan, a narrow window, and a French chef who shrugs a lot.</span>
+    `,
+    choices: [
+      { text: 'Head home and let Dad finish baking his cupcakes', next: 'honeyGot' },
+    ]
+  },
+
+  dadKnows: {
+    chapter: 'Chapter Three',
+    title: 'Dad\'s Solution',
+    emoji: '💡',
+    progress: 36,
+    text: `
+      <p>You tell Dad everything.</p>
+      <p>He listens in complete silence, which is how he listens when something is important.</p>
+      <p>Then he says: <span class="dad-speech">"The answer is simple. Doris Plumsworth makes the finest cupcakes in the county. She does not need tricks. She does not need cheating. All she needs is her wildflower honey and her best recipe."</span></p>
+      <p><span class="dialogue">"But what about Hazell?"</span></p>
+      <p><span class="dad-speech">"Let Hazell have his chocolate tower,"</span> Dad says calmly. <span class="dad-speech">"Mrs Clipstone has been judging this competition for twelve years. She knows a cupcake from a piece of showing-off."</span></p>
+      <p>He is, as usual, almost certainly right.</p>
+    `,
+    choices: [
+      { text: 'Focus on making the best possible cupcakes', next: 'honeyGot' },
+      { text: 'Tell Mrs Clipstone about the Brussels sprout plot anyway', next: 'tellJudge' },
+    ]
+  },
+
+  journalist: {
+    chapter: 'Chapter Three',
+    title: 'The Fake Journalist',
+    emoji: '📰',
+    progress: 38,
+    text: `
+      <p>You tell Hazell's butler, very seriously, that a journalist from <em>Country Life</em> magazine has been spotted coming up the lane with a camera.</p>
+      <p>This information passes through three members of staff at the speed of light and reaches Hazell in approximately forty-five seconds.</p>
+      <p>What follows is remarkable. Hazell immediately disappears to change into his best suit. Then his second-best suit. Then his first-best suit again. His staff rush around polishing things.</p>
+      <p>The French chef is left entirely alone in the kitchen for three hours.</p>
+      <p>He uses the time to eat a large lunch and take a nap.</p>
+      <p>The chocolate tower is not finished.</p>
+    `,
+    choices: [
+      { text: 'Slip away before Hazell realises there is no journalist', next: 'honeyGot' },
+    ]
+  },
+
+  conkers: {
+    chapter: 'Chapter Three',
+    title: 'The Conker Challenge',
+    emoji: '🌰',
+    progress: 36,
+    text: `
+      <p>You stand at Hazell's gate and shout that you challenge him to a conker match. In front of all his staff.</p>
+      <p>There is a very long pause.</p>
+      <p>Then Hazell appears, red-faced and furious.</p>
+      <p><span class="hazell-speech">"I am not playing <em>conkers</em> with a child,"</span> he announces.</p>
+      <p><span class="dialogue">"Afraid you'll lose?"</span> you say.</p>
+      <p>What follows is seventeen minutes of Hazell attempting to win at conkers against a twelve-year-old, in front of his three gardeners, his housekeeper, and a very confused delivery driver.</p>
+      <p>He loses spectacularly. His conker explodes on the third swing.</p>
+      <p>Dad, meanwhile, has had a very productive morning.</p>
+    `,
+    choices: [
+      { text: 'Go and find out what Dad has been up to', next: 'honeyGot' },
+    ]
+  },
+
+  rabbit: {
+    chapter: 'Chapter Three',
+    title: 'Operation Rabbit',
+    emoji: '🐰',
+    progress: 34,
+    text: `
+      <p>Your rabbit is named Captain Flop. He is a large white rabbit with one floppy ear and absolutely no respect for other people's vegetable gardens.</p>
+      <p>You place Captain Flop near Hazell's prize-winning carrot patch.</p>
+      <p>Captain Flop looks at the carrots. The carrots look at Captain Flop.</p>
+      <p>What follows is forty minutes of Hazell, three staff members, and a very confused gardener chasing a single white rabbit around a large garden. Captain Flop treats this as an excellent game.</p>
+      <span class="aside">Rabbits, it turns out, are much faster than people in Wellington boots. This is useful to know.</span>
+      <p>Dad has an entirely undisturbed morning.</p>
+    `,
+    choices: [
+      { text: 'Retrieve Captain Flop and check on Dad', next: 'honeyGot' },
+    ]
+  },
+
+  wakeHazell: {
+    chapter: 'Chapter Four',
+    title: 'The Early Morning Visit',
+    emoji: '🚪',
+    progress: 46,
+    text: `
+      <p>You ring Hazell's doorbell at five thirty in the morning.</p>
+      <p>This is, you will admit, an aggressive move.</p>
+      <p>When Hazell appears in his dressing gown, purple with sleep and fury, you hand him a note that reads: <em>Your top field fence is down. Sheep are escaping onto the main road.</em></p>
+      <p>Hazell has no sheep. But he does have a top field, and the possibility of looking negligent in front of the village is enough to send him charging off in his Land Rover.</p>
+      <p>Dad gets the honey in nine minutes.</p>
+      <span class="aside">It takes Hazell forty minutes to find his top field, discover there are no sheep, and return home extremely cross and suspicious. By then, you are having breakfast.</span>
+    `,
+    choices: [
+      { text: 'Head to the competition', next: 'competitionDay' },
+    ]
+  },
+
+  getBottle: {
+    chapter: 'Chapter Four',
+    title: 'Into the Kitchen',
+    emoji: '🏃',
+    progress: 48,
+    text: `
+      <p>Getting back into Hazell's kitchen is easier the second time. You have now done it once, which means you know exactly which floorboards creak (all of them) and where the chef keeps his notebooks (everywhere).</p>
+      <p>You get the bottle. You bring it to Mrs Clipstone.</p>
+      <p>Mrs Clipstone reads the label. She reads it again. She writes something very firmly in red pen and then crosses it out and writes it again even more firmly.</p>
+      <p><span class="dialogue">"Mr Hazell,"</span> she says, in a tone that could ice a cake from ten feet, <span class="dialogue">"will be hearing from the judging committee."</span></p>
+    `,
+    choices: [
+      { text: 'Watch Mrs Clipstone deal with Hazell, then go support Dad', next: 'competitionDay' },
+    ]
+  },
+
+  inspection: {
+    chapter: 'Chapter Four',
+    title: 'The Surprise Inspection',
+    emoji: '🔍',
+    progress: 46,
+    text: `
+      <p>Mrs Clipstone's surprise kitchen inspection is not very surprising, because she announces it at the top of her voice in the village car park.</p>
+      <p>Nevertheless, it is effective. Hazell's chef immediately throws the Brussels sprout extract out of the window, where it lands in a flower bed. Mrs Clipstone finds it there anyway.</p>
+      <p>She holds it up. She looks at Hazell.</p>
+      <p>Hazell's face goes the colour of a very ripe tomato.</p>
+      <p>His entry is disqualified before the competition even begins.</p>
+      <span class="aside">There is a justice to this that feels very satisfying, like when a car engine starts on the first turn of the key.</span>
+    `,
+    choices: [
+      { text: 'Find Dad and cheer him on', next: 'competitionDay' },
+    ]
+  },
+
+  competitionDay: {
+    chapter: 'The Final Chapter',
+    title: 'The Great Buckinghamshire Village Bake-Off',
+    emoji: '🏆',
+    progress: 82,
+    text: `
+      <p>The village hall smells of sugar and fresh flowers and beeswax candles. Long tables are covered in white cloths, and on them sit every kind of cake, biscuit, and confection you can imagine.</p>
+      <p>At the end of the table, next to a three-tier sponge and a rather magnificent trifle, sit Doris Plumsworth's cupcakes.</p>
+      <p>They are perfect. The icing is cream-coloured and smooth, and if you look very carefully you can see tiny flecks of golden honey in the sponge. They smell like a warm afternoon in late summer.</p>
+      <p>Mrs Clipstone moves down the table, clipboard in hand. She tastes each entry. She writes things down. She tastes again.</p>
+      <p>You watch Dad standing at the back, his arms folded, his face carefully arranged to look like a person who is not nervous at all, and failing completely.</p>
+      <p>Mrs Clipstone reaches the cupcakes. She picks one up. She takes a bite.</p>
+      <p>She closes her eyes.</p>
+    `,
+    choices: [
+      { text: 'Find Dad in the crowd', next: 'hallArrival' },
+    ]
+  },
+
+  hallArrival: {
+    chapter: 'The Final Chapter',
+    title: 'The Village Hall',
+    emoji: '🎪',
+    progress: 88,
+    text: `
+      <p>The village hall is packed. Half the village has turned out, plus several people from the next village who heard there would be free samples. Mr Pringle the vicar is already on his third slice of something, and shows no sign of stopping.</p>
+      <p>You spot Hazell immediately. He is standing next to his chocolate tower with his arms folded and his chin raised, wearing a blazer with actual gold buttons on it. The tower is very tall. It lists slightly to the left, like a building that has had bad news.</p>
+      <p><span class="hazell-speech">"Impressive, isn't it,"</span> Hazell says to no one in particular. <span class="hazell-speech">"Seven tiers. Belgian chocolate. Imported."</span></p>
+      <p>Nobody responds. Mr Pringle has found the trifle.</p>
+      <p>You find Dad — or rather, Doris — at the far end of the table. The cupcakes are arranged in three neat rows of four on a white stand, with a small handwritten card that reads: <em>Wildflower Honey Cupcakes. A family recipe.</em></p>
+      <p>Which is technically true.</p>
+    `,
+    choices: [
+      { text: 'Watch the judging begin', next: 'theVerdict' },
+    ]
+  },
+
+  theVerdict: {
+    chapter: 'The Final Chapter',
+    title: 'Doris Plumsworth Triumphs',
+    emoji: '🥇',
+    progress: 95,
+    text: `
+      <p><span class="dialogue">"First prize,"</span> says Mrs Clipstone, and the room is very quiet, <span class="dialogue">"goes to Doris Plumsworth."</span></p>
+      <p>The room applauds.</p>
+      <p>Dad does not move. Then, very slowly, he smiles. It is not a large smile. It is a quiet, private, deeply pleased smile — the smile of a man who has baked forty-seven cupcakes in a garage and stood in a field humming to bees and kept a brilliant secret for three years, and who has finally, absolutely, unmistakably won.</p>
+      <p><span class="dialogue">"That's you,"</span> you whisper.</p>
+      <p><span class="dad-speech">"Yes,"</span> says Dad. <span class="dad-speech">"I suppose it is."</span></p>
+      <p>He goes up to collect the rosette. Mrs Clipstone hands him the prize envelope. She does not ask why Doris Plumsworth is wearing oil-stained overalls. This is one of her many excellent qualities.</p>
+      <span class="aside">On the way home, Dad gives you the rosette. He says you've earned it more than Doris has. You wear it on your jacket all the way back to the filling station, and you feel, for no particular reason, that you are the luckiest boy in the world.</span>
+    `,
+    choices: [
+      { text: 'Read the ending', next: 'trueEnding' },
+    ]
+  },
+
+  trueEnding: {
+    chapter: 'The End',
+    title: 'The Best Kind of Secret',
+    emoji: '🌟',
+    progress: 100,
+    ending: 'good',
+    endingBadge: '⭐ Champion Ending',
+    endingTitle: 'Danny, Champion of the Bake-Off',
+    text: `
+      <p>That evening you sit outside the caravan on the wooden step, with mugs of hot chocolate and the rosette between you. The stars are out. Somewhere across the fields, a tawny owl is asking a question nobody answers.</p>
+      <p><span class="dialogue">"Dad,"</span> you say. <span class="dialogue">"Is Doris Plumsworth going to retire now?"</span></p>
+      <p>Dad thinks about this for a long time.</p>
+      <p><span class="dad-speech">"I don't think so,"</span> he says at last. <span class="dad-speech">"She's already planning a lemon drizzle for next year."</span></p>
+      <p>Inside the prize envelope, by the way, is a voucher for twelve pounds at the village garden centre, which Dad declares to be <em>"an absolute fortune"</em> and which you both know he will spend entirely on more baking equipment, hidden at the back of the workshop where nobody will see it.</p>
+      <p>You lean against his shoulder, and the night is warm and still, and the filling station makes its small comfortable sounds — the creak of the pump, the tick of cooling metal — and everything is exactly as it should be.</p>
+      <p>Your father, you think, is not like other fathers. Other fathers do not have secret baking identities. Other fathers do not hum to bees at four in the morning. Other fathers do not have the ability to make you feel, without ever quite saying so, that the world is full of extraordinary things waiting to be discovered.</p>
+      <p>You are very glad he is yours.</p>
+      <p style="text-align:center; margin-top:20px; font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--gold);"><em>— The End —</em></p>
+    `
+  },
+
+};
+
+// ══════════════════════════════════════════════════════════════
+//  ENGINE
+// ══════════════════════════════════════════════════════════════
+let currentScene = 'start';
+let visitedScenes = new Set();
+let choices_made = 0;
+
+function render(sceneId) {
+  const scene = STORY[sceneId];
+  if (!scene) return;
+  currentScene = sceneId;
+  visitedScenes.add(sceneId);
+
+  // Progress
+  document.getElementById('progressBar').style.width = (scene.progress || 5) + '%';
+  document.getElementById('sceneCounter').textContent = `Scene ${visitedScenes.size}`;
+
+  // Score strip
+  document.getElementById('scoreStrip').innerHTML = choices_made > 0
+    ? `<div class="score-pip">Choices made: <span>${choices_made}</span></div>
+       <div class="score-pip">Endings available: <span>4</span></div>`
+    : '';
+
+  const container = document.getElementById('storyContainer');
+
+  // Build HTML
+  let html = `<div class="scene-card${scene.ending ? ' ending-card ending-' + scene.ending : ''}">`;
+
+  if (scene.ending) {
+    html += `<div class="ending-badge">${scene.endingBadge}</div>`;
+    html += `<div class="ending-emoji">${scene.emoji}</div>`;
+    html += `<div class="ending-title">${scene.endingTitle}</div>`;
+  } else {
+    html += `<div class="scene-chapter">${scene.chapter}</div>`;
+    html += `<div class="scene-emoji">${scene.emoji}</div>`;
+    html += `<div class="scene-title">${scene.title}</div>`;
+  }
+
+  html += `<div class="scene-text">${scene.text}</div>`;
+
+  if (scene.choices && scene.choices.length > 0) {
+    html += `<div class="choices">`;
+    const letters = 'ABCDEFGH';
+    scene.choices.forEach((c, i) => {
+      html += `<button class="choice-btn" onclick="choose('${c.next}')">
+        <div class="choice-letter">${letters[i]}</div>
+        <div class="choice-text">${c.text}</div>
+      </button>`;
+    });
+    html += `</div>`;
+  }
+
+  if (scene.ending) {
+    html += `<button class="restart-btn" onclick="restart()">🔄 Try a Different Path</button>`;
+  }
+
+  html += `</div>`;
+  container.innerHTML = html;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function choose(nextId) {
+  choices_made++;
+  render(nextId);
+}
+
+function restart() {
+  visitedScenes = new Set();
+  choices_made = 0;
+  render('start');
+}
+
+// Start
+render('start');
+</script>
+</body>
+</html>
