@@ -353,21 +353,21 @@ const QUESTIONS = [
     { pts:500, q:`English has borrowed words from dozens of languages. But borrowing isn't equal — powerful nations tend to export more words. Can you think of a modern example of a language borrowing words from English today, and why this might be happening?`, a:`Accept thoughtful answers — e.g. Malay borrows: komputer, telefon, televisyen, internet; French resists with loi Toubon; reflects global dominance of English through technology, media, and trade` },
   ],
 
-  // ── Category 4: Malay Loanwords 🇲🇾 ─────────────────────
-  [
-    { pts:100, q:`The English word <em>orangutan</em> comes directly from Malay. What does it literally mean in Malay?`, a:`Orang = person, utan = forest/jungle — so "person of the forest"` },
-    { pts:200, q:`The English word <em>amok</em> — as in "running amok" — comes from the Malay word <em>mengamuk</em>. What does it mean, and in what kind of sentence would you use it in English today?`, a:`To go into a wild, uncontrolled frenzy — e.g. "The children ran amok in the playground"` },
-    { pts:300, q:`Three common English words — <em>bamboo</em>, <em>rattan</em>, and <em>gecko</em> — all came from Malay. What does this suggest about what British traders and travellers found in Southeast Asia that they had no words for?`, a:`They encountered plants, materials, and animals completely new to them — bamboo (buluh), rattan (rotan), gecko (cicak/gekok) — and borrowed the local names` },
-    { pts:400, q:`The English word <em>compound</em> (as in a fenced area with buildings) comes from the Malay word <em>kampung</em>. How has the meaning changed, and can you think of a sentence using both the Malay and English meanings?`, a:`Kampung = village/community; compound in English = enclosed area of buildings — meaning has narrowed and shifted. Accept any sentence using both correctly` },
-    { pts:500, q:`You now know that English borrowed <em>orangutan, amok, bamboo, rattan, gecko, compound, ketchup</em> from Malay. Does this change how you think about the English language? Is English really a "British" language? Discuss.`, a:`Open discussion — award points for reasoning: English is a global hybrid language, shaped by every culture it has touched; Malay contributions show Southeast Asia's influence on world English; no language truly "belongs" to one nation` },
-  ],
-  // ── Category 3: Eponyms & Shakespeare ────────────────────
+  // ── Category 3: Eponyms & Shakespeare & Shakespeare ────────────────────
   [
     { pts:100, q:`Which inventor gave his name to a type of engine that runs on diesel fuel?`, a:`Rudolf Diesel` },
     { pts:200, q:`Using Shakespeare's word-building rules, what would <em>homeworkful</em> mean?`, a:`Full of homework (noun + ful = adjective describing something full of that noun) — accept any sensible definition` },
     { pts:300, q:`Shakespeare invented the word <em>uncomfortable</em>. Which rule did he use, and what does the prefix mean?`, a:`un + adjective = the opposite; "un" means not — so uncomfortable means not comfortable` },
     { pts:400, q:`The Earl of Sandwich gave his name to a food. What is the story — why is it called a sandwich?`, a:`The Earl of Sandwich reportedly asked for meat between bread so he could eat without leaving his card game — the snack was named after him` },
     { pts:500, q:`Invent a new word using Shakespeare's rules (noun+ful, noun+some, noun+y, noun+let, or un+adjective). Say the word, explain the rule you used, and use it in a sentence.`, a:`Creative answer — award points for correct use of a Shakespeare rule, a plausible meaning, and a correct sentence` },
+  ],
+  // ── Category 4: Malay Loanwords 🇲🇾 Loanwords 🇲🇾 ─────────────────────
+  [
+    { pts:100, q:`The English word <em>orangutan</em> comes directly from Malay. What does it literally mean in Malay?`, a:`Orang = person, utan = forest/jungle — so "person of the forest"` },
+    { pts:200, q:`The English word <em>amok</em> — as in "running amok" — comes from the Malay word <em>mengamuk</em>. What does it mean, and in what kind of sentence would you use it in English today?`, a:`To go into a wild, uncontrolled frenzy — e.g. "The children ran amok in the playground"` },
+    { pts:300, q:`Three common English words — <em>bamboo</em>, <em>rattan</em>, and <em>gecko</em> — all came from Malay. What does this suggest about what British traders and travellers found in Southeast Asia that they had no words for?`, a:`They encountered plants, materials, and animals completely new to them — bamboo (buluh), rattan (rotan), gecko (cicak/gekok) — and borrowed the local names` },
+    { pts:400, q:`The English word <em>compound</em> (as in a fenced area with buildings) comes from the Malay word <em>kampung</em>. How has the meaning changed, and can you think of a sentence using both the Malay and English meanings?`, a:`Kampung = village/community; compound in English = enclosed area of buildings — meaning has narrowed and shifted. Accept any sentence using both correctly` },
+    { pts:500, q:`You now know that English borrowed <em>orangutan, amok, bamboo, rattan, gecko, compound, ketchup</em> from Malay. Does this change how you think about the English language? Is English really a "British" language? Discuss.`, a:`Open discussion — award points for reasoning: English is a global hybrid language, shaped by every culture it has touched; Malay contributions show Southeast Asia's influence on world English; no language truly "belongs" to one nation` },
   ],
 ];
 
@@ -401,7 +401,7 @@ function toggleTeam(i) {
 //  GAME STATE
 // ══════════════════════════════════════════════════════════════
 let teams = [];
-let used = Array.from({length:4}, ()=> Array(5).fill(false));
+let used = Array.from({length:5}, ()=> Array(5).fill(false));
 let currentTeamIdx = 0;
 let stealTeamIdx = -1;
 let currentCell = null; // {cat, row}
@@ -411,7 +411,7 @@ let stealing = false;
 function startGame() {
   teams = teamConfig.filter(t=>t.active).map(t=>({ name:t.name, color:t.color, score:0 }));
   if (teams.length < 2) { alert('Please enable at least 2 teams.'); return; }
-  used = Array.from({length:4}, ()=> Array(5).fill(false));
+  used = Array.from({length:CATEGORIES.length}, ()=> Array(5).fill(false));
   currentTeamIdx = 0; stealing = false; stealTeamIdx = -1;
   document.getElementById('setupScreen').style.display = 'none';
   document.getElementById('boardScreen').style.display = 'block';
@@ -438,10 +438,10 @@ function renderBoard() {
     headers.appendChild(h);
   });
 
-  // Grid — 5 rows × 4 cols
+  // Grid — 5 rows × N cols
   const grid = document.getElementById('boardGrid'); grid.innerHTML = '';
   for (let row = 0; row < 5; row++) {
-    for (let cat = 0; cat < 4; cat++) {
+    for (let cat = 0; cat < CATEGORIES.length; cat++) {
       const cell = document.createElement('div');
       const pts = QUESTIONS[cat][row].pts;
       cell.className = `q-cell ${CATEGORIES[cat].color}${used[cat][row]?' used':''}`;
