@@ -268,6 +268,27 @@ const STORY = {
     `,
     choices: [
       { text: 'Give up pretending and ask Dad what\'s going on', next: 'askDad' },
+      { text: 'Double down — whistle even louder and add a little dance', next: 'doubleDance' },
+    ]
+  },
+
+  doubleDance: {
+    chapter: 'A Very Short Chapter',
+    title: 'The Dance Does Not Help',
+    emoji: '💃',
+    progress: 12,
+    text: \`
+      <p>You add a little side-to-side shuffle to your whistling. You are not sure what you are hoping to achieve.</p>
+      <p>Dad watches you for a full thirty seconds.</p>
+      <p><span class="dad-speech">"Danny,"</span> he says, very gently, <span class="dad-speech">"are you having some kind of episode?"</span></p>
+      <p>You stop dancing.</p>
+      <p><span class="dialogue">"No,"</span> you say. <span class="dialogue">"I just didn't want to see the cupcakes."</span></p>
+      <p><span class="dad-speech">"But you've already seen them."</span></p>
+      <p><span class="dialogue">"I know,"</span> you say. <span class="dialogue">"It didn't really work as a plan."</span></p>
+      <span class="aside">Dad makes you a mug of hot chocolate and tells you everything. This, you reflect, was always going to happen.</span>
+    \`,
+    choices: [
+      { text: 'Listen to Dad explain the cupcake situation', next: 'askDad' },
     ]
   },
 
@@ -345,9 +366,32 @@ const STORY = {
       <p>You fall asleep in your chair and Dad carries you to your bunk. In the morning, the competition cupcakes are lined up perfectly on the windowsill, and Dad is already dressed in his cleanest overalls.</p>
       <p><span class="dad-speech">"Ready?"</span> he says, grinning.</p>
       <p>You are absolutely ready.</p>
+      <p>Then you notice that one of the cupcakes has a slightly larger marzipan bee than the others. It is clearly the best one. It is staring at you.</p>
     `,
     choices: [
-      { text: 'Head to the village hall for the competition', next: 'competitionDay' },
+      { text: 'Leave all twelve cupcakes intact — head to the competition', next: 'competitionDay' },
+      { text: 'Eat the one with the big marzipan bee. Just that one.', next: 'oneMoreCake' },
+    ]
+  },
+
+  oneMoreCake: {
+    chapter: 'A Moment of Weakness',
+    title: 'The Big Bee',
+    emoji: '🐝',
+    progress: 35,
+    text: `
+      <p>The marzipan bee is exceptional. The cupcake beneath it is the finest thing you have ever eaten in your entire life.</p>
+      <p>Dad comes back into the caravan, looks at the stand, counts the cupcakes, and looks at you.</p>
+      <p><span class="dad-speech">"There were twelve,"</span> he says.</p>
+      <p><span class="dialogue">"There are eleven,"</span> you agree.</p>
+      <p><span class="dad-speech">"The one with the large bee."</span></p>
+      <p><span class="dialogue">"It was staring at me."</span></p>
+      <p>Dad sits down. He pours himself a tea. After a long moment, he says: <span class="dad-speech">"Was it worth it?"</span></p>
+      <p><span class="dialogue">"Absolutely,"</span> you say, without hesitation.</p>
+      <p>Dad laughs. <span class="dad-speech">"Good. Eleven is still enough. Let's go."</span></p>
+    `,
+    choices: [
+      { text: 'Head to the competition with eleven cupcakes', next: 'competitionDay' },
     ]
   },
 
@@ -443,9 +487,30 @@ const STORY = {
       <p><span class="dad-speech">"Extraordinary,"</span> Dad murmurs, not stopping the humming.</p>
       <p>The bees drift down the lane and into the hedgerow, and when you follow them carefully, you find they have led you directly to a hollow tree absolutely stuffed with honeycomb.</p>
       <p>Mr Corrado is either a genius or extremely lucky. You make a mental note to tell your friends that Burna Boy is also, apparently, popular with bees. Possibly both.</p>
+      <p>The hollow tree is absolutely stuffed with honeycomb. There is far more than you could ever need.</p>
     `,
     choices: [
-      { text: 'Carefully collect just enough honey for the cupcakes', next: 'honeyGot' },
+      { text: 'Take just enough for the cupcakes — leave the rest', next: 'honeyGot' },
+      { text: 'Take a huge amount — Dad could open a honey shop', next: 'tooMuchHoney' },
+    ]
+  },
+
+  tooMuchHoney: {
+    chapter: 'Chapter Four',
+    title: 'A Slight Overdoing of It',
+    emoji: '🍯',
+    progress: 56,
+    text: `
+      <p>You fill every container you brought. Then your pockets. Then, in a moment of pure optimism, your hat.</p>
+      <p>On the walk home you leave a golden trail of honey across the lane, through the gate, and directly into the workshop. Every bee within half a mile follows you. They seem very pleased about this.</p>
+      <p>Dad opens the workshop door, sees forty bees calmly investigating his toolbox, and closes it again.</p>
+      <p><span class="dad-speech">"How much,"</span> he says very carefully, <span class="dad-speech">"did you take?"</span></p>
+      <p><span class="dialogue">"Quite a lot,"</span> you say. <span class="dialogue">"My hat is full."</span></p>
+      <p>It takes thirty minutes to persuade the bees to leave. Dad has to hum Six Seven twice around the caravan before they go, and even then two of them linger near the kettle.</p>
+      <p>You end up with enough honey for the cupcakes, next year's cupcakes, and approximately four hundred pieces of toast.</p>
+    `,
+    choices: [
+      { text: 'Get back to the baking', next: 'honeyGot' },
     ]
   },
 
@@ -482,9 +547,30 @@ const STORY = {
       <p><span class="dad-speech">"Did he see your face?"</span></p>
       <p><span class="dialogue">"I don't think so."</span></p>
       <p><span class="dad-speech">"Good,"</span> says Dad. <span class="dad-speech">"Let's bake."</span></p>
+      <p>Then a Land Rover appears at the end of the lane, moving at considerable speed. Hazell has apparently got dressed very quickly.</p>
     `,
     choices: [
-      { text: 'Bake the final cupcakes and head to the competition', next: 'competitionDay' },
+      { text: 'Duck into the workshop and hide until he drives past', next: 'competitionDay' },
+      { text: 'Stand in the forecourt looking innocent — you live here, after all', next: 'innocentFace' },
+    ]
+  },
+
+  innocentFace: {
+    chapter: 'Chapter Four',
+    title: 'The Innocent Face',
+    emoji: '😇',
+    progress: 65,
+    text: `
+      <p>You stand in the forecourt with your hands in your pockets, leaning against the petrol pump with what you hope is the expression of a boy who has absolutely not been on anyone's land this morning.</p>
+      <p>Hazell's Land Rover slows. He glares at you through the window with the full force of a man who suspects something but cannot prove it.</p>
+      <p>You nod politely. <span class="dialogue">"Morning, Mr Hazell."</span></p>
+      <p>Hazell stares for a very long time. You are simply a boy standing by a petrol pump at six in the morning, which is, admittedly, slightly unusual, but not actually illegal.</p>
+      <p>The Land Rover drives away. Slowly. Still glaring in the mirror.</p>
+      <p>Dad appears from behind the workshop wall, where he has been hiding with the honey jar pressed to his chest.</p>
+      <p><span class="dad-speech">"That,"</span> he says, <span class="dad-speech">"was extremely well done."</span></p>
+    `,
+    choices: [
+      { text: 'Bake the cupcakes and head to the competition', next: 'competitionDay' },
     ]
   },
 
@@ -735,7 +821,46 @@ const STORY = {
       <p>Which is technically true.</p>
     `,
     choices: [
-      { text: 'Watch the judging begin', next: 'theVerdict' },
+      { text: 'Stand with Dad and watch the judging', next: 'theVerdict' },
+      { text: 'Go and examine Hazell\'s tower up close', next: 'examinesTower' },
+    ]
+  },
+
+  examinesTower: {
+    chapter: 'The Final Chapter',
+    title: 'A Structural Survey',
+    emoji: '🔍',
+    progress: 91,
+    text: `
+      <p>Up close, the chocolate tower is even taller than it looked. It is also, you notice, trembling slightly. Seven tiers of Belgian chocolate, stacked improbably high, held together by what appears to be an unreasonable amount of hope and not much else.</p>
+      <p><span class="hazell-speech">"Can I help you?"</span> says Hazell, appearing at your elbow like an angry weather front.</p>
+      <p><span class="dialogue">"Just admiring it,"</span> you say. <span class="dialogue">"It's very tall."</span></p>
+      <p><span class="hazell-speech">"Seven tiers. Belgian chocolate. Imported."</span></p>
+      <p><span class="dialogue">"Does it lean slightly to the left?"</span></p>
+      <p>Hazell looks at the tower. It does, undeniably, lean to the left. His face suggests this is not information he wanted.</p>
+      <p>At this moment, Mr Pringle the vicar drifts past with a very full plate, bumps the table gently, and the tower leans a little further. Everyone in the vicinity takes a small step back.</p>
+    `,
+    choices: [
+      { text: 'Step well back and watch the judging from a safe distance', next: 'towerFalls' },
+    ]
+  },
+
+  towerFalls: {
+    chapter: 'The Final Chapter',
+    title: 'Seven Tiers of Belgian Chocolate',
+    emoji: '💥',
+    progress: 94,
+    text: `
+      <p>The tower falls in slow motion.</p>
+      <p>It is, in its way, magnificent. Seven tiers of Belgian chocolate, rotating gracefully as they descend, landing across the judging table with a sound like a very expensive mistake.</p>
+      <p>Tier five lands on Mrs Clipstone's clipboard. Tier three lands directly on Mr Pringle's trifle, which he was clearly planning to return to. Tier one — the largest — slides off the edge entirely and comes to rest against Hazell's left Wellington boot.</p>
+      <p>There is a very long silence.</p>
+      <p><span class="hazell-speech">"It was the table,"</span> says Hazell. <span class="hazell-speech">"The table is uneven."</span></p>
+      <p>Mrs Clipstone removes a piece of chocolate from her clipboard. She writes something down with great firmness in red pen.</p>
+      <span class="aside">You look across the hall. Dad's cupcakes stand serenely on their white stand, twelve small perfect things that have not moved an inch.</span>
+    `,
+    choices: [
+      { text: 'Watch Mrs Clipstone deliver her verdict', next: 'theVerdict' },
     ]
   },
 
