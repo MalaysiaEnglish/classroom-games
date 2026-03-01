@@ -328,6 +328,32 @@
       border-color: rgba(240,180,41,0.4);
     }
 
+    /* ── Content loaded indicator ── */
+    .content-loaded {
+      padding: 8px 14px 0;
+    }
+
+    .content-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(62,207,207,0.08);
+      border: 1px solid rgba(62,207,207,0.2);
+      color: var(--accent2);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+    }
+
+    .content-tag .ct-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0;
+    }
+
     /* ── Toolkit modal ── */
     .modal-overlay {
       display: none;
@@ -513,8 +539,9 @@
           <div class="unit-header">
             <div class="unit-emoji">🍑</div>
             <div class="unit-meta">
-              <div class="unit-number">Unit 7</div>
+              <div class="unit-number">Unit 7 · CLIL</div>
               <div class="unit-title">Danny Champion of the World</div>
+              <div class="unit-grammar">Space · Geography · History · Chemistry</div>
             </div>
           </div>
           <div class="unit-games">
@@ -524,7 +551,10 @@
               <span class="gl-type">Adventure</span>
             </a>
           </div>
-          <div class="toolkit-row">
+          <div class="content-loaded">
+            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel of Fortune · 38 vocab words loaded</span>
+          </div>
+          <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
@@ -580,7 +610,38 @@
               <span class="gl-type">L2 · 3rd Conditional</span>
             </a>
           </div>
-          <div class="toolkit-row">
+          <div class="content-loaded">
+            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · 35 vocab words loaded</span>
+          </div>
+          <div class="content-loaded" style="padding-top:4px;">
+            <span class="content-tag"><span class="ct-dot"></span>Grammar Auction · 24 conditional sentences loaded</span>
+          </div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S6 U8 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">📢</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 8</div>
+              <div class="unit-title">Advertising</div>
+              <div class="unit-grammar">Persuasive Language · Formal vs Informal</div>
+            </div>
+          </div>
+          <div class="unit-games">
+            <a href="slogan-matcher/index.html" class="game-link">
+              <span class="gl-icon">💬</span>
+              <span class="gl-label">Slogan Matcher</span>
+              <span class="gl-type">L2 · Brands &amp; Slogans</span>
+            </a>
+          </div>
+          <div class="content-loaded">
+            <span class="content-tag"><span class="ct-dot"></span>Grammar Auction · 16 formal/informal sentences loaded</span>
+          </div>
+          <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
