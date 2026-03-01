@@ -169,24 +169,32 @@
       <div class="panel sentences-area">
         <h2>Sentences</h2>
         <p style="color:var(--muted); font-size:0.82rem; margin-bottom:12px;">
-          Select a topic and/or year group to filter sentences from your content.js file.
-          Leave blank to use all sentences.
+          Tick one or more topics to combine them into a single game. Leave all unticked to use every sentence.
         </p>
 
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px; align-items:flex-end;">
-          <div style="display:flex; flex-direction:column; gap:5px; flex:1; min-width:160px;">
-            <label style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px;">Grammar Topic</label>
-            <select id="filterTopic" onchange="applyFilters()" style="padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.07); color:white; font-size:0.92rem;">
-              <option value="">All Topics</option>
-            </select>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:5px;">
-            <label style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px;">Shuffle</label>
+        <!-- Topic filter UI -->
+        <div id="topicFilterWrap" style="margin-bottom:14px;">
+
+          <!-- Quick-select buttons, built dynamically -->
+          <div id="unitQuickSelect" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
+
+          <!-- Checkbox list -->
+          <div id="topicCheckboxes" style="
+            display:flex; flex-wrap:wrap; gap:6px;
+            padding:12px; border-radius:10px;
+            border:1px solid rgba(255,255,255,0.1);
+            background:rgba(255,255,255,0.04);
+            max-height:220px; overflow-y:auto;
+          "></div>
+
+          <div style="display:flex; gap:8px; margin-top:10px; align-items:center; flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="selectAllTopics()">✅ Select All</button>
+            <button class="btn btn-outline btn-sm" onclick="clearAllTopics()">✖ Clear All</button>
             <button class="btn btn-outline btn-sm" onclick="shuffleSentences()">🔀 Shuffle</button>
+            <div id="filterStatus" style="font-size:0.82rem; color:var(--muted); margin-left:auto;"></div>
           </div>
         </div>
 
-        <div id="filterStatus" style="font-size:0.82rem; color:var(--muted); margin-bottom:8px;"></div>
         <ul class="sentence-list" id="sentenceList"></ul>
       </div>
     </div>
@@ -257,18 +265,127 @@ function loadContentSentences() {
 
 function populateFilters() {
   const topics = [...new Set(allSentences.map(s => s.topic).filter(Boolean))].sort();
-  const topicSel = document.getElementById('filterTopic');
-  topicSel.innerHTML = '<option value="">All Topics</option>';
-  topics.forEach(t => topicSel.innerHTML += `<option value="${t}">${t}</option>`);
+
+  // Build unit quick-select buttons (e.g. "S6/U6" groups all S6/U6/Lx topics)
+  const unitGroups = {};
+  topics.forEach(t => {
+    const m = t.match(/^(S\d+\/U\d+)/);
+    if (m) {
+      const key = m[1];
+      if (!unitGroups[key]) unitGroups[key] = [];
+      unitGroups[key].push(t);
+    }
+  });
+
+  const quickWrap = document.getElementById('unitQuickSelect');
+  quickWrap.innerHTML = '';
+  Object.keys(unitGroups).sort().forEach(unit => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline btn-sm';
+    btn.textContent = `${unit} All`;
+    btn.onclick = () => selectUnitTopics(unitGroups[unit]);
+    quickWrap.appendChild(btn);
+  });
+
+  // Build checkboxes
+  const wrap = document.getElementById('topicCheckboxes');
+  wrap.innerHTML = '';
+  topics.forEach(t => {
+    const label = document.createElement('label');
+    label.style.cssText = `
+      display:inline-flex; align-items:center; gap:6px;
+      padding:5px 10px; border-radius:20px; cursor:pointer;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      font-size:0.8rem; color:var(--text);
+      transition: all 0.15s; user-select:none;
+    `;
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = t;
+    cb.style.accentColor = '#F5A623';
+    cb.addEventListener('change', applyFilters);
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(t));
+    label.addEventListener('mouseenter', () => label.style.borderColor = 'rgba(245,166,35,0.4)');
+    label.addEventListener('mouseleave', () => label.style.borderColor = 'rgba(255,255,255,0.12)');
+    wrap.appendChild(label);
+  });
+}
+
+function getCheckedTopics() {
+  return [...document.querySelectorAll('#topicCheckboxes input[type=checkbox]:checked')]
+    .map(cb => cb.value);
+}
+
+function selectAllTopics() {
+  document.querySelectorAll('#topicCheckboxes input[type=checkbox]')
+    .forEach(cb => cb.checked = true);
+  applyFilters();
+}
+
+function clearAllTopics() {
+  document.querySelectorAll('#topicCheckboxes input[type=checkbox]')
+    .forEach(cb => cb.checked = false);
+  applyFilters();
+}
+
+function selectUnitTopics(topicsForUnit) {
+  // Clear all first, then tick only this unit's topics
+  document.querySelectorAll('#topicCheckboxes input[type=checkbox]')
+    .forEach(cb => { cb.checked = topicsForUnit.includes(cb.value); });
+  applyFilters();
 }
 
 function applyFilters() {
-  const topic = document.getElementById('filterTopic').value;
-  sentences = allSentences.filter(s => !topic || s.topic === topic);
+  const checked = getCheckedTopics();
+  sentences = checked.length === 0
+    ? [...allSentences]
+    : allSentences.filter(s => checked.includes(s.topic));
+
+  // Highlight active checkboxes
+  document.querySelectorAll('#topicCheckboxes label').forEach(label => {
+    const cb = label.querySelector('input');
+    label.style.background = cb.checked
+      ? 'rgba(245,166,35,0.15)'
+      : 'rgba(255,255,255,0.05)';
+    label.style.borderColor = cb.checked
+      ? 'rgba(245,166,35,0.5)'
+      : 'rgba(255,255,255,0.12)';
+  });
+
   const status = document.getElementById('filterStatus');
-  if (status) status.textContent = sentences.length > 0
-    ? `${sentences.length} sentence${sentences.length !== 1 ? 's' : ''} loaded`
-    : 'No sentences match — try a different filter';
+  if (status) {
+    const topicCount = checked.length;
+    status.textContent = sentences.length > 0
+      ? `${sentences.length} sentence${sentences.length !== 1 ? 's' : ''} loaded${topicCount > 0 ? ` from ${topicCount} topic${topicCount > 1 ? 's' : ''}` : ' (all topics)'}`
+      : 'No sentences match — try a different selection';
+    status.style.color = sentences.length > 0 ? '#4ade80' : '#ef4444';
+  }
+  renderSentenceList();
+}
+
+function renderSentenceList() {
+  const ul = document.getElementById('sentenceList');
+  if (!ul) return;
+  ul.innerHTML = '';
+  sentences.forEach(s => {
+    const li = document.createElement('li');
+    li.className = 'sentence-item';
+    const badgeStyle = s.correct
+      ? 'background:rgba(74,222,128,0.15);color:#4ade80'
+      : 'background:rgba(239,68,68,0.15);color:#ef4444';
+    li.innerHTML = `
+      <span class="badge" style="${badgeStyle}">${s.correct ? 'CORRECT' : 'INCORRECT'}</span>
+      <span>${s.text}</span>
+    `;
+    ul.appendChild(li);
+  });
+}
+
+function shuffleSentences() {
+  sentences = sentences.sort(() => Math.random() - 0.5);
+  renderSentenceList();
 }
 
 function init() {
