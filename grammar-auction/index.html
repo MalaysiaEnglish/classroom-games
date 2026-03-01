@@ -260,7 +260,16 @@ function populateFilters() {
   const topicSel = document.getElementById('filterTopic');
   topicSel.innerHTML = '<option value="">All Topics</option>';
   topics.forEach(t => topicSel.innerHTML += `<option value="${t}">${t}</option>`);
-  }
+}
+
+function applyFilters() {
+  const topic = document.getElementById('filterTopic').value;
+  sentences = allSentences.filter(s => !topic || s.topic === topic);
+  const status = document.getElementById('filterStatus');
+  if (status) status.textContent = sentences.length > 0
+    ? `${sentences.length} sentence${sentences.length !== 1 ? 's' : ''} loaded`
+    : 'No sentences match — try a different filter';
+}
 
 function init() {
   teams = ['Team 1','Team 2','Team 3'].map((name, i) => ({ name, color: TEAM_COLORS[i], id: i }));
