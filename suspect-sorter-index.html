@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suspect Sorter — Unsolved Mysteries</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f2ead8;
+    --aged: #e8dcc0;
+    --ink: #1a1208;
+    --red: #8b1a1a;
+    --green: #1a4a1a;
+    --stamp: #6b3a2a;
+    --shadow: rgba(26,18,8,0.3);
+    --for: #1a4a1a;
+    --against: #8b1a1a;
+    --neutral: #4a3a2a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1208;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255,255,255,0.01) 50px, rgba(255,255,255,0.01) 51px),
+      repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,255,255,0.01) 50px, rgba(255,255,255,0.01) 51px);
+    min-height: 100vh;
+    font-family: 'Courier Prime', monospace;
+    color: var(--ink);
+    padding: 20px;
+  }
+
+  /* HEADER */
+  .masthead {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .masthead h1 {
+    font-family: 'Special Elite', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--paper);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0 #000, 4px 4px 10px rgba(0,0,0,0.8);
+  }
+  .masthead .subtitle {
+    color: #8b7355;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* CASE SELECTOR */
+  .case-selector {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .case-btn {
+    font-family: 'Special Elite', serif;
+    font-size: 0.9rem;
+    padding: 8px 20px;
+    background: var(--aged);
+    border: 2px solid var(--stamp);
+    color: var(--stamp);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  }
+  .case-btn:hover, .case-btn.active {
+    background: var(--stamp);
+    color: var(--paper);
+  }
+
+  /* MAIN LAYOUT */
+  .game-area {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .game-area.visible { display: flex; }
+
+  /* CASE DOSSIER HEADER */
+  .dossier-header {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 16px 24px;
+    text-align: center;
+    position: relative;
+    box-shadow: 6px 6px 0 var(--shadow);
+  }
+  .dossier-header::before {
+    content: 'CLASSIFIED DOSSIER';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--red);
+    color: var(--paper);
+    font-family: 'Special Elite', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    padding: 2px 12px;
+  }
+  .dossier-header h2 {
+    font-family: 'Special Elite', serif;
+    font-size: 1.6rem;
+    color: var(--ink);
+    margin-top: 6px;
+  }
+  .dossier-header p {
+    font-size: 0.85rem;
+    color: var(--stamp);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* CLUE BANK */
+  .clue-bank-wrap {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 16px;
+    box-shadow: 6px 6px 0 var(--shadow);
+    position: relative;
+  }
+  .clue-bank-wrap h3 {
+    font-family: 'Special Elite', serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--stamp);
+    border-bottom: 2px solid var(--stamp);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .clue-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 60px;
+  }
+
+  /* CLUE CARDS */
+  .clue {
+    background: var(--aged);
+    border: 1.5px solid var(--ink);
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    cursor: grab;
+    max-width: 280px;
+    position: relative;
+    box-shadow: 2px 2px 0 var(--shadow);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .clue:active { cursor: grabbing; }
+  .clue.dragging {
+    opacity: 0.5;
+    transform: rotate(2deg) scale(0.97);
+    box-shadow: 4px 4px 8px var(--shadow);
+  }
+  .clue.for-clue { border-left: 4px solid var(--for); }
+  .clue.against-clue { border-left: 4px solid var(--against); }
+  .clue.neutral-clue { border-left: 4px solid var(--neutral); }
+  .clue.placed { display: none; }
+
+  /* SUSPECTS GRID */
+  .suspects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .suspect-card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .suspect-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 14px;
+    font-family: 'Special Elite', serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .suspect-name { font-size: 1rem; letter-spacing: 0.05em; }
+  .suspect-badge {
+    font-size: 0.65rem;
+    background: var(--red);
+    padding: 2px 6px;
+    letter-spacing: 0.1em;
+  }
+
+  .suspect-bio {
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--stamp);
+    border-bottom: 1px dashed var(--stamp);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .drop-zones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    flex: 1;
+  }
+
+  .drop-zone {
+    padding: 10px;
+    min-height: 80px;
+    border-top: 2px solid var(--ink);
+    transition: background 0.2s;
+  }
+  .drop-zone:first-child { border-right: 1px dashed var(--ink); }
+
+  .drop-zone-label {
+    font-family: 'Special Elite', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .drop-zone.for-zone .drop-zone-label { color: var(--for); }
+  .drop-zone.against-zone .drop-zone-label { color: var(--against); }
+
+  .drop-zone.drag-over { background: rgba(0,0,0,0.06); }
+
+  .dropped-clue {
+    background: var(--aged);
+    border: 1px solid var(--ink);
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+    line-height: 1.35;
+    cursor: pointer;
+    position: relative;
+    transition: opacity 0.2s;
+  }
+  .dropped-clue::after {
+    content: '×';
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    color: var(--red);
+    font-weight: bold;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .dropped-clue:hover::after { opacity: 1; }
+  .dropped-clue.for-dropped { border-left: 3px solid var(--for); }
+  .dropped-clue.against-dropped { border-left: 3px solid var(--against); }
+
+  /* VERDICT ZONE */
+  .verdict-section {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 16px;
+    box-shadow: 6px 6px 0 var(--shadow);
+  }
+  .verdict-section h3 {
+    font-family: 'Special Elite', serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--stamp);
+    border-bottom: 2px solid var(--stamp);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .verdict-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .verdict-btn {
+    font-family: 'Special Elite', serif;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    background: var(--aged);
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .verdict-btn:hover { background: var(--ink); color: var(--paper); }
+  .verdict-btn.selected { background: var(--red); border-color: var(--red); color: var(--paper); }
+
+  /* CHECK ANSWERS */
+  .check-section {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .btn-check {
+    font-family: 'Special Elite', serif;
+    font-size: 1rem;
+    padding: 12px 32px;
+    background: var(--ink);
+    border: 3px solid var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    box-shadow: 4px 4px 0 var(--stamp);
+  }
+  .btn-check:hover {
+    background: var(--red);
+    border-color: var(--red);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--stamp);
+  }
+  .btn-reset {
+    font-family: 'Special Elite', serif;
+    font-size: 0.85rem;
+    padding: 12px 20px;
+    background: transparent;
+    border: 2px solid var(--paper);
+    color: var(--paper);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover { background: var(--paper); color: var(--ink); }
+
+  /* RESULTS PANEL */
+  .results-panel {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 20px;
+    box-shadow: 6px 6px 0 var(--shadow);
+    display: none;
+  }
+  .results-panel.visible { display: block; }
+  .results-panel h3 {
+    font-family: 'Special Elite', serif;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: var(--stamp);
+  }
+  .result-item {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    border-left: 4px solid;
+    line-height: 1.4;
+  }
+  .result-correct { border-color: var(--for); background: rgba(26,74,26,0.07); }
+  .result-wrong { border-color: var(--against); background: rgba(139,26,26,0.07); }
+  .result-partial { border-color: var(--neutral); background: rgba(74,58,42,0.07); }
+
+  .score-display {
+    font-family: 'Special Elite', serif;
+    font-size: 2rem;
+    text-align: center;
+    margin: 16px 0;
+    color: var(--stamp);
+  }
+
+  /* INSTRUCTIONS */
+  .instructions {
+    background: rgba(242,234,216,0.08);
+    border: 1px solid rgba(242,234,216,0.2);
+    padding: 10px 16px;
+    color: #8b7355;
+    font-size: 0.78rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  /* TOUCH DRAG GHOST */
+  .drag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.85;
+    transform: rotate(3deg);
+  }
+
+  @media (max-width: 600px) {
+    .drop-zones { grid-template-columns: 1fr; }
+    .drop-zone:first-child { border-right: none; border-bottom: 1px dashed var(--ink); }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>Suspect Sorter</h1>
+  <div class="subtitle">Unsolved Mysteries — Stage 6 / Unit 1</div>
+</div>
+
+<div class="case-selector">
+  <button class="case-btn" onclick="loadCase('cooper')">Case #1: DB Cooper</button>
+  <button class="case-btn" onclick="loadCase('watcher')">Case #2: The Watcher</button>
+</div>
+
+<div class="instructions">
+  Drag each clue card to the FOR or AGAINST column under the correct suspect. Then give your verdict.
+</div>
+
+<!-- GAME AREA -->
+<div class="game-area" id="gameArea">
+
+  <div class="dossier-header" id="dossierHeader">
+    <h2 id="caseTitle"></h2>
+    <p id="caseDesc"></p>
+  </div>
+
+  <div class="clue-bank-wrap">
+    <h3>📁 Evidence File — Drag clues to suspects below</h3>
+    <div class="clue-bank" id="clueBankEl"></div>
+  </div>
+
+  <div class="suspects-grid" id="suspectsGrid"></div>
+
+  <div class="verdict-section" id="verdictSection">
+    <h3>🔍 Your Verdict — Who is most likely guilty?</h3>
+    <div class="verdict-buttons" id="verdictButtons"></div>
+  </div>
+
+  <div class="check-section">
+    <button class="btn-check" onclick="checkAnswers()">File Report</button>
+    <button class="btn-reset" onclick="resetGame()">Clear Evidence</button>
+  </div>
+
+  <div class="results-panel" id="resultsPanel">
+    <div class="score-display" id="scoreDisplay"></div>
+    <h3>Evidence Review</h3>
+    <div id="resultsDetail"></div>
+  </div>
+
+</div>
+
+<script>
+// ─── CASE DATA ───────────────────────────────────────────────────────────────
+
+const CASES = {
+  cooper: {
+    title: "The DB Cooper Hijacking",
+    desc: "November 24th, 1971 — A man hijacked Northwest Airlines flight 305, extorted $200,000, then vanished after parachuting from the plane. The FBI never identified him.",
+    suspects: [
+      {
+        id: "mccoy",
+        name: "Richard Floyd McCoy",
+        badge: "SUSPECT #1",
+        bio: "Former paratrooper. Arrested in 1972 for a very similar airline hijacking — parachuted from the rear staircase, demanded two parachutes, passed a note saying 'No funny stuff.'"
+      },
+      {
+        id: "weber",
+        name: "Duane Weber",
+        badge: "SUSPECT #2",
+        bio: "Mysterious man whose wife claimed he confessed on his deathbed: 'I'm Dan Cooper.' Had nightmares about leaving fingerprints on planes and an unexplained knee injury."
+      },
+      {
+        id: "kenneth",
+        name: "Kenneth Christiansen",
+        badge: "SUSPECT #3",
+        bio: "Northwest Airlines employee who bought a house shortly after the hijacking. His brother became convinced he was Cooper after watching Unsolved Mysteries."
+      }
+    ],
+    clues: [
+      // McCoy
+      { id: "c1", text: "Used the same phrase 'No funny stuff' in his hijacking note as Cooper.", correct: { suspect: "mccoy", zone: "for" } },
+      { id: "c2", text: "Jumped from the rear staircase — exactly the same exit point as Cooper.", correct: { suspect: "mccoy", zone: "for" } },
+      { id: "c3", text: "McCoy's family identified an unspecified object left on Cooper's plane.", correct: { suspect: "mccoy", zone: "for" } },
+      { id: "c4", text: "FBI confirmed McCoy was home in Utah for Thanksgiving dinner — a 12-hour drive from the crime scene.", correct: { suspect: "mccoy", zone: "against" } },
+      { id: "c5", text: "Flight attendants said he didn't match their description of Cooper's appearance.", correct: { suspect: "mccoy", zone: "against" } },
+      // Weber
+      { id: "c6", text: "His wife Jo said he confessed on his deathbed: 'I have a secret — I'm Dan Cooper.'", correct: { suspect: "weber", zone: "for" } },
+      { id: "c7", text: "Sleep-talked about 'leaving fingerprints on a plane' during nightmares.", correct: { suspect: "weber", zone: "for" } },
+      { id: "c8", text: "Had an old Northwest Airlines ticket with no explanation.", correct: { suspect: "weber", zone: "for" } },
+      { id: "c9", text: "Lead FBI agent Ralph Himmelsbach ultimately did not believe it was Weber.", correct: { suspect: "weber", zone: "against" } },
+      // Kenneth
+      { id: "c10", text: "Worked for Northwest Airlines — supporting the theory it was an inside job.", correct: { suspect: "kenneth", zone: "for" } },
+      { id: "c11", text: "A flight attendant who interacted with Cooper said Kenneth's photo was 'the closest' of all suspects.", correct: { suspect: "kenneth", zone: "for" } },
+      { id: "c12", text: "Was a paratrooper — but FBI believed Cooper was NOT an experienced jumper.", correct: { suspect: "kenneth", zone: "against" } },
+      { id: "c13", text: "FBI said Kenneth's physical description didn't match Cooper's.", correct: { suspect: "kenneth", zone: "against" } },
+    ],
+    verdictOptions: ["Richard Floyd McCoy", "Duane Weber", "Kenneth Christiansen", "Cooper didn't survive", "Unknown — unsolved"],
+    teacherNotes: "All three suspects have genuine evidence for and against. The FBI's final position was that Cooper likely did not survive the jump (no body found, dangerous conditions). Encourage students to justify their verdict using the clues they sorted."
+  },
+
+  watcher: {
+    title: "The Watcher — 657 Boulevard",
+    desc: "June 2014, Westfield, New Jersey. The Broaddus family received threatening letters from someone calling themselves 'The Watcher' — claiming to have monitored the house for generations.",
+    suspects: [
+      {
+        id: "gamer",
+        name: "The Gamer",
+        badge: "SUSPECT #1",
+        bio: "Anonymous young man whose girlfriend told police he played a video game where he roleplayed as a character called 'The Watcher.' Agreed to be questioned but never showed up."
+      },
+      {
+        id: "langford",
+        name: "Michael Langford",
+        badge: "SUSPECT #2",
+        bio: "Next-door neighbour whose family had lived at 657 Boulevard since the 1960s — matching The Watcher's claim that 'his father watched in the 1960s.' Known for odd behaviour."
+      },
+      {
+        id: "broaddus",
+        name: "The Broaddus Family",
+        badge: "SUSPECT #3",
+        bio: "The victims themselves. Some locals suspected they fabricated the letters to escape a mortgage they couldn't afford — especially once Netflix came calling for their story rights."
+      }
+    ],
+    clues: [
+      // Gamer
+      { id: "w1", text: "Played a video game where he roleplayed as a character literally named 'The Watcher.'", correct: { suspect: "gamer", zone: "for" } },
+      { id: "w2", text: "Agreed to be questioned by police, then never appeared.", correct: { suspect: "gamer", zone: "for" } },
+      { id: "w3", text: "Detectives never had enough evidence to compel him to come in for questioning.", correct: { suspect: "gamer", zone: "against" } },
+      { id: "w4", text: "His girlfriend's home was on the same block — he had local knowledge.", correct: { suspect: "gamer", zone: "for" } },
+      // Langford
+      { id: "w5", text: "Family had lived next door since the 1960s — matching The Watcher's timeline exactly.", correct: { suspect: "langford", zone: "for" } },
+      { id: "w6", text: "Known to peek through neighbours' windows and walk through their yards uninvited.", correct: { suspect: "langford", zone: "for" } },
+      { id: "w7", text: "His positioning gave him a perfect view of the daughter's easel on the porch — referenced in letter two.", correct: { suspect: "langford", zone: "for" } },
+      { id: "w8", text: "DNA found on envelope belonged to a woman — Langfords were ruled out.", correct: { suspect: "langford", zone: "against" } },
+      { id: "w9", text: "Those who knew Langford vouched for him and said he was incapable of writing the letters.", correct: { suspect: "langford", zone: "against" } },
+      // Broaddus
+      { id: "w10", text: "Family had moved from a $315k home to a $770k home to a $1.3m home — some suspected financial desperation.", correct: { suspect: "broaddus", zone: "for" } },
+      { id: "w11", text: "Netflix offered to buy the rights to their story — giving them a motive to fabricate.", correct: { suspect: "broaddus", zone: "for" } },
+      { id: "w12", text: "Derek admitted to sending anonymous threatening letters to neighbours — though claimed this was out of frustration.", correct: { suspect: "broaddus", zone: "for" } },
+      { id: "w13", text: "A completely separate family on the same street also received a Watcher letter — undermining the fraud theory.", correct: { suspect: "broaddus", zone: "against" } },
+      { id: "w14", text: "The psychological trauma the family suffered would be extreme if they were responsible.", correct: { suspect: "broaddus", zone: "against" } },
+    ],
+    verdictOptions: ["The Gamer", "Michael Langford", "The Broaddus Family", "A different neighbour", "Genuinely unknown"],
+    teacherNotes: "No suspect was ever charged. The Langfords were officially ruled out by DNA. The case remains unsolved. A Netflix series 'The Watcher' dramatised the story in 2022. Encourage debate — the Broaddus theory is provocative and divides opinion."
+  }
+};
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentCase = null;
+let placements = {}; // clueId -> { suspect, zone }
+let selectedVerdict = null;
+let draggedClue = null;
+let touchGhost = null;
+let touchOffX = 0, touchOffY = 0;
+
+// ─── LOAD CASE ───────────────────────────────────────────────────────────────
+function loadCase(caseId) {
+  currentCase = CASES[caseId];
+  placements = {};
+  selectedVerdict = null;
+
+  document.querySelectorAll('.case-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[onclick="loadCase('${caseId}')"]`).classList.add('active');
+
+  document.getElementById('caseTitle').textContent = currentCase.title;
+  document.getElementById('caseDesc').textContent = currentCase.desc;
+
+  buildClueBank();
+  buildSuspects();
+  buildVerdictButtons();
+  document.getElementById('resultsPanel').classList.remove('visible');
+  document.getElementById('gameArea').classList.add('visible');
+}
+
+// ─── BUILD CLUE BANK ─────────────────────────────────────────────────────────
+function buildClueBank() {
+  const bank = document.getElementById('clueBankEl');
+  bank.innerHTML = '';
+  // Shuffle clues
+  const clues = [...currentCase.clues].sort(() => Math.random() - 0.5);
+  clues.forEach(clue => {
+    const el = document.createElement('div');
+    el.className = 'clue';
+    el.id = 'clue-' + clue.id;
+    el.textContent = clue.text;
+    el.draggable = true;
+    el.dataset.clueId = clue.id;
+    addDragListeners(el);
+    addTouchListeners(el);
+    bank.appendChild(el);
+  });
+}
+
+// ─── BUILD SUSPECTS ──────────────────────────────────────────────────────────
+function buildSuspects() {
+  const grid = document.getElementById('suspectsGrid');
+  grid.innerHTML = '';
+  currentCase.suspects.forEach(s => {
+    grid.innerHTML += `
+      <div class="suspect-card">
+        <div class="suspect-header">
+          <span class="suspect-name">${s.name}</span>
+          <span class="suspect-badge">${s.badge}</span>
+        </div>
+        <div class="suspect-bio">${s.bio}</div>
+        <div class="drop-zones">
+          <div class="drop-zone for-zone" data-suspect="${s.id}" data-zone="for"
+               ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <div class="drop-zone-label">✓ For</div>
+          </div>
+          <div class="drop-zone against-zone" data-suspect="${s.id}" data-zone="against"
+               ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <div class="drop-zone-label">✗ Against</div>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+// ─── BUILD VERDICT BUTTONS ───────────────────────────────────────────────────
+function buildVerdictButtons() {
+  const wrap = document.getElementById('verdictButtons');
+  wrap.innerHTML = '';
+  currentCase.verdictOptions.forEach(v => {
+    const btn = document.createElement('button');
+    btn.className = 'verdict-btn';
+    btn.textContent = v;
+    btn.onclick = () => {
+      selectedVerdict = v;
+      document.querySelectorAll('.verdict-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+// ─── DRAG & DROP ─────────────────────────────────────────────────────────────
+function addDragListeners(el) {
+  el.addEventListener('dragstart', e => {
+    draggedClue = el.dataset.clueId;
+    el.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  el.addEventListener('dragend', () => el.classList.remove('dragging'));
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!draggedClue) return;
+  placeClue(draggedClue, e.currentTarget.dataset.suspect, e.currentTarget.dataset.zone, e.currentTarget);
+  draggedClue = null;
+}
+
+// ─── TOUCH DRAG ──────────────────────────────────────────────────────────────
+function addTouchListeners(el) {
+  el.addEventListener('touchstart', e => {
+    const touch = e.touches[0];
+    draggedClue = el.dataset.clueId;
+    const rect = el.getBoundingClientRect();
+    touchOffX = touch.clientX - rect.left;
+    touchOffY = touch.clientY - rect.top;
+    touchGhost = el.cloneNode(true);
+    touchGhost.className = 'clue drag-ghost';
+    touchGhost.style.width = rect.width + 'px';
+    touchGhost.style.left = (touch.clientX - touchOffX) + 'px';
+    touchGhost.style.top = (touch.clientY - touchOffY) + 'px';
+    document.body.appendChild(touchGhost);
+    el.style.opacity = '0.4';
+  }, { passive: true });
+
+  el.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    if (touchGhost) {
+      touchGhost.style.left = (touch.clientX - touchOffX) + 'px';
+      touchGhost.style.top = (touch.clientY - touchOffY) + 'px';
+    }
+  }, { passive: false });
+
+  el.addEventListener('touchend', e => {
+    const touch = e.changedTouches[0];
+    if (touchGhost) { touchGhost.remove(); touchGhost = null; }
+    el.style.opacity = '';
+    if (!draggedClue) return;
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const zone = target?.closest('.drop-zone');
+    if (zone) {
+      placeClue(draggedClue, zone.dataset.suspect, zone.dataset.zone, zone);
+    }
+    draggedClue = null;
+  });
+}
+
+// ─── PLACE CLUE ──────────────────────────────────────────────────────────────
+function placeClue(clueId, suspectId, zoneType, zoneEl) {
+  // Remove from previous placement if any
+  if (placements[clueId]) {
+    const old = document.querySelector(`.dropped-clue[data-clue="${clueId}"]`);
+    if (old) old.remove();
+  }
+  placements[clueId] = { suspect: suspectId, zone: zoneType };
+
+  // Hide from bank
+  const bankClue = document.getElementById('clue-' + clueId);
+  if (bankClue) bankClue.style.display = 'none';
+
+  // Find clue text
+  const clueData = currentCase.clues.find(c => c.id === clueId);
+
+  // Add to zone
+  const label = document.createElement('div');
+  label.className = `dropped-clue ${zoneType}-dropped`;
+  label.dataset.clue = clueId;
+  label.textContent = clueData.text;
+  label.title = 'Click to return to evidence file';
+  label.onclick = () => returnClue(clueId, label);
+  // Insert after label div
+  const labelDiv = zoneEl.querySelector('.drop-zone-label');
+  zoneEl.insertBefore(label, labelDiv.nextSibling);
+}
+
+function returnClue(clueId, el) {
+  el.remove();
+  delete placements[clueId];
+  const bankClue = document.getElementById('clue-' + clueId);
+  if (bankClue) bankClue.style.display = '';
+}
+
+// ─── CHECK ANSWERS ───────────────────────────────────────────────────────────
+function checkAnswers() {
+  let correct = 0;
+  let total = currentCase.clues.length;
+  let details = '';
+
+  currentCase.clues.forEach(clue => {
+    const placed = placements[clue.id];
+    if (!placed) {
+      details += `<div class="result-item result-partial">⚠ <strong>Not placed:</strong> "${clue.text.substring(0, 60)}..."</div>`;
+    } else {
+      const suspectName = currentCase.suspects.find(s => s.id === clue.correct.suspect)?.name;
+      const isCorrectSuspect = placed.suspect === clue.correct.suspect;
+      const isCorrectZone = placed.zone === clue.correct.zone;
+      if (isCorrectSuspect && isCorrectZone) {
+        correct++;
+        details += `<div class="result-item result-correct">✓ <strong>Correct:</strong> "${clue.text.substring(0, 70)}..."</div>`;
+      } else if (isCorrectSuspect && !isCorrectZone) {
+        correct += 0.5;
+        details += `<div class="result-item result-partial">~ <strong>Right suspect, wrong column:</strong> "${clue.text.substring(0, 60)}..." → Should be <em>${clue.correct.zone.toUpperCase()}</em> for ${suspectName}</div>`;
+      } else {
+        details += `<div class="result-item result-wrong">✗ <strong>Wrong suspect:</strong> "${clue.text.substring(0, 60)}..." → Belongs to ${suspectName} (${clue.correct.zone.toUpperCase()})</div>`;
+      }
+    }
+  });
+
+  const pct = Math.round((correct / total) * 100);
+  document.getElementById('scoreDisplay').textContent = `${Math.round(correct)} / ${total} — ${pct}%`;
+  document.getElementById('resultsDetail').innerHTML = details;
+
+  if (selectedVerdict) {
+    document.getElementById('resultsDetail').innerHTML += `
+      <div class="result-item result-partial" style="margin-top:12px">
+        🔍 <strong>Your verdict:</strong> ${selectedVerdict}<br>
+        <em style="font-size:0.8rem">${currentCase.teacherNotes}</em>
+      </div>`;
+  }
+
+  const panel = document.getElementById('resultsPanel');
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ─── RESET ───────────────────────────────────────────────────────────────────
+function resetGame() {
+  if (currentCase) loadCase(Object.keys(CASES).find(k => CASES[k] === currentCase));
+}
+</script>
+</body>
+</html>

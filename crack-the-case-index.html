@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crack the Case — Unsolved Mysteries</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --paper: #f0e8d0;
+    --aged: #e0d4b0;
+    --ink: #1a1208;
+    --red: #8b1a1a;
+    --gold: #b8922a;
+    --dim: #5a4a30;
+    --shadow: rgba(0,0,0,0.6);
+    --glow: rgba(184,146,42,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at 50% 0%, rgba(184,146,42,0.08) 0%, transparent 60%);
+    min-height: 100vh;
+    font-family: 'Courier Prime', monospace;
+    color: var(--paper);
+    padding: 16px;
+  }
+
+  /* HEADER */
+  .masthead {
+    text-align: center;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid rgba(184,146,42,0.3);
+    margin-bottom: 20px;
+  }
+  .masthead h1 {
+    font-family: 'Special Elite', serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 40px rgba(184,146,42,0.4);
+    text-transform: uppercase;
+  }
+  .masthead p {
+    color: var(--dim);
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    margin-top: 4px;
+  }
+
+  /* SETUP SCREEN */
+  #setupScreen {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .setup-section {
+    background: rgba(240,232,208,0.06);
+    border: 1px solid rgba(184,146,42,0.25);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .setup-section h2 {
+    font-family: 'Special Elite', serif;
+    color: var(--gold);
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .case-option {
+    border: 2px solid rgba(184,146,42,0.3);
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--paper);
+    font-family: 'Special Elite', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+  .case-option:hover, .case-option.selected {
+    border-color: var(--gold);
+    background: var(--glow);
+    color: var(--gold);
+  }
+  .case-option .case-emoji { font-size: 1.5rem; display: block; margin-bottom: 6px; }
+
+  .team-setup { display: flex; flex-direction: column; gap: 10px; }
+  .team-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .team-row input[type="text"] {
+    flex: 1;
+    background: rgba(240,232,208,0.08);
+    border: 1px solid rgba(184,146,42,0.3);
+    color: var(--paper);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    outline: none;
+  }
+  .team-row input[type="text"]:focus { border-color: var(--gold); }
+  .team-row input[type="color"] {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(184,146,42,0.3);
+    background: none;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .remove-team {
+    background: none;
+    border: 1px solid var(--red);
+    color: var(--red);
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .btn-add-team {
+    background: none;
+    border: 1px dashed rgba(184,146,42,0.4);
+    color: var(--gold);
+    padding: 8px;
+    cursor: pointer;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    width: 100%;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .btn-add-team:hover { border-style: solid; background: var(--glow); }
+
+  .btn-start {
+    font-family: 'Special Elite', serif;
+    font-size: 1.1rem;
+    padding: 14px 40px;
+    background: var(--gold);
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    width: 100%;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(184,146,42,0.3);
+  }
+  .btn-start:hover { background: #d4a832; box-shadow: 0 6px 30px rgba(184,146,42,0.5); }
+
+  /* GAME SCREEN */
+  #gameScreen { display: none; max-width: 900px; margin: 0 auto; }
+
+  /* TOP BAR */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .case-label {
+    font-family: 'Special Elite', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .clue-counter {
+    font-size: 0.8rem;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+  }
+
+  /* SCOREBOARD */
+  .scoreboard {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .score-chip {
+    padding: 6px 14px;
+    border: 2px solid;
+    font-family: 'Special Elite', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-num {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  /* CLUE REVEAL AREA */
+  .clue-stage {
+    background: rgba(240,232,208,0.04);
+    border: 1px solid rgba(184,146,42,0.2);
+    padding: 20px;
+    margin-bottom: 16px;
+    min-height: 180px;
+  }
+  .clue-stage h3 {
+    font-family: 'Special Elite', serif;
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(184,146,42,0.2);
+    padding-bottom: 8px;
+  }
+
+  .revealed-clues { display: flex; flex-direction: column; gap: 8px; }
+  .clue-item {
+    padding: 10px 14px;
+    background: rgba(240,232,208,0.05);
+    border-left: 3px solid var(--gold);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    animation: fadeIn 0.4s ease;
+  }
+  .clue-item.new-clue { border-left-color: #e8c84a; background: rgba(232,200,74,0.08); }
+  .clue-num {
+    font-family: 'Special Elite', serif;
+    color: var(--gold);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .no-clues-yet {
+    text-align: center;
+    color: var(--dim);
+    font-style: italic;
+    padding: 30px;
+    font-size: 0.9rem;
+  }
+
+  /* THEORY VOTING */
+  .theory-section {
+    background: rgba(240,232,208,0.04);
+    border: 1px solid rgba(184,146,42,0.2);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .theory-section h3 {
+    font-family: 'Special Elite', serif;
+    color: var(--gold);
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .theories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .theory-btn {
+    background: rgba(240,232,208,0.05);
+    border: 1px solid rgba(240,232,208,0.2);
+    color: var(--paper);
+    padding: 10px 12px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.4;
+    transition: all 0.2s;
+  }
+  .theory-btn:hover { border-color: var(--gold); background: var(--glow); }
+  .theory-btn.team-selected { border-width: 2px; }
+
+  .who-guesses {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .who-label { font-size: 0.8rem; color: var(--dim); letter-spacing: 0.1em; }
+  .team-selector {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .team-pick-btn {
+    padding: 4px 12px;
+    border: 2px solid;
+    background: transparent;
+    font-family: 'Special Elite', serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+  }
+  .team-pick-btn.active { color: var(--ink) !important; }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .btn-reveal {
+    font-family: 'Special Elite', serif;
+    font-size: 0.95rem;
+    padding: 12px 24px;
+    background: var(--gold);
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex: 1;
+    transition: all 0.2s;
+  }
+  .btn-reveal:hover { background: #d4a832; }
+  .btn-reveal:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-lock {
+    font-family: 'Special Elite', serif;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-lock:hover { background: var(--glow); }
+  .btn-lock:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-answer {
+    font-family: 'Special Elite', serif;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    background: transparent;
+    border: 2px solid var(--red);
+    color: var(--red);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-answer:hover { background: rgba(139,26,26,0.2); }
+
+  /* ANSWER REVEAL */
+  .answer-reveal {
+    background: rgba(139,26,26,0.1);
+    border: 2px solid var(--red);
+    padding: 20px;
+    margin-bottom: 16px;
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  .answer-reveal.visible { display: block; }
+  .answer-reveal h3 {
+    font-family: 'Special Elite', serif;
+    color: var(--red);
+    letter-spacing: 0.15em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .answer-text { font-size: 0.9rem; line-height: 1.7; }
+  .answer-text strong { color: var(--gold); }
+
+  /* VOTE LOG */
+  .vote-log {
+    background: rgba(240,232,208,0.03);
+    border: 1px solid rgba(240,232,208,0.1);
+    padding: 14px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .vote-log.has-votes { display: block; }
+  .vote-log h4 {
+    font-family: 'Special Elite', serif;
+    font-size: 0.75rem;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .vote-entry {
+    font-size: 0.8rem;
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(240,232,208,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .vote-entry-team { color: var(--paper); }
+  .vote-entry-theory { color: var(--dim); font-style: italic; max-width: 60%; text-align: right; }
+
+  .btn-new-game {
+    font-family: 'Special Elite', serif;
+    font-size: 0.85rem;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--dim);
+    color: var(--dim);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .btn-new-game:hover { border-color: var(--paper); color: var(--paper); }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>Crack the Case</h1>
+  <p>Unsolved Mysteries — Stage 6 / Unit 1</p>
+</div>
+
+<!-- SETUP SCREEN -->
+<div id="setupScreen">
+
+  <div class="setup-section">
+    <h2>Choose a Case</h2>
+    <div class="case-grid" id="caseGrid"></div>
+  </div>
+
+  <div class="setup-section">
+    <h2>Teams</h2>
+    <div class="team-setup" id="teamSetup"></div>
+    <button class="btn-add-team" onclick="addTeam()">+ Add Team</button>
+  </div>
+
+  <button class="btn-start" onclick="startGame()">Open the Dossier</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="gameScreen">
+
+  <div class="top-bar">
+    <div class="case-label" id="gameCaseLabel"></div>
+    <div class="clue-counter" id="clueCounter"></div>
+  </div>
+
+  <div class="scoreboard" id="scoreboard"></div>
+
+  <div class="clue-stage">
+    <h3>📋 Evidence Revealed So Far</h3>
+    <div class="revealed-clues" id="revealedClues">
+      <div class="no-clues-yet">No evidence revealed yet. Press "Reveal Next Clue" to begin.</div>
+    </div>
+  </div>
+
+  <div class="theory-section">
+    <h3>🔍 Which Theory Do You Support?</h3>
+    <div class="who-guesses">
+      <span class="who-label">GUESSING TEAM:</span>
+      <div class="team-selector" id="teamSelector"></div>
+    </div>
+    <div class="theories-grid" id="theoriesGrid"></div>
+  </div>
+
+  <div class="vote-log" id="voteLog">
+    <h4>Votes This Round</h4>
+    <div id="voteEntries"></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-reveal" id="btnReveal" onclick="revealClue()">Reveal Next Clue</button>
+    <button class="btn-lock" id="btnLock" onclick="lockVotes()" disabled>Lock In Votes</button>
+    <button class="btn-answer" onclick="showAnswer()">Reveal Answer</button>
+  </div>
+
+  <div class="answer-reveal" id="answerReveal">
+    <h3>Case Conclusion</h3>
+    <div class="answer-text" id="answerText"></div>
+  </div>
+
+  <div style="text-align:center; margin-top:10px;">
+    <button class="btn-new-game" onclick="backToSetup()">← New Case</button>
+  </div>
+
+</div>
+
+<script>
+// ─── CASE DATA ────────────────────────────────────────────────────────────────
+const CASES = [
+  {
+    id: "phoenix",
+    emoji: "🛸",
+    name: "Phoenix Lights",
+    subtitle: "March 13th, 1997 — Arizona",
+    theories: [
+      "Military flares dropped during a training exercise",
+      "A single massive alien spacecraft",
+      "Multiple separate UFOs flying in formation",
+      "Military aircraft in a classified test flight",
+      "Mass misidentification — planes and natural phenomena"
+    ],
+    clues: [
+      "On March 13th 1997, over 700 witnesses reported lights in the sky over Phoenix, Arizona — including pilots, police officers and military officials.",
+      "The lights were described in two distinct events: a V-formation around 7pm, and a second set of nine hovering lights later that night around 10pm.",
+      "Air traffic controllers could not detect the lights on radar — despite seeing them with their own eyes.",
+      "Witnesses described a massive, silent craft — some said it was 'a mile wide.' One compared it to 'a shopping mall flying over my home.'",
+      "A truck driver reported watching two orbs near Luke Air Force Base — then seeing three F-16s scramble to intercept one, which shot straight up and disappeared.",
+      "Computer analysis of video footage estimated the object at 6,000 feet long — over a mile.",
+      "The Air Force's official explanation: military flares dropped during a training exercise at around 1am.",
+      "However, the flare explanation only accounts for the second set of lights — it does not explain the first V-formation seen nearly three hours earlier.",
+      "Governor Fife Symington initially mocked the event with a man in an alien suit at a press conference. He later admitted he personally saw a massive craft that 'did not resemble any man-made object.'",
+      "In 2017, it emerged the US Defence Department had spent $22 million investigating UFOs through a secret program.",
+      "One witness used a high-powered telescope during the first sighting and claimed the lights were simply planes. However, no planes were officially reported in the area at that time.",
+      "Former F-16 pilot Ty Gro says flares go where wind takes them — a breeze could have kept them equidistant. National Guard flare demonstrations, however, 'flickered and moved erratically' — unlike the steady Phoenix Lights."
+    ],
+    answer: "The case remains officially <strong>unsolved</strong>. The Air Force maintains the lights were flares, but this only explains the second sighting. The first V-formation has never been explained. Governor Symington's admission that he personally witnessed a massive craft adds significant weight to witness testimony. The Phoenix Lights are considered one of the most credible mass UFO sightings in history."
+  },
+  {
+    id: "cooper",
+    emoji: "💼",
+    name: "DB Cooper",
+    subtitle: "November 24th, 1971",
+    theories: [
+      "Richard Floyd McCoy — a similar hijacker caught in 1972",
+      "Duane Weber — made a deathbed confession to his wife",
+      "Kenneth Christiansen — Northwest Airlines employee",
+      "Cooper did not survive the parachute jump",
+      "A completely unidentified person — still unknown"
+    ],
+    clues: [
+      "On November 24th 1971, a man calling himself Dan Cooper hijacked a plane with a briefcase bomb, extorted $200,000 in $20 bills and two parachutes, then parachuted out somewhere over Washington State.",
+      "Cooper was described as mid-40s, 175–180cm, brown eyes, calm and intelligent. He ordered a bourbon and soda before the hijacking.",
+      "One clue: Cooper took off his tie clip before jumping — the FBI extracted DNA from it. No match has ever been found in any database.",
+      "In 1980, a boy found $5,800 of the ransom money on a beach — the serial numbers matched. Despite an extensive search, nothing else was ever found.",
+      "Richard Floyd McCoy hijacked a plane in 1972 using almost identical methods — rear staircase, two parachutes, the phrase 'No funny stuff.' His family identified an item left on Cooper's plane.",
+      "McCoy's alibi: FBI records show he was home in Utah for Thanksgiving dinner — a 12-hour drive away. Flight attendants also said he didn't match their description of Cooper.",
+      "Duane Weber's wife said he confessed on his deathbed: 'I'm Dan Cooper.' He had nightmares about 'leaving fingerprints on a plane' and an unexplained knee injury from jumping.",
+      "Kenneth Christiansen worked for Northwest Airlines — the exact airline Cooper hijacked. His brother became convinced after seeing Unsolved Mysteries. A flight attendant said Kenneth's photo was 'the closest' of all suspects.",
+      "The FBI believe Cooper was not an experienced parachutist. Agent Larry Carr noted: 'No experienced parachutist would jump in pitch-black night, in the rain, in office shoes and a long coat.'",
+      "Cooper packed two parachutes. Unknown to him, one was a training chute sewn shut. The second — the safe one — was a military chute with no steering capability.",
+      "The jump happened at night, in heavy rain, over dense forested terrain. No body, no parachute and almost no money has ever been found.",
+      "The FBI officially closed the active investigation in 2016 — the only unsolved case of air piracy in US aviation history. Over 800 suspects were investigated."
+    ],
+    answer: "The case remains <strong>officially unsolved</strong>. The FBI's own lead agent believed Cooper likely did not survive the jump — the conditions were extreme and the parachute was not steerable. However, no body was ever found. All named suspects were eventually ruled out. The $5,800 found in 1980 remains the only physical evidence ever recovered."
+  },
+  {
+    id: "watcher",
+    emoji: "👁️",
+    name: "The Watcher",
+    subtitle: "657 Boulevard, Westfield, New Jersey, 2014",
+    theories: [
+      "Michael Langford — the odd next-door neighbour",
+      "The Gamer — anonymous young man with a Watcher roleplay obsession",
+      "The Broaddus family themselves — fabricating it for profit",
+      "A different unidentified neighbour",
+      "Genuinely unknown — case unsolved"
+    ],
+    clues: [
+      "Three days after the Broaddus family bought their $1.3 million dream home at 657 Boulevard, a threatening letter arrived — signed 'The Watcher.'",
+      "The Watcher's first letter claimed: 'My grandfather watched the house in the 1920s and my father watched in the 1960s. It is now my time.'",
+      "The letter threatened the family's children: 'Once I know their names, I will call to them and draw them to me.'",
+      "A second letter arrived two weeks later — disturbingly, it contained the children's names and referenced their daughter painting on an easel on the porch.",
+      "Michael Langford's family had lived next door since the 1960s — exactly matching The Watcher's timeline. He was known to walk through neighbours' yards and peek through windows.",
+      "Police questioned Langford after letter one, but DNA found on an envelope belonged to a woman. All Langfords were eventually ruled out by prosecutors.",
+      "The Gamer: a young man whose girlfriend told police he played a video game where he roleplayed as a character called 'The Watcher.' He agreed to be questioned — but never showed up.",
+      "The Broaddus family theory: locals noted they had moved from a $315k home to a $770k home to a $1.3m home using refinanced mortgages. Some suspected financial desperation.",
+      "When Netflix offered to buy their story rights, some suspected this gave the family a motive to have fabricated the letters.",
+      "Derek Broaddus admitted to sending anonymous threatening letters to neighbours who had rejected his planning application — though he insisted these were the only anonymous letters he had ever written.",
+      "A completely separate family on the same street also received a Watcher letter — strongly undermining the theory that the Broaddus family fabricated everything.",
+      "The case has never been solved. No charges were ever filed. The Watcher has never been identified. Netflix dramatised the story in their 2022 series 'The Watcher.'"
+    ],
+    answer: "The case remains <strong>officially unsolved</strong>. The Langfords were ruled out by DNA evidence. The Gamer was never questioned. The Broaddus family theory is compelling but weakened by the fact a separate neighbour received a letter too. Netflix's dramatisation of the case in 2022 renewed public interest — but The Watcher's identity remains unknown."
+  },
+  {
+    id: "celeste",
+    emoji: "⛵",
+    name: "Mary Celeste",
+    subtitle: "Atlantic Ocean, December 1872",
+    theories: [
+      "Pirates attacked the crew from outside the ship",
+      "The crew mutinied and took control",
+      "The captain panicked due to a faulty sounding rod — misread water levels",
+      "A seaquake caused alcohol fumes and the crew feared explosion",
+      "Supernatural or alien abduction"
+    ],
+    clues: [
+      "On December 4th 1872, the British merchant ship Dei Gratia spotted the Mary Celeste drifting 400 miles east of the Azores. When they boarded her, the ship was completely abandoned.",
+      "There was no sign of struggle. The cargo — 1,700 barrels of alcohol — was largely intact. There was six months of food and water still on board.",
+      "The ship's one lifeboat was missing, along with its chronometer, sextant and navigation book — suggesting the crew left in an organised, deliberate manner.",
+      "The ship's last log entry was from 8am on November 25th — ten days before the Dei Gratia found her. Whatever happened occurred shortly after that entry.",
+      "Nine barrels of alcohol were found empty — but they were made from red oak rather than white oak like the rest. They likely leaked naturally rather than being broken open.",
+      "The sounding rod — used to measure water levels in the hull — was found lying on the deck rather than in its proper place. The replacement rod suggested a faulty reading may have alarmed the captain.",
+      "The second mate of the Dei Gratia measured approximately one metre of water in the hull — significant for the ship's size, but not enough to justify abandoning a seaworthy vessel.",
+      "The crew of the Dei Gratia were initially suspected of foul play — finding an abandoned ship in such good condition with a full cargo was extremely rare. They were only paid 1/6th of the insurance policy.",
+      "German brothers Volkert and Boye Lorenzen were suspected of mutiny — unusually, none of their belongings were found on the ship. It later emerged they had been lost in a separate shipwreck earlier that year.",
+      "According to the US Naval Research Laboratory, the Azores area is one of the most seismically active in the world. Evidence suggests an 8.5 magnitude seaquake occurred nearby around the time of abandonment.",
+      "A special effects expert analysed the lights and described them as 'perfectly uniform with no variation from edge to edge and no glow' — ruling out flares, lasers, holograms and aircraft lights.",
+      "No trace of the Mary Celeste's crew, captain, his wife Sarah, or their two-year-old daughter Sophia was ever found. The case remains one of the greatest maritime mysteries in history."
+    ],
+    answer: "The case remains <strong>officially unsolved</strong>. The most plausible modern theory is that the captain misread water levels due to a faulty sounding rod, panicked, and ordered everyone into the lifeboat — which then became separated from the ship in rough seas. The seaquake theory is also widely considered. No bodies, no lifeboat and no definitive evidence were ever found."
+  }
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let selectedCaseId = null;
+let teams = [];
+let currentClueIndex = 0;
+let currentCase = null;
+let activeTeam = null;
+let votes = []; // { teamName, theory, clueIndex }
+let lockedThisRound = false;
+let teamColors = ['#e8b84a','#4a8be8','#e84a4a','#4ae88b','#b84ae8'];
+
+// ─── SETUP ────────────────────────────────────────────────────────────────────
+function init() {
+  buildCaseGrid();
+  teams = [
+    { name: 'Team 1', color: teamColors[0] },
+    { name: 'Team 2', color: teamColors[1] }
+  ];
+  renderTeams();
+}
+
+function buildCaseGrid() {
+  const grid = document.getElementById('caseGrid');
+  CASES.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'case-option';
+    btn.dataset.id = c.id;
+    btn.innerHTML = `<span class="case-emoji">${c.emoji}</span>${c.name}<br><span style="font-size:0.7rem;opacity:0.6">${c.subtitle}</span>`;
+    btn.onclick = () => {
+      document.querySelectorAll('.case-option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedCaseId = c.id;
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function renderTeams() {
+  const wrap = document.getElementById('teamSetup');
+  wrap.innerHTML = '';
+  teams.forEach((t, i) => {
+    const row = document.createElement('div');
+    row.className = 'team-row';
+    row.innerHTML = `
+      <input type="color" value="${t.color}" onchange="teams[${i}].color=this.value; renderTeams()">
+      <input type="text" value="${t.name}" placeholder="Team name" onchange="teams[${i}].name=this.value">
+      ${teams.length > 1 ? `<button class="remove-team" onclick="removeTeam(${i})">×</button>` : ''}
+    `;
+    wrap.appendChild(row);
+  });
+}
+
+function addTeam() {
+  if (teams.length >= 5) return;
+  teams.push({ name: `Team ${teams.length + 1}`, color: teamColors[teams.length] });
+  renderTeams();
+}
+
+function removeTeam(i) {
+  teams.splice(i, 1);
+  renderTeams();
+}
+
+function startGame() {
+  if (!selectedCaseId) { alert('Please choose a case first.'); return; }
+  currentCase = CASES.find(c => c.id === selectedCaseId);
+  currentClueIndex = 0;
+  activeTeam = null;
+  votes = [];
+  lockedThisRound = false;
+
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'block';
+
+  document.getElementById('gameCaseLabel').textContent = `${currentCase.emoji} ${currentCase.name}`;
+  updateClueCounter();
+
+  buildScoreboard();
+  buildTeamSelector();
+  buildTheoriesGrid();
+
+  document.getElementById('revealedClues').innerHTML = '<div class="no-clues-yet">No evidence revealed yet. Press "Reveal Next Clue" to begin.</div>';
+  document.getElementById('btnReveal').disabled = false;
+  document.getElementById('btnLock').disabled = true;
+  document.getElementById('answerReveal').classList.remove('visible');
+  document.getElementById('voteLog').classList.remove('has-votes');
+  document.getElementById('voteEntries').innerHTML = '';
+}
+
+function backToSetup() {
+  document.getElementById('gameScreen').style.display = 'none';
+  document.getElementById('setupScreen').style.display = 'block';
+}
+
+// ─── SCOREBOARD ───────────────────────────────────────────────────────────────
+function buildScoreboard() {
+  const sb = document.getElementById('scoreboard');
+  sb.innerHTML = '';
+  teams.forEach(t => {
+    t.score = t.score || 0;
+    const chip = document.createElement('div');
+    chip.className = 'score-chip';
+    chip.id = 'score-' + sanitize(t.name);
+    chip.style.borderColor = t.color;
+    chip.style.color = t.color;
+    chip.innerHTML = `<span>${t.name}</span><span class="score-num">${t.score}</span>`;
+    sb.appendChild(chip);
+  });
+}
+
+function updateScore(teamName, delta) {
+  const t = teams.find(t => t.name === teamName);
+  if (!t) return;
+  t.score = (t.score || 0) + delta;
+  const chip = document.getElementById('score-' + sanitize(teamName));
+  if (chip) chip.querySelector('.score-num').textContent = t.score;
+}
+
+function sanitize(s) { return s.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,''); }
+
+// ─── TEAM SELECTOR ────────────────────────────────────────────────────────────
+function buildTeamSelector() {
+  const sel = document.getElementById('teamSelector');
+  sel.innerHTML = '';
+  teams.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'team-pick-btn';
+    btn.style.borderColor = t.color;
+    btn.style.color = t.color;
+    btn.textContent = t.name;
+    btn.onclick = () => {
+      activeTeam = t.name;
+      document.querySelectorAll('.team-pick-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'transparent';
+      });
+      btn.classList.add('active');
+      btn.style.background = t.color;
+    };
+    sel.appendChild(btn);
+  });
+}
+
+// ─── THEORIES GRID ────────────────────────────────────────────────────────────
+function buildTheoriesGrid() {
+  const grid = document.getElementById('theoriesGrid');
+  grid.innerHTML = '';
+  currentCase.theories.forEach(theory => {
+    const btn = document.createElement('button');
+    btn.className = 'theory-btn';
+    btn.textContent = theory;
+    btn.onclick = () => selectTheory(theory, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function selectTheory(theory, btn) {
+  if (!activeTeam) { alert('Select a team first!'); return; }
+  // Deselect previous for this team
+  document.querySelectorAll('.theory-btn').forEach(b => {
+    if (b.dataset.team === activeTeam) {
+      b.classList.remove('team-selected');
+      b.style.borderColor = '';
+      delete b.dataset.team;
+    }
+  });
+  const t = teams.find(t => t.name === activeTeam);
+  btn.classList.add('team-selected');
+  btn.style.borderColor = t.color;
+  btn.dataset.team = activeTeam;
+  // Store pending vote
+  btn._pendingTeam = activeTeam;
+  btn._pendingTheory = theory;
+  document.getElementById('btnLock').disabled = false;
+}
+
+// ─── REVEAL CLUE ─────────────────────────────────────────────────────────────
+function revealClue() {
+  if (currentClueIndex >= currentCase.clues.length) return;
+
+  const container = document.getElementById('revealedClues');
+  // Remove placeholder
+  container.querySelector('.no-clues-yet')?.remove();
+
+  // Remove 'new' class from previous
+  container.querySelectorAll('.new-clue').forEach(el => el.classList.remove('new-clue'));
+
+  const clue = currentCase.clues[currentClueIndex];
+  const item = document.createElement('div');
+  item.className = 'clue-item new-clue';
+  item.innerHTML = `<span class="clue-num">CLUE ${currentClueIndex + 1}</span>${clue}`;
+  container.appendChild(item);
+  item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  currentClueIndex++;
+  updateClueCounter();
+
+  if (currentClueIndex >= currentCase.clues.length) {
+    document.getElementById('btnReveal').disabled = true;
+  }
+  lockedThisRound = false;
+  document.getElementById('btnLock').disabled = true;
+  // Clear theory selections
+  document.querySelectorAll('.theory-btn').forEach(b => {
+    b.classList.remove('team-selected');
+    b.style.borderColor = '';
+    delete b.dataset.team;
+  });
+}
+
+function updateClueCounter() {
+  document.getElementById('clueCounter').textContent = 
+    `Clue ${Math.min(currentClueIndex, currentCase.clues.length)} / ${currentCase.clues.length}`;
+}
+
+// ─── LOCK VOTES ───────────────────────────────────────────────────────────────
+function lockVotes() {
+  const pending = [];
+  document.querySelectorAll('.theory-btn[data-team]').forEach(btn => {
+    pending.push({ team: btn.dataset.team, theory: btn.textContent, clue: currentClueIndex });
+  });
+
+  if (pending.length === 0) return;
+
+  // Add to vote log
+  const logEl = document.getElementById('voteEntries');
+  pending.forEach(v => {
+    const t = teams.find(t => t.name === v.team);
+    const entry = document.createElement('div');
+    entry.className = 'vote-entry';
+    entry.innerHTML = `
+      <span class="vote-entry-team" style="color:${t?.color}">${v.team}</span>
+      <span class="vote-entry-theory">${v.theory}</span>`;
+    logEl.appendChild(entry);
+    votes.push(v);
+  });
+  document.getElementById('voteLog').classList.add('has-votes');
+  document.getElementById('btnLock').disabled = true;
+  lockedThisRound = true;
+}
+
+// ─── SHOW ANSWER ──────────────────────────────────────────────────────────────
+function showAnswer() {
+  const panel = document.getElementById('answerReveal');
+  document.getElementById('answerText').innerHTML = currentCase.answer;
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior: 'smooth' });
+
+  // Award points based on final locked votes
+  if (votes.length > 0) {
+    // For each team, get their most recent vote
+    const finalVotes = {};
+    votes.forEach(v => { finalVotes[v.team] = v.theory; });
+    // The "best" theory is the first two theories (index 0 or 1) — teacher decides
+    // We'll award points based on how early they picked the best supported theory
+    // For now just show who voted for what — teacher awards manually
+    let scoreNote = '<br><strong style="color:var(--gold)">Final votes:</strong><br>';
+    Object.entries(finalVotes).forEach(([team, theory]) => {
+      scoreNote += `${team}: ${theory}<br>`;
+    });
+    document.getElementById('answerText').innerHTML += scoreNote;
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
