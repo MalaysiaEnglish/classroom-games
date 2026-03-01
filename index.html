@@ -3,263 +3,681 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Classroom Games Collection</title>
-
+  <title>Classroom Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
+    :root {
+      --bg:       #0a0d14;
+      --surface:  #111520;
+      --card:     #161b2e;
+      --border:   rgba(255,255,255,0.07);
+      --accent:   #f0b429;
+      --accent2:  #3ecfcf;
+      --text:     #e8eaf0;
+      --muted:    rgba(232,234,240,0.45);
+      --radius:   14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
+      overflow-x: hidden;
     }
 
+    /* ── Background texture ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 10%, rgba(240,180,41,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(62,207,207,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Header ── */
     header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      font-size: clamp(2em, 6vw, 3.2em);
-      text-shadow: 3px 3px 10px #000;
-    }
-
-    .subtitle {
-      font-size: clamp(1em, 3vw, 1.3em);
-      margin-top: 8px;
-      opacity: 0.9;
-    }
-
-    /* ✅ Smaller, cleaner grid */
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px;
-      max-width: 1000px;
-      margin: 0 auto;
-      flex: 1;
-    }
-
-    /* ✅ More compact cards */
-    .game-card {
-      background: rgba(255,255,255,0.15);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-      transition: transform 0.25s;
+      position: relative;
+      z-index: 1;
+      padding: 36px 24px 0;
       text-align: center;
     }
 
-    .game-card:hover {
-      transform: translateY(-8px);
-    }
-
-    /* ✅ Smaller thumbnails */
-    .game-thumb {
-      height: 140px;
-      background: #222;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .game-info {
-      padding: 15px;
-    }
-
-    .game-info h2 {
-      font-size: clamp(1.3em, 4vw, 1.8em);
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
       margin-bottom: 6px;
     }
 
-    .game-info p {
-      font-size: clamp(0.9em, 3vw, 1.1em);
-      margin-bottom: 14px;
-      opacity: 0.9;
+    .logo-icon {
+      font-size: 2.4rem;
+      filter: drop-shadow(0 0 12px rgba(240,180,41,0.6));
     }
 
-    .play-btn {
-      display: inline-block;
-      padding: 10px 28px;
-      background: #50c878;
-      color: white;
-      text-decoration: none;
+    h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 300;
+      margin-top: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Toolkit floating button ── */
+    .toolkit-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+    }
+
+    .toolkit-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--accent);
+      color: #0a0d14;
+      border: none;
       border-radius: 40px;
-      font-weight: bold;
-      font-size: clamp(1em, 3vw, 1.2em);
-      transition: all 0.25s;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(240,180,41,0.4);
+      transition: all 0.2s;
+      text-decoration: none;
     }
 
-    .play-btn:hover {
-      background: #45a863;
-      transform: scale(1.05);
+    .toolkit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(240,180,41,0.55);
+    }
+
+    /* ── Stage tabs ── */
+    .stage-nav {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 28px 24px 0;
+    }
+
+    .stage-tab {
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-family: 'Unbounded', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .stage-tab:hover:not(.disabled) {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--text);
+    }
+
+    .stage-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0d14;
+      box-shadow: 0 0 20px rgba(240,180,41,0.3);
+    }
+
+    .stage-tab.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .stage-tab .coming {
+      position: absolute;
+      top: -6px; right: -6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.5rem;
+      padding: 1px 5px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Main content ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 120px;
+    }
+
+    /* ── Stage panel ── */
+    .stage-panel { display: none; }
+    .stage-panel.active { display: block; }
+
+    .stage-label {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ── Unit cards ── */
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .unit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .unit-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-3px);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .unit-card:nth-child(1) { animation-delay: 0.05s; }
+    .unit-card:nth-child(2) { animation-delay: 0.10s; }
+    .unit-card:nth-child(3) { animation-delay: 0.15s; }
+    .unit-card:nth-child(4) { animation-delay: 0.20s; }
+
+    .unit-header {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .unit-emoji {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .unit-meta {
+      flex: 1;
+    }
+
+    .unit-number {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .unit-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .unit-grammar {
+      font-size: 0.78rem;
+      color: var(--accent2);
+      margin-top: 3px;
+    }
+
+    /* ── Game links inside unit ── */
+    .unit-games {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .game-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid transparent;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.18s;
+    }
+
+    .game-link:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--border);
+      transform: translateX(3px);
+    }
+
+    .game-link .gl-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .game-link .gl-label { flex: 1; }
+    .game-link .gl-type {
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Toolkit row inside unit ── */
+    .toolkit-row {
+      padding: 0 14px 14px;
+    }
+
+    .toolkit-unit-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      background: rgba(240,180,41,0.08);
+      border: 1px solid rgba(240,180,41,0.2);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: 'DM Sans', sans-serif;
+      text-align: left;
+    }
+
+    .toolkit-unit-btn:hover {
+      background: rgba(240,180,41,0.14);
+      border-color: rgba(240,180,41,0.4);
+    }
+
+    /* ── Toolkit modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .modal {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 22px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 6px;
+      transition: color 0.15s;
+    }
+
+    .modal-close:hover { color: var(--text); }
+
+    .modal-body {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .modal-body { grid-template-columns: 1fr; }
+    }
+
+    .modal-game-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.18s;
+    }
+
+    .modal-game-link:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    .modal-game-link .mg-icon { font-size: 1.3rem; }
+    .modal-game-link .mg-text { flex: 1; }
+    .modal-game-link .mg-text small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 1px;
+    }
+
+    /* ── Content editor link ── */
+    .editor-link {
+      display: block;
+      text-align: center;
+      margin: 0 auto;
+      padding: 10px 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      width: fit-content;
+      margin-top: 32px;
+    }
+
+    .editor-link:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
     }
 
     footer {
       text-align: center;
-      padding: 15px;
-      font-size: 1em;
-      opacity: 0.8;
+      padding: 10px 20px 20px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      position: relative;
+      z-index: 1;
     }
   </style>
 </head>
-
 <body>
+
+  <!-- Floating toolkit button -->
+  <div class="toolkit-float">
+    <button class="toolkit-btn" onclick="openToolkit()">
+      🧰 Toolkit
+    </button>
+  </div>
+
+  <!-- Header -->
   <header>
-    <h1>Classroom Games</h1>
-    <p class="subtitle">9 Projector Games • No Login • Instant Play</p>
+    <div class="logo-row">
+      <span class="logo-icon">🎮</span>
+      <h1>Classroom <span>Games</span></h1>
+    </div>
+    <p class="tagline">IGCSE English · TEFL Malaysia · No login · Works offline</p>
   </header>
 
-  <div class="games-grid">
+  <!-- Stage tabs -->
+  <nav class="stage-nav">
+    <button class="stage-tab active" onclick="showStage('s5')">Stage 5</button>
+    <button class="stage-tab" onclick="showStage('s6')">Stage 6</button>
+    <button class="stage-tab disabled" title="Coming soon">Stage 7<span class="coming">soon</span></button>
+    <button class="stage-tab disabled" title="Coming soon">Stage 8<span class="coming">soon</span></button>
+    <button class="stage-tab disabled" title="Coming soon">Stage 9<span class="coming">soon</span></button>
+    <button class="stage-tab disabled" title="Coming soon">Stage 10<span class="coming">soon</span></button>
+  </nav>
 
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#ff6b6b,#feca57); font-size:4rem; display:flex; align-items:center; justify-content:center;">⚔️</div>
-      <div class="game-info">
-        <h2>Battle Teams</h2>
-        <p>Power-up grid battles!</p>
-        <a href="battle-teams/index.html" class="play-btn">Play</a>
+  <main>
+
+    <!-- ── STAGE 5 ── -->
+    <div class="stage-panel active" id="panel-s5">
+      <div class="stage-label">Stage 5</div>
+      <div class="units-grid">
+
+        <!-- S5 U7 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🍑</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 7</div>
+              <div class="unit-title">Danny Champion of the World</div>
+            </div>
+          </div>
+          <div class="unit-games">
+            <a href="danny-adventure/index.html" class="game-link">
+              <span class="gl-icon">📖</span>
+              <span class="gl-label">Danny &amp; Dad's Secret</span>
+              <span class="gl-type">Adventure</span>
+            </a>
+          </div>
+          <div class="toolkit-row">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#1e3a8a,#2563eb); font-size:4rem; display:flex; align-items:center; justify-content:center;">🃏</div>
-      <div class="game-info">
-        <h2>Grammar Cards</h2>
-        <p>Higher/Lower + sentences!</p>
-        <a href="grammar-cards/index.html" class="play-btn">Play</a>
+    <!-- ── STAGE 6 ── -->
+    <div class="stage-panel" id="panel-s6">
+      <div class="stage-label">Stage 6</div>
+      <div class="units-grid">
+
+        <!-- S6 U5 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">📜</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 5</div>
+              <div class="unit-title">The History of Language</div>
+            </div>
+          </div>
+          <div class="unit-games">
+            <a href="history-of-language/index.html" class="game-link">
+              <span class="gl-icon">🏛️</span>
+              <span class="gl-label">History of Language</span>
+              <span class="gl-type">Jeopardy Quiz</span>
+            </a>
+            <a href="language-sorter/index.html" class="game-link">
+              <span class="gl-icon">⚡</span>
+              <span class="gl-label">Language Sorter</span>
+              <span class="gl-type">Quickfire</span>
+            </a>
+          </div>
+          <div class="toolkit-row">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S6 U6 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">💀</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 6</div>
+              <div class="unit-title">Unbelievable Stories</div>
+              <div class="unit-grammar">2nd · 3rd · Mixed Conditionals</div>
+            </div>
+          </div>
+          <div class="unit-games">
+            <a href="curse-story-builder/index.html" class="game-link">
+              <span class="gl-icon">🕯️</span>
+              <span class="gl-label">Curse Story Builder</span>
+              <span class="gl-type">L2 · 3rd Conditional</span>
+            </a>
+          </div>
+          <div class="toolkit-row">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#1f2937,#374151); font-size:4rem; display:flex; align-items:center; justify-content:center;">🪢</div>
-      <div class="game-info">
-        <h2>Hangman Modes</h2>
-        <p>Basic • Consonant • Diceman</p>
-        <a href="hangman/index.html" class="play-btn">Play</a>
+  </main>
+
+  <!-- ── Toolkit Modal ── -->
+  <div class="modal-overlay" id="toolkitModal" onclick="closeToolkitOnOverlay(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">🧰 Toolkit — All Generic Games</span>
+        <button class="modal-close" onclick="closeToolkit()">×</button>
+      </div>
+      <div class="modal-body">
+        <a href="battle-teams/index.html" class="modal-game-link">
+          <span class="mg-icon">⚔️</span>
+          <span class="mg-text">Battle Teams<small>Power-up grid battles</small></span>
+        </a>
+        <a href="grammar-cards/index.html" class="modal-game-link">
+          <span class="mg-icon">🃏</span>
+          <span class="mg-text">Grammar Cards<small>Higher / Lower + sentences</small></span>
+        </a>
+        <a href="hangman/index.html" class="modal-game-link">
+          <span class="mg-icon">🪢</span>
+          <span class="mg-text">Hangman<small>Basic · Consonant · Diceman</small></span>
+        </a>
+        <a href="connect4/index.html" class="modal-game-link">
+          <span class="mg-icon">🔴</span>
+          <span class="mg-text">Connect 4<small>Question-based turns</small></span>
+        </a>
+        <a href="blockbusters/index.html" class="modal-game-link">
+          <span class="mg-icon">⬡</span>
+          <span class="mg-text">Blockbusters<small>Gold vs Blue path game</small></span>
+        </a>
+        <a href="boardgame/index.html" class="modal-game-link">
+          <span class="mg-icon">🎲</span>
+          <span class="mg-text">Boardgame<small>Roll, move, challenge</small></span>
+        </a>
+        <a href="grammar-auction/index.html" class="modal-game-link">
+          <span class="mg-icon">🏛️</span>
+          <span class="mg-text">Grammar Auction<small>Bid on correct sentences</small></span>
+        </a>
+        <a href="battleships/index.html" class="modal-game-link">
+          <span class="mg-icon">🚢</span>
+          <span class="mg-text">Battleships<small>Hunt the hidden fleet</small></span>
+        </a>
+        <a href="noughts-crosses/index.html" class="modal-game-link">
+          <span class="mg-icon">⭕</span>
+          <span class="mg-text">Noughts &amp; Crosses<small>Simple or question mode</small></span>
+        </a>
+        <a href="wheel-of-fortune/index.html" class="modal-game-link">
+          <span class="mg-icon">🎡</span>
+          <span class="mg-text">Wheel of Fortune<small>Spin, guess, solve</small></span>
+        </a>
+        <a href="passive-dice/index.html" class="modal-game-link">
+          <span class="mg-icon">🎯</span>
+          <span class="mg-text">Passive Dice<small>Build passive sentences</small></span>
+        </a>
       </div>
     </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#1e40af,#172554); font-size:4rem; display:flex; align-items:center; justify-content:center;">🔴</div>
-      <div class="game-info">
-        <h2>Connect 4</h2>
-        <p>Question-based turns!</p>
-        <a href="connect4/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#92400e,#d97706); font-size:4rem; display:flex; align-items:center; justify-content:center;">⬡</div>
-      <div class="game-info">
-        <h2>Blockbusters</h2>
-        <p>Gold vs Blue path game!</p>
-        <a href="blockbusters/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#065f46,#059669); font-size:4rem; display:flex; align-items:center; justify-content:center;">🎲</div>
-      <div class="game-info">
-        <h2>Boardgame</h2>
-        <p>Roll, move, challenge!</p>
-        <a href="boardgame/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#4c1d95,#7c3aed); font-size:4rem; display:flex; align-items:center; justify-content:center;">🎯</div>
-      <div class="game-info">
-        <h2>Passive Dice</h2>
-        <p>Build passive voice sentences!</p>
-        <a href="passive-dice/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#2c1a0e,#2d5a27); font-size:4rem; display:flex; align-items:center; justify-content:center;">🌲</div>
-      <div class="game-info">
-        <h2>The Road Not Taken</h2>
-        <p>Class adventure • dragons • gnomes • bad decisions!</p>
-        <a href="road-not-taken/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#1A1A2E,#F5A623); font-size:4rem; display:flex; align-items:center; justify-content:center;">🏛️</div>
-      <div class="game-info">
-        <h2>Grammar Auction</h2>
-        <p>Bid on correct sentences — teams win or lose points!</p>
-        <a href="grammar-auction/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#0e4a7a,#1a6fad); font-size:4rem; display:flex; align-items:center; justify-content:center;">🚢</div>
-      <div class="game-info">
-        <h2>Battleships</h2>
-        <p>Hunt the hidden fleet — hit ships and fire again!</p>
-        <a href="battleships/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#1a1a2e,#4a0080);font-size:4rem;display:flex;align-items:center;justify-content:center;">⭕</div>
-      <div class="game-info">
-        <h2>Noughts &amp; Crosses</h2>
-        <p>Simple or question mode — claim squares to get three in a row!</p>
-        <a href="noughts-crosses/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#1a0533,#6b21a8);font-size:4rem;display:flex;align-items:center;justify-content:center;">🎡</div>
-      <div class="game-info">
-        <h2>Wheel of Fortune</h2>
-        <p>Spin the wheel, pick letters, solve the phrase — Bankrupt lurks!</p>
-        <a href="wheel-of-fortune/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#2c1a0e,#5c3d1e);font-size:4rem;display:flex;align-items:center;justify-content:center;">🧁</div>
-      <div class="game-info">
-        <h2>Danny &amp; Dad's Secret</h2>
-        <p>A choose-your-own adventure in the world of Danny Champion of the World!</p>
-        <a href="danny-adventure/index.html" class="play-btn">Read</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#0a0f1e,#1e3a5f);font-size:4rem;display:flex;align-items:center;justify-content:center;">📜</div>
-      <div class="game-info">
-        <h2>History of Language</h2>
-        <p>Jeopardy-style quiz on Middle English, word evolution, borrowed words &amp; eponyms.</p>
-        <a href="history-of-language/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
-    <div class="game-card">
-      <div class="game-thumb" style="background:linear-gradient(135deg,#0b0c10,#1a2a3a);font-size:4rem;display:flex;align-items:center;justify-content:center;">⚡</div>
-      <div class="game-info">
-        <h2>Language Sorter</h2>
-        <p>Quickfire revision — words flash up, teams race to shout the category!</p>
-        <a href="language-sorter/index.html" class="play-btn">Play</a>
-      </div>
-    </div>
-
   </div>
 
-  <div style="text-align:center; margin: 8px 0 20px;">
-    <a href="content-editor.html" style="display:inline-block; padding:12px 28px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:12px; color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem; font-weight:600; letter-spacing:0.05em;">
-      ✏️ Content Editor — manage sentences &amp; words
-    </a>
+  <div style="text-align:center; position:relative; z-index:1; padding-bottom: 30px;">
+    <a href="content-editor.html" class="editor-link">✏️ Content Editor</a>
   </div>
 
-  <footer>
-    Made with ❤️ for classrooms • Works offline • Free forever
-  </footer>
+  <footer>Made with ❤️ for classrooms · Works offline · Free forever</footer>
+
+  <script>
+    function showStage(id) {
+      document.querySelectorAll('.stage-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.stage-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('panel-' + id).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    function openToolkit() {
+      document.getElementById('toolkitModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeToolkit() {
+      document.getElementById('toolkitModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeToolkitOnOverlay(e) {
+      if (e.target === document.getElementById('toolkitModal')) closeToolkit();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeToolkit();
+    });
+  </script>
+
 </body>
 </html>
