@@ -28,6 +28,26 @@
     min-height: 100vh;
   }
 
+  .home-btn {
+    font-family: 'Special Elite', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border: 1px solid #444;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    margin: 10px 0 0 16px;
+  }
+  .home-btn:hover { border-color: var(--gold); color: var(--gold); }
+
   /* ── Clapperboard header ── */
   .clapper-header {
     background: #111;
@@ -337,6 +357,9 @@
 
 <!-- Intro -->
 <div id="intro">
+  <div style="text-align:left; padding: 16px 0 0 0;">
+    <a href="../index.html" class="home-btn">🏠 Home</a>
+  </div>
   <div class="intro-icon">🎥</div>
   <div class="intro-h">Direct Cut</div>
   <p class="intro-p">
@@ -364,6 +387,7 @@
 <div id="game" style="display:none">
   <div class="clapper-header">
     <div class="clapper-top"></div>
+    <a href="../index.html" class="home-btn">🏠 Home</a>
     <div class="clapper-info">
       <div>
         <div class="clapper-title">Direct <span>Cut</span></div>
