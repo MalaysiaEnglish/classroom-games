@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fix the Phrasal Verb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --surface: #101520;
+      --card: #161d2e;
+      --border: rgba(255,255,255,0.08);
+      --teal: #3ecfcf;
+      --gold: #f0b429;
+      --red: #e85d5d;
+      --green: #4cbb7f;
+      --purple: #a78bfa;
+      --text: #e8eaf0;
+      --muted: rgba(232,234,240,0.45);
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 50% 35% at 5% 15%, rgba(62,207,207,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 95% 85%, rgba(167,139,250,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative; z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      padding: 28px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 auto;
+    }
+
+    .home-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .home-btn:hover { color: var(--text); border-color: var(--teal); }
+
+    .hdr-centre { text-align: center; }
+    .hdr-centre h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: -0.02em;
+    }
+    .hdr-centre p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .score-badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--teal);
+      min-width: 80px;
+      text-align: center;
+    }
+
+    main {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 860px;
+      padding: 32px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* ── Intro ── */
+    #intro {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 28px; text-align: center; padding: 20px 0;
+    }
+
+    .intro-terminal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 36px;
+      max-width: 540px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+    .intro-terminal::before {
+      content: '● ● ●';
+      position: absolute; top: 12px; left: 16px;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 4px;
+    }
+    .terminal-line {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-top: 8px;
+    }
+    .terminal-line .t-cmd { color: var(--teal); }
+    .terminal-line .t-good { color: var(--green); }
+    .terminal-line .t-bad { color: var(--red); text-decoration: line-through; }
+    .terminal-line .t-fix { color: var(--gold); }
+
+    .intro-title {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+    .intro-title span { color: var(--teal); }
+
+    .intro-desc {
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    /* Mode pills */
+    .mode-section {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      width: 100%; max-width: 600px;
+    }
+    .mode-label {
+      font-size: 0.78rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted);
+    }
+    .mode-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .mode-pill {
+      padding: 8px 18px; border-radius: 40px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted); font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .mode-pill.active {
+      background: var(--teal); border-color: var(--teal);
+      color: #0a0f1a; font-weight: 700;
+    }
+    .mode-pill:not(.active):hover { border-color: var(--teal); color: var(--text); }
+
+    .start-btn {
+      padding: 16px 48px;
+      background: var(--teal);
+      border: none; border-radius: 40px;
+      color: #0a0f1a;
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 24px rgba(62,207,207,0.25);
+    }
+    .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(62,207,207,0.4); }
+
+    /* ── Progress ── */
+    .progress-row {
+      width: 100%; display: flex; align-items: center; gap: 12px;
+    }
+    .progress-track {
+      flex: 1; height: 4px; background: var(--card); border-radius: 4px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--teal); border-radius: 4px; transition: width 0.4s ease;
+    }
+    .progress-label { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+
+    /* ── Error type tag ── */
+    .error-type-row {
+      width: 100%; display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .error-tag {
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid transparent;
+    }
+    .error-tag.particle  { background: rgba(62,207,207,0.1);   border-color: rgba(62,207,207,0.25);   color: var(--teal); }
+    .error-tag.order     { background: rgba(240,180,41,0.1);   border-color: rgba(240,180,41,0.25);   color: var(--gold); }
+    .error-tag.preposition { background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.25); color: var(--purple); }
+    .error-tag.form      { background: rgba(232,93,93,0.1);    border-color: rgba(232,93,93,0.25);    color: var(--red); }
+
+    /* ── Sentence display ── */
+    .sentence-card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 36px 32px;
+      position: relative;
+    }
+    .sentence-instruction {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* The sentence with clickable words */
+    .sentence-display {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      line-height: 1.9;
+      font-weight: 400;
+    }
+
+    .word-btn {
+      display: inline;
+      background: none;
+      border: none;
+      padding: 2px 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: inherit;
+      font-weight: inherit;
+      color: var(--text);
+      transition: all 0.15s;
+      position: relative;
+    }
+    .word-btn:hover:not([disabled]) {
+      background: rgba(62,207,207,0.15);
+      color: var(--teal);
+    }
+    .word-btn.selected {
+      background: rgba(240,180,41,0.2);
+      color: var(--gold);
+      font-weight: 600;
+      border-bottom: 2px solid var(--gold);
+    }
+    .word-btn.correct-word {
+      background: rgba(76,187,127,0.2);
+      color: var(--green);
+      font-weight: 600;
+      border-bottom: 2px solid var(--green);
+    }
+    .word-btn.wrong-word {
+      background: rgba(232,93,93,0.15);
+      color: var(--red);
+      font-weight: 600;
+      border-bottom: 2px solid var(--red);
+      text-decoration: line-through;
+    }
+    .word-btn[disabled] { cursor: default; }
+
+    /* ── Submit ── */
+    .action-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hint-text {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .submit-btn {
+      padding: 12px 32px;
+      background: var(--teal);
+      border: none; border-radius: 40px;
+      color: #0a0f1a;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .submit-btn.ready { opacity: 1; pointer-events: auto; }
+    .submit-btn.ready:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(62,207,207,0.3); }
+
+    /* ── Feedback ── */
+    .feedback {
+      width: 100%; padding: 16px 24px;
+      border-radius: var(--radius);
+      font-size: 0.95rem; font-weight: 500; line-height: 1.5;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.ok  { background: rgba(76,187,127,0.12); border: 1px solid rgba(76,187,127,0.3); color: #7de0aa; }
+    .feedback.bad { background: rgba(232,93,93,0.1);   border: 1px solid rgba(232,93,93,0.25); color: #f08080; }
+
+    .fixed-sentence {
+      margin-top: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.88rem;
+      background: rgba(0,0,0,0.3);
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: var(--green);
+    }
+
+    .next-btn {
+      align-self: flex-end;
+      padding: 12px 32px;
+      background: var(--teal);
+      border: none; border-radius: 40px;
+      color: #0a0f1a;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      display: none;
+    }
+    .next-btn.show { display: block; }
+    .next-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(62,207,207,0.3); }
+
+    /* ── End ── */
+    #end {
+      display: none; flex-direction: column; align-items: center;
+      gap: 24px; text-align: center; padding: 20px 0;
+    }
+    .end-icon { font-size: 5rem; }
+    .end-title {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      font-weight: 700;
+    }
+    .end-score { font-size: 3.5rem; font-weight: 700; color: var(--teal); font-family: 'Space Mono', monospace; }
+    .end-sub { color: var(--muted); font-size: 0.95rem; }
+
+    .end-stats { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .stat-pill {
+      padding: 10px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      font-size: 0.88rem;
+    }
+    .stat-pill span { color: var(--teal); font-weight: 700; }
+
+    .end-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .replay-btn {
+      padding: 14px 36px;
+      background: var(--teal);
+      border: none; border-radius: 40px;
+      color: #0a0f1a;
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .replay-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(62,207,207,0.3); }
+    .replay-btn.secondary {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    #game { display: none; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-centre">
+    <h1>FIX THE PHRASAL VERB</h1>
+    <p>Phrasal Verbs · S6/U3</p>
+  </div>
+  <div class="score-badge" id="scoreBadge">0/0</div>
+</header>
+
+<main>
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="intro-terminal">
+      <div class="terminal-line" style="color:var(--muted); font-size:0.7rem; margin-bottom:8px;">PHRASAL_VERB_DEBUGGER v1.0</div>
+      <div class="terminal-line"><span class="t-cmd">ERROR:</span> "He tore <span class="t-bad">up it</span> and threw it away."</div>
+      <div class="terminal-line"><span class="t-cmd">FIX:</span> "He tore <span class="t-fix">it up</span> and threw it away."</div>
+      <div class="terminal-line" style="margin-top:8px;"><span class="t-cmd">STATUS:</span> <span class="t-good">REPAIRED ✓</span></div>
+    </div>
+
+    <div class="intro-title">FIX THE<br><span>PHRASAL VERB</span></div>
+    <p class="intro-desc">
+      Each sentence contains one error. Tap the word that's <strong>wrong</strong>, then choose the correct replacement.
+      Errors include: wrong particle, wrong word order, or wrong preposition.
+    </p>
+
+    <div class="mode-section">
+      <span class="mode-label">Choose a set</span>
+      <div class="mode-pills" id="modePills">
+        <button class="mode-pill active" data-mode="all">⚡ All Types</button>
+        <button class="mode-pill" data-mode="particle">Wrong Particle</button>
+        <button class="mode-pill" data-mode="order">Word Order</button>
+        <button class="mode-pill" data-mode="preposition">Wrong Preposition</button>
+        <button class="mode-pill" data-mode="form">Wrong Form</button>
+      </div>
+    </div>
+
+    <button class="start-btn" id="startBtn">START DEBUGGING</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="game">
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">1 / 12</div>
+    </div>
+
+    <div class="error-type-row" id="errorTypeRow"></div>
+
+    <div class="sentence-card">
+      <div class="sentence-instruction">Click the word that is WRONG in this sentence:</div>
+      <div class="sentence-display" id="sentenceDisplay"></div>
+    </div>
+
+    <div class="action-row">
+      <span class="hint-text" id="hintText">👆 Select the incorrect word</span>
+      <button class="submit-btn" id="submitBtn">CHECK ✓</button>
+    </div>
+
+    <!-- Replacement options (shown after clicking a word) -->
+    <div id="replacementArea" style="display:none; width:100%; flex-direction:column; gap:12px;">
+      <div style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);">
+        Replace <strong id="selectedWordDisplay" style="color:var(--gold);"></strong> with:
+      </div>
+      <div id="replacementGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">NEXT →</button>
+  </div>
+
+  <!-- END -->
+  <div id="end">
+    <div class="end-icon" id="endIcon">🔧</div>
+    <div class="end-title" id="endTitle">ALL FIXED!</div>
+    <div class="end-score" id="endScore">10/12</div>
+    <div class="end-sub" id="endSub">Great debugging skills!</div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-btns">
+      <button class="replay-btn" id="replayBtn">PLAY AGAIN</button>
+      <a href="../index.html" class="replay-btn secondary">HOME</a>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── Question data ────────────────────────────────────────────────────────────
+// Each question:
+//   sentence: string, errorIndex: word index (0-based), correct: replacement word
+//   options: 4 choices inc correct, errorType, explanation
+
+const ALL_QUESTIONS = [
+  // ── Word Order errors (pronoun must go between parts) ──
+  {
+    sentence: "Carl's children are badly behaved. I don't know how he puts up them with.",
+    errorWord: "with.", correctWord: "with",
+    errorIndex: 14,
+    options: ["with", "for", "at", "to"],
+    errorType: "order",
+    errorLabel: "Word Order",
+    fixed: "I don't know how he puts up with them.",
+    explanation: "When the object is a pronoun (them), it must go BETWEEN the two parts: 'puts up with them' — but actually this is a 3-part verb, so: puts up with them (pronoun after all 3 parts is wrong; the whole structure 'put up with' is inseparable — the correct version is 'puts up with them')."
+  },
+  {
+    sentence: "Matt's girlfriend left him, so his friends tried to cheer up him.",
+    errorWord: "up",
+    errorIndex: 11,
+    correctWord: "him",
+    options: ["him up", "up him", "him", "him out"],
+    errorType: "order",
+    errorLabel: "Word Order",
+    fixed: "...tried to cheer him up.",
+    explanation: "'Cheer up' is separable. When the object is a pronoun (him), it MUST go between the parts: cheer HIM up — never 'cheer up him'."
+  },
+  {
+    sentence: "Nobody could prove Bill had stolen the car and so he got away it with.",
+    errorWord: "with.",
+    correctWord: "with",
+    errorIndex: 16,
+    options: ["with", "off", "at", "for"],
+    errorType: "order",
+    errorLabel: "Word Order",
+    fixed: "...he got away with it.",
+    explanation: "'Get away with' is a 3-part verb. The object always comes AFTER all three parts: 'got away with it' — never 'got away it with'."
+  },
+  {
+    sentence: "If they want to rent the cottage, they'll have to do up it first.",
+    errorWord: "it",
+    correctWord: "it up",
+    errorIndex: 14,
+    options: ["it up", "up it", "it over", "it on"],
+    errorType: "order",
+    errorLabel: "Word Order",
+    fixed: "...they'll have to do it up first.",
+    explanation: "'Do up' is separable. With a pronoun object (it), it must go BETWEEN the parts: 'do it up' — never 'do up it'."
+  },
+  {
+    sentence: "Once you start smoking, it's very hard to give up it.",
+    errorWord: "it",
+    correctWord: "it up",
+    errorIndex: 12,
+    options: ["it up", "up it", "in it", "it off"],
+    errorType: "order",
+    errorLabel: "Word Order",
+    fixed: "...very hard to give it up.",
+    explanation: "'Give up' is separable. With the pronoun 'it', the object must come BETWEEN the parts: 'give it up'."
+  },
+
+  // ── Wrong Particle errors ──
+  {
+    sentence: "My old school reports were in a box. I came across with them in the attic.",
+    errorWord: "with",
+    correctWord: "[remove 'with']",
+    errorIndex: 13,
+    options: ["[no word needed]", "across", "by", "over"],
+    errorType: "particle",
+    errorLabel: "Wrong Particle",
+    fixed: "I came across them in the attic.",
+    explanation: "'Come across' means to find by chance. It only takes one particle: 'came across' — no 'with' is needed or correct."
+  },
+  {
+    sentence: "The match has been called out by the referee.",
+    errorWord: "out",
+    correctWord: "off",
+    errorIndex: 6,
+    options: ["off", "out", "up", "away"],
+    errorType: "particle",
+    errorLabel: "Wrong Particle",
+    fixed: "The match has been called OFF.",
+    explanation: "'Call off' means to cancel. 'Call out' has a different meaning (to challenge or shout). The correct phrasal verb here is 'called off'."
+  },
+  {
+    sentence: "The traffic is being held on by an accident on the motorway.",
+    errorWord: "on",
+    correctWord: "up",
+    errorIndex: 6,
+    options: ["up", "back", "on", "over"],
+    errorType: "particle",
+    errorLabel: "Wrong Particle",
+    fixed: "The traffic is being held UP by an accident.",
+    explanation: "'Hold up' means to delay. 'Hold on' means to wait or grip. The correct phrasal verb here is 'held up'."
+  },
+  {
+    sentence: "500 workers will be lay off at the end of the month.",
+    errorWord: "lay",
+    correctWord: "laid",
+    errorIndex: 5,
+    options: ["laid", "lay", "lain", "laying"],
+    errorType: "form",
+    errorLabel: "Wrong Form",
+    fixed: "500 workers will be LAID off.",
+    explanation: "In a passive structure: will + be + PAST PARTICIPLE. The past participle of 'lay' is 'laid' — not 'lay'."
+  },
+
+  // ── Wrong Preposition / Missing word ──
+  {
+    sentence: "She was brought up from her grandparents in the countryside.",
+    errorWord: "from",
+    correctWord: "by",
+    errorIndex: 5,
+    options: ["by", "from", "with", "under"],
+    errorType: "preposition",
+    errorLabel: "Wrong Preposition",
+    fixed: "She was brought up BY her grandparents.",
+    explanation: "In passive structures the agent (the person doing the action) is introduced with 'by' — not 'from'. She was brought up BY her grandparents."
+  },
+  {
+    sentence: "Jane's phone is always engaged. It's impossible to get through her.",
+    errorWord: "through",
+    correctWord: "through to",
+    errorIndex: 11,
+    options: ["through to", "through", "to", "across to"],
+    errorType: "preposition",
+    errorLabel: "Missing Word",
+    fixed: "It's impossible to get through TO her.",
+    explanation: "'Get through to' is a 3-part phrasal verb meaning to make contact. You need the 'to': 'get through TO her' — dropping 'to' makes it incomplete."
+  },
+  {
+    sentence: "Do you still see your old neighbours? No, I fell out them.",
+    errorWord: "out",
+    correctWord: "out with",
+    errorIndex: 11,
+    options: ["out with", "out for", "out at", "out about"],
+    errorType: "preposition",
+    errorLabel: "Missing Word",
+    fixed: "No, I fell out WITH them.",
+    explanation: "'Fall out with' means to have an argument and stop being friends. You need 'with': 'fell out WITH them'."
+  },
+  {
+    sentence: "The work is being carried on by a local builder this week.",
+    errorWord: "on",
+    correctWord: "out",
+    errorIndex: 5,
+    options: ["out", "on", "over", "through"],
+    errorType: "particle",
+    errorLabel: "Wrong Particle",
+    fixed: "The work is being carried OUT by a local builder.",
+    explanation: "'Carry out' means to perform or complete a task. 'Carry on' means to continue doing something — a completely different meaning."
+  },
+  {
+    sentence: "Harry often lets down the team by missing football practice.",
+    errorWord: "down",
+    correctWord: "the team down",
+    errorIndex: 4,
+    options: ["the team down", "down the team", "down them", "them down"],
+    errorType: "order",
+    errorLabel: "Word Order",
+    fixed: "Harry often lets the team down.",
+    explanation: "'Let down' is separable. With a noun object ('the team'), it can go either side — but 'lets the team down' is more natural. With a pronoun it MUST split: 'lets them down'."
+  },
+  {
+    sentence: "Tom was beat up on his way home from school last night.",
+    errorWord: "beat",
+    correctWord: "beaten",
+    errorIndex: 2,
+    options: ["beaten", "beat", "beating", "beats"],
+    errorType: "form",
+    errorLabel: "Wrong Form",
+    fixed: "Tom was BEATEN up on his way home.",
+    explanation: "Passive structure: was + PAST PARTICIPLE. The past participle of 'beat' is 'beaten', not 'beat'."
+  },
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+let questions = [];
+let current = 0;
+let score = 0;
+let selectedWordIndex = -1;
+let selectedReplacement = null;
+let answered = false;
+let activeMode = 'all';
+
+const LABELS = { particle:'Wrong Particle', order:'Word Order', preposition:'Missing Word', form:'Wrong Form' };
+const TAG_CLASSES = { particle:'particle', order:'order', preposition:'preposition', form:'form' };
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuestions(mode) {
+  let pool = mode === 'all' ? ALL_QUESTIONS : ALL_QUESTIONS.filter(q => q.errorType === mode);
+  return shuffle(pool);
+}
+
+function show(id) {
+  ['intro','game','end'].forEach(s => {
+    const el = document.getElementById(s);
+    el.style.display = s === id ? 'flex' : 'none';
+  });
+}
+
+function startGame() {
+  questions = buildQuestions(activeMode);
+  current = 0; score = 0; answered = false;
+  updateScoreBadge();
+  show('game');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  selectedWordIndex = -1;
+  selectedReplacement = null;
+
+  const q = questions[current];
+  const total = questions.length;
+
+  document.getElementById('progressFill').style.width = `${(current / total) * 100}%`;
+  document.getElementById('progressLabel').textContent = `${current + 1} / ${total}`;
+
+  // Error type tag
+  const tagRow = document.getElementById('errorTypeRow');
+  tagRow.innerHTML = `<span class="error-tag ${TAG_CLASSES[q.errorType]}">${q.errorLabel}</span>`;
+
+  // Build sentence with clickable words
+  const words = q.sentence.split(' ');
+  const display = document.getElementById('sentenceDisplay');
+  display.innerHTML = '';
+
+  words.forEach((word, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'word-btn';
+    btn.textContent = word + (i < words.length - 1 ? ' ' : '');
+    btn.dataset.index = i;
+    btn.addEventListener('click', () => selectWord(i, word));
+    display.appendChild(btn);
+  });
+
+  // Hide replacement area
+  document.getElementById('replacementArea').style.display = 'none';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+  document.getElementById('submitBtn').className = 'submit-btn';
+  document.getElementById('hintText').textContent = '👆 Select the incorrect word';
+}
+
+function selectWord(index, word) {
+  if (answered) return;
+
+  selectedWordIndex = index;
+  selectedReplacement = null;
+
+  // Update visual
+  document.querySelectorAll('.word-btn').forEach(b => {
+    b.classList.remove('selected');
+  });
+  document.querySelectorAll('.word-btn')[index].classList.add('selected');
+
+  // Show replacement options
+  const q = questions[current];
+  const repArea = document.getElementById('replacementArea');
+  repArea.style.display = 'flex';
+  document.getElementById('selectedWordDisplay').textContent = `"${word.replace(/[.,!?]$/,'')} "`;
+
+  const grid = document.getElementById('replacementGrid');
+  grid.innerHTML = '';
+  const shuffledOpts = shuffle(q.options);
+  shuffledOpts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.style.cssText = `padding:12px 16px; background:var(--card); border:1px solid var(--border); border-radius:${getComputedStyle(document.documentElement).getPropertyValue('--radius')}; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:500; cursor:pointer; transition:all 0.18s; text-align:left;`;
+    btn.textContent = opt;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#replacementGrid button').forEach(b => {
+        b.style.borderColor = 'rgba(255,255,255,0.08)';
+        b.style.background = 'var(--card)';
+        b.style.color = 'var(--text)';
+      });
+      btn.style.borderColor = 'var(--gold)';
+      btn.style.background = 'rgba(240,180,41,0.1)';
+      btn.style.color = 'var(--gold)';
+      selectedReplacement = opt;
+      document.getElementById('submitBtn').className = 'submit-btn ready';
+      document.getElementById('hintText').textContent = '✓ Ready to check';
+    });
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('submitBtn').className = 'submit-btn';
+  document.getElementById('hintText').textContent = '👆 Now choose the replacement';
+}
+
+function checkAnswer() {
+  if (answered || selectedReplacement === null) return;
+  answered = true;
+
+  const q = questions[current];
+  const isCorrect = selectedReplacement === q.correctWord || selectedReplacement === q.options[0];
+  // Use correctWord for comparison
+  const correct = isCorrect;
+
+  // Mark word buttons
+  const wordBtns = document.querySelectorAll('.word-btn');
+  wordBtns.forEach(b => b.disabled = true);
+
+  // Find the actual error word position
+  const sentenceWords = q.sentence.split(' ');
+  const errorWordInSentence = sentenceWords.findIndex((w, i) => w.replace(/[.,!?]+$/,'') === q.errorWord.replace(/[.,!?]+$/,''));
+
+  if (isCorrect) {
+    score++;
+    if (selectedWordIndex === errorWordInSentence || errorWordInSentence === -1) {
+      wordBtns[selectedWordIndex]?.classList.add('correct-word');
+    }
+  } else {
+    wordBtns[selectedWordIndex]?.classList.add('wrong-word');
+    if (errorWordInSentence >= 0) wordBtns[errorWordInSentence]?.classList.add('correct-word');
+  }
+
+  // Disable replacement buttons
+  document.querySelectorAll('#replacementGrid button').forEach(b => b.disabled = true);
+
+  updateScoreBadge();
+
+  const fb = document.getElementById('feedback');
+  if (isCorrect) {
+    fb.innerHTML = `✓ Correct! ${q.explanation}<div class="fixed-sentence">✓ ${q.fixed}</div>`;
+    fb.className = 'feedback ok show';
+  } else {
+    fb.innerHTML = `✗ Not quite. ${q.explanation}<div class="fixed-sentence">✓ ${q.fixed}</div>`;
+    fb.className = 'feedback bad show';
+  }
+
+  document.getElementById('submitBtn').className = 'submit-btn'; // disable it
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = current + 1 < questions.length ? 'NEXT →' : 'SEE RESULTS';
+  nextBtn.className = 'next-btn show';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showEnd();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showEnd() {
+  show('end');
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  let icon = '🏆', title = 'ALL FIXED!', sub = 'Excellent debugging skills!';
+  if (pct < 50) { icon = '🔧'; title = 'NEEDS WORK'; sub = 'Review the rules and try again.'; }
+  else if (pct < 70) { icon = '⚙️'; title = 'GETTING THERE'; sub = 'Good effort — a few bugs remain.'; }
+  else if (pct < 90) { icon = '✅'; title = 'WELL DEBUGGED'; sub = 'Great work on the phrasal verbs!'; }
+
+  document.getElementById('endIcon').textContent = icon;
+  document.getElementById('endTitle').textContent = title;
+  document.getElementById('endScore').textContent = `${score}/${total}`;
+  document.getElementById('endSub').textContent = sub;
+  document.getElementById('endStats').innerHTML = `
+    <div class="stat-pill">Correct: <span>${score}</span></div>
+    <div class="stat-pill">Wrong: <span>${total - score}</span></div>
+    <div class="stat-pill">Score: <span>${pct}%</span></div>
+  `;
+}
+
+function updateScoreBadge() {
+  document.getElementById('scoreBadge').textContent = `${score}/${questions.length || 0}`;
+}
+
+// ── Events ───────────────────────────────────────────────────────────────────
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('submitBtn').addEventListener('click', checkAnswer);
+document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+document.getElementById('replayBtn').addEventListener('click', () => show('intro'));
+
+document.querySelectorAll('.mode-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.mode-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeMode = pill.dataset.mode;
+  });
+});
+
+show('intro');
+</script>
+</body>
+</html>

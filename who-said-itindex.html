@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Who Said It? — Rivalries</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c0c0f;
+      --surface: #14141a;
+      --card: #1a1a24;
+      --border: rgba(255,255,255,0.08);
+      --gold: #f0b429;
+      --teal: #3ecfcf;
+      --red: #e85d5d;
+      --green: #4cbb7f;
+      --text: #e8eaf0;
+      --muted: rgba(232,234,240,0.45);
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(240,180,41,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 30% at 80% 90%, rgba(62,207,207,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Header ── */
+    header {
+      position: relative; z-index: 1;
+      width: 100%;
+      padding: 28px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .home-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .home-btn:hover { color: var(--text); border-color: var(--gold); }
+
+    .hdr-title {
+      text-align: center;
+    }
+    .hdr-title h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .hdr-title p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .score-badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gold);
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* ── Main container ── */
+    main {
+      position: relative; z-index: 1;
+      width: 100%;
+      max-width: 860px;
+      padding: 32px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* ── Intro screen ── */
+    #intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .intro-icon {
+      font-size: 5rem;
+      filter: drop-shadow(0 0 30px rgba(240,180,41,0.4));
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); filter: drop-shadow(0 0 30px rgba(240,180,41,0.4)); }
+      50% { transform: scale(1.05); filter: drop-shadow(0 0 50px rgba(240,180,41,0.6)); }
+    }
+
+    .intro-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .intro-title span { color: var(--gold); }
+
+    .intro-desc {
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Filter pills */
+    .filter-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .filter-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .filter-pill {
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filter-pill.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #0c0c0f;
+      font-weight: 700;
+    }
+    .filter-pill:not(.active):hover {
+      border-color: var(--gold);
+      color: var(--text);
+    }
+
+    .start-btn {
+      padding: 16px 48px;
+      background: var(--gold);
+      border: none;
+      border-radius: 40px;
+      color: #0c0c0f;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 24px rgba(240,180,41,0.3);
+    }
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(240,180,41,0.45);
+    }
+
+    /* ── Progress bar ── */
+    .progress-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progress-track {
+      flex: 1;
+      height: 4px;
+      background: var(--card);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .progress-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* ── Quote card ── */
+    .quote-card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 40px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-card::before {
+      content: '\201C';
+      position: absolute;
+      top: -10px;
+      left: 24px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 8rem;
+      color: rgba(240,180,41,0.08);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .rivalry-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(240,180,41,0.1);
+      border: 1px solid rgba(240,180,41,0.2);
+      border-radius: 40px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .quote-text {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--text);
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+    }
+
+    .question-prompt {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--teal);
+    }
+
+    /* ── Answer grid ── */
+    .answers-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .answers-grid { grid-template-columns: 1fr; }
+      .quote-card { padding: 28px 20px 24px; }
+    }
+
+    .answer-btn {
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .answer-btn .ans-letter {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all 0.18s;
+    }
+    .answer-btn:not([disabled]):hover {
+      border-color: var(--gold);
+      background: rgba(240,180,41,0.07);
+    }
+    .answer-btn:not([disabled]):hover .ans-letter {
+      background: var(--gold);
+      color: #0c0c0f;
+    }
+    .answer-btn.correct {
+      border-color: var(--green);
+      background: rgba(76,187,127,0.1);
+    }
+    .answer-btn.correct .ans-letter {
+      background: var(--green);
+      color: #0c0c0f;
+    }
+    .answer-btn.wrong {
+      border-color: var(--red);
+      background: rgba(232,93,93,0.08);
+      opacity: 0.6;
+    }
+    .answer-btn.wrong .ans-letter {
+      background: var(--red);
+      color: #fff;
+    }
+    .answer-btn[disabled] { cursor: default; }
+
+    /* ── Feedback bar ── */
+    .feedback {
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.5;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.ok {
+      background: rgba(76,187,127,0.12);
+      border: 1px solid rgba(76,187,127,0.3);
+      color: #7de0aa;
+    }
+    .feedback.bad {
+      background: rgba(232,93,93,0.1);
+      border: 1px solid rgba(232,93,93,0.25);
+      color: #f08080;
+    }
+
+    .next-btn {
+      align-self: flex-end;
+      padding: 12px 32px;
+      background: var(--gold);
+      border: none;
+      border-radius: 40px;
+      color: #0c0c0f;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+    .next-btn.show { display: block; }
+    .next-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(240,180,41,0.4); }
+
+    /* ── End screen ── */
+    #end {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .end-icon { font-size: 5rem; }
+    .end-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      letter-spacing: 0.06em;
+    }
+    .end-score {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .end-sub { color: var(--muted); font-size: 0.95rem; }
+
+    .end-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat-pill {
+      padding: 10px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+    .stat-pill span { color: var(--gold); font-weight: 700; }
+
+    .end-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .replay-btn {
+      padding: 14px 36px;
+      background: var(--gold);
+      border: none; border-radius: 40px;
+      color: #0c0c0f;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem; letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .replay-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(240,180,41,0.4); }
+
+    #game { display: none; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-title">
+    <h1>Who Said It?</h1>
+    <p>Rivalries · S6/U3</p>
+  </div>
+  <div class="score-badge" id="scoreBadge">0 / 0</div>
+</header>
+
+<main>
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="intro-icon">🗣️</div>
+    <div class="intro-title">WHO<br><span>SAID IT?</span></div>
+    <p class="intro-desc">
+      A quote will appear on screen. Identify who said it — and which rivalry it's from.
+      Race against your classmates to score the most points!
+    </p>
+
+    <div class="filter-section">
+      <span class="filter-label">Choose a rivalry</span>
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-filter="all">🏆 All Rivalries</button>
+        <button class="filter-pill" data-filter="ford">🏎️ Ford vs Ferrari</button>
+        <button class="filter-pill" data-filter="tech">💻 Jobs vs Gates</button>
+        <button class="filter-pill" data-filter="heroes">🦇 Batman vs Superman</button>
+        <button class="filter-pill" data-filter="football">⚽ Man Utd vs Liverpool</button>
+      </div>
+    </div>
+
+    <button class="start-btn" id="startBtn">START GAME</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="game">
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">1 / 10</div>
+    </div>
+
+    <div class="quote-card" id="quoteCard">
+      <div class="rivalry-tag" id="rivalryTag">⚽ Man Utd vs Liverpool</div>
+      <div class="quote-text" id="quoteText">"Quote goes here..."</div>
+      <div class="question-prompt">— Who said this? —</div>
+    </div>
+
+    <div class="answers-grid" id="answersGrid"></div>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">NEXT →</button>
+  </div>
+
+  <!-- END -->
+  <div id="end">
+    <div class="end-icon" id="endIcon">🏆</div>
+    <div class="end-title" id="endTitle">WELL PLAYED!</div>
+    <div class="end-score" id="endScore">8 / 10</div>
+    <div class="end-sub" id="endSub">Great knowledge of the rivalries!</div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-btns">
+      <button class="replay-btn" id="replayBtn">PLAY AGAIN</button>
+      <a href="../index.html" class="replay-btn" style="text-decoration:none; background:var(--card); border:1px solid var(--border); color:var(--text);">HOME</a>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── Quote data ──────────────────────────────────────────────────────────────
+const ALL_QUOTES = [
+  // Ford vs Ferrari
+  {
+    rivalry: "ford",
+    rivalryLabel: "🏎️ Ford vs Ferrari",
+    quote: "I would never sell to a company that builds ugly cars in an ugly factory.",
+    speaker: "Enzo Ferrari",
+    options: ["Enzo Ferrari", "Henry Ford II", "Carroll Shelby", "Ken Miles"]
+  },
+  {
+    rivalry: "ford",
+    rivalryLabel: "🏎️ Ford vs Ferrari",
+    quote: "We lost to Ferrari in 1964 and 1965. We need someone who can actually win Le Mans.",
+    speaker: "Henry Ford II",
+    options: ["Henry Ford II", "Enzo Ferrari", "Ken Miles", "Carroll Shelby"]
+  },
+  {
+    rivalry: "ford",
+    rivalryLabel: "🏎️ Ford vs Ferrari",
+    quote: "The GT40 needs to be faster, lighter and more stable — and I know exactly how to do it.",
+    speaker: "Carroll Shelby",
+    options: ["Carroll Shelby", "Ken Miles", "Henry Ford II", "Enzo Ferrari"]
+  },
+  {
+    rivalry: "ford",
+    rivalryLabel: "🏎️ Ford vs Ferrari",
+    quote: "He couldn't hold a candle to his grandfather, the real Henry Ford.",
+    speaker: "Enzo Ferrari",
+    options: ["Enzo Ferrari", "Carroll Shelby", "Henry Ford II", "Ken Miles"]
+  },
+  {
+    rivalry: "ford",
+    rivalryLabel: "🏎️ Ford vs Ferrari",
+    quote: "I'll never sell under those terms. Racing belongs to Ferrari.",
+    speaker: "Enzo Ferrari",
+    options: ["Enzo Ferrari", "Henry Ford II", "Carroll Shelby", "Ken Miles"]
+  },
+
+  // Jobs vs Gates
+  {
+    rivalry: "tech",
+    rivalryLabel: "💻 Jobs vs Gates",
+    quote: "I don't need you, but I might let you be involved.",
+    speaker: "Steve Jobs",
+    options: ["Steve Jobs", "Bill Gates", "John Sculley", "Steve Wozniak"]
+  },
+  {
+    rivalry: "tech",
+    rivalryLabel: "💻 Jobs vs Gates",
+    quote: "You're ripping us off! I trusted you, and now you're stealing from us!",
+    speaker: "Steve Jobs",
+    options: ["Steve Jobs", "Bill Gates", "John Sculley", "Steve Wozniak"]
+  },
+  {
+    rivalry: "tech",
+    rivalryLabel: "💻 Jobs vs Gates",
+    quote: "If he believes that, he really has entered into one of his own reality distortion fields.",
+    speaker: "Bill Gates",
+    options: ["Bill Gates", "Steve Jobs", "John Sculley", "Steve Wozniak"]
+  },
+  {
+    rivalry: "tech",
+    rivalryLabel: "💻 Jobs vs Gates",
+    quote: "The only problem with Microsoft is they just have no taste.",
+    speaker: "Steve Jobs",
+    options: ["Steve Jobs", "Bill Gates", "John Sculley", "Steve Wozniak"]
+  },
+  {
+    rivalry: "tech",
+    rivalryLabel: "💻 Jobs vs Gates",
+    quote: "There was no peace to make. We were not at war. We made great products.",
+    speaker: "Bill Gates",
+    options: ["Bill Gates", "Steve Jobs", "John Sculley", "Steve Wozniak"]
+  },
+  {
+    rivalry: "tech",
+    rivalryLabel: "💻 Jobs vs Gates",
+    quote: "He made the world a better place.",
+    speaker: "Steve Jobs",
+    options: ["Steve Jobs", "Bill Gates", "John Sculley", "Steve Wozniak"]
+  },
+
+  // Batman vs Superman (narrator/character thoughts)
+  {
+    rivalry: "heroes",
+    rivalryLabel: "🦇 Batman vs Superman",
+    quote: "People can be inspired to do better. I believe in humanity.",
+    speaker: "Superman",
+    options: ["Superman", "Batman", "Bruce Wayne", "Lex Luthor"]
+  },
+  {
+    rivalry: "heroes",
+    rivalryLabel: "🦇 Batman vs Superman",
+    quote: "The world is cruel, corrupt and unpredictable. I fight it with discipline and strategy.",
+    speaker: "Batman",
+    options: ["Batman", "Superman", "Bruce Wayne", "Lex Luthor"]
+  },
+  {
+    rivalry: "heroes",
+    rivalryLabel: "🦇 Batman vs Superman",
+    quote: "His immense power could one day turn dangerous. Someone has to be prepared for that.",
+    speaker: "Batman",
+    options: ["Batman", "Superman", "Bruce Wayne", "Lex Luthor"]
+  },
+  {
+    rivalry: "heroes",
+    rivalryLabel: "🦇 Batman vs Superman",
+    quote: "His dark methods are unnecessary — they create fear instead of hope.",
+    speaker: "Superman",
+    options: ["Superman", "Batman", "Bruce Wayne", "Lex Luthor"]
+  },
+
+  // Man Utd vs Liverpool
+  {
+    rivalry: "football",
+    rivalryLabel: "⚽ Man Utd vs Liverpool",
+    quote: "The media don't have to hype this game up. It's guaranteed to show hostility.",
+    speaker: "The author",
+    options: ["The author", "Sir Alex Ferguson", "Jurgen Klopp", "Matt Busby"]
+  },
+  {
+    rivalry: "football",
+    rivalryLabel: "⚽ Man Utd vs Liverpool",
+    quote: "I miraculously survived the disaster and went on to build more great teams.",
+    speaker: "Matt Busby",
+    options: ["Matt Busby", "Sir Alex Ferguson", "Jurgen Klopp", "Bill Shankly"]
+  },
+  {
+    rivalry: "football",
+    rivalryLabel: "⚽ Man Utd vs Liverpool",
+    quote: "Family and friends fought a long, hard battle for justice — and they were vindicated.",
+    speaker: "The author",
+    options: ["The author", "Matt Busby", "Sir Alex Ferguson", "Jurgen Klopp"]
+  },
+  {
+    rivalry: "football",
+    rivalryLabel: "⚽ Man Utd vs Liverpool",
+    quote: "In 2019-2020, I managed the club to their first league title in 30 years.",
+    speaker: "Jurgen Klopp",
+    options: ["Jurgen Klopp", "Matt Busby", "Sir Alex Ferguson", "Bill Shankly"]
+  },
+  {
+    rivalry: "football",
+    rivalryLabel: "⚽ Man Utd vs Liverpool",
+    quote: "Scousers and Mancs shout horrible things at one another — but they secretly respect each other.",
+    speaker: "The author",
+    options: ["The author", "Matt Busby", "Jurgen Klopp", "Sir Alex Ferguson"]
+  },
+];
+
+// ── State ───────────────────────────────────────────────────────────────────
+let questions = [];
+let current = 0;
+let score = 0;
+let answered = false;
+let activeFilter = 'all';
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuestions(filter) {
+  let pool = filter === 'all' ? ALL_QUOTES : ALL_QUOTES.filter(q => q.rivalry === filter);
+  return shuffle(pool);
+}
+
+function show(id) {
+  ['intro','game','end'].forEach(s => {
+    const el = document.getElementById(s);
+    el.style.display = s === id ? 'flex' : 'none';
+  });
+}
+
+function startGame() {
+  questions = buildQuestions(activeFilter);
+  current = 0; score = 0; answered = false;
+  updateScoreBadge();
+  show('game');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[current];
+  const total = questions.length;
+
+  document.getElementById('progressFill').style.width = `${(current / total) * 100}%`;
+  document.getElementById('progressLabel').textContent = `${current + 1} / ${total}`;
+  document.getElementById('rivalryTag').textContent = q.rivalryLabel;
+  document.getElementById('quoteText').textContent = `"${q.quote}"`;
+
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').textContent = '';
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.className = 'next-btn';
+
+  const letters = ['A','B','C','D'];
+  const options = shuffle(q.options);
+  const grid = document.getElementById('answersGrid');
+  grid.innerHTML = '';
+
+  options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.innerHTML = `<span class="ans-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.addEventListener('click', () => handleAnswer(opt, q.speaker, btn));
+    grid.appendChild(btn);
+  });
+}
+
+function handleAnswer(chosen, correct, btn) {
+  if (answered) return;
+  answered = true;
+
+  const allBtns = document.querySelectorAll('.answer-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const label = b.querySelector('span:last-child').textContent;
+    if (label === correct) b.classList.add('correct');
+    else if (b === btn && label !== correct) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (chosen === correct) {
+    score++;
+    fb.textContent = `✓ Correct! "${questions[current].quote.substring(0,40)}..." was said by ${correct}.`;
+    fb.className = 'feedback ok show';
+  } else {
+    fb.textContent = `✗ Not quite. The correct answer is ${correct}.`;
+    fb.className = 'feedback bad show';
+  }
+
+  updateScoreBadge();
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = current + 1 < questions.length ? 'NEXT →' : 'SEE RESULTS';
+  nextBtn.className = 'next-btn show';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showEnd();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showEnd() {
+  show('end');
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  let icon = '🏆', title = 'EXCELLENT!', sub = 'Outstanding knowledge of the rivalries!';
+  if (pct < 50) { icon = '📚'; title = 'KEEP STUDYING!'; sub = 'Review the unit and try again.'; }
+  else if (pct < 70) { icon = '👍'; title = 'GOOD EFFORT!'; sub = 'Solid work — a few to brush up on.'; }
+  else if (pct < 90) { icon = '⭐'; title = 'WELL DONE!'; sub = 'Great knowledge of the rivalries!'; }
+
+  document.getElementById('endIcon').textContent = icon;
+  document.getElementById('endTitle').textContent = title;
+  document.getElementById('endScore').textContent = `${score} / ${total}`;
+  document.getElementById('endSub').textContent = sub;
+
+  const stats = document.getElementById('endStats');
+  stats.innerHTML = `
+    <div class="stat-pill">Correct: <span>${score}</span></div>
+    <div class="stat-pill">Wrong: <span>${total - score}</span></div>
+    <div class="stat-pill">Score: <span>${pct}%</span></div>
+  `;
+}
+
+function updateScoreBadge() {
+  document.getElementById('scoreBadge').textContent = `${score} / ${questions.length || 0}`;
+}
+
+// ── Event listeners ─────────────────────────────────────────────────────────
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+document.getElementById('replayBtn').addEventListener('click', () => { show('intro'); });
+
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeFilter = pill.dataset.filter;
+  });
+});
+
+// Init
+show('intro');
+</script>
+</body>
+</html>
