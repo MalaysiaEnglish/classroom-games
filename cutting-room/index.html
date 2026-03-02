@@ -72,6 +72,28 @@
   }
 
   /* ── Header ── */
+  .home-btn {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    font-family: 'Special Elite', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border: 1px solid #444;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .home-btn:hover { border-color: var(--gold); color: var(--gold); }
+
   header {
     text-align: center;
     padding: 28px 20px 16px;
@@ -416,6 +438,9 @@
 
 <!-- Intro screen -->
 <div id="intro">
+  <div style="text-align:left; padding: 16px 0 0 0;">
+    <a href="../index.html" class="home-btn">🏠 Home</a>
+  </div>
   <div class="intro-logo">🎬</div>
   <div class="intro-title">The Cutting Room</div>
   <p class="intro-desc">
@@ -448,6 +473,7 @@
 <!-- Game screen (hidden initially) -->
 <div id="game" style="display:none">
   <header>
+    <a href="../index.html" class="home-btn">🏠 Home</a>
     <div class="title-sub">S6 · Unit 3 · At the Movies</div>
     <h1>The <span>Cutting</span> Room</h1>
     <div class="title-desc" id="set-label">Reel 1 · Early Years</div>
