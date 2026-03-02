@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cutting Room — At the Movies</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Source+Sans+3:wght@400;600&display=swap');
+
+  :root {
+    --gold: #f5c842;
+    --red:  #c0392b;
+    --dark: #0d0d0d;
+    --mid:  #1a1a1a;
+    --panel:#222222;
+    --text: #f0e8d8;
+    --muted:#888;
+    --green:#27ae60;
+    --strip:#f5c842;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Film strip border top & bottom ── */
+  .filmstrip {
+    height: 36px;
+    background: #111;
+    border-top: 3px solid #333;
+    border-bottom: 3px solid #333;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .filmstrip::before {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 18px,
+      #f5c842 18px, #f5c842 20px,
+      transparent 20px, transparent 34px,
+      #f5c842 34px, #f5c842 36px,
+      transparent 36px, transparent 54px
+    );
+    opacity: 0.15;
+  }
+  .filmstrip-holes {
+    position: absolute;
+    display: flex;
+    gap: 28px;
+    padding: 0 14px;
+    height: 100%;
+    align-items: center;
+  }
+  .hole {
+    width: 14px; height: 14px;
+    background: var(--dark);
+    border-radius: 3px;
+    border: 1px solid #555;
+    flex-shrink: 0;
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    padding: 28px 20px 16px;
+    position: relative;
+  }
+  .title-sub {
+    font-family: 'Special Elite', serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 8vw, 80px);
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: 4px;
+  }
+  h1 span { color: var(--gold); }
+  .title-desc {
+    font-family: 'Special Elite', serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 2px;
+  }
+
+  /* ── Controls bar ── */
+  .controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 20px;
+  }
+  .set-btn {
+    font-family: 'Special Elite', serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 7px 16px;
+    border: 1px solid #444;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 2px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .set-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .set-btn.active { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 700; }
+
+  /* ── Score / timer bar ── */
+  .scorebar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 10px 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+  .scorebar .label { font-size: 11px; font-family: 'Source Sans 3', sans-serif; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; display: block; line-height: 1; }
+  .scorebar .val { color: var(--gold); font-size: 32px; }
+  #timer-val { color: var(--text); }
+  #timer-val.danger { color: var(--red); animation: pulse 0.5s infinite; }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── Main game area ── */
+  .game-area {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 20px 40px;
+  }
+
+  /* ── Word on screen (the "clip") ── */
+  .clip-display {
+    background: var(--panel);
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 24px 32px;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .clip-display::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+  .clip-label {
+    font-family: 'Special Elite', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .clip-word {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    color: var(--gold);
+    letter-spacing: 4px;
+    line-height: 1;
+    transition: all 0.3s;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.4s ease;
+  }
+
+  /* ── Definition grid ── */
+  .defs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .def-btn {
+    background: var(--panel);
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    transition: all 0.2s;
+    position: relative;
+    line-height: 1.5;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+  }
+  .def-btn:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: #2a2a2a;
+    transform: translateY(-1px);
+  }
+  .def-btn:disabled { cursor: default; }
+  .def-btn.correct {
+    background: #1a3a1a;
+    border-color: var(--green);
+    color: #7deb7d;
+  }
+  .def-btn.wrong {
+    background: #3a1a1a;
+    border-color: var(--red);
+    color: #eb7d7d;
+  }
+  .def-btn.reveal {
+    background: #2a2a1a;
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .def-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--muted);
+    margin-right: 14px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .def-btn.correct .def-letter { color: var(--green); }
+  .def-btn.wrong .def-letter { color: var(--red); }
+
+  /* ── Feedback flash ── */
+  .feedback {
+    text-align: center;
+    height: 32px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    margin: 6px 0;
+    transition: opacity 0.3s;
+  }
+  .feedback.correct { color: var(--green); }
+  .feedback.wrong { color: var(--red); }
+
+  /* ── End screen ── */
+  .end-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .end-screen.show { display: block; }
+  .end-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--gold);
+    letter-spacing: 6px;
+  }
+  .end-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .end-score span { color: var(--gold); }
+  .end-sub {
+    font-family: 'Special Elite', serif;
+    font-size: 15px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-top: 8px;
+  }
+  .restart-btn {
+    margin-top: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    padding: 14px 40px;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .restart-btn:hover { background: #e8b800; transform: scale(1.04); }
+
+  /* ── Intro screen ── */
+  #intro {
+    max-width: 680px;
+    margin: 20px auto;
+    text-align: center;
+    padding: 0 20px 40px;
+  }
+  .intro-logo {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+  .intro-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--gold);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+  .intro-desc {
+    font-family: 'Special Elite', serif;
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 16px 0 28px;
+    letter-spacing: 1px;
+  }
+  .start-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    padding: 16px 50px;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .start-btn:hover { background: #e8b800; transform: scale(1.04); }
+
+  .set-selector {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .set-card {
+    border: 1px solid #444;
+    background: var(--panel);
+    border-radius: 4px;
+    padding: 16px 22px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    min-width: 160px;
+  }
+  .set-card:hover, .set-card.selected { border-color: var(--gold); }
+  .set-card.selected { background: #2a2300; }
+  .set-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+  .set-card-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Special Elite', serif;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* Queue indicator */
+  .queue-dots {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .qdot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #333;
+    border: 1px solid #555;
+    transition: background 0.3s;
+  }
+  .qdot.done { background: var(--green); border-color: var(--green); }
+  .qdot.active { background: var(--gold); border-color: var(--gold); }
+  .qdot.wrong-dot { background: var(--red); border-color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- Film strip top -->
+<div class="filmstrip">
+  <div class="filmstrip-holes" id="holes-top"></div>
+</div>
+
+<!-- Intro screen -->
+<div id="intro">
+  <div class="intro-logo">🎬</div>
+  <div class="intro-title">The Cutting Room</div>
+  <p class="intro-desc">
+    A word appears on screen. Find its definition before it gets cut.<br>
+    Choose a vocabulary set, then match every word correctly.
+  </p>
+
+  <div class="set-selector" id="set-selector">
+    <div class="set-card selected" data-set="0" onclick="selectSet(0, this)">
+      <div class="set-card-title">Reel 1</div>
+      <div class="set-card-sub">L1 · Early Years<br>15 words</div>
+    </div>
+    <div class="set-card" data-set="1" onclick="selectSet(1, this)">
+      <div class="set-card-title">Reel 2</div>
+      <div class="set-card-sub">L2 · Colour & Sound<br>13 words</div>
+    </div>
+    <div class="set-card" data-set="2" onclick="selectSet(2, this)">
+      <div class="set-card-title">Reel 3</div>
+      <div class="set-card-sub">L3–L4 · Modern Era<br>12 words</div>
+    </div>
+    <div class="set-card" data-set="3" onclick="selectSet(3, this)">
+      <div class="set-card-title">Double Bill</div>
+      <div class="set-card-sub">L2+L3 · Review Mix<br>24 words</div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">🎬 Action!</button>
+</div>
+
+<!-- Game screen (hidden initially) -->
+<div id="game" style="display:none">
+  <header>
+    <div class="title-sub">S6 · Unit 3 · At the Movies</div>
+    <h1>The <span>Cutting</span> Room</h1>
+    <div class="title-desc" id="set-label">Reel 1 · Early Years</div>
+  </header>
+
+  <div class="scorebar">
+    <div>
+      <span class="label">Score</span>
+      <span class="val" id="score-val">0</span>
+    </div>
+    <div>
+      <span class="label">Word</span>
+      <span class="val" id="word-num">1/15</span>
+    </div>
+    <div>
+      <span class="label">Streak</span>
+      <span class="val" id="streak-val">0🔥</span>
+    </div>
+  </div>
+
+  <div class="game-area">
+    <div class="queue-dots" id="queue-dots"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+    <div class="clip-display">
+      <div class="clip-label">Find the definition for:</div>
+      <div class="clip-word" id="current-word">PERSISTENCE</div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="defs-grid" id="defs-grid"></div>
+
+    <!-- End screen inside game area -->
+    <div class="end-screen" id="end-screen">
+      <div class="end-title">That's a Wrap!</div>
+      <div class="end-score" id="end-score">0<span>/15</span></div>
+      <div class="end-sub" id="end-sub">Nice work on the set.</div>
+      <br>
+      <button class="restart-btn" onclick="backToIntro()">↩ Change Reel</button>
+      &nbsp;
+      <button class="restart-btn" onclick="restartGame()">🎬 Shoot Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- Film strip bottom -->
+<div class="filmstrip" style="position:fixed;bottom:0;left:0;right:0;z-index:100;">
+  <div class="filmstrip-holes" id="holes-bot"></div>
+</div>
+
+<script>
+// ── Vocabulary data ─────────────────────────────────────────
+const SETS = [
+  {
+    name: "Reel 1 · Early Years",
+    words: [
+      { word: "ILLUSIONIST",    def: "A person who performs tricks that deceive the eye" },
+      { word: "LINEAR",         def: "Progressing step by step in a straight line" },
+      { word: "INFLUENTIAL",    def: "Having great influence on someone or something" },
+      { word: "ADAPTED",        def: "Made suitable for a new use or purpose" },
+      { word: "REEL",           def: "A cylinder on which film can be wound" },
+      { word: "DISTRIBUTION",   def: "The action of sharing something out among many people" },
+      { word: "NARRATIVE",      def: "Another word for story" },
+      { word: "DOMINANT",       def: "Having power over others" },
+      { word: "PERMANENT",      def: "Lasting or not changing for a long time" },
+      { word: "SUPERSPECTACLE", def: "An impressive spectacle or display" },
+      { word: "LEGITIMATE",     def: "Following the laws or rules" },
+      { word: "UNCONVENTIONAL", def: "Not following what is generally done or believed" },
+      { word: "TEMPERATE",      def: "An area with mild temperatures" },
+      { word: "TOPOGRAPHY",     def: "The natural features of an area — mountains, rivers etc." },
+      { word: "PLENTIFUL",      def: "Having lots of something" },
+    ]
+  },
+  {
+    name: "Reel 2 · Colour & Sound",
+    words: [
+      { word: "COMMISSIONED",   def: "Ordered to create something" },
+      { word: "SYNCHRONIZED",   def: "Occurring at the same time or rate" },
+      { word: "MAINSTREAM",     def: "Ideas regarded as normal or conventional" },
+      { word: "SCORES",         def: "Orchestrated pieces of music for a film" },
+      { word: "AMPLIFICATION",  def: "Increasing the volume of sound" },
+      { word: "MAGNIFIED",      def: "Made to appear larger than it is" },
+      { word: "NOVELTY",        def: "A new or unfamiliar thing that usually gets forgotten" },
+      { word: "SOPHISTICATED",  def: "A highly complex machine or system" },
+      { word: "REBUFFED",       def: "Rejected in an abrupt manner" },
+      { word: "MARKETABILITY",  def: "Attractive to potential customers" },
+      { word: "ACCOMPANIMENT",  def: "A musical part which supports a movie image" },
+      { word: "ENTHUSIASTIC",   def: "Showing intense interest" },
+      { word: "CONVERSION",     def: "Changing from one thing to another" },
+    ]
+  },
+  {
+    name: "Reel 3 · Modern Era",
+    words: [
+      { word: "AUTOMATED",      def: "Operated without the need for human input" },
+      { word: "DEVOTED",        def: "Give all or most of your time and resources to something" },
+      { word: "VIDEOCASSETTE",  def: "A device that contains a videotape for recording" },
+      { word: "INDEPENDENT",    def: "Free from outside control; not subject to another's authority" },
+      { word: "COMMERCIAL",     def: "Related to business" },
+      { word: "RENT",           def: "To hire something out at a cost, then return it" },
+      { word: "CULTURAL",       def: "Relating to the arts" },
+      { word: "FRANCHISE",      def: "A collection of films that share the same fictional universe" },
+      { word: "TECHNIQUES",     def: "Ways of carrying out a particular task" },
+      { word: "ANIMATRONICS",   def: "Puppets animated by electromechanical devices" },
+      { word: "UTILISE",        def: "Make practical and effective use of something" },
+      { word: "INTEGRAL",       def: "Essential or fundamental; very important" },
+    ]
+  },
+  {
+    name: "Double Bill · Review Mix (L2+L3)",
+    words: [
+      { word: "COMMISSIONED",   def: "Ordered to create something" },
+      { word: "SYNCHRONIZED",   def: "Occurring at the same time or rate" },
+      { word: "MAINSTREAM",     def: "Ideas regarded as normal or conventional" },
+      { word: "SCORES",         def: "Orchestrated pieces of music for a film" },
+      { word: "AMPLIFICATION",  def: "Increasing the volume of sound" },
+      { word: "MAGNIFIED",      def: "Made to appear larger than it is" },
+      { word: "NOVELTY",        def: "A new or unfamiliar thing that usually gets forgotten" },
+      { word: "SOPHISTICATED",  def: "A highly complex machine or system" },
+      { word: "REBUFFED",       def: "Rejected in an abrupt manner" },
+      { word: "MARKETABILITY",  def: "Attractive to potential customers" },
+      { word: "ACCOMPANIMENT",  def: "A musical part which supports a movie image" },
+      { word: "ENTHUSIASTIC",   def: "Showing intense interest" },
+      { word: "AUTOMATED",      def: "Operated without the need for human input" },
+      { word: "DEVOTED",        def: "Give all or most of your time and resources to something" },
+      { word: "VIDEOCASSETTE",  def: "A device that contains a videotape for recording" },
+      { word: "INDEPENDENT",    def: "Free from outside control; not subject to another's authority" },
+      { word: "COMMERCIAL",     def: "Related to business" },
+      { word: "RENT",           def: "To hire something out at a cost, then return it" },
+      { word: "CULTURAL",       def: "Relating to the arts" },
+      { word: "FRANCHISE",      def: "A collection of films that share the same fictional universe" },
+      { word: "TECHNIQUES",     def: "Ways of carrying out a particular task" },
+      { word: "ANIMATRONICS",   def: "Puppets animated by electromechanical devices" },
+      { word: "UTILISE",        def: "Make practical and effective use of something" },
+      { word: "INTEGRAL",       def: "Essential or fundamental; very important" },
+    ]
+  }
+];
+
+// ── State ────────────────────────────────────────────────────
+let activeSet = 0;
+let queue = [];
+let current = 0;
+let score = 0;
+let streak = 0;
+let answered = false;
+let results = []; // true/false per question
+
+// ── Filmstrip holes ──────────────────────────────────────────
+function buildHoles(id) {
+  const el = document.getElementById(id);
+  const count = Math.ceil(window.innerWidth / 28) + 2;
+  el.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const h = document.createElement('div');
+    h.className = 'hole';
+    el.appendChild(h);
+  }
+}
+buildHoles('holes-top');
+buildHoles('holes-bot');
+
+// ── Set selection ────────────────────────────────────────────
+function selectSet(idx, el) {
+  activeSet = idx;
+  document.querySelectorAll('.set-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── Fisher-Yates shuffle ─────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── Game start ───────────────────────────────────────────────
+function startGame() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('game').style.display = 'block';
+  document.getElementById('set-label').textContent = SETS[activeSet].name;
+  queue = shuffle(SETS[activeSet].words);
+  score = 0; streak = 0; current = 0;
+  results = new Array(queue.length).fill(null);
+  buildDots();
+  showWord();
+}
+
+function restartGame() {
+  queue = shuffle(SETS[activeSet].words);
+  score = 0; streak = 0; current = 0;
+  results = new Array(queue.length).fill(null);
+  document.getElementById('end-screen').classList.remove('show');
+  buildDots();
+  showWord();
+}
+
+function backToIntro() {
+  document.getElementById('game').style.display = 'none';
+  document.getElementById('end-screen').classList.remove('show');
+  document.getElementById('intro').style.display = 'block';
+}
+
+// ── Build queue dots ─────────────────────────────────────────
+function buildDots() {
+  const container = document.getElementById('queue-dots');
+  container.innerHTML = '';
+  queue.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'qdot';
+    d.id = 'dot-' + i;
+    container.appendChild(d);
+  });
+  updateDots();
+}
+
+function updateDots() {
+  results.forEach((r, i) => {
+    const d = document.getElementById('dot-' + i);
+    if (!d) return;
+    d.className = 'qdot';
+    if (i === current && r === null) d.classList.add('active');
+    else if (r === true) d.classList.add('done');
+    else if (r === false) d.classList.add('wrong-dot');
+  });
+}
+
+// ── Show current word ────────────────────────────────────────
+function showWord() {
+  answered = false;
+  const item = queue[current];
+  document.getElementById('current-word').textContent = item.word;
+  document.getElementById('word-num').textContent = `${current + 1}/${queue.length}`;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+
+  // Progress
+  document.getElementById('progress-fill').style.width = `${(current / queue.length) * 100}%`;
+
+  // Build 4 options: correct + 3 random wrong
+  const correctDef = item.def;
+  const others = SETS[activeSet].words.filter(w => w.word !== item.word);
+  const wrongs = shuffle(others).slice(0, 3).map(w => w.def);
+  const options = shuffle([correctDef, ...wrongs]);
+
+  const grid = document.getElementById('defs-grid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  options.forEach((def, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'def-btn';
+    btn.innerHTML = `<span class="def-letter">${letters[i]}</span><span>${def}</span>`;
+    btn.onclick = () => choose(btn, def, correctDef);
+    grid.appendChild(btn);
+  });
+
+  updateDots();
+  updateScorebar();
+}
+
+// ── Choose answer ────────────────────────────────────────────
+function choose(btn, chosen, correct) {
+  if (answered) return;
+  answered = true;
+
+  const allBtns = document.querySelectorAll('.def-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    score += (streak >= 2 ? 2 : 1); // bonus for streak
+    streak++;
+    results[current] = true;
+    const fb = document.getElementById('feedback');
+    fb.textContent = streak >= 3 ? `✓ CORRECT  ·  ${streak}× STREAK!` : '✓ CORRECT';
+    fb.className = 'feedback correct';
+  } else {
+    btn.classList.add('wrong');
+    streak = 0;
+    results[current] = false;
+    // Reveal correct
+    allBtns.forEach(b => {
+      if (b.querySelector('span:last-child').textContent === correct) {
+        b.classList.add('reveal');
+      }
+    });
+    const fb = document.getElementById('feedback');
+    fb.textContent = '✗ NOT QUITE — SEE THE CORRECT ANSWER';
+    fb.className = 'feedback wrong';
+  }
+
+  updateDots();
+  updateScorebar();
+
+  setTimeout(() => {
+    current++;
+    if (current >= queue.length) {
+      endGame();
+    } else {
+      showWord();
+    }
+  }, 1600);
+}
+
+function updateScorebar() {
+  document.getElementById('score-val').textContent = score;
+  document.getElementById('streak-val').textContent = streak + (streak >= 2 ? '🔥' : '');
+}
+
+// ── End ──────────────────────────────────────────────────────
+function endGame() {
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('defs-grid').innerHTML = '';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('current-word').textContent = '';
+
+  const total = queue.length;
+  const pct = Math.round((score / (total * 2)) * 100); // max is 2pts per (streak)
+  const correct = results.filter(r => r === true).length;
+
+  document.getElementById('end-score').innerHTML = `${correct}<span>/${total}</span>`;
+
+  let sub = '';
+  if (correct === total) sub = 'Perfect score! That\'s a cinematic masterpiece.';
+  else if (correct >= total * 0.8) sub = 'Excellent work — nearly flawless.';
+  else if (correct >= total * 0.6) sub = 'Good effort — a few scenes need a reshoot.';
+  else sub = 'Back to the editing suite for more practice.';
+  document.getElementById('end-sub').textContent = sub;
+
+  document.getElementById('end-screen').classList.add('show');
+}
+</script>
+</body>
+</html>

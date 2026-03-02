@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direct Cut — At the Movies</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+  :root {
+    --gold:  #f5c842;
+    --red:   #c0392b;
+    --dark:  #0d0d0d;
+    --mid:   #1a1a1a;
+    --panel: #1e1e1e;
+    --text:  #f0e8d8;
+    --muted: #777;
+    --green: #27ae60;
+    --blue:  #2980b9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Clapperboard header ── */
+  .clapper-header {
+    background: #111;
+    border-bottom: 3px solid #2a2a2a;
+    padding: 0;
+  }
+  .clapper-top {
+    background: repeating-linear-gradient(
+      -45deg,
+      #000 0px, #000 12px,
+      #f5c842 12px, #f5c842 24px
+    );
+    height: 16px;
+  }
+  .clapper-info {
+    padding: 18px 30px 14px;
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .clapper-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    color: var(--text);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+  .clapper-title span { color: var(--gold); }
+  .clapper-meta {
+    font-family: 'Special Elite', serif;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+  .clapper-meta strong { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; }
+
+  /* ── Mode selector ── */
+  .mode-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #2a2a2a;
+    background: #111;
+    overflow-x: auto;
+  }
+  .mode-tab {
+    font-family: 'Special Elite', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    margin-bottom: -2px;
+  }
+  .mode-tab:hover { color: var(--gold); }
+  .mode-tab.active { color: var(--gold); border-bottom-color: var(--gold); background: #161616; }
+
+  /* ── Score strip ── */
+  .score-strip {
+    background: #111;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    padding: 12px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .ss-item { text-align: center; }
+  .ss-label { font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; display: block; }
+  .ss-val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); }
+
+  /* ── Main ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  /* ── The scene: direct speech display ── */
+  .scene-card {
+    background: var(--panel);
+    border: 1px solid #333;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  .scene-top {
+    background: #161616;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .scene-emoji { font-size: 26px; }
+  .scene-character {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+  .scene-film {
+    font-family: 'Special Elite', serif;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-left: auto;
+  }
+  .scene-quote {
+    padding: 22px 24px;
+    font-family: 'Special Elite', serif;
+    font-size: clamp(17px, 2.5vw, 22px);
+    color: var(--text);
+    line-height: 1.6;
+    position: relative;
+  }
+  .scene-quote::before {
+    content: '"';
+    font-size: 60px;
+    color: var(--gold);
+    opacity: 0.2;
+    position: absolute;
+    top: 6px; left: 14px;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .scene-quote span { color: var(--gold); font-style: italic; }
+
+  /* The question below */
+  .question-prompt {
+    background: #161616;
+    padding: 14px 24px;
+    font-family: 'Special Elite', serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    border-top: 1px solid #2a2a2a;
+  }
+  .question-prompt strong { color: var(--text); }
+
+  /* ── Options ── */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .opt-btn {
+    background: var(--panel);
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--gold); background: #252525; }
+  .opt-btn:disabled { cursor: default; }
+  .opt-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--muted);
+    flex-shrink: 0;
+    width: 18px;
+    padding-top: 1px;
+  }
+  .opt-btn.correct { background: #1a3a1a; border-color: var(--green); }
+  .opt-btn.correct .opt-letter { color: var(--green); }
+  .opt-btn.wrong { background: #3a1a1a; border-color: var(--red); }
+  .opt-btn.wrong .opt-letter { color: var(--red); }
+  .opt-btn.reveal { background: #2a2500; border-color: var(--gold); }
+  .opt-btn.reveal .opt-letter { color: var(--gold); }
+
+  /* ── Feedback ── */
+  .feedback {
+    min-height: 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .feedback.correct { color: var(--green); }
+  .feedback.wrong   { color: var(--red); }
+
+  /* Explanation panel */
+  .explanation {
+    display: none;
+    background: #1a1a2a;
+    border: 1px solid #334;
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: #aab;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--gold); }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: #222;
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill { height: 100%; background: var(--gold); transition: width 0.4s; }
+
+  /* ── End screen ── */
+  .end-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .end-screen.show { display: block; }
+  .end-big { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: var(--gold); letter-spacing: 4px; }
+  .end-num { font-family: 'Bebas Neue', sans-serif; font-size: 88px; color: var(--text); line-height: 1; }
+  .end-num span { color: var(--gold); }
+  .end-msg { font-family: 'Special Elite', serif; font-size: 16px; color: var(--muted); letter-spacing: 1px; margin-top: 8px; }
+  .end-btns { margin-top: 28px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .end-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 13px 34px;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .end-btn:hover { background: #e8b800; transform: scale(1.04); }
+  .end-btn.outline {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+  }
+  .end-btn.outline:hover { background: #2a2300; }
+
+  /* ── Intro ── */
+  #intro {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
+    text-align: center;
+  }
+  .intro-icon { font-size: 56px; margin-bottom: 16px; }
+  .intro-h { font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: var(--gold); letter-spacing: 4px; }
+  .intro-p { font-family: 'Special Elite', serif; font-size: 15px; color: var(--muted); line-height: 1.8; margin: 16px 0 28px; letter-spacing: 1px; }
+  .mode-cards { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+  .mode-card {
+    border: 1px solid #444;
+    background: var(--panel);
+    border-radius: 4px;
+    padding: 16px 20px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    min-width: 150px;
+  }
+  .mode-card:hover, .mode-card.selected { border-color: var(--gold); }
+  .mode-card.selected { background: #2a2300; }
+  .mode-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 2px; color: var(--gold); }
+  .mode-card-sub { font-size: 12px; color: var(--muted); font-family: 'Special Elite', serif; margin-top: 4px; }
+  .go-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    padding: 15px 48px;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .go-btn:hover { background: #e8b800; transform: scale(1.04); }
+
+  /* dots */
+  .dot-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 14px; flex-wrap: wrap; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #333; border: 1px solid #555; transition: background 0.3s; }
+  .dot.done { background: var(--green); border-color: var(--green); }
+  .dot.active { background: var(--gold); border-color: var(--gold); }
+  .dot.miss { background: var(--red); border-color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- Intro -->
+<div id="intro">
+  <div class="intro-icon">🎥</div>
+  <div class="intro-h">Direct Cut</div>
+  <p class="intro-p">
+    Famous movie characters said something. Now report what they said.<br>
+    Choose a mode — tense backshift, pronoun changes, or alternative reporting verbs.
+  </p>
+  <div class="mode-cards">
+    <div class="mode-card selected" data-mode="0" onclick="selectMode(0,this)">
+      <div class="mode-card-title">Scene 1</div>
+      <div class="mode-card-sub">Reported Speech 1<br>Tense backshift</div>
+    </div>
+    <div class="mode-card" data-mode="1" onclick="selectMode(1,this)">
+      <div class="mode-card-title">Scene 2</div>
+      <div class="mode-card-sub">Reported Speech 2<br>Alternative verbs</div>
+    </div>
+    <div class="mode-card" data-mode="2" onclick="selectMode(2,this)">
+      <div class="mode-card-title">Director's Cut</div>
+      <div class="mode-card-sub">Both scenes<br>Full mix</div>
+    </div>
+  </div>
+  <button class="go-btn" onclick="startGame()">🎬 Roll Camera!</button>
+</div>
+
+<!-- Game -->
+<div id="game" style="display:none">
+  <div class="clapper-header">
+    <div class="clapper-top"></div>
+    <div class="clapper-info">
+      <div>
+        <div class="clapper-title">Direct <span>Cut</span></div>
+      </div>
+      <div class="clapper-meta">
+        S6 · Unit 3 · At the Movies<br>
+        <strong id="mode-label">Scene 1 · Reported Speech 1</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-strip">
+    <div class="ss-item"><span class="ss-label">Score</span><span class="ss-val" id="score-v">0</span></div>
+    <div class="ss-item"><span class="ss-label">Question</span><span class="ss-val" id="q-num">1/10</span></div>
+    <div class="ss-item"><span class="ss-label">Correct</span><span class="ss-val" id="correct-v">0</span></div>
+  </div>
+
+  <main>
+    <div class="dot-row" id="dots"></div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog"></div></div>
+
+    <!-- Question card -->
+    <div class="scene-card" id="q-card">
+      <div class="scene-top">
+        <div class="scene-emoji" id="char-emoji">🤖</div>
+        <div>
+          <div class="scene-character" id="char-name">THE TERMINATOR</div>
+        </div>
+        <div class="scene-film" id="char-film">The Terminator (1984)</div>
+      </div>
+      <div class="scene-quote" id="quote-text">
+        'I'll be back.'
+      </div>
+      <div class="question-prompt" id="question-prompt">
+        <strong>Which sentence correctly reports what was said?</strong>
+      </div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="explanation" id="explanation"></div>
+    <div class="options" id="options"></div>
+
+    <!-- End screen -->
+    <div class="end-screen" id="end-screen">
+      <div class="end-big">Cut! Print it!</div>
+      <div class="end-num" id="end-num">0<span>/10</span></div>
+      <div class="end-msg" id="end-msg">Back to the editing suite.</div>
+      <div class="end-btns">
+        <button class="end-btn outline" onclick="backToIntro()">↩ Change Scene</button>
+        <button class="end-btn" onclick="restartGame()">🎬 Shoot Again</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// QUESTION DATA
+// ══════════════════════════════════════════════════════════════
+
+const SCENE1 = [
+  // Basic tense backshift — movie quotes
+  {
+    emoji: '🤖', character: 'THE TERMINATOR', film: 'The Terminator (1984)',
+    quote: "'I'll be back,' said the Terminator.",
+    question: "Which sentence correctly reports what the Terminator said?",
+    correct: "The Terminator said that he would be back.",
+    wrong: [
+      "The Terminator said that he will be back.",
+      "The Terminator said that he is back.",
+      "The Terminator said that I'll be back."
+    ],
+    explanation: "<strong>'will'</strong> → <strong>'would'</strong> in reported speech. Also note: <strong>'I'</strong> changes to <strong>'he'</strong> (pronoun shift)."
+  },
+  {
+    emoji: '🎩', character: 'THE GODFATHER', film: 'The Godfather (1972)',
+    quote: "'I'm going to make him an offer he can't refuse,' said the Godfather.",
+    question: "Which sentence correctly reports what the Godfather said?",
+    correct: "The Godfather said he was going to make him an offer he couldn't refuse.",
+    wrong: [
+      "The Godfather said he is going to make him an offer he can't refuse.",
+      "The Godfather said I am going to make him an offer he can't refuse.",
+      "The Godfather said he has been going to make him an offer he couldn't refuse."
+    ],
+    explanation: "<strong>'am going'</strong> → <strong>'was going'</strong> (present continuous → past continuous). <strong>'can't'</strong> → <strong>'couldn't'</strong> (can → could)."
+  },
+  {
+    emoji: '🌪️', character: 'DOROTHY', film: 'The Wizard of Oz (1939)',
+    quote: "'I have a feeling we're not in Kansas anymore,' said Dorothy.",
+    question: "Which sentence correctly reports what Dorothy said?",
+    correct: "Dorothy said she had a feeling they weren't in Kansas anymore.",
+    wrong: [
+      "Dorothy said she has a feeling they aren't in Kansas anymore.",
+      "Dorothy said I have a feeling we're not in Kansas anymore.",
+      "Dorothy said she had a feeling we're not in Kansas anymore."
+    ],
+    explanation: "<strong>'have'</strong> → <strong>'had'</strong>, <strong>'we're'</strong> → <strong>'they weren't'</strong>. Both pronoun and tense shift together."
+  },
+  {
+    emoji: '🦈', character: 'CHIEF BRODY', film: 'Jaws (1975)',
+    quote: "'You're going to need a bigger boat,' said Brody.",
+    question: "Which sentence correctly reports what Brody said?",
+    correct: "Brody said we were going to need a bigger boat.",
+    wrong: [
+      "Brody said you are going to need a bigger boat.",
+      "Brody said you will need a bigger boat.",
+      "Brody said we will need a bigger boat."
+    ],
+    explanation: "<strong>'you're'</strong> → <strong>'we were'</strong>. Present continuous shifts to past continuous, and <em>you</em> changes depending on who is speaking."
+  },
+  {
+    emoji: '💀', character: 'WILLIAM WALLACE', film: 'Braveheart (1995)',
+    quote: "'They may take our lives, but they'll never take our freedom!' said William.",
+    question: "Which sentence correctly reports what William said?",
+    correct: "William said that they might take their lives, but they would never take their freedom.",
+    wrong: [
+      "William said that they may take their lives, but they will never take their freedom.",
+      "William said that they might take our lives, but they will never take our freedom.",
+      "William said they are taking our lives but they'll never take our freedom."
+    ],
+    explanation: "<strong>'may'</strong> → <strong>'might'</strong>, <strong>'will'</strong> → <strong>'would'</strong>. <strong>'our'</strong> → <strong>'their'</strong> (pronoun shift)."
+  },
+  {
+    emoji: '🧙', character: 'WICKED WITCH', film: 'The Wizard of Oz (1939)',
+    quote: "'I'll get you and your little dog too!' said the Wicked Witch.",
+    question: "Which sentence correctly reports what the Wicked Witch said?",
+    correct: "The Wicked Witch said she would get them and their little dog too.",
+    wrong: [
+      "The Wicked Witch said she will get you and your little dog too.",
+      "The Wicked Witch said she would get you and your little dog too.",
+      "The Wicked Witch said I'll get you and your little dog too."
+    ],
+    explanation: "<strong>'I'll'</strong> → <strong>'she would'</strong>. <strong>'you'</strong> → <strong>'them'</strong> and <strong>'your'</strong> → <strong>'their'</strong>."
+  },
+  {
+    emoji: '👑', character: 'JACK', film: 'Titanic (1997)',
+    quote: "'I'm the king of the world!' shouted Jack.",
+    question: "Which sentence correctly reports what Jack said?",
+    correct: "Jack shouted that he was the king of the world.",
+    wrong: [
+      "Jack shouted that he is the king of the world.",
+      "Jack shouted that I am the king of the world.",
+      "Jack shouted that he had been the king of the world."
+    ],
+    explanation: "<strong>'am'</strong> → <strong>'was'</strong> (present simple → past simple). <strong>'I'</strong> → <strong>'he'</strong> (pronoun shift)."
+  },
+  {
+    emoji: '🦁', character: 'SIMBA', film: 'The Lion King (1994)',
+    quote: "'Everything the light touches is our kingdom,' said Mufasa.",
+    question: "Which sentence correctly reports what Mufasa said?",
+    correct: "Mufasa said that everything the light touched was their kingdom.",
+    wrong: [
+      "Mufasa said that everything the light touches is our kingdom.",
+      "Mufasa said that everything the light touched is our kingdom.",
+      "Mufasa said that everything the light was touching had been their kingdom."
+    ],
+    explanation: "<strong>'touches'</strong> → <strong>'touched'</strong>, <strong>'is'</strong> → <strong>'was'</strong>. <strong>'our'</strong> → <strong>'their'</strong>."
+  },
+  {
+    emoji: '🏈', character: 'FORREST', film: 'Forrest Gump (1994)',
+    quote: "'Life is like a box of chocolates,' said Forrest.",
+    question: "Which sentence correctly reports what Forrest said?",
+    correct: "Forrest said that life was like a box of chocolates.",
+    wrong: [
+      "Forrest said that life is like a box of chocolates.",
+      "Forrest told life was like a box of chocolates.",
+      "Forrest said life has been like a box of chocolates."
+    ],
+    explanation: "<strong>'is'</strong> → <strong>'was'</strong>. Note: <em>said that</em> is correct — not <em>told that</em> without an object."
+  },
+  {
+    emoji: '🚀', character: 'BUZZ LIGHTYEAR', film: 'Toy Story (1995)',
+    quote: "'To infinity and beyond!' said Buzz.",
+    question: "Time expressions also change. If Buzz had said 'We'll fly there today!', how would that be reported?",
+    correct: "Buzz said they would fly there that day.",
+    wrong: [
+      "Buzz said they will fly there today.",
+      "Buzz said we would fly there today.",
+      "Buzz said they would fly there tomorrow."
+    ],
+    explanation: "<strong>'today'</strong> → <strong>'that day'</strong> (time expression shift). <strong>'will'</strong> → <strong>'would'</strong>. <strong>'We'</strong> → <strong>'they'</strong>."
+  },
+];
+
+const SCENE2 = [
+  // Alternative reporting verbs
+  {
+    emoji: '🎭', character: 'MR JOHNSON (TEACHER)', film: 'Cinema Hall',
+    quote: "'If you don't stop talking, I'll call a member of staff,' said Mr Johnson.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "Mr Johnson threatened to call a member of staff if they didn't stop talking.",
+    wrong: [
+      "Mr Johnson promised to call a member of staff if they didn't stop talking.",
+      "Mr Johnson recommended calling a member of staff if they didn't stop talking.",
+      "Mr Johnson warned them not to call a member of staff."
+    ],
+    explanation: "We use <strong>threaten to</strong> when someone says they will do something unpleasant unless a condition is met."
+  },
+  {
+    emoji: '😢', character: 'JO', film: 'The Popcorn Incident',
+    quote: "'Please, please don't drop all of that popcorn,' said Jo.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "Jo begged them not to drop all of the popcorn.",
+    wrong: [
+      "Jo warned them not to drop all of the popcorn.",
+      "Jo threatened them not to drop all of the popcorn.",
+      "Jo insisted on them not dropping all of the popcorn."
+    ],
+    explanation: "We use <strong>beg someone not to</strong> when someone pleads urgently. Note <em>please, please</em> signals begging, not warning."
+  },
+  {
+    emoji: '🦇', character: 'BEN', film: 'Gotham City',
+    quote: "'I think you should go and see Batman. It's really good,' said Ben.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "Ben recommended us to go and see Batman.",
+    wrong: [
+      "Ben warned us to go and see Batman.",
+      "Ben insisted on us going to see Batman.",
+      "Ben promised us to go and see Batman."
+    ],
+    explanation: "We use <strong>recommend someone to</strong> when giving positive advice about something they should try."
+  },
+  {
+    emoji: '🏆', character: 'SUE', film: 'The Academy Awards',
+    quote: "'Well done for winning the Oscar trophy,' said Sue.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "Sue congratulated them on winning the Oscar trophy.",
+    wrong: [
+      "Sue recommended them on winning the Oscar trophy.",
+      "Sue claimed them winning the Oscar trophy.",
+      "Sue insisted on them winning the Oscar trophy."
+    ],
+    explanation: "We use <strong>congratulate someone on doing something</strong> to report praise for an achievement. Note the -ing form after <em>on</em>."
+  },
+  {
+    emoji: '🎬', character: 'STEVE', film: 'The Cinema Trip',
+    quote: "'I'll definitely come with you to the cinema,' said Steve.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "Steve promised to come with us to the cinema.",
+    wrong: [
+      "Steve threatened to come with us to the cinema.",
+      "Steve claimed to come with us to the cinema.",
+      "Steve insisted on coming with us to the cinema."
+    ],
+    explanation: "We use <strong>promise to</strong> when someone makes a firm commitment to do something positive."
+  },
+  {
+    emoji: '👻', character: 'TOM', film: 'Annabelle (2014)',
+    quote: "'Don't watch the new Annabelle movie, it's very scary,' said Tom.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "Tom warned us not to watch the new Annabelle movie.",
+    wrong: [
+      "Tom begged us not to watch the new Annabelle movie.",
+      "Tom threatened us not to watch the new Annabelle movie.",
+      "Tom recommended us not to watch the new Annabelle movie."
+    ],
+    explanation: "We use <strong>warn someone not to</strong> when advising someone to avoid something potentially harmful."
+  },
+  {
+    emoji: '🥦', character: 'DAD', film: 'The Dinner Table',
+    quote: "'You must finish your vegetables,' said her dad.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "Her dad insisted on her finishing her vegetables.",
+    wrong: [
+      "Her dad promised on her finishing her vegetables.",
+      "Her dad warned her not to finish her vegetables.",
+      "Her dad begged her to finish her vegetables."
+    ],
+    explanation: "We use <strong>insist on someone doing something</strong> when someone firmly demands an action. Note: <em>on + -ing form</em>."
+  },
+  {
+    emoji: '🎥', character: 'HE (critic)', film: 'Film Review Show',
+    quote: "'I've never watched that movie,' he said.",
+    question: "Which sentence uses the correct reporting verb?",
+    correct: "He claimed never to have watched that movie.",
+    wrong: [
+      "He promised never to have watched that movie.",
+      "He warned never to have watched that movie.",
+      "He begged never to have watched that movie."
+    ],
+    explanation: "We use <strong>claim to</strong> when reporting something someone asserts — often something others might doubt."
+  },
+];
+
+const ALL_QUESTIONS = [...SCENE1, ...SCENE2];
+
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+let mode = 0; // 0=scene1, 1=scene2, 2=mix
+let queue = [];
+let current = 0;
+let score = 0;
+let correctCount = 0;
+let answered = false;
+let results = [];
+
+function shuffle(a) {
+  const arr = [...a];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function selectMode(m, el) {
+  mode = m;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function startGame() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('game').style.display = 'block';
+
+  const labels = ['Scene 1 · Tense Backshift', 'Scene 2 · Alternative Verbs', 'Director\'s Cut · Full Mix'];
+  document.getElementById('mode-label').textContent = labels[mode];
+
+  const pool = mode === 0 ? SCENE1 : mode === 1 ? SCENE2 : ALL_QUESTIONS;
+  queue = shuffle(pool);
+  current = 0; score = 0; correctCount = 0;
+  results = new Array(queue.length).fill(null);
+  document.getElementById('end-screen').classList.remove('show');
+  buildDots();
+  showQ();
+}
+
+function restartGame() {
+  const pool = mode === 0 ? SCENE1 : mode === 1 ? SCENE2 : ALL_QUESTIONS;
+  queue = shuffle(pool);
+  current = 0; score = 0; correctCount = 0;
+  results = new Array(queue.length).fill(null);
+  document.getElementById('end-screen').classList.remove('show');
+  buildDots();
+  showQ();
+}
+
+function backToIntro() {
+  document.getElementById('game').style.display = 'none';
+  document.getElementById('intro').style.display = 'block';
+}
+
+function buildDots() {
+  const c = document.getElementById('dots');
+  c.innerHTML = '';
+  queue.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'dot'+i;
+    c.appendChild(d);
+  });
+  refreshDots();
+}
+
+function refreshDots() {
+  results.forEach((r,i) => {
+    const d = document.getElementById('dot'+i);
+    if (!d) return;
+    d.className = 'dot';
+    if (i === current && r === null) d.classList.add('active');
+    else if (r === true) d.classList.add('done');
+    else if (r === false) d.classList.add('miss');
+  });
+}
+
+function showQ() {
+  answered = false;
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('explanation').innerHTML = '';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+
+  const q = queue[current];
+  document.getElementById('char-emoji').textContent = q.emoji;
+  document.getElementById('char-name').textContent = q.character;
+  document.getElementById('char-film').textContent = q.film;
+  document.getElementById('quote-text').textContent = q.quote;
+  document.getElementById('question-prompt').innerHTML = `<strong>${q.question}</strong>`;
+  document.getElementById('q-num').textContent = `${current+1}/${queue.length}`;
+  document.getElementById('prog').style.width = `${(current/queue.length)*100}%`;
+
+  // Build options
+  const opts = shuffle([q.correct, ...q.wrong]);
+  const letters = ['A','B','C','D'];
+  const container = document.getElementById('options');
+  container.innerHTML = '';
+  opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => pick(btn, opt, q.correct, q.explanation);
+    container.appendChild(btn);
+  });
+
+  refreshDots();
+  updateStrip();
+}
+
+function pick(btn, chosen, correct, explain) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    score++; correctCount++;
+    results[current] = true;
+    const fb = document.getElementById('feedback');
+    fb.textContent = '✓ CUT! PERFECT TAKE.';
+    fb.className = 'feedback correct';
+  } else {
+    btn.classList.add('wrong');
+    results[current] = false;
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.querySelector('span:last-child').textContent === correct) b.classList.add('reveal');
+    });
+    const fb = document.getElementById('feedback');
+    fb.textContent = '✗ RETAKE — SEE CORRECT ANSWER';
+    fb.className = 'feedback wrong';
+  }
+
+  // Show explanation
+  const ex = document.getElementById('explanation');
+  ex.innerHTML = '📽️ <strong>Why?</strong> ' + explain;
+  ex.classList.add('show');
+
+  refreshDots();
+  updateStrip();
+
+  setTimeout(() => {
+    current++;
+    if (current >= queue.length) endGame();
+    else showQ();
+  }, 2400);
+}
+
+function updateStrip() {
+  document.getElementById('score-v').textContent = score;
+  document.getElementById('correct-v').textContent = correctCount;
+}
+
+function endGame() {
+  document.getElementById('prog').style.width = '100%';
+  document.getElementById('options').innerHTML = '';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('q-card').style.display = 'none';
+  document.getElementById('explanation').classList.remove('show');
+
+  const total = queue.length;
+  document.getElementById('end-num').innerHTML = `${correctCount}<span>/${total}</span>`;
+
+  let msg = '';
+  if (correctCount === total) msg = 'Perfect! A flawless performance.';
+  else if (correctCount >= total * 0.8) msg = 'Excellent! Ready for the final cut.';
+  else if (correctCount >= total * 0.6) msg = 'Good work — a few scenes to reshoot.';
+  else msg = 'Back to the screenplay — more practice needed.';
+  document.getElementById('end-msg').textContent = msg;
+  document.getElementById('end-screen').classList.add('show');
+}
+
+// Show q-card again on restart
+function restartGame() {
+  document.getElementById('q-card').style.display = '';
+  const pool = mode === 0 ? SCENE1 : mode === 1 ? SCENE2 : ALL_QUESTIONS;
+  queue = shuffle(pool);
+  current = 0; score = 0; correctCount = 0;
+  results = new Array(queue.length).fill(null);
+  document.getElementById('end-screen').classList.remove('show');
+  buildDots();
+  showQ();
+}
+</script>
+</body>
+</html>
