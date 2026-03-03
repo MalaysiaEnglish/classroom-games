@@ -562,6 +562,7 @@
             </a>
           </div>
           <div class="content-loaded" data-words-stage="5" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -930,11 +931,30 @@
       });
     }
 
-    // Run after content.js loads
-    window.addEventListener('load', updateContentBadges);
+    // Questions badges — reads from questions.js
+    function updateQuestionBadges() {
+      if (typeof window.QUESTIONS === 'undefined') return;
+      document.querySelectorAll('[data-questions-stage]').forEach(el => {
+        const stage = el.dataset.questionsStage;
+        const unit  = el.dataset.questionsUnit;
+        const tag   = 'S' + stage + '/U' + unit;
+        const matching = window.QUESTIONS.filter(q => q.tags && q.tags.includes(tag));
+        if (matching.length === 0) { el.style.display = 'none'; return; }
+        const topics = [...new Set(matching.map(q => q.topic))].length;
+        const topicTxt = topics > 1 ? ' across ' + topics + ' topics' : '';
+        el.innerHTML = '<span class="content-tag"><span class="ct-dot"></span>Connect 4 \u00b7 ' + matching.length + ' questions ready' + topicTxt + '</span>';
+        el.style.display = '';
+      });
+    }
+
+    window.addEventListener('load', function() {
+      updateContentBadges();
+      updateQuestionBadges();
+    });
   </script>
 
   <script src="content.js"></script>
+  <script src="questions.js"></script>
 
 </body>
 </html>
