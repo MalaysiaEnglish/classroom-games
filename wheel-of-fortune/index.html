@@ -194,12 +194,8 @@
       </div>
 
       <div style="width:100%">
-        <div class="picker-label">Word/Phrase Topic</div>
-        <div style="display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;">
-          <select id="topicSelect" style="padding:8px 12px;border-radius:8px;font-size:0.9rem;min-width:180px;">
-            <option value="">All Topics</option>
-          </select>
-        </div>
+        <div class="picker-label">Word/Phrase Topics <span id="topicCount" style="font-weight:400;font-size:0.75rem;color:var(--text-dim);margin-left:4px;">all selected</span></div>
+        <div id="topicCheckboxes" style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding:2px 4px 2px 0;margin-top:4px;"></div>
         <div id="topicPreview" style="text-align:center;font-size:0.78rem;color:var(--text-dim);margin-top:6px;"></div>
       </div>
 
@@ -318,23 +314,91 @@
     }
     buildTeamInputs();
 
-    function loadTopics(){
-      const sel=document.getElementById('topicSelect');
-      const words=window.CUSTOM_CONTENT?.words||[];
-      const topics=[...new Set(words.map(w=>w.topic).filter(Boolean))].sort();
-      topics.forEach(t=>{
-        const opt=document.createElement('option'); opt.value=t; opt.textContent=t; sel.appendChild(opt);
-      });
-      sel.addEventListener('change',previewTopic);
-      previewTopic();
+    const selectedWofTopics = new Set(); // empty = all topics
+
+    function buildWofPool() {
+      const allWords = window.CUSTOM_CONTENT?.words || [];
+      if (selectedWofTopics.size === 0) return allWords.map(w => w.word);
+      return allWords.filter(w => selectedWofTopics.has(w.topic)).map(w => w.word);
     }
 
-    function previewTopic(){
-      const topic=document.getElementById('topicSelect').value;
-      const words=window.CUSTOM_CONTENT?.words||[];
-      const pool=words.filter(w=>!topic||w.topic===topic);
-      document.getElementById('topicPreview').textContent=
-        pool.length?`${pool.length} word${pool.length!==1?'s':''} available`:'No words found — add some in content.js';
+    function previewTopic() {
+      const pool = buildWofPool();
+      const countEl = document.getElementById('topicCount');
+      if (countEl) {
+        countEl.textContent = selectedWofTopics.size === 0
+          ? 'all topics · ' + pool.length + ' words'
+          : selectedWofTopics.size + ' topic' + (selectedWofTopics.size > 1 ? 's' : '') + ' · ' + pool.length + ' words';
+      }
+      document.getElementById('topicPreview').textContent =
+        pool.length ? pool.length + ' word' + (pool.length !== 1 ? 's' : '') + ' available' : 'No words found — add some via Content Editor';
+    }
+
+    function loadTopics() {
+      const container = document.getElementById('topicCheckboxes');
+      const allWords  = window.CUSTOM_CONTENT?.words || [];
+      const topics    = [...new Set(allWords.map(w => w.topic).filter(Boolean))].sort();
+
+      container.innerHTML = '';
+
+      // "All topics" row
+      const allRow = document.createElement('label');
+      allRow.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 10px;border-radius:8px;border:1px solid var(--glass-border);background:rgba(0,201,167,0.12);';
+      const allCb = document.createElement('input');
+      allCb.type = 'checkbox'; allCb.checked = true;
+      allCb.style.cssText = 'accent-color:var(--accent);width:15px;height:15px;cursor:pointer;';
+      allCb.id = 'wof-all-cb';
+      const allSpan = document.createElement('span');
+      allSpan.textContent = '🎲 All topics';
+      allSpan.style.cssText = 'font-size:0.88rem;font-weight:700;';
+      allRow.appendChild(allCb); allRow.appendChild(allSpan);
+      container.appendChild(allRow);
+
+      allCb.onchange = () => {
+        if (allCb.checked) {
+          selectedWofTopics.clear();
+          container.querySelectorAll('.wof-topic-cb').forEach(cb => { cb.checked = false; cb.closest('label').style.background = 'var(--glass)'; });
+          allRow.style.background = 'rgba(0,201,167,0.12)';
+        } else {
+          allCb.checked = true; // keep it checked — deselect individual topics instead
+        }
+        previewTopic();
+      };
+
+      topics.forEach(topic => {
+        const row = document.createElement('label');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 10px;border-radius:8px;border:1px solid var(--glass-border);background:var(--glass);transition:background 0.15s;';
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.className = 'wof-topic-cb';
+        cb.style.cssText = 'accent-color:var(--accent);width:15px;height:15px;cursor:pointer;';
+        cb.onchange = () => {
+          if (cb.checked) {
+            selectedWofTopics.add(topic);
+            // Uncheck "all" visual state
+            allCb.checked = false;
+            allRow.style.background = 'var(--glass)';
+            row.style.background = 'rgba(0,201,167,0.12)';
+          } else {
+            selectedWofTopics.delete(topic);
+            row.style.background = 'var(--glass)';
+            // If nothing selected, revert to all
+            if (selectedWofTopics.size === 0) {
+              allCb.checked = true;
+              allRow.style.background = 'rgba(0,201,167,0.12)';
+            }
+          }
+          previewTopic();
+        };
+
+        const span = document.createElement('span');
+        span.textContent = topic;
+        span.style.cssText = 'font-size:0.88rem;font-weight:600;';
+        row.appendChild(cb); row.appendChild(span);
+        container.appendChild(row);
+      });
+
+      previewTopic();
     }
 
     document.getElementById('startBtn').onclick=startGame;
@@ -353,9 +417,7 @@
         color:TEAM_COLORS[i], roundScore:0, totalScore:0,
       }));
       currentTeam=0;
-      const topic=document.getElementById('topicSelect').value;
-      const words=window.CUSTOM_CONTENT?.words||[];
-      phrasePool=words.filter(w=>!topic||w.topic===topic).map(w=>w.word);
+      phrasePool = buildWofPool();
       if(!phrasePool.length) phrasePool=['WHEEL OF FORTUNE','PASSIVE VOICE','CONDITIONAL SENTENCE',
         'METAPHOR AND SIMILE','PRESENT PERFECT TENSE','REPORTED SPEECH','FIGURATIVE LANGUAGE',
         'ADJECTIVE CLAUSE','SUBORDINATE CONJUNCTION','CHARACTERISATION'];
@@ -389,7 +451,7 @@
       document.getElementById('spinBtn').disabled=false;
       renderPhrase(); buildLetterBtns(); buildScoreCards(); updateStatus();
       document.getElementById('phraseCategory').textContent=
-        document.getElementById('topicSelect').value||'Word / Phrase';
+        selectedWofTopics.size === 1 ? [...selectedWofTopics][0] : selectedWofTopics.size > 1 ? 'Mixed Topics' : 'All Topics';
     }
 
     function renderPhrase(solvedBy){
