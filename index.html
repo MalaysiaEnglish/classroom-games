@@ -534,7 +534,7 @@
       <div class="stage-label">Stage 5</div>
       <div class="units-grid">
 
-      <!-- S5 U1 -->
+        <!-- S5 U1 -->
         <div class="unit-card">
           <div class="unit-header">
             <div class="unit-emoji">🎩</div>
@@ -561,6 +561,7 @@
               <span class="gl-type">Matching</span>
             </a>
           </div>
+          <div class="content-loaded" data-words-stage="5" data-words-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -617,12 +618,8 @@
               <span class="gl-type">L2–L3 · Drag &amp; drop evidence</span>
             </a>
           </div>
-          <div class="content-loaded">
-            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · 55 vocab words loaded (4 lessons)</span>
-          </div>
-          <div class="content-loaded" style="padding-top:4px;">
-            <span class="content-tag"><span class="ct-dot"></span>Grammar Auction · 51 relative clause sentences loaded</span>
-          </div>
+          <div class="content-loaded" data-words-stage="6" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -650,12 +647,8 @@
               <span class="gl-type">L2–L3 · Reported Speech</span>
             </a>
           </div>
-          <div class="content-loaded">
-            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · 39 vocab words loaded (3 lessons)</span>
-          </div>
-          <div class="content-loaded" style="padding-top:4px;">
-            <span class="content-tag"><span class="ct-dot"></span>Grammar Auction · 54 ellipsis &amp; reported speech sentences loaded</span>
-          </div>
+          <div class="content-loaded" data-words-stage="6" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -683,12 +676,8 @@
               <span class="gl-type">L1–L2 · Error correction</span>
             </a>
           </div>
-          <div class="content-loaded">
-            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · 57 vocab words loaded (4 lessons)</span>
-          </div>
-          <div class="content-loaded" style="padding-top:4px;">
-            <span class="content-tag"><span class="ct-dot"></span>Grammar Auction · 68 phrasal verb &amp; habits sentences loaded</span>
-          </div>
+          <div class="content-loaded" data-words-stage="6" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -721,9 +710,7 @@
               <span class="gl-type">L4 · N. Ireland · Cleft &amp; Inversion</span>
             </a>
           </div>
-          <div class="content-loaded">
-            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · 48 vocab words loaded (4 lessons)</span>
-          </div>
+          <div class="content-loaded" data-words-stage="6" data-words-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -772,12 +759,8 @@
               <span class="gl-type">L2 · 3rd Conditional</span>
             </a>
           </div>
-          <div class="content-loaded">
-            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · 35 vocab words loaded</span>
-          </div>
-          <div class="content-loaded" style="padding-top:4px;">
-            <span class="content-tag"><span class="ct-dot"></span>Grammar Auction · 24 conditional sentences loaded</span>
-          </div>
+          <div class="content-loaded" data-words-stage="6" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -793,9 +776,7 @@
               <div class="unit-grammar">Space · Geography · History · Chemistry</div>
             </div>
           </div>
-          <div class="content-loaded">
-            <span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · 38 vocab words loaded (4 subjects)</span>
-          </div>
+          <div class="content-loaded" data-words-stage="6" data-words-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -818,9 +799,7 @@
               <span class="gl-type">L2 · Brands &amp; Slogans</span>
             </a>
           </div>
-          <div class="content-loaded">
-            <span class="content-tag"><span class="ct-dot"></span>Grammar Auction · 16 formal/informal sentences loaded</span>
-          </div>
+          <div class="content-loaded" data-sentences-stage="6" data-sentences-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -922,7 +901,40 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeToolkit();
     });
+
+    // ── Dynamic content counters ──────────────────────────────
+    function updateContentBadges() {
+      if (typeof window.CUSTOM_CONTENT === 'undefined') return;
+      const words     = window.CUSTOM_CONTENT.words     || [];
+      const sentences = window.CUSTOM_CONTENT.sentences || [];
+
+      // Words badges
+      document.querySelectorAll('[data-words-stage]').forEach(el => {
+        const stage = parseInt(el.dataset.wordsStage);
+        const unit  = parseInt(el.dataset.wordsUnit);
+        const matching = words.filter(w => w.stage === stage && w.unit === unit);
+        const count = matching.length;
+        if (count === 0) { el.style.display = 'none'; return; }
+        const lessons = new Set(matching.map(w => w.lesson).filter(Boolean)).size;
+        const lessonTxt = lessons > 0 ? ` (${lessons} lesson${lessons > 1 ? 's' : ''})` : '';
+        el.innerHTML = `<span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · ${count} vocab words loaded${lessonTxt}</span>`;
+      });
+
+      // Sentences badges
+      document.querySelectorAll('[data-sentences-stage]').forEach(el => {
+        const stage = parseInt(el.dataset.sentencesStage);
+        const unit  = parseInt(el.dataset.sentencesUnit);
+        const count = sentences.filter(s => s.stage === stage && s.unit === unit).length;
+        if (count === 0) { el.style.display = 'none'; return; }
+        el.innerHTML = `<span class="content-tag"><span class="ct-dot"></span>Grammar Auction · ${count} sentences loaded</span>`;
+      });
+    }
+
+    // Run after content.js loads
+    window.addEventListener('load', updateContentBadges);
   </script>
+
+  <script src="content.js"></script>
 
 </body>
 </html>
