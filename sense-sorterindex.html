@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sense Sorter — Scotland</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0d1117;--card:#161b22;--border:rgba(255,255,255,0.08);--text:#e6edf3;--muted:rgba(230,237,243,0.45);
+      --sight:#7c9ef5;--sound:#f5a623;--smell:#56d364;--taste:#f778ba;--touch:#a371f7;--radius:14px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(124,158,245,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 35% at 85% 80%,rgba(163,113,247,.05) 0%,transparent 60%);pointer-events:none;z-index:0}
+    header{position:relative;z-index:1;width:100%;max-width:900px;padding:28px 24px 0;display:flex;align-items:center;justify-content:space-between}
+    .home-btn{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:40px;color:var(--muted);text-decoration:none;font-size:.85rem;transition:all .2s}
+    .home-btn:hover{color:var(--text);border-color:var(--sight)}
+    .hdr-c{text-align:center}
+    .hdr-c h1{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,4vw,2rem);color:var(--text)}
+    .hdr-c p{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+    .score-badge{background:var(--card);border:1px solid var(--border);border-radius:40px;padding:8px 14px;font-size:.85rem;font-weight:700;color:var(--sight);min-width:70px;text-align:center}
+    main{position:relative;z-index:1;width:100%;max-width:900px;padding:28px 20px 60px;display:flex;flex-direction:column;align-items:center;gap:22px}
+    #intro{display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+    .intro-senses{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+    .sb{width:68px;height:68px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:2px solid;font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+    .sb .si{font-size:1.5rem}
+    .sb-sight{border-color:var(--sight);color:var(--sight);background:rgba(124,158,245,.08)}
+    .sb-sound{border-color:var(--sound);color:var(--sound);background:rgba(245,166,35,.08)}
+    .sb-smell{border-color:var(--smell);color:var(--smell);background:rgba(86,211,100,.08)}
+    .sb-taste{border-color:var(--taste);color:var(--taste);background:rgba(247,120,186,.08)}
+    .sb-touch{border-color:var(--touch);color:var(--touch);background:rgba(163,113,247,.08)}
+    .intro-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.5rem);line-height:1.1}
+    .intro-title em{font-style:italic;color:var(--sight)}
+    .intro-desc{max-width:460px;color:var(--muted);line-height:1.65;font-size:.95rem}
+    .start-btn{padding:15px 44px;background:var(--sight);border:none;border-radius:40px;color:#fff;font-family:'Playfair Display',serif;font-size:1.2rem;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(124,158,245,.25)}
+    .start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,158,245,.4)}
+    .progress-row{width:100%;display:flex;align-items:center;gap:12px}
+    .progress-track{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--sight);border-radius:4px;transition:width .4s}
+    .progress-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+    .phrase-card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px 36px;text-align:center}
+    .phrase-instruction{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:20px}
+    .phrase-text{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.8rem);font-style:italic;color:var(--text);line-height:1.5}
+    .multi-note{font-size:.8rem;color:var(--muted);font-style:italic;text-align:center}
+    .sense-grid{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    @media(max-width:600px){.sense-grid{grid-template-columns:repeat(3,1fr)}}
+    .sense-btn{padding:16px 8px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:'DM Sans',sans-serif}
+    .sense-btn .sbi{font-size:1.8rem}
+    .sense-btn .sbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+    .sense-btn[data-s="sight"]:not([disabled]):hover{border-color:var(--sight);background:rgba(124,158,245,.1)}
+    .sense-btn[data-s="sound"]:not([disabled]):hover{border-color:var(--sound);background:rgba(245,166,35,.1)}
+    .sense-btn[data-s="smell"]:not([disabled]):hover{border-color:var(--smell);background:rgba(86,211,100,.1)}
+    .sense-btn[data-s="taste"]:not([disabled]):hover{border-color:var(--taste);background:rgba(247,120,186,.1)}
+    .sense-btn[data-s="touch"]:not([disabled]):hover{border-color:var(--touch);background:rgba(163,113,247,.1)}
+    .sense-btn.correct[data-s="sight"]{border-color:var(--sight);background:rgba(124,158,245,.18);color:var(--sight)}
+    .sense-btn.correct[data-s="sound"]{border-color:var(--sound);background:rgba(245,166,35,.18);color:var(--sound)}
+    .sense-btn.correct[data-s="smell"]{border-color:var(--smell);background:rgba(86,211,100,.18);color:var(--smell)}
+    .sense-btn.correct[data-s="taste"]{border-color:var(--taste);background:rgba(247,120,186,.18);color:var(--taste)}
+    .sense-btn.correct[data-s="touch"]{border-color:var(--touch);background:rgba(163,113,247,.18);color:var(--touch)}
+    .sense-btn.wrong{border-color:#e85d5d;background:rgba(232,93,93,.1);opacity:.6}
+    .sense-btn[disabled]{cursor:default}
+    .feedback{width:100%;padding:14px 22px;border-radius:var(--radius);font-size:.92rem;line-height:1.5;display:none}
+    .feedback.show{display:block}
+    .feedback.ok{background:rgba(86,211,100,.08);border:1px solid rgba(86,211,100,.25);color:#7ee787}
+    .feedback.ok2{background:rgba(124,158,245,.08);border:1px solid rgba(124,158,245,.25);color:#a5bfff}
+    .feedback.bad{background:rgba(232,93,93,.08);border:1px solid rgba(232,93,93,.2);color:#f08080}
+    .next-btn{align-self:flex-end;padding:11px 28px;background:var(--sight);border:none;border-radius:40px;color:#fff;font-family:'Playfair Display',serif;font-size:1rem;cursor:pointer;transition:all .2s;display:none}
+    .next-btn.show{display:block}.next-btn:hover{transform:translateY(-1px)}
+    #end{display:none;flex-direction:column;align-items:center;gap:22px;text-align:center}
+    .end-icon{font-size:5rem}
+    .end-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem)}
+    .end-score{font-size:3.5rem;font-weight:800;color:var(--sight);font-family:'Playfair Display',serif}
+    .end-sub{color:var(--muted)}.end-stats{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+    .stat-pill{padding:9px 18px;background:var(--card);border:1px solid var(--border);border-radius:40px;font-size:.88rem}
+    .stat-pill span{color:var(--sight);font-weight:700}
+    .end-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .replay-btn{padding:13px 32px;background:var(--sight);border:none;border-radius:40px;color:#fff;font-family:'Playfair Display',serif;font-size:1.1rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .replay-btn:hover{transform:translateY(-2px)}
+    .replay-btn.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+    #game{display:none;flex-direction:column;align-items:center;gap:18px;width:100%}
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-c"><h1>Sense Sorter</h1><p>Scotland · S6/U4/L2</p></div>
+  <div class="score-badge" id="scoreBadge">0/0</div>
+</header>
+<main>
+  <div id="intro">
+    <div class="intro-senses">
+      <div class="sb sb-sight"><span class="si">👁️</span>Sight</div>
+      <div class="sb sb-sound"><span class="si">👂</span>Sound</div>
+      <div class="sb sb-smell"><span class="si">👃</span>Smell</div>
+      <div class="sb sb-taste"><span class="si">👅</span>Taste</div>
+      <div class="sb sb-touch"><span class="si">✋</span>Touch</div>
+    </div>
+    <div class="intro-title">SENSE<br><em>SORTER</em></div>
+    <p class="intro-desc">A word or phrase from the Scottish Highlands description will appear. Which of the five senses does it appeal to? Some phrases may appeal to more than one!</p>
+    <button class="start-btn" id="startBtn">START</button>
+  </div>
+  <div id="game">
+    <div class="progress-row"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel">1/20</div></div>
+    <div class="phrase-card"><div class="phrase-instruction">Which sense does this phrase appeal to?</div><div class="phrase-text" id="phraseText"></div></div>
+    <p class="multi-note" id="multiNote"></p>
+    <div class="sense-grid">
+      <button class="sense-btn" data-s="sight"  onclick="pick('sight')"><span class="sbi">👁️</span><span class="sbl" style="color:var(--sight)">Sight</span></button>
+      <button class="sense-btn" data-s="sound"  onclick="pick('sound')"><span class="sbi">👂</span><span class="sbl" style="color:var(--sound)">Sound</span></button>
+      <button class="sense-btn" data-s="smell"  onclick="pick('smell')"><span class="sbi">👃</span><span class="sbl" style="color:var(--smell)">Smell</span></button>
+      <button class="sense-btn" data-s="taste"  onclick="pick('taste')"><span class="sbi">👅</span><span class="sbl" style="color:var(--taste)">Taste</span></button>
+      <button class="sense-btn" data-s="touch"  onclick="pick('touch')"><span class="sbi">✋</span><span class="sbl" style="color:var(--touch)">Touch</span></button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">NEXT →</button>
+  </div>
+  <div id="end">
+    <div class="end-icon" id="endIcon">🏔️</div><div class="end-title" id="endTitle">OUTSTANDING!</div>
+    <div class="end-score" id="endScore">0/0</div><div class="end-sub" id="endSub"></div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-btns"><button class="replay-btn" id="replayBtn">PLAY AGAIN</button><a href="../index.html" class="replay-btn secondary">HOME</a></div>
+  </div>
+</main>
+<script>
+const Q=[
+  {p:"thundering waterfalls",primary:"sound",also:[],e:"You can HEAR waterfalls thundering — this appeals to sound."},
+  {p:"white-sand beach with turquoise crystal-clear waters",primary:"sight",also:[],e:"The colours and appearance — white, turquoise, crystal-clear — all appeal to sight."},
+  {p:"fresh smell of pine",primary:"smell",also:[],e:"Pine smell is directly a smell sensation."},
+  {p:"stove flickering warmly",primary:"touch",also:["sight"],e:"Warmth from the stove is primarily touch/temperature. The flickering is also sight."},
+  {p:"shaggy coats",primary:"touch",also:["sight"],e:"A shaggy coat feels rough and textured — primarily touch. You can also see it."},
+  {p:"pointy horns",primary:"sight",also:["touch"],e:"You can see the pointed shape — primarily sight. You could feel their sharpness too."},
+  {p:"bowl of fish chowder",primary:"taste",also:["smell","sight"],e:"Chowder is food — primarily taste."},
+  {p:"hunk of braised lamb",primary:"taste",also:["smell"],e:"This is food — primarily taste. The smell of braised meat also appeals to smell."},
+  {p:"empty and narrow, single-lane roads",primary:"sight",also:[],e:"The appearance of the road — you can SEE it is narrow and empty."},
+  {p:"deep blue lochs",primary:"sight",also:[],e:"The colour of the lochs — deep blue — is a visual description."},
+  {p:"peace and quiet",primary:"sound",also:[],e:"Quiet is the absence of sound — this appeals to hearing."},
+  {p:"bristly green halo",primary:"sight",also:["touch"],e:"The colour (green) and shape (halo) are visual. Bristly also implies a rough texture — touch."},
+  {p:"snow-capped mountains",primary:"sight",also:[],e:"You can SEE snow on the mountain tops — a visual image."},
+  {p:"local ales on tap",primary:"taste",also:["sight"],e:"Ale is a drink — primarily taste."},
+  {p:"fast-changing weather",primary:"touch",also:["sight"],e:"Weather affects how you feel on your skin — temperature, wind. Primarily touch."},
+  {p:"undulating moors",primary:"sight",also:[],e:"'Undulating' describes the rolling shape of the moors — a visual description."},
+  {p:"eagles rule the skies",primary:"sight",also:[],e:"Eagles flying high — you can SEE them in the sky."},
+  {p:"rushing rivers weaving like snakes",primary:"sight",also:["sound"],e:"The movement and shape of the rivers is visual. You can also HEAR rushing water."},
+  {p:"heathered moors",primary:"sight",also:["smell"],e:"The purple heather is a visual image. Heather also has a distinct scent."},
+  {p:"flickering warmly",primary:"touch",also:["sight"],e:"Warmth is a temperature sensation — touch. The flickering of a flame is also visual."},
+];
+let qs=[],cur=0,sc=0,ans=false;
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function show(id){['intro','game','end'].forEach(s=>document.getElementById(s).style.display=s===id?'flex':'none')}
+function upd(){document.getElementById('scoreBadge').textContent=sc+'/'+(qs.length||0)}
+function start(){qs=shuf(Q);cur=0;sc=0;upd();show('game');render()}
+function render(){
+  ans=false;const q=qs[cur];
+  document.getElementById('progressFill').style.width=(cur/qs.length*100)+'%';
+  document.getElementById('progressLabel').textContent=(cur+1)+'/'+qs.length;
+  document.getElementById('phraseText').textContent='"'+q.p+'"';
+  document.getElementById('multiNote').textContent=q.also.length?'This phrase may appeal to more than one sense.':'';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').className='next-btn';
+  document.querySelectorAll('.sense-btn').forEach(b=>{b.className='sense-btn';b.disabled=false});
+}
+function pick(chosen){
+  if(ans)return;ans=true;
+  const q=qs[cur];
+  document.querySelectorAll('.sense-btn').forEach(b=>b.disabled=true);
+  const isPrimary=chosen===q.primary,isAlso=q.also.includes(chosen);
+  document.querySelector('.sense-btn[data-s="'+q.primary+'"]').classList.add('correct');
+  if(!isPrimary&&!isAlso)document.querySelector('.sense-btn[data-s="'+chosen+'"]').classList.add('wrong');
+  if(isPrimary||isAlso)sc++;
+  upd();
+  const fb=document.getElementById('feedback');
+  if(isPrimary){fb.textContent='✓ Correct! '+q.e;fb.className='feedback ok show';}
+  else if(isAlso){fb.textContent='✓ Also accepted! '+q.e;fb.className='feedback ok2 show';}
+  else{fb.textContent='✗ The primary sense is '+q.primary+'. '+q.e;fb.className='feedback bad show';}
+  const nb=document.getElementById('nextBtn');nb.textContent=cur+1<qs.length?'NEXT →':'SEE RESULTS';nb.className='next-btn show';
+}
+function endGame(){
+  show('end');const t=qs.length,p=Math.round(sc/t*100);
+  let ic='🏔️',ti='OUTSTANDING!',su='You have a great sensory vocabulary!';
+  if(p<50){ic='📖';ti='KEEP TRYING';su='Review the sensory words and try again.'}
+  else if(p<70){ic='👍';ti='GOOD EFFORT!';su='Getting there — a few tricky ones!'}
+  else if(p<90){ic='⭐';ti='WELL DONE!';su='Great sensory awareness!'}
+  document.getElementById('endIcon').textContent=ic;document.getElementById('endTitle').textContent=ti;
+  document.getElementById('endScore').textContent=sc+'/'+t;document.getElementById('endSub').textContent=su;
+  document.getElementById('endStats').innerHTML='<div class="stat-pill">Correct: <span>'+sc+'</span></div><div class="stat-pill">Wrong: <span>'+(t-sc)+'</span></div><div class="stat-pill">Score: <span>'+p+'%</span></div>';
+}
+document.getElementById('startBtn').addEventListener('click',start);
+document.getElementById('nextBtn').addEventListener('click',()=>{cur++;cur>=qs.length?endGame():render()});
+document.getElementById('replayBtn').addEventListener('click',()=>show('intro'));
+show('intro');
+</script>
+</body>
+</html>

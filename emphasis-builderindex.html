@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Emphasis Builder — Northern Ireland</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#12100e;--card:#1c1916;--border:rgba(255,255,255,0.08);--text:#f0ebe4;--muted:rgba(240,235,228,0.45);--gold:#c9a84c;--red:#c0392b;--green:#27ae60;--radius:14px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,168,76,.05) 0%,transparent 70%);pointer-events:none;z-index:0}
+    header{position:relative;z-index:1;width:100%;max-width:860px;padding:28px 24px 0;display:flex;align-items:center;justify-content:space-between}
+    .home-btn{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:40px;color:var(--muted);text-decoration:none;font-size:.85rem;transition:all .2s}
+    .home-btn:hover{color:var(--text);border-color:var(--gold)}
+    .hdr-c{text-align:center}
+    .hdr-c h1{font-family:'Oswald',sans-serif;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:700;letter-spacing:.06em;color:var(--text)}
+    .hdr-c p{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+    .score-badge{background:var(--card);border:1px solid var(--border);border-radius:40px;padding:8px 14px;font-size:.85rem;font-weight:700;color:var(--gold);min-width:70px;text-align:center}
+    main{position:relative;z-index:1;width:100%;max-width:860px;padding:28px 20px 60px;display:flex;flex-direction:column;align-items:center;gap:22px}
+    #intro{display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+    .techniques-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;width:100%;max-width:620px}
+    .tech-card{padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);text-align:left}
+    .tech-name{font-family:'Oswald',sans-serif;font-size:.9rem;font-weight:700;color:var(--gold);letter-spacing:.05em;margin-bottom:4px}
+    .tech-ex{font-size:.78rem;color:var(--muted);font-style:italic;line-height:1.4}
+    .intro-title{font-family:'Oswald',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;letter-spacing:.06em;line-height:1}
+    .intro-title span{color:var(--gold)}
+    .intro-desc{max-width:460px;color:var(--muted);line-height:1.65;font-size:.95rem}
+    .filter-section{display:flex;flex-direction:column;align-items:center;gap:10px}
+    .filter-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+    .filter-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .filter-pill{padding:7px 16px;border-radius:40px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:.82rem;cursor:pointer;transition:all .18s}
+    .filter-pill.active{background:var(--gold);border-color:var(--gold);color:#12100e;font-weight:700}
+    .filter-pill:not(.active):hover{border-color:var(--gold);color:var(--text)}
+    .start-btn{padding:15px 44px;background:var(--gold);border:none;border-radius:40px;color:#12100e;font-family:'Oswald',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(201,168,76,.25)}
+    .start-btn:hover{transform:translateY(-2px)}
+    .progress-row{width:100%;display:flex;align-items:center;gap:12px}
+    .progress-track{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--gold);border-radius:4px;transition:width .4s}
+    .progress-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+    .question-card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 36px}
+    .q-type-tag{display:inline-block;padding:4px 12px;border-radius:40px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3);margin-bottom:14px}
+    .q-instruction{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px}
+    .q-original{font-size:clamp(1rem,2.5vw,1.2rem);line-height:1.6;color:var(--text);background:rgba(255,255,255,.04);border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:0}
+    .options-grid{width:100%;display:grid;grid-template-columns:1fr;gap:10px}
+    .opt-btn{padding:14px 18px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.92rem;line-height:1.5;cursor:pointer;transition:all .18s;text-align:left}
+    .opt-btn:not([disabled]):hover{border-color:var(--gold);background:rgba(201,168,76,.08)}
+    .opt-btn.correct{border-color:var(--green);background:rgba(39,174,96,.1);color:#5dde8a}
+    .opt-btn.wrong{border-color:var(--red);background:rgba(192,57,43,.08);color:#e07070;opacity:.7}
+    .opt-btn[disabled]{cursor:default}
+    .feedback{width:100%;padding:14px 22px;border-radius:var(--radius);font-size:.92rem;line-height:1.5;display:none}
+    .feedback.show{display:block}
+    .feedback.ok{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.25);color:#5dde8a}
+    .feedback.bad{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);color:#e07070}
+    .next-btn{align-self:flex-end;padding:11px 28px;background:var(--gold);border:none;border-radius:40px;color:#12100e;font-family:'Oswald',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:all .2s;display:none}
+    .next-btn.show{display:block}.next-btn:hover{transform:translateY(-1px)}
+    #end{display:none;flex-direction:column;align-items:center;gap:22px;text-align:center}
+    .end-icon{font-size:5rem}
+    .end-title{font-family:'Oswald',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:.06em}
+    .end-score{font-size:3.5rem;font-weight:800;color:var(--gold);font-family:'Oswald',sans-serif}
+    .end-sub{color:var(--muted)}.end-stats{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+    .stat-pill{padding:9px 18px;background:var(--card);border:1px solid var(--border);border-radius:40px;font-size:.88rem}
+    .stat-pill span{color:var(--gold);font-weight:700}
+    .end-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .replay-btn{padding:13px 32px;background:var(--gold);border:none;border-radius:40px;color:#12100e;font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .replay-btn:hover{transform:translateY(-2px)}
+    .replay-btn.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+    #game{display:none;flex-direction:column;align-items:center;gap:18px;width:100%}
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-c"><h1>EMPHASIS BUILDER</h1><p>Northern Ireland · S6/U4/L4</p></div>
+  <div class="score-badge" id="scoreBadge">0/0</div>
+</header>
+<main>
+  <div id="intro">
+    <div class="techniques-grid">
+      <div class="tech-card"><div class="tech-name">Cleft Sentences</div><div class="tech-ex">It was Jack who lost it. / What Kate sold was her flat.</div></div>
+      <div class="tech-card"><div class="tech-name">Inversion</div><div class="tech-ex">Never have I seen such a place. / Rarely did we arrive on time.</div></div>
+      <div class="tech-card"><div class="tech-name">Not only… but also</div><div class="tech-ex">Not only did she eat my cake, but she also drank my juice.</div></div>
+      <div class="tech-card"><div class="tech-name">Adverbial Fronting</div><div class="tech-ex">Up the hill he walked. / Outside the palace stood the guards.</div></div>
+    </div>
+    <div class="intro-title">EMPHASIS<br><span>BUILDER</span></div>
+    <p class="intro-desc">A plain sentence will appear. Choose the version that correctly adds emphasis using the technique shown. One option is right — the others have grammar errors.</p>
+    <div class="filter-section">
+      <span class="filter-label">Focus on a technique</span>
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-f="all">⚡ All Techniques</button>
+        <button class="filter-pill" data-f="cleft">Cleft Sentences</button>
+        <button class="filter-pill" data-f="inversion">Inversion</button>
+        <button class="filter-pill" data-f="notonly">Not only… but also</button>
+        <button class="filter-pill" data-f="fronting">Adverbial Fronting</button>
+      </div>
+    </div>
+    <button class="start-btn" id="startBtn">START</button>
+  </div>
+  <div id="game">
+    <div class="progress-row"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel">1/20</div></div>
+    <div class="question-card">
+      <div class="q-type-tag" id="qTypeTag">Cleft Sentence</div>
+      <div class="q-instruction">Rewrite with emphasis — choose the correct version:</div>
+      <div class="q-original" id="qOriginal">Original sentence here</div>
+    </div>
+    <div class="options-grid" id="optionsGrid"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">NEXT →</button>
+  </div>
+  <div id="end">
+    <div class="end-icon" id="endIcon">🏛️</div><div class="end-title" id="endTitle">WELL DONE!</div>
+    <div class="end-score" id="endScore">0/0</div><div class="end-sub" id="endSub"></div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-btns"><button class="replay-btn" id="replayBtn">PLAY AGAIN</button><a href="../index.html" class="replay-btn secondary">HOME</a></div>
+  </div>
+</main>
+<script>
+const ALL_Q=[
+  // CLEFT SENTENCES - It was/is... who/that
+  {type:"cleft",tag:"Cleft: It was… who/that",
+   original:"Belfast surprised me the most.",
+   correct:"It was Belfast that surprised me the most.",
+   wrong:["It was Belfast who surprised me the most.","It is Belfast that surprised me most.", "That Belfast surprised me the most."],
+   e:"Use 'It was… that' for things/places. 'Who' is only for people."},
+  {type:"cleft",tag:"Cleft: It was… who/that",
+   original:"The guide recommended the Giant's Causeway.",
+   correct:"It was the Giant's Causeway that the guide recommended.",
+   wrong:["It was the guide who the Causeway recommended.","It was the Giant's Causeway who the guide recommended.","It is the Giant's Causeway that the guide recommends."],
+   e:"'It was… that' emphasises the object (Giant's Causeway). The guide is a person so takes 'who' — but here we're emphasising the place, not the person."},
+  {type:"cleft",tag:"Cleft: What… is/was",
+   original:"They need better signage to fix the confusion.",
+   correct:"What they need to fix the confusion is better signage.",
+   wrong:["What do they need to fix the confusion is better signage.","What they needed to fix the confusion were better signage.","What fixing the confusion needs is better signage."],
+   e:"'What [subject] [verb] is/was [object]' — the subject-verb order stays the same after What."},
+  {type:"cleft",tag:"Cleft: What… is/was",
+   original:"I miss the fresh air the most.",
+   correct:"What I miss the most is the fresh air.",
+   wrong:["What I miss the most are the fresh air.","What misses me the most is the fresh air.","What I miss most were the fresh air."],
+   e:"'What I miss most is…' — singular subject takes 'is'."},
+  {type:"cleft",tag:"Cleft: It was… who/that",
+   original:"The Titanic museum impressed the visitors.",
+   correct:"It was the Titanic museum that impressed the visitors.",
+   wrong:["It was the visitors who impressed the Titanic museum.","It were the Titanic museum that impressed the visitors.","It was the Titanic museum which impressed to the visitors."],
+   e:"'It was [thing] that [verb]' — use 'that' for things, keep the original verb."},
+
+  // INVERSION
+  {type:"inversion",tag:"Inversion: Never / Rarely",
+   original:"I have never tasted such fresh seafood.",
+   correct:"Never have I tasted such fresh seafood.",
+   wrong:["Never I have tasted such fresh seafood.","Never did I have tasted such fresh seafood.","Never I tasted such fresh seafood."],
+   e:"With inversion, the auxiliary comes before the subject: Never + have + I + past participle."},
+  {type:"inversion",tag:"Inversion: Never / Rarely",
+   original:"We rarely see such dramatic coastlines.",
+   correct:"Rarely do we see such dramatic coastlines.",
+   wrong:["Rarely we see such dramatic coastlines.","Rarely have we seen such dramatic coastlines.","Rarely did we see such dramatic coastlines."],
+   e:"Present simple needs 'do' for inversion: Rarely + do + we + base verb."},
+  {type:"inversion",tag:"Inversion: Hardly / Scarcely",
+   original:"The party had barely started when the storm arrived.",
+   correct:"Hardly had the party started when the storm arrived.",
+   wrong:["Hardly the party had started when the storm arrived.","Hardly did the party start when the storm arrived.","Hardly has the party started when the storm arrived."],
+   e:"'Hardly had [subject] [past participle] when…' — past perfect inversion."},
+  {type:"inversion",tag:"Inversion: Not only… but also",
+   original:"She won the race and she broke the record.",
+   correct:"Not only did she win the race, but she also broke the record.",
+   wrong:["Not only she won the race, but she also broke the record.","Not only did she won the race, but she also broke the record.","Not only did she win the race, but also she broke the record."],
+   e:"'Not only did [subject] [base verb]…' — inversion with 'did', then 'but [subject] also [verb]'."},
+  {type:"inversion",tag:"Inversion: Not only… but also",
+   original:"Belfast has great food and it has stunning architecture.",
+   correct:"Not only does Belfast have great food, but it also has stunning architecture.",
+   wrong:["Not only Belfast has great food, but it also has stunning architecture.","Not only does Belfast have great food, but also it has stunning architecture.","Not only did Belfast have great food, but it also has stunning architecture."],
+   e:"Present: 'Not only does [subject] [base verb]…' — 'does' inverts with the subject."},
+
+  // NOT ONLY... BUT ALSO (as standalone without inversion confusion)
+  {type:"notonly",tag:"Not only… but also",
+   original:"The trip was expensive. It was also exhausting.",
+   correct:"Not only was the trip expensive, but it was also exhausting.",
+   wrong:["Not only the trip was expensive, but it was also exhausting.","Not only was the trip expensive, but also it was exhausting.","Not only the trip was expensive, but also exhausting."],
+   e:"'Not only was [subject] [adjective]…' — inversion because 'was' is the verb, no 'did' needed."},
+  {type:"notonly",tag:"Not only… but also",
+   original:"The Giant's Causeway is beautiful. It is also historically significant.",
+   correct:"Not only is the Giant's Causeway beautiful, but it is also historically significant.",
+   wrong:["Not only the Giant's Causeway is beautiful, but it is also historically significant.","Not only is the Giant's Causeway beautiful, but also historically significant.","Not only was the Giant's Causeway beautiful, but it is also historically significant."],
+   e:"'Not only is [subject] [adjective]…' — inversion with 'is' when that's the main verb."},
+
+  // ADVERBIAL FRONTING
+  {type:"fronting",tag:"Adverbial Fronting",
+   original:"Two armed soldiers stood outside the palace.",
+   correct:"Outside the palace stood two armed soldiers.",
+   wrong:["Outside the palace two armed soldiers stood.","Outside the palace did two armed soldiers stand.","Outside stood two armed soldiers the palace."],
+   e:"Adverbial phrase + inverted verb + subject: 'Outside the palace stood two armed soldiers.'"},
+  {type:"fronting",tag:"Adverbial Fronting",
+   original:"The four officers jumped into a waiting police car.",
+   correct:"Into a waiting police car jumped the four officers.",
+   wrong:["Into a waiting police car the four officers jumped.","Into a waiting police car did the four officers jump.","Into jumped a waiting police car the four officers."],
+   e:"'Into [place] + verb + subject' — the verb and subject swap positions."},
+  {type:"fronting",tag:"Adverbial Fronting",
+   original:"He walked up the hill slowly.",
+   correct:"Up the hill he walked slowly.",
+   wrong:["Up the hill slowly walked he.","Up the hill slowly he walked.","Up the hill did he walk slowly."],
+   e:"With intransitive verbs like 'walk', subject stays before the verb after the fronted adverbial."},
+  {type:"fronting",tag:"The truth/problem/fact is…",
+   original:"We got completely carried away. That's the truth.",
+   correct:"The truth is, we got completely carried away.",
+   wrong:["The truth is that we got carried away completely.","The truth is we completely did get carried away.","Truth is, we got completely carried away."],
+   e:"'The truth is, [main clause]' — adds emphasis by foregrounding the framing phrase."},
+  {type:"fronting",tag:"Emphatic do/does/did",
+   original:"We paid for the hotel, not the flight.",
+   correct:"We did pay for the hotel, not the flight.",
+   wrong:["We do paid for the hotel, not the flight.","We did paid for the hotel, not the flight.","We does pay for the hotel, not the flight."],
+   e:"Emphatic 'did' + base verb (not past tense): 'We did pay' not 'We did paid'."},
+  {type:"fronting",tag:"Emphatic do/does/did",
+   original:"I enjoy travelling, despite the cost.",
+   correct:"I do enjoy travelling, despite the cost.",
+   wrong:["I does enjoy travelling, despite the cost.","I did enjoy travelling, despite the cost.","I do enjoyed travelling, despite the cost."],
+   e:"Present simple: 'I do enjoy' — use 'do' with I/you/we/they + base verb."},
+];
+
+let qs=[],cur=0,sc=0,ans=false,activeFilter='all';
+
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function show(id){['intro','game','end'].forEach(s=>document.getElementById(s).style.display=s===id?'flex':'none')}
+function upd(){document.getElementById('scoreBadge').textContent=sc+'/'+(qs.length||0)}
+
+function start(){
+  let pool=activeFilter==='all'?ALL_Q:ALL_Q.filter(q=>q.type===activeFilter);
+  qs=shuf(pool);cur=0;sc=0;upd();show('game');render();
+}
+
+function render(){
+  ans=false;const q=qs[cur];
+  document.getElementById('progressFill').style.width=(cur/qs.length*100)+'%';
+  document.getElementById('progressLabel').textContent=(cur+1)+'/'+qs.length;
+  document.getElementById('qTypeTag').textContent=q.tag;
+  document.getElementById('qOriginal').textContent=q.original;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').className='next-btn';
+  // Build shuffled options
+  const opts=shuf([{text:q.correct,ok:true},...q.wrong.slice(0,2).map(t=>({text:t,ok:false}))]);
+  const grid=document.getElementById('optionsGrid');
+  grid.innerHTML='';
+  opts.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.textContent=o.text;
+    btn.dataset.ok=o.ok;
+    btn.addEventListener('click',()=>handleChoice(btn,o.ok,q));
+    grid.appendChild(btn);
+  });
+}
+
+function handleChoice(btn,ok,q){
+  if(ans)return;ans=true;
+  if(ok)sc++;
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.ok==='true')b.classList.add('correct');
+    else if(b===btn&&!ok)b.classList.add('wrong');
+  });
+  upd();
+  const fb=document.getElementById('feedback');
+  fb.textContent=(ok?'✓ Correct! ':'✗ Not quite. ')+q.e;
+  fb.className='feedback '+(ok?'ok':'bad')+' show';
+  const nb=document.getElementById('nextBtn');nb.textContent=cur+1<qs.length?'NEXT →':'SEE RESULTS';nb.className='next-btn show';
+}
+
+function endGame(){
+  show('end');const t=qs.length,p=Math.round(sc/t*100);
+  let ic='🏛️',ti='EXCELLENT!',su='Your emphasis structures are spot on!';
+  if(p<50){ic='📖';ti='KEEP PRACTISING';su='Review the emphasis structures and try again.'}
+  else if(p<70){ic='👍';ti='GOOD EFFORT!';su='Getting the hang of it!'}
+  else if(p<90){ic='⭐';ti='WELL DONE!';su='Strong grasp of emphasis!'}
+  document.getElementById('endIcon').textContent=ic;document.getElementById('endTitle').textContent=ti;
+  document.getElementById('endScore').textContent=sc+'/'+t;document.getElementById('endSub').textContent=su;
+  document.getElementById('endStats').innerHTML='<div class="stat-pill">Correct: <span>'+sc+'</span></div><div class="stat-pill">Wrong: <span>'+(t-sc)+'</span></div><div class="stat-pill">Score: <span>'+p+'%</span></div>';
+}
+
+document.getElementById('startBtn').addEventListener('click',start);
+document.getElementById('nextBtn').addEventListener('click',()=>{cur++;cur>=qs.length?endGame():render()});
+document.getElementById('replayBtn').addEventListener('click',()=>show('intro'));
+document.querySelectorAll('.filter-pill').forEach(p=>{
+  p.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active');activeFilter=p.dataset.f;
+  });
+});
+show('intro');
+</script>
+</body>
+</html>

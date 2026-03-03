@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Viewpoint Sorter — Wales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1923;--card:#172032;--border:rgba(255,255,255,0.08);--text:#e8edf4;--muted:rgba(232,237,244,0.45);--a:#56a0f5;--b:#e85d5d;--radius:14px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+    header{width:100%;max-width:860px;padding:28px 24px 0;display:flex;align-items:center;justify-content:space-between}
+    .home-btn{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:40px;color:var(--muted);text-decoration:none;font-size:.85rem;transition:all .2s}
+    .home-btn:hover{color:var(--text);border-color:var(--a)}
+    .hdr-c{text-align:center}
+    .hdr-c h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:700;letter-spacing:.04em}
+    .hdr-c p{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+    .score-badge{background:var(--card);border:1px solid var(--border);border-radius:40px;padding:8px 14px;font-size:.85rem;font-weight:700;color:var(--a);min-width:70px;text-align:center}
+    main{width:100%;max-width:860px;padding:28px 20px 60px;display:flex;flex-direction:column;align-items:center;gap:22px}
+    #intro{display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+    .writers-preview{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;max-width:560px}
+    .wcard{flex:1;min-width:190px;padding:18px;border-radius:var(--radius);border:2px solid;text-align:left}
+    .wcard.a{border-color:var(--a);background:rgba(86,160,245,.07)}.wcard.b{border-color:var(--b);background:rgba(232,93,93,.07)}
+    .wtag{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.1em;margin-bottom:7px}
+    .wtag.a{color:var(--a)}.wtag.b{color:var(--b)}
+    .wquote{font-size:.83rem;color:var(--muted);font-style:italic;line-height:1.5}
+    .intro-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.2rem,7vw,4rem);font-weight:800;letter-spacing:.04em;line-height:1.05}
+    .intro-title .a{color:var(--a)}.intro-title .b{color:var(--b)}
+    .intro-desc{max-width:460px;color:var(--muted);line-height:1.65;font-size:.95rem}
+    .start-btn{padding:15px 44px;background:var(--a);border:none;border-radius:40px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(86,160,245,.25)}
+    .start-btn:hover{transform:translateY(-2px)}
+    .progress-row{width:100%;display:flex;align-items:center;gap:12px}
+    .progress-track{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--a);border-radius:4px;transition:width .4s}
+    .progress-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+    .phrase-card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px 36px;text-align:center}
+    .phrase-instruction{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:20px}
+    .phrase-text{font-size:clamp(1.1rem,3vw,1.5rem);line-height:1.6;font-style:italic}
+    .choice-row{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:480px){.choice-row{grid-template-columns:1fr}}
+    .choice-btn{padding:20px 16px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:'DM Sans',sans-serif}
+    .choice-btn .cb-w{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:.06em}
+    .choice-btn .cb-t{font-size:.8rem;color:var(--muted)}
+    .ab:not([disabled]):hover{border-color:var(--a);background:rgba(86,160,245,.1)}
+    .bb:not([disabled]):hover{border-color:var(--b);background:rgba(232,93,93,.1)}
+    .ab.correct{border-color:var(--a);background:rgba(86,160,245,.15)}
+    .bb.correct{border-color:var(--b);background:rgba(232,93,93,.15)}
+    .choice-btn.wrong{border-color:#888;opacity:.4}.choice-btn[disabled]{cursor:default}
+    .feedback{width:100%;padding:14px 22px;border-radius:var(--radius);font-size:.92rem;line-height:1.5;display:none}
+    .feedback.show{display:block}
+    .feedback.ok{background:rgba(86,160,245,.1);border:1px solid rgba(86,160,245,.25);color:#a0c8ff}
+    .feedback.bad{background:rgba(232,93,93,.08);border:1px solid rgba(232,93,93,.2);color:#f08080}
+    .next-btn{align-self:flex-end;padding:11px 28px;background:var(--a);border:none;border-radius:40px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;display:none}
+    .next-btn.show{display:block}.next-btn:hover{transform:translateY(-1px)}
+    #end{display:none;flex-direction:column;align-items:center;gap:22px;text-align:center}
+    .end-icon{font-size:5rem}.end-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:.04em}
+    .end-score{font-size:3.5rem;font-weight:800;color:var(--a);font-family:'Barlow Condensed',sans-serif}
+    .end-sub{color:var(--muted)}.end-stats{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+    .stat-pill{padding:9px 18px;background:var(--card);border:1px solid var(--border);border-radius:40px;font-size:.88rem}
+    .stat-pill span{color:var(--a);font-weight:700}
+    .end-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .replay-btn{padding:13px 32px;background:var(--a);border:none;border-radius:40px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .replay-btn:hover{transform:translateY(-2px)}
+    .replay-btn.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+    #game{display:none;flex-direction:column;align-items:center;gap:18px;width:100%}
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-c"><h1>VIEWPOINT SORTER</h1><p>Wales · S6/U4/L3</p></div>
+  <div class="score-badge" id="scoreBadge">0/0</div>
+</header>
+<main>
+  <div id="intro">
+    <div class="writers-preview">
+      <div class="wcard a"><div class="wtag a">✏️ WRITER A</div><p class="wquote">"Gobsmacked by what I saw... stunning views... emerald-green valleys... charming little village..."</p></div>
+      <div class="wcard b"><div class="wtag b">✏️ WRITER B</div><p class="wquote">"Barren, seemingly endless rocky grey landscape... soul crushing... eerie, almost deserted..."</p></div>
+    </div>
+    <div class="intro-title">TWO <span class="a">WRITERS</span>.<br><span class="b">ONE PLACE.</span></div>
+    <p class="intro-desc">Both writers visited Snowdon, Wales but had very different experiences. A phrase will appear on screen. Which writer wrote it — the positive Writer A or the negative Writer B?</p>
+    <button class="start-btn" id="startBtn">START</button>
+  </div>
+  <div id="game">
+    <div class="progress-row"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel">1/20</div></div>
+    <div class="phrase-card"><div class="phrase-instruction">Which writer used this phrase?</div><div class="phrase-text" id="phraseText"></div></div>
+    <div class="choice-row">
+      <button class="choice-btn ab" id="btnA" onclick="handleChoice('A')"><span class="cb-w" style="color:var(--a)">WRITER A</span><span class="cb-t">😊 Positive view</span></button>
+      <button class="choice-btn bb" id="btnB" onclick="handleChoice('B')"><span class="cb-w" style="color:var(--b)">WRITER B</span><span class="cb-t">😞 Negative view</span></button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">NEXT →</button>
+  </div>
+  <div id="end">
+    <div class="end-icon" id="endIcon">🏔️</div><div class="end-title" id="endTitle">WELL DONE!</div>
+    <div class="end-score" id="endScore">0/0</div><div class="end-sub" id="endSub"></div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-btns"><button class="replay-btn" id="replayBtn">PLAY AGAIN</button><a href="../index.html" class="replay-btn secondary">HOME</a></div>
+  </div>
+</main>
+<script>
+const Q=[
+  {p:"gobsmacked by what I saw",w:"A",e:"'Gobsmacked' expresses amazed delight — a strongly positive reaction."},
+  {p:"stunning views of the Welsh countryside",w:"A",e:"'Stunning' is a strongly positive word for the views."},
+  {p:"bare cliff faces, gleaming blue lakes reflecting the winter sun",w:"A",e:"Gleaming, blue, reflecting — beautiful positive visual imagery."},
+  {p:"emerald-green valleys which looked like they had been freshly shaved",w:"A",e:"'Emerald-green' is a vivid attractive colour — a positive description."},
+  {p:"a charming little village inhabited by locals",w:"A",e:"'Charming' is a positive word — Writer A was delighted by the village."},
+  {p:"very interesting to hear the friendly villagers speaking Welsh",w:"A",e:"'Interesting' and 'friendly' — Writer A found the Welsh language fascinating."},
+  {p:"it's fascinating to see everything written in both languages",w:"A",e:"Writer A is curious and positive about bilingual signs."},
+  {p:"one of the enchanting local pubs",w:"A",e:"'Enchanting' means magical and delightful — strongly positive."},
+  {p:"a delicious stew made with lamb, potatoes, carrots and leeks",w:"A",e:"'Delicious' — Writer A loved the food."},
+  {p:"a steamy, hearty and freshly cooked meal after our great adventure",w:"A",e:"Hearty, great adventure — warm positive words from Writer A."},
+  {p:"a bleak and miserable winter morning",w:"B",e:"'Bleak' and 'miserable' — strongly negative from the very start."},
+  {p:"our gruelling journey began up to the top of Snowdon",w:"B",e:"'Gruelling' means exhausting and unpleasant — a negative word choice."},
+  {p:"a barren, seemingly endless rocky grey landscape",w:"B",e:"'Barren', 'endless', 'grey' — all lifeless and negative."},
+  {p:"soul crushing to see how misty it was",w:"B",e:"'Soul crushing' is an intensely negative emotional reaction."},
+  {p:"the stink of farm animals filled my nostrils",w:"B",e:"'Stink' is strongly negative — Writer B found the smell unpleasant."},
+  {p:"sound of endless bleating from sheep filled my ears",w:"B",e:"'Endless bleating' — Writer B finds the sheep noise irritating."},
+  {p:"the Welsh language is completely unreadable",w:"B",e:"Writer B is dismissive and critical of Welsh — a negative attitude."},
+  {p:"an eerie, almost deserted little village",w:"B",e:"'Eerie' means strange and unsettling — a negative atmosphere."},
+  {p:"this was a huge mistake",w:"B",e:"A direct negative statement — Writer B deeply regrets ordering the food."},
+  {p:"a bowl of tepid water with overcooked vegetables and gristly pieces of lamb",w:"B",e:"'Tepid', 'overcooked', 'gristly' — all negative descriptions of the food."},
+];
+let qs=[],cur=0,sc=0,ans=false;
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function show(id){['intro','game','end'].forEach(s=>document.getElementById(s).style.display=s===id?'flex':'none')}
+function upd(){document.getElementById('scoreBadge').textContent=sc+'/'+(qs.length||0)}
+function start(){qs=shuf(Q);cur=0;sc=0;upd();show('game');render()}
+function render(){
+  ans=false;const q=qs[cur];
+  document.getElementById('progressFill').style.width=(cur/qs.length*100)+'%';
+  document.getElementById('progressLabel').textContent=(cur+1)+'/'+qs.length;
+  document.getElementById('phraseText').textContent='"'+q.p+'"';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').className='next-btn';
+  const bA=document.getElementById('btnA'),bB=document.getElementById('btnB');
+  bA.className='choice-btn ab';bA.disabled=false;
+  bB.className='choice-btn bb';bB.disabled=false;
+}
+function handleChoice(ch){
+  if(ans)return;ans=true;
+  const q=qs[cur],ok=ch===q.w;if(ok)sc++;
+  document.getElementById('btnA').disabled=true;document.getElementById('btnB').disabled=true;
+  document.getElementById('btn'+q.w).classList.add('correct');
+  if(ch!==q.w)document.getElementById('btn'+ch).classList.add('wrong');
+  upd();
+  const fb=document.getElementById('feedback');
+  fb.textContent=(ok?'✓ Correct! ':'✗ Not quite. ')+'This was Writer '+q.w+'. '+q.e;
+  fb.className='feedback '+(ok?'ok':'bad')+' show';
+  const nb=document.getElementById('nextBtn');nb.textContent=cur+1<qs.length?'NEXT →':'SEE RESULTS';nb.className='next-btn show';
+}
+function endGame(){
+  show('end');const t=qs.length,p=Math.round(sc/t*100);
+  let ic='🏆',ti='EXCELLENT!',su='You can spot a viewpoint from a mile away!';
+  if(p<50){ic='📖';ti='KEEP STUDYING';su='Look at the word choices carefully.'}
+  else if(p<70){ic='👍';ti='GOOD EFFORT!';su='Getting the hang of it!'}
+  else if(p<90){ic='⭐';ti='WELL DONE!';su='You can spot a viewpoint!'}
+  document.getElementById('endIcon').textContent=ic;document.getElementById('endTitle').textContent=ti;
+  document.getElementById('endScore').textContent=sc+'/'+t;document.getElementById('endSub').textContent=su;
+  document.getElementById('endStats').innerHTML='<div class="stat-pill">Correct: <span>'+sc+'</span></div><div class="stat-pill">Wrong: <span>'+(t-sc)+'</span></div><div class="stat-pill">Score: <span>'+p+'%</span></div>';
+}
+document.getElementById('startBtn').addEventListener('click',start);
+document.getElementById('nextBtn').addEventListener('click',()=>{cur++;cur>=qs.length?endGame():render()});
+document.getElementById('replayBtn').addEventListener('click',()=>show('intro'));
+show('intro');
+</script>
+</body>
+</html>

@@ -814,6 +814,62 @@ window.CUSTOM_CONTENT = {
     { word: "PIPETTE",           topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
     { word: "FLASK",             topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
 
+    // ── S6/U4/L1 — England: Tourist Attractions ──────────────
+    { word: "MONUMENT",            topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "ARCHAEOLOGICAL SITE", topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "STATELY HOME",        topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "HISTORICAL SITE",     topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "RELIGIOUS FESTIVAL",  topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "THEME PARK",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "PROMENADE",           topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "RESORT",              topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "PIER",                topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "ATTRACTION",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "PANORAMIC",           topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "WATERFRONT",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+
+    // ── S6/U4/L2 — Scotland: Descriptive Language ────────────
+    { word: "UNDULATING",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "TURQUOISE",           topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "MYSTICAL",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "INCOMPARABLE",        topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "WILDERNESS",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "ATMOSPHERE",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "SIMILE",              topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "METAPHOR",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "LOCH",                topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "GLEN",                topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "MAJESTIC",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "HEATHER",             topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+
+    // ── S6/U4/L3 — Wales: Viewpoints & Suffixes ──────────────
+    { word: "GRUELLING",           topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "GOBSMACKED",          topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "BARREN",              topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "GLEAMING",            topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "ENCHANTING",          topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "EERIE",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "TEPID",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "GRISTLY",             topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "DESCENT",             topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "DISSATISFACTION",     topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "BLEAK",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "BEWILDERING",         topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+
+    // ── S6/U4/L4 — Northern Ireland: Belfast ─────────────────
+    { word: "CAUSEWAY",            topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "HEXAGONAL",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SPECTACULAR",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "EXTRAVAGANZA",        topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "LANGOUSTINE",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SCALLOP",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "HOMOPHONE",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "INVERSION",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "TITANIC",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "HERITAGE",            topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SLIPWAY",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SUPERLATIVE",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+
 
   ]
 

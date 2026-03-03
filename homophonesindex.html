@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Homophones</title>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f7f3ee;--surface:#fff;--ink:#1a1a2e;--muted:rgba(26,26,46,0.45);--border:rgba(26,26,46,0.1);--amber:#e07c24;--green:#2d6a4f;--red:#e63946;--radius:12px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+    body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(26,26,46,.04) 28px);pointer-events:none;z-index:0}
+    header{position:relative;z-index:1;width:100%;max-width:860px;padding:28px 24px 0;display:flex;align-items:center;justify-content:space-between}
+    .home-btn{padding:8px 16px;background:var(--surface);border:1px solid var(--border);border-radius:40px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .2s}
+    .home-btn:hover{color:var(--ink);border-color:var(--amber)}
+    .hdr-c{text-align:center}
+    .hdr-c h1{font-family:'Righteous',sans-serif;font-size:clamp(1.4rem,4vw,2rem);color:var(--ink);letter-spacing:.02em}
+    .hdr-c p{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+    .score-badge{background:var(--surface);border:1px solid var(--border);border-radius:40px;padding:8px 16px;font-size:.85rem;font-weight:700;color:var(--amber);min-width:72px;text-align:center}
+    main{position:relative;z-index:1;width:100%;max-width:860px;padding:28px 20px 60px;display:flex;flex-direction:column;align-items:center;gap:22px}
+    #intro{display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+    .intro-icon{font-size:5rem}
+    .intro-title{font-family:'Righteous',sans-serif;font-size:clamp(2rem,6vw,3.2rem);color:var(--ink)}
+    .intro-title span{color:var(--amber)}
+    .intro-desc{max-width:460px;color:var(--muted);line-height:1.65;font-size:.95rem}
+    .pair-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:560px}
+    .pair-chip{padding:6px 14px;background:var(--surface);border:1px solid var(--border);border-radius:40px;font-size:.82rem;color:var(--ink)}
+    .pair-chip em{color:var(--amber);font-style:normal;font-weight:700}
+    .filter-section{display:flex;flex-direction:column;align-items:center;gap:10px}
+    .filter-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+    .filter-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .filter-pill{padding:7px 16px;border-radius:40px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.82rem;cursor:pointer;transition:all .18s}
+    .filter-pill.active{background:var(--amber);border-color:var(--amber);color:#fff;font-weight:700}
+    .filter-pill:not(.active):hover{border-color:var(--amber);color:var(--ink)}
+    .start-btn{padding:15px 44px;background:var(--amber);border:none;border-radius:40px;color:#fff;font-family:'Righteous',sans-serif;font-size:1.3rem;letter-spacing:.06em;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(224,124,36,.25)}
+    .start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(224,124,36,.35)}
+    .progress-row{width:100%;display:flex;align-items:center;gap:12px}
+    .progress-track{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--amber);border-radius:4px;transition:width .4s}
+    .progress-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+    .sentence-card{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px 36px 32px;position:relative}
+    .sentence-instruction{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:18px}
+    .sentence-display{font-size:clamp(1rem,2.4vw,1.2rem);line-height:2.2}
+    .word-btn{display:inline;background:none;border:none;padding:2px 3px;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:inherit;color:var(--ink);transition:all .15s}
+    .word-btn:hover:not([disabled]){background:rgba(224,124,36,.15);color:var(--amber)}
+    .word-btn.selected{background:rgba(224,124,36,.18);color:var(--amber);font-weight:600;border-bottom:2px solid var(--amber)}
+    .word-btn.correct-word{background:rgba(45,106,79,.12);color:var(--green);font-weight:700;border-bottom:2px solid var(--green)}
+    .word-btn.wrong-word{background:rgba(230,57,70,.1);color:var(--red);text-decoration:line-through;border-bottom:2px solid var(--red)}
+    .word-btn[disabled]{cursor:default}
+    #replacementArea{width:100%;display:none;flex-direction:column;gap:10px}
+    .rep-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+    #replacementGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+    .rep-btn{padding:12px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
+    .rep-btn:hover:not([disabled]){border-color:var(--amber);background:rgba(224,124,36,.08)}
+    .rep-btn.chosen{border-color:var(--amber);background:rgba(224,124,36,.12);color:var(--amber)}
+    .rep-btn[disabled]{cursor:default}
+    .action-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .hint-text{font-size:.82rem;color:var(--muted);font-style:italic}
+    .submit-btn{padding:11px 28px;background:var(--amber);border:none;border-radius:40px;color:#fff;font-family:'Righteous',sans-serif;font-size:1rem;cursor:pointer;transition:all .2s;opacity:.35;pointer-events:none}
+    .submit-btn.ready{opacity:1;pointer-events:auto}.submit-btn.ready:hover{transform:translateY(-1px)}
+    .feedback{width:100%;padding:14px 22px;border-radius:var(--radius);font-size:.92rem;font-weight:500;line-height:1.5;display:none}
+    .feedback.show{display:block}
+    .feedback.ok{background:rgba(45,106,79,.1);border:1px solid rgba(45,106,79,.25);color:var(--green)}
+    .feedback.bad{background:rgba(230,57,70,.07);border:1px solid rgba(230,57,70,.2);color:var(--red)}
+    .fix-sentence{margin-top:8px;font-weight:700;font-size:.9rem}
+    .next-btn{align-self:flex-end;padding:11px 28px;background:var(--amber);border:none;border-radius:40px;color:#fff;font-family:'Righteous',sans-serif;font-size:1rem;cursor:pointer;transition:all .2s;display:none}
+    .next-btn.show{display:block}.next-btn:hover{transform:translateY(-1px)}
+    #end{display:none;flex-direction:column;align-items:center;gap:22px;text-align:center}
+    .end-icon{font-size:5rem}
+    .end-title{font-family:'Righteous',sans-serif;font-size:clamp(2rem,5vw,3rem)}
+    .end-score{font-size:3.5rem;font-weight:800;color:var(--amber)}
+    .end-sub{color:var(--muted)}.end-stats{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+    .stat-pill{padding:9px 18px;background:var(--surface);border:1px solid var(--border);border-radius:40px;font-size:.88rem}
+    .stat-pill span{color:var(--amber);font-weight:700}
+    .end-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .replay-btn{padding:13px 32px;background:var(--amber);border:none;border-radius:40px;color:#fff;font-family:'Righteous',sans-serif;font-size:1.1rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .replay-btn:hover{transform:translateY(-2px)}
+    .replay-btn.secondary{background:var(--surface);border:1px solid var(--border);color:var(--ink)}
+    #game{display:none;flex-direction:column;align-items:center;gap:18px;width:100%}
+    @media(max-width:520px){.sentence-card{padding:24px 18px 20px}}
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-c"><h1>HOMOPHONES</h1><p>Spot &amp; Fix · All Units</p></div>
+  <div class="score-badge" id="scoreBadge">0/0</div>
+</header>
+<main>
+  <div id="intro">
+    <div class="intro-icon">👂</div>
+    <div class="intro-title">SPOT THE<br><span>HOMOPHONE</span></div>
+    <p class="intro-desc">Homophones sound the same but are spelled differently. Find the wrong word in each sentence and choose the correct one.</p>
+    <div class="pair-chips">
+      <div class="pair-chip"><em>there</em> / their / they're</div>
+      <div class="pair-chip"><em>your</em> / you're</div>
+      <div class="pair-chip"><em>to</em> / too / two</div>
+      <div class="pair-chip"><em>weather</em> / whether</div>
+      <div class="pair-chip"><em>knew</em> / new</div>
+      <div class="pair-chip"><em>past</em> / passed</div>
+      <div class="pair-chip"><em>hear</em> / here</div>
+      <div class="pair-chip"><em>sea</em> / see</div>
+      <div class="pair-chip"><em>wear</em> / where</div>
+      <div class="pair-chip"><em>bare</em> / bear</div>
+      <div class="pair-chip"><em>know</em> / no</div>
+      <div class="pair-chip"><em>write</em> / right</div>
+    </div>
+    <div class="filter-section">
+      <span class="filter-label">Choose a set</span>
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-f="all">⚡ All Pairs</button>
+        <button class="filter-pill" data-f="there">there/their/they're</button>
+        <button class="filter-pill" data-f="your">your/you're</button>
+        <button class="filter-pill" data-f="to">to/too/two</button>
+        <button class="filter-pill" data-f="weather">weather/whether</button>
+        <button class="filter-pill" data-f="misc">Other pairs</button>
+      </div>
+    </div>
+    <button class="start-btn" id="startBtn">START</button>
+  </div>
+  <div id="game">
+    <div class="progress-row"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel">1/20</div></div>
+    <div class="sentence-card">
+      <div class="sentence-instruction">Click the word that is spelled INCORRECTLY:</div>
+      <div class="sentence-display" id="sentenceDisplay"></div>
+    </div>
+    <div id="replacementArea">
+      <div class="rep-label">Replace <strong id="selectedWordDisplay" style="color:var(--amber)"></strong> with:</div>
+      <div id="replacementGrid"></div>
+    </div>
+    <div class="action-row">
+      <span class="hint-text" id="hintText">👆 Click the wrong word</span>
+      <button class="submit-btn" id="submitBtn">CHECK ✓</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">NEXT →</button>
+  </div>
+  <div id="end">
+    <div class="end-icon" id="endIcon">🏆</div><div class="end-title" id="endTitle">WELL DONE!</div>
+    <div class="end-score" id="endScore">0/0</div><div class="end-sub" id="endSub"></div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-btns"><button class="replay-btn" id="replayBtn">PLAY AGAIN</button><a href="../index.html" class="replay-btn secondary">HOME</a></div>
+  </div>
+</main>
+<script>
+const ALL_Q=[
+  {s:"The students forgot there homework again.",err:"there",correct:"their",opts:["their","there","they're"],pair:"there",fix:"The students forgot THEIR homework again.",e:"'Their' shows possession (belonging to them)."},
+  {s:"They're going to the beach but there friends aren't coming.",err:"there",correct:"their",opts:["their","there","they're"],pair:"there",fix:"...THEIR friends aren't coming.",e:"'Their' = belonging to them. 'There' = a place."},
+  {s:"Their going to miss the bus if they don't hurry.",err:"Their",correct:"They're",opts:["They're","Their","There"],pair:"there",fix:"THEY'RE going to miss the bus...",e:"'They're' = they are. 'Their' = belonging to them."},
+  {s:"I left my bag over their by the door.",err:"their",correct:"there",opts:["there","their","they're"],pair:"there",fix:"I left my bag over THERE by the door.",e:"'There' refers to a place. 'Their' shows possession."},
+  {s:"The team played brilliantly — there the best in the league.",err:"there",correct:"they're",opts:["they're","their","there"],pair:"there",fix:"...THEY'RE the best in the league.",e:"'They're' = they are. 'There' = a place."},
+  {s:"Your going to love this film.",err:"Your",correct:"You're",opts:["You're","Your"],pair:"your",fix:"YOU'RE going to love this film.",e:"'You're' = you are. 'Your' shows possession."},
+  {s:"Is that you're bag on the table?",err:"you're",correct:"your",opts:["your","you're"],pair:"your",fix:"Is that YOUR bag on the table?",e:"'Your' shows possession. 'You're' = you are."},
+  {s:"You're attitude needs to change if you want to succeed.",err:"You're",correct:"Your",opts:["Your","You're"],pair:"your",fix:"YOUR attitude needs to change...",e:"'Your' shows possession. 'You're' = you are."},
+  {s:"I hope you're feeling better after you're cold.",err:"you're",correct:"your",opts:["your","you're"],pair:"your",fix:"...after YOUR cold.",e:"The second 'you're' should be 'your' — your cold (possession)."},
+  {s:"I want to go to the cinema to.",err:"to",correct:"too",opts:["too","to","two"],pair:"to",fix:"I want to go to the cinema TOO.",e:"'Too' means also. 'To' is a preposition or part of an infinitive."},
+  {s:"She ate too much and felt to ill to move.",err:"to",correct:"too",opts:["too","to","two"],pair:"to",fix:"She felt TOO ill to move.",e:"'Too' means excessively here. 'To' is used before a verb (to move)."},
+  {s:"The too friends decided to travel together.",err:"too",correct:"two",opts:["two","too","to"],pair:"to",fix:"The TWO friends decided to travel together.",e:"'Two' is the number 2. 'Too' means also or excessively."},
+  {s:"It was too cold too go swimming.",err:"too",correct:"to",opts:["to","too","two"],pair:"to",fix:"It was too cold TO go swimming.",e:"'To' goes before a verb in an infinitive. 'Too' means excessively."},
+  {s:"I don't know weather to stay or go.",err:"weather",correct:"whether",opts:["whether","weather"],pair:"weather",fix:"I don't know WHETHER to stay or go.",e:"'Whether' introduces alternatives or a choice. 'Weather' is rain, sun, etc."},
+  {s:"The whether this summer has been terrible.",err:"whether",correct:"weather",opts:["weather","whether"],pair:"weather",fix:"The WEATHER this summer has been terrible.",e:"'Weather' is the climate. 'Whether' introduces a choice."},
+  {s:"We're going on the trip weather or not it rains.",err:"weather",correct:"whether",opts:["whether","weather"],pair:"weather",fix:"...WHETHER or not it rains.",e:"'Whether or not' introduces a condition. 'Weather' is climate."},
+  {s:"Come over hear and look at this!",err:"hear",correct:"here",opts:["here","hear"],pair:"misc",fix:"Come over HERE and look at this!",e:"'Here' refers to a place. 'Hear' means to perceive sound."},
+  {s:"I past the exam on my second attempt.",err:"past",correct:"passed",opts:["passed","past"],pair:"misc",fix:"I PASSED the exam on my second attempt.",e:"'Passed' is the past tense of 'to pass'. 'Past' is a noun/adjective/preposition."},
+  {s:"She new exactly what to say.",err:"new",correct:"knew",opts:["knew","new"],pair:"misc",fix:"She KNEW exactly what to say.",e:"'Knew' is the past tense of 'to know'. 'New' means not old."},
+  {s:"We could sea the mountains in the distance.",err:"sea",correct:"see",opts:["see","sea"],pair:"misc",fix:"We could SEE the mountains in the distance.",e:"'See' is the verb (to perceive with eyes). 'Sea' is the ocean."},
+  {s:"I no what you're thinking.",err:"no",correct:"know",opts:["know","no"],pair:"misc",fix:"I KNOW what you're thinking.",e:"'Know' is the verb. 'No' is a negative response."},
+  {s:"The cliff face was bear and rocky.",err:"bear",correct:"bare",opts:["bare","bear"],pair:"misc",fix:"The cliff face was BARE and rocky.",e:"'Bare' means uncovered/empty. 'Bear' is the animal or to carry/endure."},
+  {s:"Write me know if you have any problems.",err:"know",correct:"now",opts:["now","know","no"],pair:"misc",fix:"Write me NOW if you have any problems.",e:"'Now' means at this moment. 'Know' is a verb meaning to be aware."},
+];
+let qs=[],cur=0,sc=0,ans=false,selIdx=-1,selRep=null,activeFilter='all';
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function show(id){['intro','game','end'].forEach(s=>document.getElementById(s).style.display=s===id?'flex':'none')}
+function upd(){document.getElementById('scoreBadge').textContent=sc+'/'+(qs.length||0)}
+function start(){
+  let pool=activeFilter==='all'?ALL_Q:ALL_Q.filter(q=>q.pair===activeFilter);
+  qs=shuf(pool);cur=0;sc=0;upd();show('game');render();
+}
+function render(){
+  ans=false;selIdx=-1;selRep=null;
+  const q=qs[cur];
+  document.getElementById('progressFill').style.width=(cur/qs.length*100)+'%';
+  document.getElementById('progressLabel').textContent=(cur+1)+'/'+qs.length;
+  const words=q.s.split(' ');
+  const disp=document.getElementById('sentenceDisplay');
+  disp.innerHTML='';
+  words.forEach((word,i)=>{
+    const btn=document.createElement('button');
+    btn.className='word-btn';
+    btn.textContent=word+(i<words.length-1?' ':'');
+    btn.dataset.index=i;
+    btn.addEventListener('click',()=>selectWord(i,word));
+    disp.appendChild(btn);
+  });
+  document.getElementById('replacementArea').style.display='none';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').className='next-btn';
+  document.getElementById('submitBtn').className='submit-btn';
+  document.getElementById('hintText').textContent='👆 Click the wrong word';
+}
+function selectWord(index,word){
+  if(ans)return;
+  selIdx=index;selRep=null;
+  document.querySelectorAll('.word-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.word-btn')[index].classList.add('selected');
+  const q=qs[cur];
+  const clean=word.replace(/[.,!?'"]+$/,'').replace(/^['"]+/,'');
+  document.getElementById('selectedWordDisplay').textContent='"'+clean+'"';
+  document.getElementById('replacementArea').style.display='flex';
+  const grid=document.getElementById('replacementGrid');
+  grid.innerHTML='';
+  shuf(q.opts).forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='rep-btn';btn.textContent=opt;
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.rep-btn').forEach(b=>b.classList.remove('chosen'));
+      btn.classList.add('chosen');selRep=opt;
+      document.getElementById('submitBtn').className='submit-btn ready';
+      document.getElementById('hintText').textContent='✓ Ready — click CHECK';
+    });
+    grid.appendChild(btn);
+  });
+  document.getElementById('submitBtn').className='submit-btn';
+  document.getElementById('hintText').textContent='👆 Now choose the correct word';
+}
+function checkAnswer(){
+  if(ans||!selRep)return;ans=true;
+  const q=qs[cur];
+  const words=q.s.split(' ');
+  const errIdx=words.findIndex(w=>w.replace(/[.,!?'"]+/g,'').toLowerCase()===q.err.replace(/[.,!?'"]+/g,'').toLowerCase());
+  const wbtns=document.querySelectorAll('.word-btn');
+  wbtns.forEach(b=>b.disabled=true);
+  document.querySelectorAll('.rep-btn').forEach(b=>b.disabled=true);
+  const ok=selRep.toLowerCase()===q.correct.toLowerCase();
+  if(ok)sc++;
+  if(errIdx>=0)wbtns[errIdx].classList.add(ok?'correct-word':'correct-word');
+  else wbtns[selIdx].classList.add(ok?'correct-word':'wrong-word');
+  if(!ok&&errIdx>=0)wbtns[errIdx].classList.add('correct-word');
+  if(!ok)wbtns[selIdx].classList.add('wrong-word');
+  upd();
+  const fb=document.getElementById('feedback');
+  const inner=(ok?'✓ Correct! ':'✗ The correct word is <strong>'+q.correct+'</strong>. ')+q.e+'<div class="fix-sentence">✓ '+q.fix+'</div>';
+  fb.innerHTML=inner;fb.className='feedback '+(ok?'ok':'bad')+' show';
+  document.getElementById('submitBtn').className='submit-btn';
+  const nb=document.getElementById('nextBtn');nb.textContent=cur+1<qs.length?'NEXT →':'SEE RESULTS';nb.className='next-btn show';
+}
+function endGame(){
+  show('end');const t=qs.length,p=Math.round(sc/t*100);
+  let ic='🏆',ti='PERFECT!',su='Flawless spelling!';
+  if(p<50){ic='📚';ti='KEEP PRACTISING';su='Review the homophone pairs and try again.'}
+  else if(p<70){ic='👍';ti='GOOD EFFORT!';su='A few tricky ones — well done overall.'}
+  else if(p<90){ic='⭐';ti='WELL DONE!';su='Great homophone knowledge!'}
+  document.getElementById('endIcon').textContent=ic;document.getElementById('endTitle').textContent=ti;
+  document.getElementById('endScore').textContent=sc+'/'+t;document.getElementById('endSub').textContent=su;
+  document.getElementById('endStats').innerHTML='<div class="stat-pill">Correct: <span>'+sc+'</span></div><div class="stat-pill">Wrong: <span>'+(t-sc)+'</span></div><div class="stat-pill">Score: <span>'+p+'%</span></div>';
+}
+document.getElementById('startBtn').addEventListener('click',start);
+document.getElementById('submitBtn').addEventListener('click',checkAnswer);
+document.getElementById('nextBtn').addEventListener('click',()=>{cur++;cur>=qs.length?endGame():render()});
+document.getElementById('replayBtn').addEventListener('click',()=>show('intro'));
+document.querySelectorAll('.filter-pill').forEach(p=>{
+  p.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active');activeFilter=p.dataset.f;
+  });
+});
+show('intro');
+</script>
+</body>
+</html>
