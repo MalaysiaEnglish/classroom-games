@@ -47,8 +47,8 @@
       </div>
 
       <div class="hm-setup-section">
-        <label>Category</label>
-        <div class="hm-picker" id="wordlistPicker">
+        <label>Word Topics <span id="wordlistCount" style="font-weight:400;font-size:0.8rem;color:var(--text-dim);margin-left:6px;">All topics selected</span></label>
+        <div class="hm-picker" id="wordlistPicker" style="display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;padding-right:4px;">
           <!-- Populated dynamically -->
         </div>
       </div>
@@ -104,7 +104,21 @@
     let words = [];
     let selTeams = 4, selMode = 'basic', selList = '';
 
-    // ── Build category picker ────────────────────────
+    // ── Build category picker (multi-select checkboxes) ─────
+    const selectedTopics = new Set(); // tracks which topic keys are ticked
+
+    function buildWordPool() {
+      if (selectedTopics.size === 0) {
+        words = buildRandomPool();
+      } else {
+        words = [];
+        for (const [key, cat] of Object.entries(wordLists)) {
+          if (selectedTopics.has(key)) words.push(...cat.words);
+        }
+        if (!words.length) words = buildRandomPool();
+      }
+    }
+
     function buildCategoryPicker() {
       const picker = document.getElementById('wordlistPicker');
       picker.innerHTML = '';
@@ -113,54 +127,69 @@
       const topicMap = {};   // label → { keys[], words[] }
       for (const [key, cat] of Object.entries(wordLists)) {
         if (key.startsWith('_')) continue;
-
         const lbl = cat.label;
         if (!topicMap[lbl]) topicMap[lbl] = { keys: [], words: [] };
         topicMap[lbl].keys.push(key);
         topicMap[lbl].words.push(...cat.words);
       }
 
-      // "Random — all" always first
-      const randBtn = document.createElement('button');
-      randBtn.textContent  = '🎲 Random — all';
-      randBtn.dataset.list = '__random__';
-      if (selList === '__random__') randBtn.classList.add('hm-selected');
-      randBtn.onclick = () => {
-        selList = '__random__';
-        words   = buildRandomPool();
-        pickBtn('wordlistPicker', 'list', '__random__');
-      };
-      picker.appendChild(randBtn);
-
-      // One button per topic
-      let firstCat = true;
-      for (const [lbl, data] of Object.entries(topicMap)) {
-        const topicKey = data.keys.join('+');
-        const btn = document.createElement('button');
-        btn.textContent   = lbl;
-        btn.dataset.list  = topicKey;
-        if (selList === topicKey) btn.classList.add('hm-selected');
-        btn.onclick = () => {
-          selList = topicKey;
-          words   = [...data.words];
-          pickBtn('wordlistPicker', 'list', topicKey);
-        };
-        picker.appendChild(btn);
-
-        if (firstCat && selList !== '__random__') {
-          selList = topicKey;
-          words   = [...data.words];
-          btn.classList.add('hm-selected');
-          firstCat = false;
+      // Helper: rebuild word pool and update count label
+      function refreshPool() {
+        buildWordPool();
+        const countEl = document.getElementById('wordlistCount');
+        if (countEl) {
+          if (selectedTopics.size === 0) {
+            countEl.textContent = 'All topics · ' + words.length + ' words';
+          } else {
+            countEl.textContent = selectedTopics.size + ' topic' + (selectedTopics.size > 1 ? 's' : '') + ' selected · ' + words.length + ' words';
+          }
         }
       }
 
-      // Fall back to random if nothing selected
-      if (!picker.querySelector('.hm-selected')) {
-        selList = '__random__';
-        words   = buildRandomPool();
-        randBtn.classList.add('hm-selected');
+      // "All topics" toggle at the top
+      const allBtn = document.createElement('button');
+      allBtn.textContent = '🎲 All topics';
+      allBtn.className = 'hm-selected';
+      allBtn.style.cssText = 'margin-bottom:6px;';
+      allBtn.onclick = () => {
+        selectedTopics.clear();
+        picker.querySelectorAll('.topic-cb').forEach(cb => cb.checked = false);
+        allBtn.classList.add('hm-selected');
+        refreshPool();
+      };
+      picker.appendChild(allBtn);
+
+      // One checkbox row per topic
+      for (const [lbl, data] of Object.entries(topicMap)) {
+        const keys = data.keys;
+        const row = document.createElement('label');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 10px;border-radius:8px;border:1px solid var(--glass-border);background:var(--glass);transition:background 0.15s;';
+        row.onmouseover = () => row.style.background = 'var(--glass-hi)';
+        row.onmouseout  = () => { if (!row.querySelector('input').checked) row.style.background = 'var(--glass)'; };
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'topic-cb';
+        cb.style.cssText = 'accent-color:var(--accent);width:15px;height:15px;cursor:pointer;';
+        cb.onchange = () => {
+          keys.forEach(k => cb.checked ? selectedTopics.add(k) : selectedTopics.delete(k));
+          // Update "All topics" button state
+          allBtn.classList.toggle('hm-selected', selectedTopics.size === 0);
+          row.style.background = cb.checked ? 'rgba(0,201,167,0.12)' : 'var(--glass)';
+          refreshPool();
+        };
+
+        const span = document.createElement('span');
+        span.textContent = lbl;
+        span.style.cssText = 'font-size:0.88rem;font-weight:600;';
+
+        row.appendChild(cb);
+        row.appendChild(span);
+        picker.appendChild(row);
       }
+
+      // Initial pool
+      refreshPool();
     }
 
     function buildRandomPool() {
