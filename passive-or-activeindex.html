@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Passive or Active? — S5/U1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0b08;
+    --surface: #1a1410;
+    --card: #211a12;
+    --gold: #c9a227;
+    --gold2: #f0c842;
+    --red: #c0392b;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --purple: #8e44ad;
+    --text: #f0e6d0;
+    --muted: rgba(240,230,208,0.5);
+    --radius: 10px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px),
+      radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201,162,39,0.08) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 28px 20px 16px;
+    border-bottom: 2px solid rgba(201,162,39,0.3);
+  }
+
+  .header-eyebrow {
+    font-family: 'Special Elite', serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 8vw, 4rem);
+    letter-spacing: 0.08em;
+    color: var(--gold2);
+    text-shadow: 0 0 30px rgba(201,162,39,0.5), 2px 2px 0 rgba(0,0,0,0.8);
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: 'Special Elite', serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .home-btn {
+    position: absolute; top: 20px; left: 20px;
+    background: rgba(201,162,39,0.15);
+    border: 1px solid rgba(201,162,39,0.4);
+    color: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .home-btn:hover { background: rgba(201,162,39,0.3); }
+
+  /* ── Mode Select ── */
+  #intro-screen {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .intro-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--gold2);
+    margin-bottom: 12px;
+  }
+
+  .intro-desc {
+    font-family: 'Special Elite', serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 500px;
+    margin-left: auto; margin-right: auto;
+  }
+
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .mode-card {
+    background: var(--card);
+    border: 2px solid rgba(201,162,39,0.2);
+    border-radius: 12px;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .mode-card:hover {
+    border-color: var(--gold);
+    background: rgba(201,162,39,0.1);
+    transform: translateY(-3px);
+  }
+
+  .mode-card.selected {
+    border-color: var(--gold2);
+    background: rgba(201,162,39,0.15);
+    box-shadow: 0 0 16px rgba(201,162,39,0.3);
+  }
+
+  .mode-icon { font-size: 2rem; margin-bottom: 8px; }
+
+  .mode-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--gold2);
+    margin-bottom: 4px;
+  }
+
+  .mode-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .start-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    background: var(--gold);
+    color: #0e0b08;
+    border: none;
+    padding: 14px 48px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(201,162,39,0.4);
+  }
+  .start-btn:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 6px 28px rgba(201,162,39,0.6); }
+
+  /* ── Game Screen ── */
+  #game-screen { display: none; position: relative; z-index: 1; }
+
+  .game-layout {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    height: 6px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-family: 'Special Elite', serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .score-val { color: var(--gold2); font-size: 1rem; }
+
+  .mode-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(201,162,39,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(201,162,39,0.3);
+  }
+
+  /* Sentence card */
+  .sentence-card {
+    background: var(--card);
+    border: 1px solid rgba(201,162,39,0.25);
+    border-radius: 14px;
+    padding: 32px 28px;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sentence-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.008) 10px, rgba(255,255,255,0.008) 11px);
+    pointer-events: none;
+  }
+
+  .sentence-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .sentence-text {
+    font-family: 'Special Elite', serif;
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .sentence-text .key-verb {
+    color: var(--gold2);
+    font-weight: bold;
+  }
+
+  /* Answer buttons */
+  .answer-grid {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  /* Mode A: 2 big buttons */
+  .answer-grid.mode-identify {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Mode B/C: multiple choice options */
+  .answer-grid.mode-multi {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin-left: auto; margin-right: auto;
+  }
+
+  .answer-btn {
+    background: var(--surface);
+    border: 2px solid rgba(201,162,39,0.2);
+    border-radius: 12px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+    font-family: 'Special Elite', serif;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .answer-btn .btn-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .answer-btn .btn-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: block;
+  }
+
+  .answer-btn:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: rgba(201,162,39,0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(201,162,39,0.2);
+  }
+
+  .answer-btn.correct { border-color: var(--green); background: rgba(39,174,96,0.15); }
+  .answer-btn.wrong   { border-color: var(--red);   background: rgba(192,57,43,0.15); opacity: 0.7; }
+  .answer-btn.highlight { border-color: var(--green); background: rgba(39,174,96,0.2); }
+  .answer-btn:disabled { cursor: default; }
+
+  /* Feedback */
+  .feedback-box {
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    font-family: 'Special Elite', serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback-box.correct { background: rgba(39,174,96,0.15); border: 1px solid rgba(39,174,96,0.4); color: #7dffb3; }
+  .feedback-box.wrong   { background: rgba(192,57,43,0.15); border: 1px solid rgba(192,57,43,0.4); color: #ff9b9b; }
+
+  .next-btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.08em;
+    background: var(--gold);
+    color: #0e0b08;
+    border: none;
+    padding: 12px 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+  }
+  .next-btn:hover { background: var(--gold2); transform: translateY(-1px); }
+
+  /* ── End Screen ── */
+  #end-screen {
+    display: none; position: relative; z-index: 1;
+    max-width: 600px; margin: 0 auto;
+    padding: 48px 20px;
+    text-align: center;
+  }
+
+  .end-badge { font-size: 5rem; margin-bottom: 16px; animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
+  .end-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--gold2); margin-bottom: 8px; }
+  .end-score { font-family: 'Special Elite', serif; font-size: 1.3rem; color: var(--text); margin-bottom: 28px; }
+  .end-score span { color: var(--gold2); font-size: 1.8rem; }
+  .end-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-secondary { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.08em; background: transparent; color: var(--gold); border: 2px solid var(--gold); padding: 10px 28px; border-radius: 8px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { background: rgba(201,162,39,0.15); }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="home-btn">⌂ Home</a>
+  <div class="header-eyebrow">S5 · Unit 1 · Grammar</div>
+  <h1>Passive or Active?</h1>
+  <div class="subtitle">Test your knowledge of the passive voice</div>
+</header>
+
+<!-- INTRO -->
+<div id="intro-screen">
+  <div class="intro-title">Choose Your Round</div>
+  <p class="intro-desc">Three ways to practise the passive voice. All sentences are drawn from the Gangsters unit.</p>
+
+  <div class="mode-grid">
+    <div class="mode-card" id="mode-a" onclick="selectMode('identify')">
+      <div class="mode-icon">⚖️</div>
+      <div class="mode-title">Identify</div>
+      <div class="mode-desc">Is the sentence Active or Passive? Choose quickly.</div>
+    </div>
+    <div class="mode-card" id="mode-b" onclick="selectMode('reason')">
+      <div class="mode-icon">🔍</div>
+      <div class="mode-title">Why Passive?</div>
+      <div class="mode-desc">Pick the reason the passive is used: unknown doer, unimportant, or implied.</div>
+    </div>
+    <div class="mode-card" id="mode-c" onclick="selectMode('transform')">
+      <div class="mode-icon">🔄</div>
+      <div class="mode-title">Transform</div>
+      <div class="mode-desc">Choose the correct passive or active rewrite of the sentence.</div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">Begin</button>
+</div>
+
+<!-- GAME -->
+<div id="game-screen">
+  <div class="game-layout">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-bar"></div>
+    </div>
+    <div class="score-row">
+      <span>Question <span id="q-num" class="score-val">1</span> of <span id="q-total" class="score-val">15</span></span>
+      <span id="mode-badge-wrap"></span>
+      <span>Score: <span id="score-display" class="score-val">0</span></span>
+    </div>
+
+    <div class="sentence-card">
+      <div class="sentence-num" id="sent-num">SENTENCE #1</div>
+      <div class="sentence-text" id="sent-text"></div>
+    </div>
+
+    <div class="answer-grid" id="answer-grid"></div>
+
+    <div class="feedback-box" id="feedback-box"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+  </div>
+</div>
+
+<!-- END -->
+<div id="end-screen">
+  <div class="end-badge" id="end-badge">🏆</div>
+  <div class="end-title">Round Complete!</div>
+  <div class="end-score">You scored <span id="final-score">0</span> out of <span id="final-total">0</span></div>
+  <div class="end-btns">
+    <button class="start-btn" onclick="backToIntro()">Try Another Round</button>
+    <a href="../index.html" class="btn-secondary">⌂ Home</a>
+  </div>
+</div>
+
+<script>
+// ── Mode A: Identify Active/Passive ──
+const IDENTIFY_Q = [
+  { text: 'Capone <span class="key-verb">was convicted</span> of five counts of tax evasion in 1931.', answer: 'passive', feedback: 'PASSIVE — "was convicted" = was + past participle. We know it was a court/judge, but the focus is on Capone.' },
+  { text: 'He <span class="key-verb">bribed</span> the mayor and policemen to keep himself safe.', answer: 'active', feedback: 'ACTIVE — Capone (the subject) performed the action of bribing. He did it himself.' },
+  { text: 'Seven gang rivals <span class="key-verb">were murdered</span> in broad daylight.', answer: 'passive', feedback: 'PASSIVE — "were murdered" = were + past participle. We don\'t know exactly who did it.' },
+  { text: 'The confederation <span class="key-verb">was dismantled</span> peacefully in April 1810.', answer: 'passive', feedback: 'PASSIVE — "was dismantled" = was + past participle. The focus is on the confederation, not who dismantled it.' },
+  { text: 'Madame Zheng <span class="key-verb">established</span> financial offices in cities and villages.', answer: 'active', feedback: 'ACTIVE — Madame Zheng (the subject) did the establishing herself.' },
+  { text: 'The telephone <span class="key-verb">was invented</span> by Alexander Graham Bell.', answer: 'passive', feedback: 'PASSIVE — "was invented" = was + past participle. We know who did it (Bell), but the focus is on the telephone.' },
+  { text: 'Siegel <span class="key-verb">was acquitted</span> in 1942.', answer: 'passive', feedback: 'PASSIVE — "was acquitted" = was + past participle. A court acquitted him, but the focus is on Siegel.' },
+  { text: 'Escobar <span class="key-verb">founded</span> the Medellín Cartel in 1976.', answer: 'active', feedback: 'ACTIVE — Escobar (subject) performed the action.' },
+  { text: 'Siegel <span class="key-verb">was shot dead</span> at the home of his girlfriend.', answer: 'passive', feedback: 'PASSIVE — "was shot" = was + past participle. We don\'t know who shot him.' },
+  { text: 'Robin Hood <span class="key-verb">returned</span> the loot to the poor people.', answer: 'active', feedback: 'ACTIVE — Robin Hood (subject) returned the loot himself.' },
+  { text: 'Escobar <span class="key-verb">was elected</span> as a member of the Chamber of Representatives.', answer: 'passive', feedback: 'PASSIVE — "was elected" = was + past participle. The voters did the electing.' },
+  { text: 'He <span class="key-verb">had his own prison built</span>.', answer: 'active', feedback: 'ACTIVE — "have something done" is NOT passive. Escobar organised it and paid for it, but others did the work.' },
+];
+
+// ── Mode B: Why Passive? ──
+const REASON_Q = [
+  {
+    text: 'Capone <span class="key-verb">was born</span> in New York City in 1899.',
+    answer: 'implied',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'IMPLIED — We all know babies don\'t give birth to themselves. The mother/midwife is obvious, so we don\'t state it.'
+  },
+  {
+    text: 'Seven gang rivals <span class="key-verb">were murdered</span> in broad daylight.',
+    answer: 'unknown',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'UNKNOWN — Officially, the killer(s) were never formally charged. The passive reflects legal uncertainty.'
+  },
+  {
+    text: 'The confederation <span class="key-verb">was successfully dismantled</span> in April 1810.',
+    answer: 'unimportant',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'UNIMPORTANT — What matters is that it was dismantled peacefully. Who exactly did the process isn\'t the focus.'
+  },
+  {
+    text: 'Siegel <span class="key-verb">was acquitted</span> in 1942.',
+    answer: 'implied',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'IMPLIED — We know it must have been a court/jury. The institution is obvious even without naming it.'
+  },
+  {
+    text: 'The house <span class="key-verb">was built</span> in 2010.',
+    answer: 'unimportant',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'UNIMPORTANT — Who built it doesn\'t matter. The house and the date are the important information.'
+  },
+  {
+    text: 'A million dollars <span class="key-verb">was stolen</span> from the bank.',
+    answer: 'unknown',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'UNKNOWN — If we knew who stole it, the police would already have them! The doer hasn\'t been identified.'
+  },
+  {
+    text: 'Escobar <span class="key-verb">was killed</span> in his hometown by Colombian National Police.',
+    answer: 'unimportant',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'UNIMPORTANT — We actually know who did it (police), but the focus is on Escobar being killed. The doer is mentioned at the end with "by".' 
+  },
+  {
+    text: 'Siegel <span class="key-verb">was tried</span> for the murder of Harry Greenberg.',
+    answer: 'implied',
+    options: ['The doer is unknown', 'The doer is unimportant', 'The doer is implied'],
+    feedback: 'IMPLIED — Courts try people. The legal system is the obvious implied doer here.'
+  },
+];
+
+// ── Mode C: Transform ──
+const TRANSFORM_Q = [
+  {
+    text: 'Active: <em>Bank robbers stole $50m from the bank.</em>',
+    prompt: 'Which is the correct passive form?',
+    answer: '$50m was stolen from the bank by bank robbers.',
+    options: [
+      '$50m was stolen from the bank by bank robbers.',
+      '$50m were stolen from the bank.',
+      'Bank robbers were stolen $50m.',
+      '$50m is stolen from the bank.',
+    ],
+    feedback: 'Correct: "$50m was stolen from the bank (by bank robbers)." — was + past participle (stolen). The subject of the passive is $50m, which is singular.'
+  },
+  {
+    text: 'Passive: <em>The telephone was invented by Alexander Graham Bell.</em>',
+    prompt: 'Which is the correct active form?',
+    answer: 'Alexander Graham Bell invented the telephone.',
+    options: [
+      'Alexander Graham Bell invented the telephone.',
+      'The telephone invented Alexander Graham Bell.',
+      'Alexander Graham Bell was invented the telephone.',
+      'The telephone had been invented.',
+    ],
+    feedback: 'The "by" phrase tells us who the subject of the active sentence should be. Remove "was" and "by", move Bell to the front.'
+  },
+  {
+    text: 'Active: <em>Builders built that school twenty years ago.</em>',
+    prompt: 'Which is the correct passive form?',
+    answer: 'That school was built twenty years ago.',
+    options: [
+      'That school was built twenty years ago.',
+      'That school were built twenty years ago.',
+      'Twenty years ago that school is built.',
+      'Builders were built the school.',
+    ],
+    feedback: '"That school" is singular so we use "was". The doer (builders) is unimportant so we can drop it.'
+  },
+  {
+    text: 'Passive: <em>Some people broke the window last night.</em>',
+    prompt: 'This should be written as passive. Which is correct?',
+    answer: 'The window was broken last night.',
+    options: [
+      'The window was broken last night.',
+      'The window were broken last night.',
+      'The window is broken last night.',
+      'Last night the window is being broken.',
+    ],
+    feedback: '"The window" is singular → "was broken". Since the doer is vague ("some people"), we can drop it entirely.'
+  },
+  {
+    text: 'Active: <em>The cleaner cleans this room every Friday.</em>',
+    prompt: 'Choose the correct passive (present simple):',
+    answer: 'This room is cleaned every Friday.',
+    options: [
+      'This room is cleaned every Friday.',
+      'This room was cleaned every Friday.',
+      'This room is being cleaned every Friday.',
+      'This room has been cleaned every Friday.',
+    ],
+    feedback: 'Present simple passive = is/are + past participle. The action is habitual/regular, so present simple fits.'
+  },
+  {
+    text: 'Active: <em>The workmen are painting the school.</em>',
+    prompt: 'Choose the correct passive (present continuous):',
+    answer: 'The school is being painted.',
+    options: [
+      'The school is being painted.',
+      'The school was being painted.',
+      'The school is painted.',
+      'The school has been painted.',
+    ],
+    feedback: 'Present continuous passive = is/are + being + past participle. The action is happening right now.'
+  },
+];
+
+let selectedMode = 'identify';
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function selectMode(mode) {
+  selectedMode = mode;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  const map = { identify: 'mode-a', reason: 'mode-b', transform: 'mode-c' };
+  document.getElementById(map[mode]).classList.add('selected');
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startGame() {
+  let pool;
+  if (selectedMode === 'identify') pool = IDENTIFY_Q;
+  else if (selectedMode === 'reason') pool = REASON_Q;
+  else pool = TRANSFORM_Q;
+
+  questions = shuffle(pool);
+  currentQ = 0;
+  score = 0;
+  answered = false;
+
+  const modeNames = { identify: 'Identify', reason: 'Why Passive?', transform: 'Transform' };
+  document.getElementById('mode-badge-wrap').innerHTML = `<span class="mode-badge">${modeNames[selectedMode]}</span>`;
+  document.getElementById('q-total').textContent = questions.length;
+
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('end-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  answered = false;
+
+  document.getElementById('q-num').textContent = currentQ + 1;
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('sent-num').textContent = `SENTENCE #${currentQ + 1}`;
+  document.getElementById('sent-text').innerHTML = q.text;
+  document.getElementById('progress-bar').style.width = `${(currentQ / questions.length) * 100}%`;
+
+  const feedback = document.getElementById('feedback-box');
+  feedback.style.display = 'none';
+  feedback.className = 'feedback-box';
+
+  document.getElementById('next-btn').style.display = 'none';
+
+  const grid = document.getElementById('answer-grid');
+  grid.innerHTML = '';
+
+  if (selectedMode === 'identify') {
+    grid.className = 'answer-grid mode-identify';
+    ['active', 'passive'].forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+      btn.innerHTML = `<span class="btn-label">${opt.toUpperCase()}</span><span class="btn-sub">${opt === 'active' ? 'Subject does the action' : 'Subject receives the action'}</span>`;
+      btn.onclick = () => checkAnswer(opt, btn, q);
+      grid.appendChild(btn);
+    });
+  } else if (selectedMode === 'reason') {
+    grid.className = 'answer-grid mode-multi';
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+      btn.innerHTML = `<span class="btn-label">${opt}</span>`;
+      btn.onclick = () => checkAnswer(opt, btn, q);
+      grid.appendChild(btn);
+    });
+  } else {
+    grid.className = 'answer-grid mode-multi';
+    if (q.prompt) {
+      const p = document.createElement('p');
+      p.style.cssText = 'font-family:Special Elite,serif;font-size:0.85rem;color:var(--gold);text-align:center;margin-bottom:8px;';
+      p.textContent = q.prompt;
+      grid.appendChild(p);
+    }
+    shuffle(q.options).forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+      btn.style.fontSize = '0.9rem';
+      btn.innerHTML = `<span>${opt}</span>`;
+      btn.onclick = () => checkAnswer(opt, btn, q);
+      grid.appendChild(btn);
+    });
+  }
+}
+
+function checkAnswer(choice, btn, q) {
+  if (answered) return;
+  answered = true;
+
+  const allBtns = document.querySelectorAll('.answer-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  const feedback = document.getElementById('feedback-box');
+  const correct = choice === q.answer;
+
+  if (correct) {
+    score++;
+    btn.classList.add('correct');
+    feedback.className = 'feedback-box correct';
+    feedback.innerHTML = `✅ Correct! ${q.feedback}`;
+  } else {
+    btn.classList.add('wrong');
+    // Highlight correct
+    allBtns.forEach(b => {
+      const t = b.textContent.trim();
+      if (t === q.answer || t.toUpperCase() === q.answer.toUpperCase() || t.toLowerCase() === q.answer.toLowerCase()) {
+        b.classList.add('highlight');
+      }
+    });
+    feedback.className = 'feedback-box wrong';
+    feedback.innerHTML = `❌ Not quite. ${q.feedback}`;
+  }
+
+  feedback.style.display = 'block';
+  document.getElementById('score-display').textContent = score;
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.textContent = currentQ < questions.length - 1 ? 'Next →' : 'See Results';
+  nextBtn.style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) showEnd();
+  else renderQuestion();
+}
+
+function showEnd() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('end-screen').style.display = 'block';
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('final-total').textContent = questions.length;
+  document.getElementById('progress-bar').style.width = '100%';
+
+  const pct = score / questions.length;
+  const badge = document.getElementById('end-badge');
+  badge.textContent = pct >= 0.9 ? '🏆' : pct >= 0.7 ? '🎓' : pct >= 0.5 ? '📚' : '📝';
+}
+
+function backToIntro() {
+  document.getElementById('end-screen').style.display = 'none';
+  document.getElementById('intro-screen').style.display = 'block';
+}
+
+// Default select mode A
+selectMode('identify');
+</script>
+</body>
+</html>

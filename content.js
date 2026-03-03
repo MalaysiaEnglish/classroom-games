@@ -870,6 +870,42 @@ window.CUSTOM_CONTENT = {
     { word: "SLIPWAY",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
     { word: "SUPERLATIVE",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
 
+    // ── S5/U1/L1 — Al Capone ─────────────────────────────────
+    { word: "NOTORIOUS",           topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "PROHIBITION",         topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "BOOTLEGGING",         topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "FEDORA",              topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "BOUNCER",             topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "CONVICTED",           topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "PROFITABLE",          topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+
+    // ── S5/U1/L2 — Madame Zheng ──────────────────────────────
+    { word: "FORMIDABLE",          topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "CONFEDERATION",       topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "PRIVATEER",           topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "ADMINISTRATIVE",      topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "VULNERABLE",          topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "AMNESTY",             topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "SABOTAGE",            topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+
+    // ── S5/U1/L3 — Robin Hood ────────────────────────────────
+    { word: "OUTLAW",              topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "OPPRESSED",           topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "PILLAGE",             topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "ARCHERY",             topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "FOLKLORE",            topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "CHRONICLER",          topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+
+    // ── S5/U1/L4 — Escobar & Siegel ──────────────────────────
+    { word: "MONOPOLISED",         topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "SMUGGLING",           topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "RANSOM",              topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "MANHUNT",             topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "ASSASSINATION",       topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "ACQUITTED",           topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "CHARISMATIC",         topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "PROWESS",             topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+
 
   ]
 
