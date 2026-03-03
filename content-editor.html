@@ -69,6 +69,7 @@
       <button class="tab-btn active" onclick="switchTab('sentences')">📝 Sentences</button>
       <button class="tab-btn" onclick="switchTab('words')">🔤 Words</button>
       <button class="tab-btn" onclick="switchTab('export')">⬇ Export</button>
+      <button class="tab-btn" onclick="switchTab('bulk')" style="background:rgba(240,180,41,0.12);border-color:rgba(240,180,41,0.4);">📥 Bulk Import</button>
     </div>
 
     <!-- ── SENTENCES TAB ─────────────────────────────── -->
@@ -162,6 +163,66 @@
         </p>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;" id="dlFeedback"></div>
+    </div>
+
+
+    <!-- ── BULK IMPORT TAB ─────────────────────────────────── -->
+    <div id="tab-bulk" class="tab-panel">
+
+      <div class="info-box">
+        <strong>How to use Bulk Import:</strong><br>
+        1. Set the <strong>Topic</strong> and <strong>Type</strong> below.<br>
+        2. Paste your list — one item per line.<br>
+        &nbsp;&nbsp;&nbsp;• <strong>Sentences</strong>: end each line with <code style="color:var(--accent)">CORRECT</code> or <code style="color:var(--accent)">WRONG</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.g. <em>She runned home. WRONG</em> &nbsp;&nbsp; <em>The cat sat on the mat. CORRECT</em><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lines with no label default to <strong>Correct</strong>.<br>
+        &nbsp;&nbsp;&nbsp;• <strong>Words</strong>: one word or phrase per line — e.g. <em>METAMORPHOSIS</em><br>
+        3. Click <strong>Preview</strong> — check the list, click × to remove any items.<br>
+        4. Click <strong>Add all to Editor</strong> — items merge into the Sentences / Words tabs.<br>
+        5. Go to <strong>Export</strong> → download both files → upload to GitHub. Done.
+      </div>
+
+      <div class="field-row" style="margin-bottom:16px;">
+        <div class="field-group" style="flex:2;">
+          <label>Topic (applied to all items in this batch)</label>
+          <input type="text" id="bulkTopic" placeholder="e.g. S6/U4/L3 Wales" list="bulkTopicSuggestions">
+          <datalist id="bulkTopicSuggestions"></datalist>
+        </div>
+        <div class="field-group" style="flex:1; min-width:150px;">
+          <label>Type</label>
+          <div class="toggle-row">
+            <button class="toggle-btn sel-correct" id="bulkTypeSentences" onclick="setBulkType('sentences')">📝 Sentences</button>
+            <button class="toggle-btn" id="bulkTypeWords" onclick="setBulkType('words')">🔤 Words</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-bottom:14px;">
+        <label>Paste your list here (one item per line)</label>
+        <textarea id="bulkInput" rows="12"
+          placeholder="She went to the shops yesterday. CORRECT&#10;She go to the shops. WRONG&#10;They was happy. WRONG&#10;The cat sat on the mat.&#10;&#10;— or for words —&#10;&#10;METAMORPHOSIS&#10;JUXTAPOSITION&#10;FORESHADOWING"
+          style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--glass-border);background:rgba(255,255,255,0.06);color:white;font-size:0.9rem;font-family:inherit;resize:vertical;line-height:1.7;margin-top:4px;"></textarea>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
+        <button onclick="parseBulk()" style="padding:10px 24px;background:var(--accent);color:#000;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-size:0.95rem;">🔍 Preview</button>
+        <button onclick="clearBulk()" style="padding:10px 16px;background:var(--glass);color:var(--text-dim);border:1px solid var(--glass-border);border-radius:8px;font-weight:700;cursor:pointer;">✕ Clear</button>
+        <span id="bulkParseError" style="color:#ef4444;font-size:0.85rem;"></span>
+      </div>
+
+      <div id="bulkPreviewArea" style="display:none;">
+        <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>Preview — <span id="bulkPreviewCount"></span></span>
+          <span style="font-size:0.76rem;color:var(--text-dim);font-weight:400;">Click × to remove before importing</span>
+        </div>
+        <div class="item-list" id="bulkPreviewList" style="max-height:320px;"></div>
+        <div style="display:flex;gap:14px;margin-top:14px;align-items:center;flex-wrap:wrap;">
+          <button onclick="commitBulk()" id="bulkCommitBtn" style="padding:11px 28px;background:#22c55e;color:#000;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-size:1rem;">✓ Add all to Editor</button>
+          <span style="font-size:0.85rem;color:var(--text-dim);">Then <strong style="color:var(--accent);">Export</strong> → download both files</span>
+          <span id="bulkCommitFeedback" style="color:#22c55e;font-size:0.88rem;font-weight:700;opacity:0;transition:opacity 0.3s;"></span>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -322,12 +383,15 @@ window.CUSTOM_CONTENT = {
       renderWords();
       updateFilters();
       updateTopicSuggestions();
+      // keep bulk topic datalist in sync
+      const allTopics = [...new Set([...sentences.map(s => s.topic), ...words.map(w => w.topic)])].sort();
+      if (document.getElementById('bulkTopicSuggestions')) fillDatalist('bulkTopicSuggestions', allTopics);
     }
 
     // ── Tab switching ──────────────────────────────────────────
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach((b,i) => {
-        b.classList.toggle('active', ['sentences','words','export'][i] === name);
+        b.classList.toggle('active', ['sentences','words','export','bulk'][i] === name);
       });
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       document.getElementById('tab-' + name).classList.add('active');
@@ -534,6 +598,140 @@ window.CUSTOM_CONTENT = {
         fb.classList.add('show');
         setTimeout(() => fb.classList.remove('show'), 2000);
       });
+    }
+
+
+    // ═══════════════════════════════════════════════════
+    // BULK IMPORT
+    // ═══════════════════════════════════════════════════
+
+    let bulkType = 'sentences';
+    let bulkPreviewItems = [];
+
+    function setBulkType(type) {
+      bulkType = type;
+      document.getElementById('bulkTypeSentences').className = 'toggle-btn' + (type === 'sentences' ? ' sel-correct' : '');
+      document.getElementById('bulkTypeWords').className     = 'toggle-btn' + (type === 'words'     ? ' sel-correct' : '');
+      if (bulkPreviewItems.length) parseBulk();
+    }
+
+    function parseBulk() {
+      const raw   = document.getElementById('bulkInput').value;
+      const topic = document.getElementById('bulkTopic').value.trim() || 'General';
+      const errEl = document.getElementById('bulkParseError');
+      errEl.textContent = '';
+
+      const lines = raw.split('\n')
+        .map(l => l.trim())
+        .filter(l => l.length > 0 && !l.startsWith('//') && !l.startsWith('#') && l !== '—');
+
+      if (!lines.length) {
+        errEl.textContent = 'Nothing to parse — paste some items first.';
+        document.getElementById('bulkPreviewArea').style.display = 'none';
+        return;
+      }
+
+      bulkPreviewItems = [];
+
+      if (bulkType === 'words') {
+        lines.forEach((line, i) => {
+          bulkPreviewItems.push({ _pid: Date.now() + i, type: 'word', word: line.toUpperCase(), topic });
+        });
+      } else {
+        lines.forEach((line, i) => {
+          let correct = true;
+          let text = line;
+          if (line.toUpperCase().endsWith(' CORRECT')) {
+            correct = true;
+            text = line.slice(0, -8).trim();
+          } else if (line.toUpperCase().endsWith(' WRONG')) {
+            correct = false;
+            text = line.slice(0, -6).trim();
+          }
+          if (text.length === 0) return;
+          bulkPreviewItems.push({ _pid: Date.now() + i, type: 'sentence', text, correct, topic });
+        });
+      }
+
+      if (!bulkPreviewItems.length) {
+        errEl.textContent = 'Could not parse any valid items. Check your format.';
+        document.getElementById('bulkPreviewArea').style.display = 'none';
+        return;
+      }
+      renderBulkPreview();
+    }
+
+    function renderBulkPreview() {
+      const area  = document.getElementById('bulkPreviewArea');
+      const list  = document.getElementById('bulkPreviewList');
+      const count = document.getElementById('bulkPreviewCount');
+      area.style.display = 'block';
+      count.textContent  = bulkPreviewItems.length + ' item' + (bulkPreviewItems.length !== 1 ? 's' : '');
+      list.innerHTML = '';
+      if (!bulkPreviewItems.length) {
+        list.innerHTML = '<div class="empty-state">All items removed.</div>';
+        document.getElementById('bulkCommitBtn').disabled = true;
+        return;
+      }
+      document.getElementById('bulkCommitBtn').disabled = false;
+      bulkPreviewItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        if (item.type === 'sentence') {
+          div.innerHTML =
+            '<span class="badge ' + (item.correct ? 'badge-correct' : 'badge-wrong') + '">' + (item.correct ? '✓ Correct' : '✗ Wrong') + '</span>' +
+            '<div class="item-main"><div>' + item.text + '</div><div class="item-meta">' + item.topic + '</div></div>' +
+            '<button class="btn-del" onclick="removeBulkItem(' + item._pid + ')" title="Remove">×</button>';
+        } else {
+          div.innerHTML =
+            '<span class="badge badge-word">WORD</span>' +
+            '<div class="item-main"><div style="font-weight:800;letter-spacing:.05em;">' + item.word + '</div><div class="item-meta">' + item.topic + '</div></div>' +
+            '<button class="btn-del" onclick="removeBulkItem(' + item._pid + ')" title="Remove">×</button>';
+        }
+        list.appendChild(div);
+      });
+    }
+
+    function removeBulkItem(pid) {
+      bulkPreviewItems = bulkPreviewItems.filter(i => i._pid !== pid);
+      renderBulkPreview();
+    }
+
+    function commitBulk() {
+      if (!bulkPreviewItems.length) return;
+      let addedS = 0, addedW = 0;
+      bulkPreviewItems.forEach(item => {
+        if (item.type === 'sentence') {
+          sentences.push({ text: item.text, correct: item.correct, topic: item.topic, _id: Date.now() + Math.random() });
+          addedS++;
+        } else {
+          words.push({ word: item.word, topic: item.topic, _id: Date.now() + Math.random() });
+          addedW++;
+        }
+      });
+      bulkPreviewItems = [];
+      document.getElementById('bulkInput').value = '';
+      refreshAll();
+      // Update bulk topic suggestions too
+      const allTopics = [...new Set([...sentences.map(s => s.topic), ...words.map(w => w.topic)])].sort();
+      fillDatalist('bulkTopicSuggestions', allTopics);
+      const parts = [];
+      if (addedS) parts.push(addedS + ' sentence' + (addedS !== 1 ? 's' : ''));
+      if (addedW) parts.push(addedW + ' word' + (addedW !== 1 ? 's' : ''));
+      const fb = document.getElementById('bulkCommitFeedback');
+      fb.textContent = '✓ Added ' + parts.join(' + ') + '! Go to Export to download.';
+      fb.style.opacity = '1';
+      document.getElementById('bulkPreviewList').innerHTML =
+        '<div class="empty-state" style="color:#22c55e;">✓ ' + parts.join(' + ') + ' added. Go to Export → download both files.</div>';
+      setTimeout(() => { fb.style.opacity = '0'; }, 5000);
+    }
+
+    function clearBulk() {
+      document.getElementById('bulkInput').value = '';
+      document.getElementById('bulkTopic').value = '';
+      document.getElementById('bulkParseError').textContent = '';
+      document.getElementById('bulkPreviewArea').style.display = 'none';
+      bulkPreviewItems = [];
     }
 
     function downloadOutput() {
