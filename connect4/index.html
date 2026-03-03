@@ -5,11 +5,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Connect 4</title>
   <link rel="stylesheet" href="../style.css">
+  <style>
+    .qpack-bar {
+      background: #1a1f35;
+      border-bottom: 2px solid rgba(240,180,41,0.3);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .qpack-label {
+      font-size: 0.78rem;
+      color: rgba(240,180,41,0.8);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .qpack-select {
+      background: #0e1120;
+      border: 1px solid rgba(240,180,41,0.4);
+      color: #f0e6d0;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      flex: 1;
+      min-width: 180px;
+    }
+    .qpack-mode-btns { display: flex; gap: 6px; }
+    .qpack-mode-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #f0e6d0;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .qpack-mode-btn.active {
+      background: rgba(240,180,41,0.25);
+      border-color: rgba(240,180,41,0.6);
+      color: #f0c842;
+    }
+    .qpack-count { font-size: 0.75rem; color: rgba(240,180,41,0.6); white-space: nowrap; }
+
+    #question-panel {
+      display: none;
+      background: #111828;
+      border-bottom: 2px solid rgba(240,180,41,0.2);
+      padding: 14px 20px;
+      text-align: center;
+    }
+    #question-panel.visible { display: block; }
+    .q-team-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(240,180,41,0.7);
+      margin-bottom: 6px;
+    }
+    .q-question {
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      color: #f0e6d0;
+      font-weight: 500;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .q-options {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .q-option {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #f0e6d0;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .q-option:hover { background: rgba(240,180,41,0.15); border-color: rgba(240,180,41,0.5); }
+    .q-option.correct { background: rgba(39,174,96,0.25); border-color: #27ae60; color: #7dffb3; pointer-events: none; }
+    .q-option.wrong   { background: rgba(192,57,43,0.2);  border-color: #c0392b; color: #ff9b9b; pointer-events: none; }
+    .q-option.reveal  { background: rgba(39,174,96,0.15); border-color: rgba(39,174,96,0.5); }
+    .q-option.disabled { pointer-events: none; opacity: 0.7; }
+    .q-controls {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .q-btn {
+      background: rgba(240,180,41,0.15);
+      border: 1px solid rgba(240,180,41,0.4);
+      color: #f0c842;
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .q-btn:hover { background: rgba(240,180,41,0.3); }
+    .q-btn.primary { background: rgba(240,180,41,0.8); color: #0e0b08; font-weight: 600; }
+    .q-btn.primary:hover { background: #f0c842; }
+  </style>
 </head>
 
 <body class="connect4-page">
-  <h1>Connect 4 – Classroom Edition</h1>
+  <h1>Connect 4 &ndash; Classroom Edition</h1>
 
+  <!-- Question Pack Bar -->
+  <div class="qpack-bar">
+    <span class="qpack-label">&#128218; Question Pack:</span>
+    <select class="qpack-select" id="topic-select">
+      <option value="">&mdash; No questions (free play) &mdash;</option>
+    </select>
+    <div class="qpack-mode-btns">
+      <button class="qpack-mode-btn active" id="mode-screen" onclick="setQMode('screen')">On Screen</button>
+      <button class="qpack-mode-btn" id="mode-teacher" onclick="setQMode('teacher')">Teacher Reads</button>
+    </div>
+    <span class="qpack-count" id="q-count"></span>
+  </div>
+
+  <!-- Question Panel -->
+  <div id="question-panel">
+    <div class="q-team-label" id="q-team-label"></div>
+    <div class="q-question" id="q-question"></div>
+    <div class="q-options" id="q-options"></div>
+    <div class="q-controls">
+      <button class="q-btn" id="reveal-btn" onclick="revealAnswer()" style="display:none">&#128065; Reveal Answer</button>
+      <button class="q-btn primary" id="correct-btn" onclick="questionResult(true)" style="display:none">&#10003; Correct &mdash; Drop Token</button>
+      <button class="q-btn" id="wrong-btn" onclick="questionResult(false)" style="display:none">&#10007; Wrong &mdash; Pass</button>
+    </div>
+  </div>
+
+  <!-- Game Controls -->
   <div class="controls">
     <button id="redBtn">Team 1 (Red)</button>
     <button id="yellowBtn">Team 2 (Yellow)</button>
@@ -19,32 +158,40 @@
     <button id="home">Home</button>
   </div>
 
-  <!-- ✅ Unified wrapper -->
   <div class="game-wrapper">
-
-    <div id="currentTurn">Team 1 (Red) — pick a column!</div>
-
-    <!-- Column selector buttons — students call the number, teacher clicks -->
+    <div id="currentTurn">Team 1 (Red) &mdash; pick a column!</div>
     <div class="col-selector" id="colSelector"></div>
-
     <div class="connect4-board" id="board"></div>
-
     <div class="scoreboard">
       <div class="team-score" id="team1">Team 1 (Red)<br>0 wins</div>
       <div class="team-score" id="team2">Team 2 (Yellow)<br>0 wins</div>
     </div>
-
   </div>
 
   <script>
+    // ── Board state ────────────────────────────────────────────────────────
     const boardEl = document.getElementById('board');
     const currentTurnEl = document.getElementById('currentTurn');
-
     const ROWS = 6, COLS = 7;
-    let board = Array(ROWS).fill().map(() => Array(COLS).fill(null));
-    let currentPlayer = 'red', gameOver = false, playToEnd = false;
-    let wins = { red: 0, yellow: 0 };
-    let resetTimer = null;
+    let board, currentPlayer, gameOver, playToEnd, wins, resetTimer;
+
+    // ── Question state ─────────────────────────────────────────────────────
+    let qMode = 'screen';
+    let qPool = [];
+    let qIndex = 0;
+    let pendingCol = null;
+    let awaitingAnswer = false;
+
+    // ── Board rendering ────────────────────────────────────────────────────
+    function initState() {
+      board = Array(ROWS).fill(null).map(() => Array(COLS).fill(null));
+      currentPlayer = 'red';
+      gameOver = false;
+      wins = { red: 0, yellow: 0 };
+      resetTimer = null;
+      awaitingAnswer = false;
+      pendingCol = null;
+    }
 
     function updateActiveTeam() {
       document.getElementById('team1').classList.toggle('active', currentPlayer === 'red');
@@ -57,8 +204,7 @@
         for (let c = 0; c < COLS; c++) {
           const cell = document.createElement('div');
           cell.className = 'connect4-cell';
-          cell.dataset.col = c;
-          cell.onclick = () => dropToken(c);
+          cell.onclick = () => handleColClick(c);
           boardEl.appendChild(cell);
         }
       }
@@ -72,31 +218,37 @@
         const btn = document.createElement('button');
         btn.textContent = c + 1;
         btn.className = 'col-btn';
-        btn.dataset.col = c;
-        btn.onclick = () => dropToken(c);
+        btn.onclick = () => handleColClick(c);
         sel.appendChild(btn);
       }
     }
 
     function highlightCol(col) {
-      document.querySelectorAll('.col-btn').forEach((btn, i) => {
-        btn.classList.toggle('col-active', i === col);
-      });
-      // fade after 600ms
-      setTimeout(() => document.querySelectorAll('.col-btn')
-        .forEach(b => b.classList.remove('col-active')), 600);
+      document.querySelectorAll('.col-btn').forEach((b, i) => b.classList.toggle('col-active', i === col));
+      setTimeout(() => document.querySelectorAll('.col-btn').forEach(b => b.classList.remove('col-active')), 600);
+    }
+
+    // ── Click handling ─────────────────────────────────────────────────────
+    function handleColClick(col) {
+      if (gameOver || awaitingAnswer) return;
+      if (qPool.length > 0) {
+        pendingCol = col;
+        highlightCol(col);
+        showQuestion();
+      } else {
+        dropToken(col);
+      }
     }
 
     function dropToken(col) {
-      if (gameOver || currentPlayer === null) return;
+      if (gameOver) return;
       highlightCol(col);
       for (let r = ROWS - 1; r >= 0; r--) {
         if (!board[r][col]) {
           board[r][col] = currentPlayer;
-
           const cell = boardEl.children[r * COLS + col];
           const token = document.createElement('div');
-          token.className = `connect4-token ${currentPlayer}`;
+          token.className = 'connect4-token ' + currentPlayer;
           cell.appendChild(token);
           requestAnimationFrame(() => token.style.transform = 'translateY(0)');
 
@@ -106,114 +258,223 @@
             updateScoreboard();
             if (!playToEnd) {
               gameOver = true;
-              currentTurnEl.textContent = `${currentPlayer==='red'?'Team 1':'Team 2'} WINS! 🎉 New game in 4 seconds...`;
+              const name = currentPlayer === 'red' ? 'Team 1' : 'Team 2';
+              currentTurnEl.textContent = name + ' WINS! New game in 4 seconds...';
               if (resetTimer) clearTimeout(resetTimer);
               resetTimer = setTimeout(resetGame, 4000);
             } else {
-              const msg = newLines > 1 ? `scores ${newLines} lines!` : `scores a line!`;
-              currentTurnEl.textContent = `${currentPlayer==='red'?'Team 1':'Team 2'} ${msg} Keep going!`;
+              const name = currentPlayer === 'red' ? 'Team 1' : 'Team 2';
+              currentTurnEl.textContent = name + (newLines > 1 ? ' scores ' + newLines + ' lines!' : ' scores a line!') + ' Keep going!';
             }
           }
 
           if (playToEnd && isBoardFull()) {
             gameOver = true;
-            const winner = wins.red > wins.yellow ? 'Team 1 (Red)' :
-                           wins.yellow > wins.red ? 'Team 2 (Yellow)' : 'Nobody — it\'s a tie';
-            currentTurnEl.textContent =
-              `Board full! ${winner} wins! Red: ${wins.red} lines – Yellow: ${wins.yellow} lines`;
+            const winner = wins.red > wins.yellow ? 'Team 1 (Red)' : wins.yellow > wins.red ? 'Team 2 (Yellow)' : 'Nobody — a tie';
+            currentTurnEl.textContent = 'Board full! ' + winner + ' wins!';
           }
 
           if (!gameOver) {
             currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
             const nextName = currentPlayer === 'red' ? 'Team 1 (Red)' : 'Team 2 (Yellow)';
-            currentTurnEl.textContent = `${nextName} — pick a column!`;
+            currentTurnEl.textContent = nextName + ' — pick a column!';
             updateActiveTeam();
           }
           return;
         }
       }
-      alert("Column full!");
+      alert('Column full!');
     }
 
     function countNewLines(row, col) {
-      // Count lines of EXACTLY 4 through (row,col) — not 5+ (already scored)
       const p = board[row][col];
       const dirs = [[1,0],[0,1],[1,1],[1,-1]];
       let newLines = 0;
-      for (const [dr,dc] of dirs) {
+      for (const [dr, dc] of dirs) {
         let count = 1;
-        for (let i = 1; i < 7; i++) {
-          const r = row + dr*i, c = col + dc*i;
-          if (r>=0 && r<ROWS && c>=0 && c<COLS && board[r][c] === p) count++;
-          else break;
-        }
-        for (let i = 1; i < 7; i++) {
-          const r = row - dr*i, c = col - dc*i;
-          if (r>=0 && r<ROWS && c>=0 && c<COLS && board[r][c] === p) count++;
-          else break;
-        }
+        for (let i = 1; i < 7; i++) { const r = row+dr*i, c = col+dc*i; if (r>=0&&r<ROWS&&c>=0&&c<COLS&&board[r][c]===p) count++; else break; }
+        for (let i = 1; i < 7; i++) { const r = row-dr*i, c = col-dc*i; if (r>=0&&r<ROWS&&c>=0&&c<COLS&&board[r][c]===p) count++; else break; }
         if (count === 4) newLines++;
       }
       return newLines;
     }
 
-    function isBoardFull() {
-      return board[0].every(c => c !== null);
-    }
+    function isBoardFull() { return board[0].every(c => c !== null); }
 
     function updateScoreboard() {
-      document.getElementById('team1').innerHTML =
-        `Team 1 (Red)<br>${wins.red} line${wins.red!==1?'s':''}`;
-      document.getElementById('team2').innerHTML =
-        `Team 2 (Yellow)<br>${wins.yellow} line${wins.yellow!==1?'s':''}`;
+      document.getElementById('team1').innerHTML = 'Team 1 (Red)<br>' + wins.red + ' line' + (wins.red !== 1 ? 's' : '');
+      document.getElementById('team2').innerHTML = 'Team 2 (Yellow)<br>' + wins.yellow + ' line' + (wins.yellow !== 1 ? 's' : '');
     }
 
     function resetGame() {
       if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
-      board = Array(ROWS).fill().map(() => Array(COLS).fill(null));
-      gameOver = false;
-      currentPlayer = 'red';
+      initState();
       createBoard();
-      currentTurnEl.textContent = "Team 1 (Red) — pick a column!";
+      currentTurnEl.textContent = 'Team 1 (Red) — pick a column!';
       updateScoreboard();
       updateActiveTeam();
+      hideQuestion();
+      if (qPool.length > 0) shufflePool();
     }
 
+    // ── Question Pack ──────────────────────────────────────────────────────
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function shufflePool() { qPool = shuffle(qPool); qIndex = 0; }
+
+    function loadTopics() {
+      const sel = document.getElementById('topic-select');
+      if (typeof window.QUESTIONS === 'undefined' || !window.QUESTIONS.length) {
+        sel.innerHTML = '<option value="">— questions.js not loaded —</option>';
+        return;
+      }
+      const topics = [...new Set(window.QUESTIONS.map(q => q.topic))].sort();
+      sel.innerHTML = '<option value="">— No questions (free play) —</option>';
+      topics.forEach(t => {
+        const count = window.QUESTIONS.filter(q => q.topic === t).length;
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t + ' (' + count + ')';
+        sel.appendChild(opt);
+      });
+      sel.onchange = () => selectTopic(sel.value);
+    }
+
+    function selectTopic(topic) {
+      hideQuestion();
+      awaitingAnswer = false;
+      pendingCol = null;
+      if (!topic) {
+        qPool = [];
+        document.getElementById('q-count').textContent = '';
+        return;
+      }
+      qPool = shuffle(window.QUESTIONS.filter(q => q.topic === topic));
+      qIndex = 0;
+      document.getElementById('q-count').textContent = qPool.length + ' questions';
+    }
+
+    function setQMode(mode) {
+      qMode = mode;
+      document.getElementById('mode-screen').classList.toggle('active', mode === 'screen');
+      document.getElementById('mode-teacher').classList.toggle('active', mode === 'teacher');
+    }
+
+    function currentQ() { return qPool.length ? qPool[qIndex % qPool.length] : null; }
+
+    function showQuestion() {
+      const q = currentQ();
+      if (!q) return;
+      awaitingAnswer = true;
+
+      document.getElementById('question-panel').classList.add('visible');
+      const teamName = currentPlayer === 'red' ? 'Team 1 (Red)' : 'Team 2 (Yellow)';
+      document.getElementById('q-team-label').textContent = teamName + ' — answer correctly to claim column ' + (pendingCol + 1);
+      document.getElementById('q-question').textContent = q.question;
+
+      const optionsEl = document.getElementById('q-options');
+      optionsEl.innerHTML = '';
+      const allOpts = shuffle([q.answer, ...q.distractors]);
+
+      if (qMode === 'screen') {
+        allOpts.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'q-option';
+          btn.textContent = opt;
+          btn.onclick = () => handleOptionClick(btn, opt === q.answer, q.answer);
+          optionsEl.appendChild(btn);
+        });
+        document.getElementById('reveal-btn').style.display = 'none';
+        document.getElementById('correct-btn').style.display = 'none';
+        document.getElementById('wrong-btn').style.display = 'none';
+      } else {
+        // Teacher reads — options hidden until revealed
+        allOpts.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'q-option';
+          btn.textContent = opt;
+          btn.style.visibility = 'hidden';
+          btn.dataset.correct = (opt === q.answer) ? '1' : '0';
+          optionsEl.appendChild(btn);
+        });
+        document.getElementById('reveal-btn').style.display = 'inline-block';
+        document.getElementById('correct-btn').style.display = 'inline-block';
+        document.getElementById('wrong-btn').style.display = 'inline-block';
+      }
+
+      currentTurnEl.textContent = teamName + ' — answer the question to claim column ' + (pendingCol + 1) + '!';
+    }
+
+    function handleOptionClick(btn, isCorrect, correctAnswer) {
+      // Lock all buttons
+      document.querySelectorAll('.q-option').forEach(b => {
+        b.classList.add('disabled');
+        if (b.textContent === correctAnswer) b.classList.add('correct');
+      });
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      setTimeout(() => questionResult(isCorrect), 1200);
+    }
+
+    function revealAnswer() {
+      document.querySelectorAll('.q-option').forEach(btn => {
+        btn.style.visibility = 'visible';
+        if (btn.dataset.correct === '1') btn.classList.add('reveal');
+      });
+      document.getElementById('reveal-btn').style.display = 'none';
+    }
+
+    function questionResult(correct) {
+      qIndex++;
+      hideQuestion();
+      awaitingAnswer = false;
+      if (correct && pendingCol !== null) {
+        const col = pendingCol;
+        pendingCol = null;
+        dropToken(col);
+      } else {
+        pendingCol = null;
+        currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+        currentTurnEl.textContent = (currentPlayer === 'red' ? 'Team 1 (Red)' : 'Team 2 (Yellow)') + ' — pick a column!';
+        updateActiveTeam();
+      }
+    }
+
+    function hideQuestion() {
+      document.getElementById('question-panel').classList.remove('visible');
+      document.getElementById('q-options').innerHTML = '';
+    }
+
+    // ── Control buttons ────────────────────────────────────────────────────
     document.getElementById('redBtn').onclick = () => {
-      if (!gameOver) {
-        currentPlayer = 'red';
-        currentTurnEl.textContent = "Team 1 (Red) — pick a column!";
-        updateActiveTeam();
-      }
+      if (!gameOver && !awaitingAnswer) { currentPlayer = 'red'; currentTurnEl.textContent = 'Team 1 (Red) — pick a column!'; updateActiveTeam(); }
     };
-
     document.getElementById('yellowBtn').onclick = () => {
-      if (!gameOver) {
-        currentPlayer = 'yellow';
-        currentTurnEl.textContent = "Team 2 (Yellow) — pick a column!";
-        updateActiveTeam();
-      }
+      if (!gameOver && !awaitingAnswer) { currentPlayer = 'yellow'; currentTurnEl.textContent = 'Team 2 (Yellow) — pick a column!'; updateActiveTeam(); }
     };
-
     document.getElementById('playToEnd').onclick = () => {
       playToEnd = !playToEnd;
       if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
-      document.getElementById('playToEnd').textContent =
-        playToEnd ? "First to 4 Mode" : "Play to End Mode";
+      document.getElementById('playToEnd').textContent = playToEnd ? 'First to 4 Mode' : 'Play to End Mode';
     };
-
     document.getElementById('newBoard').onclick = resetGame;
+    document.getElementById('fullscreen').onclick = () => document.documentElement.requestFullscreen?.();
+    document.getElementById('home').onclick = () => window.location.href = '../index.html';
 
-    document.getElementById('fullscreen').onclick =
-      () => document.documentElement.requestFullscreen?.();
-
-    document.getElementById('home').onclick =
-      () => window.location.href = '../index.html';
-
+    // ── Init ───────────────────────────────────────────────────────────────
+    initState();
     createBoard();
     updateScoreboard();
     updateActiveTeam();
+    window.addEventListener('load', loadTopics);
   </script>
 
+  <script src="../questions.js"></script>
 </body>
 </html>
