@@ -6,24 +6,16 @@
   <title>Connect 4</title>
   <link rel="stylesheet" href="../style.css">
   <style>
-    /* ── Board size override — fits screen with filter panel ── */
-    .connect4-board {
-      grid-template-columns: repeat(7, clamp(44px, 7.5vw, 64px)) !important;
-    }
-    .connect4-cell {
-      width:  clamp(44px, 7.5vw, 64px) !important;
-      height: clamp(44px, 7.5vw, 64px) !important;
-    }
-    .connect4-token {
-      width:  calc(clamp(44px, 7.5vw, 64px) - 10px) !important;
-      height: calc(clamp(44px, 7.5vw, 64px) - 10px) !important;
-    }
-    .col-btn {
-      width:  clamp(44px, 7.5vw, 64px) !important;
-      font-size: 0.8rem !important;
+    /* ── Board size fix: shrink to fit screen with filter panel ── */
+    .connect4-board,
+    .col-selector {
+      width: 70vmin !important;
+      max-width: 480px !important;
+      gap: 6px !important;
+      padding: 12px !important;
     }
 
-    /* ── Filter panel — expanded state ── */
+    /* ── Filter panel — expanded ── */
     .qf-panel {
       background: #161c2e;
       border-bottom: 2px solid rgba(240,180,41,0.25);
@@ -32,7 +24,6 @@
       flex-wrap: wrap;
       gap: 10px;
       align-items: flex-start;
-      transition: all 0.3s;
     }
     .qf-panel.collapsed { display: none; }
 
@@ -96,7 +87,7 @@
 <body class="connect4-page">
   <h1>Connect 4 &ndash; Classroom Edition</h1>
 
-  <!-- Collapsed summary bar (shown once game starts) -->
+  <!-- Collapsed summary bar -->
   <div class="qf-summary" id="qf-summary" onclick="expandFilter()" title="Click to change questions">
     <span class="qf-summary-text" id="qf-summary-text">No questions &mdash; free play</span>
     <span class="qf-summary-edit">&#9998; change</span>
@@ -123,7 +114,7 @@
           <button class="qf-mode-btn active" id="mode-screen" onclick="setQMode('screen')">On Screen</button>
           <button class="qf-mode-btn" id="mode-teacher" onclick="setQMode('teacher')">Teacher Reads</button>
         </div>
-        <button class="qf-mode-btn" id="start-btn" onclick="startGame()" style="border-color:rgba(240,180,41,0.5);color:#f0c842;">&#9654; Start Game</button>
+        <button class="qf-mode-btn" onclick="startGame()" style="border-color:rgba(240,180,41,0.5);color:#f0c842;">&#9654; Start Game</button>
       </div>
     </div>
   </div>
@@ -265,7 +256,6 @@
       initState(); createBoard();
       currentTurnEl.textContent = 'Team 1 (Red) \u2014 pick a column!';
       updateScoreboard(); updateActiveTeam(); hideQuestion();
-      // Keep filter collapsed if game was already started
       if (gameStarted) collapseFilter();
     }
 
@@ -280,25 +270,19 @@
       document.getElementById('qf-panel').classList.remove('collapsed');
       document.getElementById('qf-summary').classList.remove('visible');
     }
-    function startGame() {
-      collapseFilter();
-    }
+    function startGame() { collapseFilter(); }
     function updateSummaryBar() {
       const el = document.getElementById('qf-summary-text');
-      if (!qPool.length) {
-        el.innerHTML = 'No questions &mdash; free play';
-        return;
-      }
+      if (!qPool.length) { el.innerHTML = 'No questions \u2014 free play'; return; }
       const unitStr = selectedUnit && selectedUnit !== 'unlinked'
-        ? 'S' + selectedUnit.stage + '/U' + selectedUnit.unit + ' &middot; '
-        : '';
+        ? 'S' + selectedUnit.stage + '/U' + selectedUnit.unit + ' \u00b7 ' : '';
       const topics = [...new Set(qPool.map(q => q.topic))];
       const topicStr = topics.length === 1 ? topics[0] : topics.length + ' topics';
-      el.innerHTML = unitStr + '<strong>' + qPool.length + ' questions</strong> &middot; ' + topicStr +
-        ' &middot; ' + (qMode === 'teacher' ? 'Teacher reads' : 'On screen');
+      el.innerHTML = unitStr + '<strong>' + qPool.length + ' questions</strong> \u00b7 ' + topicStr +
+        ' \u00b7 ' + (qMode === 'teacher' ? 'Teacher reads' : 'On screen');
     }
 
-    // ── Filter System ──────────────────────────────────────────────
+    // ── Filter system ──────────────────────────────────────────────
     function shuffle(arr) {
       const a = [...arr];
       for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
@@ -428,7 +412,7 @@
       document.getElementById('mode-teacher').classList.toggle('active', mode === 'teacher');
     }
 
-    // ── Question Display ───────────────────────────────────────────
+    // ── Question display ───────────────────────────────────────────
     function handleColClick(col) {
       if (gameOver || awaitingAnswer) return;
       if (qPool.length > 0) { pendingCol = col; highlightCol(col); showQuestion(); }
