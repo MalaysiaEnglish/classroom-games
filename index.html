@@ -899,7 +899,7 @@
         </a>
         <a href="grammar-auction/index.html" class="modal-game-link">
           <span class="mg-icon">🏛️</span>
-          <span class="mg-text">Grammar Auction<small>Bid on correct sentences</small></span>
+          <span class="mg-text">Sentence Auction<small>Bid on true sentences</small></span>
         </a>
         <a href="battleships/index.html" class="modal-game-link">
           <span class="mg-icon">🚢</span>
@@ -981,7 +981,7 @@
         const unit  = parseInt(el.dataset.sentencesUnit);
         const count = sentences.filter(s => s.stage === stage && s.unit === unit).length;
         if (count === 0) { el.style.display = 'none'; return; }
-        el.innerHTML = `<span class="content-tag"><span class="ct-dot"></span>Grammar Auction · ${count} sentences loaded</span>`;
+        el.innerHTML = `<span class="content-tag"><span class="ct-dot"></span>Sentence Auction · ${count} sentences loaded</span>`;
       });
     }
 
