@@ -935,10 +935,9 @@
     function updateQuestionBadges() {
       if (typeof window.QUESTIONS === 'undefined') return;
       document.querySelectorAll('[data-questions-stage]').forEach(el => {
-        const stage = el.dataset.questionsStage;
-        const unit  = el.dataset.questionsUnit;
-        const tag   = 'S' + stage + '/U' + unit;
-        const matching = window.QUESTIONS.filter(q => q.tags && q.tags.includes(tag));
+        const stage = parseInt(el.dataset.questionsStage);
+        const unit  = parseInt(el.dataset.questionsUnit);
+        const matching = window.QUESTIONS.filter(q => q.stage === stage && q.unit === unit);
         if (matching.length === 0) { el.style.display = 'none'; return; }
         const topics = [...new Set(matching.map(q => q.topic))].length;
         const topicTxt = topics > 1 ? ' across ' + topics + ' topics' : '';
