@@ -334,6 +334,70 @@ window.CUSTOM_CONTENT = {
     { text: "The end of a story should resolve all the loose ends — unless a sequel is planned.",                   correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
     { text: "The end of a story should always leave the main conflict unresolved to maintain suspense.",            correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
 
+    // ════════════════════════════════════════════════════════════════
+    // S5 / U5 — Talking About the Past
+    // ════════════════════════════════════════════════════════════════
+
+    // ── S5/U5/L1 — Past Simple & Past Continuous ─────────────────
+    { text: "The past simple tense is used for completed actions in the past.",                                      correct: true,  topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
+    { text: "The past simple tense is used for actions that were still in progress in the past.",                   correct: false, topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
+    { text: "We use the past continuous to describe a background action that was in progress when another event occurred.", correct: true,  topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
+    { text: "We use the past continuous to describe a completed action that happened before another event in the past.", correct: false, topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
+    { text: "In 'He was driving home when a sniper shot him', the past continuous describes the background action.",  correct: true,  topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
+    { text: "In 'He was driving home when a sniper shot him', the past simple describes the background action.",     correct: false, topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
+    { text: "We use the past simple for a sequence of short completed actions: she stood up, opened the door and left.", correct: true,  topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
+    { text: "We use the past continuous for a sequence of short completed actions: she stood up, opened the door and left.", correct: false, topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
+    { text: "'When my friends arrived, I cooked dinner' suggests the cooking happened after the friends arrived.",   correct: true,  topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
+    { text: "'When my friends arrived, I cooked dinner' suggests the cooking was already finished before they arrived.", correct: false, topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
+    { text: "'When my friends arrived, I was making a cake' suggests the cake-making was in progress when they arrived.", correct: true,  topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
+    { text: "'When my friends arrived, I was making a cake' suggests the cake was already finished when they arrived.", correct: false, topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
+
+    // ── S5/U5/L1 — Past Passive ──────────────────────────────────
+    { text: "The past simple passive is formed with was/were + past participle.",                                    correct: true,  topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
+    { text: "The past simple passive is formed with had + past participle.",                                        correct: false, topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
+    { text: "In 'my car was being repaired', the repair was still in progress when I arrived.",                     correct: true,  topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
+    { text: "In 'my car was being repaired', the repair had already been completed when I arrived.",                correct: false, topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
+    { text: "In 'my car had been repaired', the repair was already finished before I arrived at the garage.",       correct: true,  topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
+    { text: "In 'my car had been repaired', the repair was still in progress when I arrived at the garage.",        correct: false, topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
+
+    // ── S5/U5/L2 — Past Perfect Simple ───────────────────────────
+    { text: "The past perfect simple is formed with had + past participle.",                                        correct: true,  topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+    { text: "The past perfect simple is formed with had been + -ing.",                                             correct: false, topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+    { text: "We use the past perfect simple to show an action that happened before another action in the past.",   correct: true,  topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+    { text: "We use the past perfect simple to show an action that was in progress when another action happened.", correct: false, topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+    { text: "'When Sarah arrived, Paul had already gone home' correctly uses the past perfect to show that Paul left first.", correct: true,  topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+    { text: "'When Sarah arrived, Paul had already gone home' incorrectly uses the past perfect — Paul left after Sarah.", correct: false, topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+    { text: "With stative verbs like 'know' or 'be', we use the past perfect simple (not continuous) with for/since.", correct: true,  topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+    { text: "With stative verbs like 'know' or 'be', we use the past perfect continuous with for/since.",           correct: false, topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
+
+    // ── S5/U5/L2 — Past Perfect Continuous ───────────────────────
+    { text: "The past perfect continuous is formed with had been + -ing.",                                          correct: true,  topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+    { text: "The past perfect continuous is formed with was/were + -ing.",                                          correct: false, topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+    { text: "We use the past perfect continuous to show the cause of something in the past.",                       correct: true,  topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+    { text: "We use the past perfect continuous to show a completed action before a specific time in the past.",    correct: false, topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+    { text: "'His hands were dirty because he had been gardening' correctly uses the past perfect continuous.",     correct: true,  topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+    { text: "'His hands were dirty because he had been gardening' incorrectly uses the past perfect continuous.",   correct: false, topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+    { text: "With action verbs, we use the past perfect continuous with for/since to show how long an action was in progress.", correct: true,  topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+    { text: "With action verbs, we use the past perfect simple with for/since to show how long an action was in progress.", correct: false, topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
+
+    // ── S5/U5/L3 — Sequencing Clauses ────────────────────────────
+    { text: "'After + -ing' is used for an action that happens before another action.",                             correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "'After + -ing' is used for an action that happens at the same time as another action.",                correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "'Having + past participle' is used for an action that happens before another action.",                 correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "'Having + past participle' is used for an action that happens at the same time as another action.",    correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "A present participle clause ('Looking up, she saw...') describes an action happening at the same time.", correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "A present participle clause ('Looking up, she saw...') describes an action that happened before.",     correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "When using a participle clause, the subject of both clauses must be the same.",                        correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "When using a participle clause, the subjects of the two clauses can be different.",                    correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "'Crossing the road, she was hit by a car' is correct because both clauses share the same subject.",    correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+    { text: "'Crossing the road, a car hit her' is correct because it uses a present participle.",                  correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
+
+    // ── S5/U5/L4 — Adverbs in narrative ──────────────────────────
+    { text: "Adverbs in narrative writing describe how people act and feel, making the story more vivid.",          correct: true,  topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
+    { text: "Adverbs in narrative writing should be avoided as they make the writing seem too informal.",           correct: false, topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
+    { text: "In a short story, using a mix of long and short sentences can make key events more dramatic.",         correct: true,  topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
+    { text: "In a short story, all sentences should be the same length to maintain a consistent pace.",             correct: false, topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
+
     // ── S6/U1/L2 — Unsolved Mysteries: Defining Relative Clauses ──
     { text: "DB Cooper is the man who hijacked a plane in 1971.",                                         correct: true,  topic: "S6/U1/L2 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "DB Cooper is the man which hijacked a plane in 1971.",                                       correct: false, topic: "S6/U1/L2 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
@@ -895,6 +959,28 @@ window.CUSTOM_CONTENT = {
     { word: "STORYBOARD",     topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
     { word: "FANTASY",        topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
     { word: "PERIL",          topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+
+    // ── S5/U5 — Talking About the Past: Vocabulary ───────────────
+    { word: "PASSIVE",        topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "CONTINUOUS",     topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "PARTICIPLE",     topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "SEQUENCE",       topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "NARRATIVE",      topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "SPECULATION",    topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "PERSPECTIVE",    topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "STATIVE",        topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "DURATION",       topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "SIMULTANEOUS",   topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "RESOLUTION",     topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "BANKNOTE",       topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "INVESTIGATION",  topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "DEPRESSION",     topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "AVALANCHE",      topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "SUMMIT",         topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "DESCENT",        topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "LABORATORY",     topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "PENNILESS",      topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
+    { word: "QUALIFICATIONS", topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
 
     // ── S6/U1/L1 — Unsolved Mysteries: Phoenix Lights ───────────
     { word: "CLUSTER",         topic: "S6/U1/L1 Phoenix Lights", stage: 6, unit: 1, lesson: 1 },
