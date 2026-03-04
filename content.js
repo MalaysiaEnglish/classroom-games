@@ -270,6 +270,70 @@ window.CUSTOM_CONTENT = {
     { text: "I'd sooner we left it until after our exams.",                              correct: true,  topic: "S5/U3/L4 I Wish", stage: 5, unit: 3, lesson: 4 },
     { text: "I'd sooner we leave it until after our exams.",                             correct: false, topic: "S5/U3/L4 I Wish", stage: 5, unit: 3, lesson: 4 },
 
+    // ════════════════════════════════════════════════════════════════
+    // S5 / U4 — The Hero's Journey
+    // ════════════════════════════════════════════════════════════════
+
+    // ── S5/U4/L1 — The Monomyth & 7 Steps ───────────────────────
+    { text: "The hero's journey is a narrative archetype found in stories from many different cultures.",  correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "The hero's journey is a narrative archetype founded in stories from many different cultures.", correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "The three essential stages of the hero's journey are the Departure, the Initiation and the Return.", correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "The three essential stages of the hero's journey are the Departure, the Initiation and the Retreat.", correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "In the Departure stage, the hero receives a call to adventure and eventually leaves the ordinary world.", correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "In the Departure stage, the hero receives a call to adventure and eventually leaves the special world.", correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "In the Initiation stage, the hero enters the special world and faces the main obstacle or enemy.",      correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "In the Initiation stage, the hero returns to the ordinary world and faces the main obstacle or enemy.", correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "After overcoming the ordeal, the hero attains an elixir — this could be wisdom, a prize, or love.",    correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "After overcoming the ordeal, the hero attains an elixir — this could be wisdom, a prize, or revenge.", correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "In the Return stage, the hero undergoes a personal metamorphosis having been changed by the adventure.", correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "In the Return stage, the hero undergoes a personal transformation having been unchanged by the adventure.", correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "The hero usually refuses the call to adventure at first before being convinced by their mentor.",        correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "The hero usually accepts the call to adventure immediately without any hesitation.",                    correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "It is possible to twist the monomyth — many modern stories have a female hero.",                       correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+    { text: "It is not possible to twist the monomyth — the hero must always be male.",                             correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
+
+    // ── S5/U4/L2 — Character Development ────────────────────────
+    { text: "Starting with a vulnerable hero gives us sympathy for the character and room for them to grow.",        correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "Starting with a vulnerable hero gives us sympathy for the character and room for them to shrink.",     correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "It is always better to show the reader a character's difficulty than to simply tell the reader about it.", correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "It is always better to tell the reader about a character's difficulty than to show them.",              correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "A character's motivation explains why they do what they do in the story.",                              correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "A character's motivation explains how they look and how they speak in the story.",                      correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "A character's motivation can be grand like saving the world or small like helping a friend.",           correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "A character's motivation must always be grand and world-changing to engage the reader.",                correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "Little details help to draw the world of the character for the audience.",                             correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+    { text: "Little details distract the audience from the main events of the story.",                              correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
+
+    // ── S5/U4/L3 — Villains & Supporting Characters ──────────────
+    { text: "The villain is often the opposite side of the coin from the hero.",                                     correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "The villain is often the same side of the coin as the hero.",                                           correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "Just as the hero needs a motivation, the villain also needs a conflicting motivation.",                 correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "Unlike the hero, the villain does not need a motivation — they are simply evil.",                       correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "An interesting villain can really enhance a hero's journey story.",                                     correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "A good villain is unnecessary — the hero's internal struggle is enough.",                               correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "Supporting characters who are the opposite of the hero can help highlight the hero's personality.",    correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "Supporting characters should always be very similar to the hero so the reader is not confused.",       correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "An important part of the hero's journey is that the hero defeats the villain near the end of the story.", correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+    { text: "An important part of the hero's journey is that the villain defeats the hero near the end of the story.", correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
+
+    // ── S5/U4/L4 — Planning & Genre ──────────────────────────────
+    { text: "Planning a story helps the narrative to flow and stops the writer from getting stuck.",                 correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "Planning a story is unnecessary — the best writing always happens spontaneously.",                     correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "A good first step in planning a story is to condense the plot into just one sentence.",                 correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "A good first step in planning a story is to write the ending before anything else.",                   correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "The genre of a story is the type or category that the story belongs to.",                              correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "The genre of a story is the moral or lesson that the story teaches.",                                  correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "Fantasy stories are often inspired by real-world myths and folklore and feature magic.",                correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "Fantasy stories are based on imagined future scientific discoveries and technological advancements.",   correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "Science fiction stories often explore themes such as time travel, space, and life on other planets.",  correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "Science fiction stories are inspired by real-world myths and folklore with supernatural creatures.",   correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "Adventure stories feature danger and excitement outside the main character's everyday life.",          correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "Adventure stories are based on imagined future scientific discoveries and space travel.",              correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "A storyboard is a visual plan showing what happens at each stage of the story.",                       correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "A storyboard is a final draft of the story written before the main version.",                         correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "The end of a story should resolve all the loose ends — unless a sequel is planned.",                   correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+    { text: "The end of a story should always leave the main conflict unresolved to maintain suspense.",            correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
+
     // ── S6/U1/L2 — Unsolved Mysteries: Defining Relative Clauses ──
     { text: "DB Cooper is the man who hijacked a plane in 1971.",                                         correct: true,  topic: "S6/U1/L2 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "DB Cooper is the man which hijacked a plane in 1971.",                                       correct: false, topic: "S6/U1/L2 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
@@ -809,6 +873,28 @@ window.CUSTOM_CONTENT = {
     { word: "DEJECTED",      topic: "S5/U3 Fables", stage: 5, unit: 3 },
     { word: "COMPENSATION",  topic: "S5/U3 Fables", stage: 5, unit: 3 },
     { word: "BIOLOGICAL",    topic: "S5/U3 Fables", stage: 5, unit: 3 },
+
+    // ── S5/U4 — Hero's Journey: Vocabulary ───────────────────────
+    { word: "MONOMYTH",       topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "ARCHETYPE",      topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "DEPARTURE",      topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "INITIATION",     topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "THRESHOLD",      topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "ORDEAL",         topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "ELIXIR",         topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "METAMORPHOSIS",  topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "MENTOR",         topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "ANTAGONIST",     topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "MOTIVATION",     topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "VULNERABLE",     topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "SYMPATHISE",     topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "TRANSFORMED",    topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "PROTAGONIST",    topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "NARRATIVE",      topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "GENRE",          topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "STORYBOARD",     topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "FANTASY",        topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
+    { word: "PERIL",          topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
 
     // ── S6/U1/L1 — Unsolved Mysteries: Phoenix Lights ───────────
     { word: "CLUSTER",         topic: "S6/U1/L1 Phoenix Lights", stage: 6, unit: 1, lesson: 1 },
