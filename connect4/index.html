@@ -7,12 +7,17 @@
   <link rel="stylesheet" href="../style.css">
   <style>
     /* ── Board size fix: shrink to fit screen with filter panel ── */
-    .connect4-board,
-    .col-selector {
+    .connect4-board {
       width: 70vmin !important;
       max-width: 480px !important;
       gap: 6px !important;
       padding: 12px !important;
+    }
+    .col-selector {
+      width: calc(70vmin - 24px) !important;
+      max-width: calc(480px - 24px) !important;
+      gap: 6px !important;
+      padding: 0 !important;
     }
 
     /* ── Filter panel — expanded ── */
