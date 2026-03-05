@@ -5,6 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blockbusters</title>
   <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── Question filter bar ── */
+    .qf-bar {
+      width:100%; max-width:640px;
+      background:rgba(10,18,30,0.92); border:1px solid rgba(255,255,255,0.1);
+      border-radius:12px; overflow:hidden; margin-bottom:4px;
+    }
+    .qf-summary { display:flex; align-items:center; gap:10px; padding:8px 14px; cursor:pointer; user-select:none; font-size:0.82rem; color:#c8bfb0; }
+    .qf-summary:hover { background:rgba(255,255,255,0.04); }
+    .qf-summary-text { flex:1; }
+    .qf-chevron { font-size:0.7rem; transition:transform 0.2s; }
+    .qf-bar.open .qf-chevron { transform:rotate(180deg); }
+    .qf-detail { display:none; padding:10px 14px 14px; border-top:1px solid rgba(255,255,255,0.07); }
+    .qf-bar.open .qf-detail { display:block; }
+    .qf-row { display:flex; gap:8px; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; }
+    .qf-col { flex:1; min-width:120px; }
+    .qf-col-label { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:rgba(240,180,41,0.8); margin-bottom:5px; }
+    .qf-units { display:flex; flex-wrap:wrap; gap:4px; }
+    .qf-unit-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); color:#c8bfb0; padding:3px 9px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-unit-btn:hover { background:rgba(240,180,41,0.12); border-color:rgba(240,180,41,0.4); }
+    .qf-unit-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.65); color:#f0c842; font-weight:600; }
+    .qf-checks { display:flex; flex-wrap:wrap; gap:4px; }
+    .qf-check-label { display:flex; align-items:center; gap:5px; font-size:0.75rem; color:#c8bfb0; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:5px; padding:3px 8px; transition:all 0.15s; }
+    .qf-check-label:hover { background:rgba(240,180,41,0.1); }
+    .qf-check-label input { accent-color:#f0c842; }
+    .qf-count { font-size:0.65rem; color:rgba(240,180,41,0.7); margin-left:2px; }
+    .qf-empty { font-size:0.75rem; color:rgba(255,255,255,0.3); font-style:italic; }
+    .qf-status-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); margin-top:6px; }
+    .qf-status { font-size:0.75rem; color:#c8bfb0; }
+    .qf-mode-btns { display:flex; gap:5px; }
+    .qf-mode-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14); color:#c8bfb0; padding:3px 10px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-mode-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.6); color:#f0c842; font-weight:600; }
+
+    /* ── Question modal ── */
+    .q-modal-overlay { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:16px; }
+    .q-modal-box { background:#111828; border:2px solid rgba(240,180,41,0.35); border-radius:18px; padding:22px 24px; width:100%; max-width:520px; animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+    @keyframes popIn { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+    .q-team-label { font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:rgba(240,180,41,0.8); margin-bottom:8px; }
+    .q-question-text { font-size:clamp(0.92rem,2.4vw,1.15rem); color:#f0e6d0; font-weight:500; line-height:1.45; margin-bottom:14px; }
+    .q-options { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+    .q-opt-btn { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#f0e6d0; padding:9px 14px; border-radius:9px; font-size:0.88rem; cursor:pointer; text-align:left; transition:all 0.18s; }
+    .q-opt-btn:hover { background:rgba(240,180,41,0.15); border-color:rgba(240,180,41,0.5); }
+    .q-opt-btn.correct { background:rgba(39,174,96,0.25); border-color:#27ae60; color:#7dffb3; pointer-events:none; }
+    .q-opt-btn.wrong   { background:rgba(192,57,43,0.2); border-color:#c0392b; color:#ff9b9b; pointer-events:none; }
+    .q-opt-btn.reveal  { background:rgba(39,174,96,0.15); border-color:rgba(39,174,96,0.4); }
+    .q-opt-btn.disabled { pointer-events:none; opacity:0.65; }
+    .q-ctrl-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+    .q-ctrl-btn { background:rgba(240,180,41,0.14); border:1px solid rgba(240,180,41,0.38); color:#f0c842; padding:7px 18px; border-radius:7px; font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
+    .q-ctrl-btn:hover { background:rgba(240,180,41,0.28); }
+    .q-ctrl-btn.primary { background:rgba(240,180,41,0.8); color:#0e0b08; font-weight:700; }
+    .q-ctrl-btn.primary:hover { background:#f0c842; }
+    .q-ctrl-btn.danger { background:rgba(192,57,43,0.2); border-color:#c0392b; color:#ff9b9b; }
+  </style>
 </head>
 
 <body class="blockbusters-page">
@@ -18,10 +71,41 @@
     <button id="home">Home</button>
   </div>
 
-  <!-- ✅ Unified wrapper -->
   <div class="game-wrapper">
 
-    <div id="currentTurn">Teacher: click Gold or Blue after a correct answer</div>
+    <!-- Question filter bar -->
+    <div class="qf-bar" id="qfBar">
+      <div class="qf-summary" onclick="toggleQF()">
+        <span>❓</span>
+        <span class="qf-summary-text" id="qfSummary">No questions — teacher asks verbally</span>
+        <span class="qf-chevron">▼</span>
+      </div>
+      <div class="qf-detail">
+        <div class="qf-row">
+          <div class="qf-col">
+            <div class="qf-col-label">Unit</div>
+            <div class="qf-units" id="qfUnits"><span class="qf-empty">Loading…</span></div>
+          </div>
+          <div class="qf-col">
+            <div class="qf-col-label">Topic</div>
+            <div class="qf-checks" id="qfTopics"><span class="qf-empty">Select a unit first</span></div>
+          </div>
+          <div class="qf-col">
+            <div class="qf-col-label">Lesson</div>
+            <div class="qf-checks" id="qfLessons"><span class="qf-empty">Select a unit first</span></div>
+          </div>
+        </div>
+        <div class="qf-status-bar">
+          <span class="qf-status" id="qfStatus">No questions selected — teacher asks verbally</span>
+          <div class="qf-mode-btns">
+            <button class="qf-mode-btn active" id="modeScreen" onclick="setQMode('screen')">On Screen</button>
+            <button class="qf-mode-btn" id="modeTeacher" onclick="setQMode('teacher')">Teacher Reads</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="currentTurn">Click Gold or Blue to assign a turn, then click a hexagon</div>
 
     <div class="blockbusters-board" id="board"></div>
 
@@ -32,108 +116,259 @@
 
   </div>
 
+  <!-- Question modal -->
+  <div id="qModal" class="q-modal-overlay" style="display:none;">
+    <div class="q-modal-box">
+      <div class="q-team-label" id="qModalTeam"></div>
+      <div class="q-question-text" id="qModalQuestion"></div>
+      <div class="q-options" id="qModalOptions"></div>
+      <div class="q-ctrl-row" id="qModalCtrl"></div>
+    </div>
+  </div>
+
   <script>
     const boardEl = document.getElementById('board');
     const currentTurnEl = document.getElementById('currentTurn');
 
-    const ROWS = 4;
-    const COLS = 5;
-    let board = Array(ROWS).fill().map(() => Array(COLS).fill(null));
+    const ROWS = 4, COLS = 5;
+    let board = Array(ROWS).fill().map(()=>Array(COLS).fill(null));
     let currentPlayer = null;
     let gameOver = false;
-    let wins = { gold: 0, blue: 0 };
+    let wins = {gold:0, blue:0};
+    let awaitingAnswer = false;
 
     const letters = 'ABCDEFGHIJKLMNOPQRST'.split('');
+    const directions = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,1],[-1,1],[1,-1]];
 
-    const directions = [
-      [-1, 0], [1, 0], [0, -1], [0, 1],
-      [-1, -1], [1, 1], [-1, 1], [1, -1]
-    ];
+    // ── Question system ────────────────────────────────────
+    let qPool = [], qIndex = 0, qMode = 'screen', selectedUnit = null;
 
-    function isValid(r, c) {
-      return r >= 0 && r < ROWS && c >= 0 && c < COLS;
+    function toggleQF() { document.getElementById('qfBar').classList.toggle('open'); }
+
+    function setQMode(m) {
+      qMode = m;
+      document.getElementById('modeScreen').classList.toggle('active', m==='screen');
+      document.getElementById('modeTeacher').classList.toggle('active', m==='teacher');
+      updateQFSummary();
     }
 
+    function buildUnitButtons() {
+      const container = document.getElementById('qfUnits');
+      if (typeof window.QUESTIONS === 'undefined' || !window.QUESTIONS.length) {
+        container.innerHTML = '<span class="qf-empty">questions.js not loaded</span>'; return;
+      }
+      const unitMap = new Map();
+      window.QUESTIONS.forEach(q => {
+        if (q.stage!=null && q.unit!=null) {
+          const key='S'+q.stage+'/U'+q.unit;
+          if (!unitMap.has(key)) unitMap.set(key,{stage:q.stage,unit:q.unit});
+        }
+      });
+      container.innerHTML='';
+      [...unitMap.values()].sort((a,b)=>a.stage!==b.stage?a.stage-b.stage:a.unit-b.unit)
+        .forEach(({stage,unit})=>{
+          const btn=document.createElement('button'); btn.className='qf-unit-btn';
+          btn.textContent='S'+stage+'/U'+unit;
+          btn.onclick=()=>selectUnit(stage,unit,btn);
+          container.appendChild(btn);
+        });
+    }
+
+    function selectUnit(stage,unit,btnEl) {
+      if (btnEl.classList.contains('active')) {
+        btnEl.classList.remove('active'); selectedUnit=null;
+        document.getElementById('qfTopics').innerHTML='<span class="qf-empty">Select a unit first</span>';
+        document.getElementById('qfLessons').innerHTML='<span class="qf-empty">Select a unit first</span>';
+        rebuildPool(); return;
+      }
+      document.querySelectorAll('.qf-unit-btn').forEach(b=>b.classList.remove('active'));
+      btnEl.classList.add('active');
+      selectedUnit={stage:parseInt(stage),unit:parseInt(unit)};
+      buildTopicsAndLessons();
+    }
+
+    function questionsForUnit() {
+      if (!selectedUnit) return [];
+      return window.QUESTIONS.filter(q=>q.stage===selectedUnit.stage&&q.unit===selectedUnit.unit);
+    }
+
+    function buildTopicsAndLessons() {
+      const qs=questionsForUnit();
+      const topicsEl=document.getElementById('qfTopics'), lessonsEl=document.getElementById('qfLessons');
+      topicsEl.innerHTML='';
+      const topics=[...new Set(qs.map(q=>q.topic))].sort();
+      if (!topics.length) { topicsEl.innerHTML='<span class="qf-empty">No topics</span>'; }
+      else topics.forEach(t=>{
+        const count=qs.filter(q=>q.topic===t).length;
+        const label=document.createElement('label'); label.className='qf-check-label';
+        const cb=document.createElement('input'); cb.type='checkbox'; cb.value=t;
+        cb.addEventListener('change',rebuildPool);
+        const span=document.createElement('span'); span.textContent=t;
+        const cs=document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
+        label.appendChild(cb); label.appendChild(span); label.appendChild(cs); topicsEl.appendChild(label);
+      });
+      lessonsEl.innerHTML='';
+      const lessons=[...new Set(qs.filter(q=>q.lesson!=null).map(q=>q.lesson))].sort((a,b)=>a-b);
+      if (!lessons.length) { lessonsEl.innerHTML='<span class="qf-empty">No lesson data</span>'; }
+      else lessons.forEach(l=>{
+        const count=qs.filter(q=>q.lesson===l).length;
+        const label=document.createElement('label'); label.className='qf-check-label';
+        const cb=document.createElement('input'); cb.type='checkbox'; cb.value=l;
+        cb.addEventListener('change',rebuildPool);
+        const span=document.createElement('span'); span.textContent='Lesson '+l;
+        const cs=document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
+        label.appendChild(cb); label.appendChild(span); label.appendChild(cs); lessonsEl.appendChild(label);
+      });
+      rebuildPool();
+    }
+
+    function shuffle(arr) {
+      for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+      return arr;
+    }
+
+    function rebuildPool() {
+      const checkedTopics=[...document.querySelectorAll('#qfTopics input:checked')].map(i=>i.value);
+      const checkedLessons=[...document.querySelectorAll('#qfLessons input:checked')].map(i=>parseInt(i.value));
+      const candidates=questionsForUnit();
+      if (!checkedTopics.length&&!checkedLessons.length) { qPool=[]; }
+      else {
+        const seen=new Set();
+        qPool=shuffle(candidates.filter(q=>{
+          const hit=(checkedTopics.length&&checkedTopics.includes(q.topic))||(checkedLessons.length&&q.lesson!=null&&checkedLessons.includes(q.lesson));
+          if (!hit||seen.has(q.question)) return false;
+          seen.add(q.question); return true;
+        }));
+      }
+      qIndex=0; updateQFSummary();
+    }
+
+    function updateQFSummary() {
+      const el=document.getElementById('qfSummary'), st=document.getElementById('qfStatus');
+      if (!qPool.length) {
+        el.textContent='No questions — teacher asks verbally';
+        st.textContent='No questions selected — teacher asks verbally';
+      } else {
+        const topics=[...new Set(qPool.map(q=>q.topic))];
+        const unitStr=selectedUnit?'S'+selectedUnit.stage+'/U'+selectedUnit.unit+' · ':'';
+        const topicStr=topics.length===1?topics[0]:topics.length+' topics';
+        el.innerHTML=unitStr+'<strong>'+qPool.length+' questions</strong> · '+topicStr+' · '+(qMode==='teacher'?'Teacher reads':'On screen');
+        st.innerHTML='<strong>'+qPool.length+' questions</strong> ready — '+topicStr;
+      }
+    }
+
+    // Show question modal — cb(true)=correct, cb(false)=wrong
+    function showQuestion(playerName, playerColor, cb) {
+      if (!qPool.length) { cb(true); return; } // no questions — just claim hex directly
+      const q=qPool[qIndex%qPool.length]; qIndex++;
+      document.getElementById('qModal').style.display='flex';
+      document.getElementById('qModalTeam').textContent=playerName+' — answer to claim a hex!';
+      document.getElementById('qModalTeam').style.color=playerColor;
+      document.getElementById('qModalQuestion').textContent=q.question;
+      const optsEl=document.getElementById('qModalOptions'), ctrlEl=document.getElementById('qModalCtrl');
+      optsEl.innerHTML=''; ctrlEl.innerHTML='';
+      const allOpts=shuffle([q.answer,...q.distractors]);
+      if (qMode==='screen') {
+        allOpts.forEach(opt=>{
+          const btn=document.createElement('button'); btn.className='q-opt-btn'; btn.textContent=opt;
+          btn.onclick=()=>{
+            document.querySelectorAll('.q-opt-btn').forEach(b=>{ b.classList.add('disabled'); if(b.textContent===q.answer) b.classList.add('correct'); });
+            btn.classList.add(opt===q.answer?'correct':'wrong');
+            setTimeout(()=>{ document.getElementById('qModal').style.display='none'; cb(opt===q.answer); },1100);
+          };
+          optsEl.appendChild(btn);
+        });
+      } else {
+        allOpts.forEach(opt=>{
+          const btn=document.createElement('button'); btn.className='q-opt-btn'; btn.textContent=opt;
+          btn.style.visibility='hidden'; btn.dataset.correct=opt===q.answer?'1':'0'; optsEl.appendChild(btn);
+        });
+        const revBtn=document.createElement('button'); revBtn.className='q-ctrl-btn'; revBtn.textContent='👁 Reveal Options';
+        revBtn.onclick=()=>{ document.querySelectorAll('.q-opt-btn').forEach(b=>{ b.style.visibility='visible'; if(b.dataset.correct==='1') b.classList.add('reveal'); }); revBtn.style.display='none'; };
+        const okBtn=document.createElement('button'); okBtn.className='q-ctrl-btn primary'; okBtn.textContent='✓ Correct — Claim Hex';
+        okBtn.onclick=()=>{ document.getElementById('qModal').style.display='none'; cb(true); };
+        const wrongBtn=document.createElement('button'); wrongBtn.className='q-ctrl-btn danger'; wrongBtn.textContent='✗ Wrong — Pass';
+        wrongBtn.onclick=()=>{ document.getElementById('qModal').style.display='none'; cb(false); };
+        ctrlEl.appendChild(revBtn); ctrlEl.appendChild(okBtn); ctrlEl.appendChild(wrongBtn);
+      }
+    }
+
+    // ── Board ──────────────────────────────────────────────
+    function isValid(r,c) { return r>=0&&r<ROWS&&c>=0&&c<COLS; }
+
     function createBoard() {
-      boardEl.innerHTML = '';
-      let idx = 0;
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          const hex = document.createElement('div');
-          hex.className = 'blockbusters-hex';
-          hex.textContent = letters[idx++];
-          hex.dataset.row = r;
-          hex.dataset.col = c;
-          hex.onclick = () => claimHex(r, c);
+      boardEl.innerHTML='';
+      let idx=0;
+      for (let r=0;r<ROWS;r++) {
+        for (let c=0;c<COLS;c++) {
+          const hex=document.createElement('div');
+          hex.className='blockbusters-hex';
+          hex.textContent=letters[idx++];
+          hex.dataset.row=r; hex.dataset.col=c;
+          hex.onclick=()=>attemptClaimHex(r,c);
           boardEl.appendChild(hex);
         }
       }
     }
 
-    function claimHex(row, col) {
-      if (gameOver || currentPlayer === null || board[row][col]) return;
+    function attemptClaimHex(row,col) {
+      if (gameOver||currentPlayer===null||board[row][col]||awaitingAnswer) return;
+      awaitingAnswer=true;
+      const name=currentPlayer==='gold'?'Gold (Solo)':'Blue (Team of 2)';
+      const color=currentPlayer==='gold'?'#f7b731':'#60a5fa';
+      showQuestion(name, color, (correct)=>{
+        awaitingAnswer=false;
+        if (correct) {
+          claimHex(row,col);
+        } else {
+          currentTurnEl.textContent='Wrong! Click Gold or Blue to assign the next turn.';
+          currentTurnEl.style.color='#ff9b9b';
+          currentPlayer=null;
+        }
+      });
+    }
 
-      board[row][col] = currentPlayer;
-      const hex = boardEl.children[row * COLS + col];
+    function claimHex(row,col) {
+      board[row][col]=currentPlayer;
+      const hex=boardEl.children[row*COLS+col];
       hex.classList.add(currentPlayer);
-
-      const path = hasWinningPath(currentPlayer);
+      const path=hasWinningPath(currentPlayer);
       if (path) {
-        gameOver = true;
-        wins[currentPlayer]++;
-        updateScoreboard();
-        currentTurnEl.textContent =
-          currentPlayer === 'gold'
-            ? 'Gold (Solo) WINS!'
-            : 'Blue (Team of 2) WINS!';
-
-        path.forEach(p => {
-          const h = boardEl.children[p.row * COLS + p.col];
-          h.classList.add('winning-path');
-        });
-
-        setTimeout(resetGame, 5000);
+        gameOver=true; wins[currentPlayer]++; updateScoreboard();
+        currentTurnEl.textContent=currentPlayer==='gold'?'Gold (Solo) WINS!':'Blue (Team of 2) WINS!';
+        currentTurnEl.style.color=currentPlayer==='gold'?'#f7b731':'#60a5fa';
+        path.forEach(p=>boardEl.children[p[0]*COLS+p[1]].classList.add('winning-path'));
+        setTimeout(resetGame,5000);
       } else {
-        currentPlayer = null;
-        currentTurnEl.textContent = "Teacher: click Gold or Blue for next turn";
+        currentPlayer=null;
+        currentTurnEl.textContent='Click Gold or Blue to assign the next turn.';
+        currentTurnEl.style.color='';
       }
     }
 
     function hasWinningPath(player) {
-      if (player === 'gold') {
-        for (let c = 0; c < COLS; c++) {
-          if (board[0][c] === 'gold') {
-            const path = bfs([0, c], player, (r, c) => r === ROWS - 1);
-            if (path) return path;
-          }
+      if (player==='gold') {
+        for (let c=0;c<COLS;c++) {
+          if (board[0][c]==='gold') { const p=bfs([0,c],player,r=>r===ROWS-1); if (p) return p; }
         }
       } else {
-        for (let r = 0; r < ROWS; r++) {
-          if (board[r][0] === 'blue') {
-            const path = bfs([r, 0], player, (r, c) => c === COLS - 1);
-            if (path) return path;
-          }
+        for (let r=0;r<ROWS;r++) {
+          if (board[r][0]==='blue') { const p=bfs([r,0],player,(_,c)=>c===COLS-1); if (p) return p; }
         }
       }
       return null;
     }
 
-    function bfs(start, player, isGoal) {
-      const queue = [[start]];
-      const visited = Array(ROWS).fill().map(() => Array(COLS).fill(false));
-      visited[start[0]][start[1]] = true;
-
+    function bfs(start,player,isGoal) {
+      const queue=[[start]], visited=Array(ROWS).fill().map(()=>Array(COLS).fill(false));
+      visited[start[0]][start[1]]=true;
       while (queue.length) {
-        const path = queue.shift();
-        const [r, c] = path[path.length - 1];
-
-        if (isGoal(r, c)) return path;
-
-        for (const [dr, dc] of directions) {
-          const nr = r + dr, nc = c + dc;
-          if (isValid(nr, nc) && !visited[nr][nc] && board[nr][nc] === player) {
-            visited[nr][nc] = true;
-            queue.push([...path, [nr, nc]]);
+        const path=queue.shift(), [r,c]=path[path.length-1];
+        if (isGoal(r,c)) return path;
+        for (const [dr,dc] of directions) {
+          const nr=r+dr,nc=c+dc;
+          if (isValid(nr,nc)&&!visited[nr][nc]&&board[nr][nc]===player) {
+            visited[nr][nc]=true; queue.push([...path,[nr,nc]]);
           }
         }
       }
@@ -141,45 +376,40 @@
     }
 
     function updateScoreboard() {
-      document.getElementById('goldTeam').innerHTML =
-        `Gold (Solo)<br>${wins.gold} win${wins.gold !== 1 ? 's' : ''}`;
-      document.getElementById('blueTeam').innerHTML =
-        `Blue (Team of 2)<br>${wins.blue} win${wins.blue !== 1 ? 's' : ''}`;
+      document.getElementById('goldTeam').innerHTML='Gold (Solo)<br>'+wins.gold+' win'+(wins.gold!==1?'s':'');
+      document.getElementById('blueTeam').innerHTML='Blue (Team of 2)<br>'+wins.blue+' win'+(wins.blue!==1?'s':'');
     }
 
     function resetGame() {
-      board = Array(ROWS).fill().map(() => Array(COLS).fill(null));
-      gameOver = false;
-      currentPlayer = null;
+      board=Array(ROWS).fill().map(()=>Array(COLS).fill(null));
+      gameOver=false; currentPlayer=null; awaitingAnswer=false;
       createBoard();
-      currentTurnEl.textContent =
-        "Teacher: click Gold or Blue after a correct answer";
+      currentTurnEl.textContent='Click Gold or Blue to assign a turn, then click a hexagon';
+      currentTurnEl.style.color='';
       updateScoreboard();
     }
 
-    document.getElementById('goldBtn').onclick = () => {
-      if (!gameOver) {
-        currentPlayer = 'gold';
-        currentTurnEl.textContent = "Gold (Solo) – click a hexagon!";
+    document.getElementById('goldBtn').onclick=()=>{
+      if (!gameOver&&!awaitingAnswer) {
+        currentPlayer='gold';
+        currentTurnEl.textContent='Gold (Solo) — click a hexagon!';
+        currentTurnEl.style.color='#f7b731';
       }
     };
-
-    document.getElementById('blueBtn').onclick = () => {
-      if (!gameOver) {
-        currentPlayer = 'blue';
-        currentTurnEl.textContent = "Blue (Team of 2) – click a hexagon!";
+    document.getElementById('blueBtn').onclick=()=>{
+      if (!gameOver&&!awaitingAnswer) {
+        currentPlayer='blue';
+        currentTurnEl.textContent='Blue (Team of 2) — click a hexagon!';
+        currentTurnEl.style.color='#60a5fa';
       }
     };
+    document.getElementById('restart').onclick=resetGame;
+    document.getElementById('fullscreen').onclick=()=>document.documentElement.requestFullscreen?.();
+    document.getElementById('home').onclick=()=>window.location.href='../index.html';
 
-    document.getElementById('restart').onclick = resetGame;
-    document.getElementById('fullscreen').onclick =
-      () => document.documentElement.requestFullscreen?.();
-    document.getElementById('home').onclick =
-      () => window.location.href = '../index.html';
-
-    createBoard();
-    updateScoreboard();
+    createBoard(); updateScoreboard();
+    window.addEventListener('load', buildUnitButtons);
   </script>
-
+  <script src="../questions.js"></script>
 </body>
 </html>
