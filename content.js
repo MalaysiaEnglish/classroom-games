@@ -982,6 +982,82 @@ window.CUSTOM_CONTENT = {
     { word: "PENNILESS",      topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
     { word: "QUALIFICATIONS", topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
 
+    // ════════════════════════════════════════════════════════════════
+    // S5 / U6 — Expressing Opinions
+    // ════════════════════════════════════════════════════════════════
+
+    // ── S5/U6/L1 — Modal verbs: present probability ──────────────
+    { text: "We use 'will' to make predictions about the future.",                                                    correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'must' to make predictions about the future.",                                                    correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We can use the future continuous to make assumptions about the present: 'She'll be driving to work.'",   correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use the future continuous to make predictions, not assumptions about the present.",                    correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'must' to conclude that something is almost certainly true: 'Dad isn't home — he must be at work.'", correct: true, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'must' to express impossibility: 'He must be at work — his car is outside.'",                     correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'can't' to express impossibility: 'He can't be at work — his car is outside.'",                  correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'mustn't' to express impossibility: 'He mustn't be at work — his car is outside.'",              correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "May, might and could are all used to express possibility.",                                               correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "May, might and could are all used to express certainty.",                                                 correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'should' to say that something will probably happen in our opinion: 'England should beat Norway.'", correct: true, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'should' to say that something is certain to happen: 'England should beat Norway.'",               correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'It's bound to snow tonight' expresses certainty about a future event.",                                  correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'It's bound to snow tonight' expresses only a slight possibility.",                                       correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'Chances are it'll rain tomorrow' means it is very probable that it will rain.",                          correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'Chances are it'll rain tomorrow' means it is impossible that it will rain.",                             correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+
+    // ── S5/U6/L2 — Modal verbs: past speculation ─────────────────
+    { text: "Past modal speculation is formed with: modal verb + have + past participle.",                             correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "Past modal speculation is formed with: modal verb + be + past participle.",                               correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They must have arrived' expresses near-certainty about a past event.",                                   correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They must have arrived' expresses only a slight possibility about a past event.",                        correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They can't have arrived' expresses impossibility — the speaker is sure they have not arrived.",          correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They can't have arrived' expresses that they definitely have arrived.",                                  correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You shouldn't have told a lie' means: you did it, but it was wrong.",                                   correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You shouldn't have told a lie' means: you didn't do it, but it was possible.",                          correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You needn't have cooked' means: you did cook, but it wasn't necessary.",                                correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You needn't have cooked' means: you didn't cook, and that was the right decision.",                     correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+
+    // ── S5/U6/L3 — Free speech & opinions ────────────────────────
+    { text: "A fact is a thing that is known or proved to be true.",                                                   correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "A fact is a personal view or judgement not necessarily based on evidence.",                               correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "An opinion is a view or judgement formed about something, not necessarily based on fact.",                correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "An opinion is something that has been proven to be true.",                                                correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "'Nurses work in hospitals' is a fact because it can be verified.",                                        correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "'Nurses don't get paid enough' is a fact because it describes working conditions.",                       correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "Two people can hold opposing opinions and both can be correct at the same time.",                         correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "Two people can hold opposing facts and both can be correct at the same time.",                            correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+
+    // ── S5/U6/L4 — Persuasive writing ────────────────────────────
+    { text: "In persuasive writing, the strongest body paragraph should come first.",                                  correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "In persuasive writing, the weakest body paragraph should come first.",                                    correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "If you only have two strong points in a persuasive letter, you can use just two body paragraphs.",        correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "A persuasive letter must always have exactly three body paragraphs.",                                     correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "In a formal letter, you should think about what the reader wants, not just what you want.",               correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "In a formal letter, you only need to convince yourself that your idea is good.",                          correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "A formal letter to someone you don't know ends with 'Yours sincerely'.",                                  correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "A formal letter to someone you don't know ends with 'Yours faithfully'.",                                 correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+
+    // ── S5/U6 — Vocabulary ────────────────────────────────────────
+    { word: "POLITICIAN",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "DEMONSTRATION",   topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "PETITION",        topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "CAMPAIGN",        topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "CYNICAL",         topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "CONSTITUENCY",    topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "CENSORSHIP",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "LIBERTARIAN",     topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "FASCISM",         topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "TERRORISM",       topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "ACTIVIST",        topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "JOURNALIST",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "SINISTER",        topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "INTOLERANT",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "SPECULATION",     topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "HOMOPHOBIC",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "PARLIAMENT",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "REFERENDUM",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "PERSUASIVE",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+    { word: "LUMINOUS",        topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
+
     // ── S6/U1/L1 — Unsolved Mysteries: Phoenix Lights ───────────
     { word: "CLUSTER",         topic: "S6/U1/L1 Phoenix Lights", stage: 6, unit: 1, lesson: 1 },
     { word: "ALLEGEDLY",       topic: "S6/U1/L1 Phoenix Lights", stage: 6, unit: 1, lesson: 1 },
