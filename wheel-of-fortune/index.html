@@ -162,6 +162,28 @@
       .wof-left { width:100%; }
       #wheelCanvas { width:260px !important; height:260px !important; }
     }
+    /* ── Word filter bar ── */
+    .qf-bar { width:100%; background:rgba(10,18,30,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:12px; overflow:hidden; }
+    .qf-summary { display:flex; align-items:center; gap:10px; padding:8px 14px; cursor:pointer; user-select:none; font-size:0.82rem; color:#c8bfb0; }
+    .qf-summary:hover { background:rgba(255,255,255,0.04); }
+    .qf-summary-text { flex:1; }
+    .qf-chevron { font-size:0.7rem; transition:transform 0.2s; }
+    .qf-bar.open .qf-chevron { transform:rotate(180deg); }
+    .qf-detail { display:none; padding:10px 14px 14px; border-top:1px solid rgba(255,255,255,0.07); }
+    .qf-bar.open .qf-detail { display:block; }
+    .qf-section-label { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:rgba(240,180,41,0.8); margin:8px 0 5px; }
+    .qf-section-label:first-child { margin-top:0; }
+    .qf-units { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:4px; }
+    .qf-unit-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); color:#c8bfb0; padding:3px 9px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-unit-btn:hover { background:rgba(240,180,41,0.12); border-color:rgba(240,180,41,0.4); }
+    .qf-unit-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.65); color:#f0c842; font-weight:600; }
+    .qf-checks { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:4px; }
+    .qf-check-label { display:flex; align-items:center; gap:5px; font-size:0.75rem; color:#c8bfb0; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:5px; padding:3px 8px; transition:all 0.15s; }
+    .qf-check-label:hover { background:rgba(240,180,41,0.1); }
+    .qf-check-label input { accent-color:#f0c842; }
+    .qf-count { font-size:0.65rem; color:rgba(240,180,41,0.7); margin-left:2px; }
+    .qf-empty { font-size:0.75rem; color:rgba(255,255,255,0.3); font-style:italic; }
+    .qf-status { font-size:0.75rem; color:#c8bfb0; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); margin-top:6px; }
   </style>
 </head>
 
@@ -194,14 +216,27 @@
       </div>
 
       <div style="width:100%">
-        <div class="picker-label">Word/Phrase Topics <span id="topicCount" style="font-weight:400;font-size:0.75rem;color:var(--text-dim);margin-left:4px;">all selected</span></div>
-        <div id="topicCheckboxes" style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;padding:2px 4px 2px 0;margin-top:4px;"></div>
-        <div id="topicPreview" style="text-align:center;font-size:0.78rem;color:var(--text-dim);margin-top:6px;"></div>
+        <div class="picker-label">Word/Phrase Topics</div>
+        <div class="qf-bar open" id="wofFilterBar">
+          <div class="qf-summary" onclick="document.getElementById('wofFilterBar').classList.toggle('open')">
+            <span>📚</span>
+            <span class="qf-summary-text" id="wofFilterSummary">All topics</span>
+            <span class="qf-chevron">▼</span>
+          </div>
+          <div class="qf-detail">
+            <div class="qf-section-label">Unit</div>
+            <div class="qf-units" id="wofUnits"><span class="qf-empty">No content.js topics found</span></div>
+            <div class="qf-section-label" id="wofTopicLabel" style="display:none;">Topic</div>
+            <div class="qf-checks" id="wofTopics"></div>
+            <div class="qf-status" id="wofStatus">Loading…</div>
+          </div>
+        </div>
       </div>
 
       <button id="startBtn" style="font-size:1.05rem;padding:13px 44px;background:var(--accent);color:#000;border:none;border-radius:12px;font-weight:900;cursor:pointer;letter-spacing:0.05em;">
         🎡 SPIN TO WIN
       </button>
+    </div>
     </div>
 
     <!-- ══ GAME ════════════════════════════════════════════ -->
@@ -314,92 +349,111 @@
     }
     buildTeamInputs();
 
+    // ── Word/phrase pool (qf-bar style) ───────────────────
     const selectedWofTopics = new Set(); // empty = all topics
+    let wofSelectedUnit = null;
 
     function buildWofPool() {
       const allWords = window.CUSTOM_CONTENT?.words || [];
+      if (!allWords.length) return [];
       if (selectedWofTopics.size === 0) return allWords.map(w => w.word);
       return allWords.filter(w => selectedWofTopics.has(w.topic)).map(w => w.word);
     }
 
-    function previewTopic() {
+    function updateWofSummary() {
       const pool = buildWofPool();
-      const countEl = document.getElementById('topicCount');
-      if (countEl) {
-        countEl.textContent = selectedWofTopics.size === 0
-          ? 'all topics · ' + pool.length + ' words'
-          : selectedWofTopics.size + ' topic' + (selectedWofTopics.size > 1 ? 's' : '') + ' · ' + pool.length + ' words';
+      const allWords = window.CUSTOM_CONTENT?.words || [];
+      const el = document.getElementById('wofFilterSummary');
+      const st = document.getElementById('wofStatus');
+      if (selectedWofTopics.size === 0) {
+        el.textContent = 'All topics · ' + (pool.length || allWords.length) + ' phrases';
+        st.textContent = (pool.length || allWords.length) + ' phrases available';
+      } else {
+        el.textContent = selectedWofTopics.size + ' topic' + (selectedWofTopics.size > 1 ? 's' : '') + ' · ' + pool.length + ' phrases';
+        st.textContent = pool.length + ' phrases available';
       }
-      document.getElementById('topicPreview').textContent =
-        pool.length ? pool.length + ' word' + (pool.length !== 1 ? 's' : '') + ' available' : 'No words found — add some via Content Editor';
     }
 
     function loadTopics() {
-      const container = document.getElementById('topicCheckboxes');
-      const allWords  = window.CUSTOM_CONTENT?.words || [];
-      const topics    = [...new Set(allWords.map(w => w.topic).filter(Boolean))].sort();
+      const allWords = window.CUSTOM_CONTENT?.words || [];
+      const unitsEl  = document.getElementById('wofUnits');
 
-      container.innerHTML = '';
+      if (!allWords.length) {
+        unitsEl.innerHTML = '<span class="qf-empty">No content.js loaded — using fallback phrases</span>';
+        document.getElementById('wofStatus').textContent = 'Using built-in fallback phrases';
+        return;
+      }
 
-      // "All topics" row
-      const allRow = document.createElement('label');
-      allRow.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 10px;border-radius:8px;border:1px solid var(--glass-border);background:rgba(0,201,167,0.12);';
-      const allCb = document.createElement('input');
-      allCb.type = 'checkbox'; allCb.checked = true;
-      allCb.style.cssText = 'accent-color:var(--accent);width:15px;height:15px;cursor:pointer;';
-      allCb.id = 'wof-all-cb';
-      const allSpan = document.createElement('span');
-      allSpan.textContent = '🎲 All topics';
-      allSpan.style.cssText = 'font-size:0.88rem;font-weight:700;';
-      allRow.appendChild(allCb); allRow.appendChild(allSpan);
-      container.appendChild(allRow);
-
-      allCb.onchange = () => {
-        if (allCb.checked) {
-          selectedWofTopics.clear();
-          container.querySelectorAll('.wof-topic-cb').forEach(cb => { cb.checked = false; cb.closest('label').style.background = 'var(--glass)'; });
-          allRow.style.background = 'rgba(0,201,167,0.12)';
-        } else {
-          allCb.checked = true; // keep it checked — deselect individual topics instead
+      // Build unit map
+      const unitMap = new Map();
+      allWords.forEach(w => {
+        const m = w.topic && w.topic.match(/^S(\d+)\/U(\d+)/);
+        if (m) {
+          const key = 'S'+m[1]+'/U'+m[2];
+          if (!unitMap.has(key)) unitMap.set(key, {stage:parseInt(m[1]), unit:parseInt(m[2])});
         }
-        previewTopic();
-      };
-
-      topics.forEach(topic => {
-        const row = document.createElement('label');
-        row.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 10px;border-radius:8px;border:1px solid var(--glass-border);background:var(--glass);transition:background 0.15s;';
-
-        const cb = document.createElement('input');
-        cb.type = 'checkbox'; cb.className = 'wof-topic-cb';
-        cb.style.cssText = 'accent-color:var(--accent);width:15px;height:15px;cursor:pointer;';
-        cb.onchange = () => {
-          if (cb.checked) {
-            selectedWofTopics.add(topic);
-            // Uncheck "all" visual state
-            allCb.checked = false;
-            allRow.style.background = 'var(--glass)';
-            row.style.background = 'rgba(0,201,167,0.12)';
-          } else {
-            selectedWofTopics.delete(topic);
-            row.style.background = 'var(--glass)';
-            // If nothing selected, revert to all
-            if (selectedWofTopics.size === 0) {
-              allCb.checked = true;
-              allRow.style.background = 'rgba(0,201,167,0.12)';
-            }
-          }
-          previewTopic();
-        };
-
-        const span = document.createElement('span');
-        span.textContent = topic;
-        span.style.cssText = 'font-size:0.88rem;font-weight:600;';
-        row.appendChild(cb); row.appendChild(span);
-        container.appendChild(row);
       });
 
-      previewTopic();
+      unitsEl.innerHTML = '';
+      if (!unitMap.size) {
+        // Topics don't follow S/U pattern — show flat topic list
+        const topics = [...new Set(allWords.map(w => w.topic).filter(Boolean))].sort();
+        topics.forEach(t => {
+          const count = allWords.filter(w => w.topic===t).length;
+          const label = document.createElement('label'); label.className = 'qf-check-label';
+          const cb = document.createElement('input'); cb.type = 'checkbox';
+          cb.onchange = () => { if (cb.checked) selectedWofTopics.add(t); else selectedWofTopics.delete(t); updateWofSummary(); };
+          const span = document.createElement('span'); span.textContent = t;
+          const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = count;
+          label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
+          unitsEl.appendChild(label);
+        });
+      } else {
+        [...unitMap.values()].sort((a,b) => a.stage!==b.stage ? a.stage-b.stage : a.unit-b.unit)
+          .forEach(({stage, unit}) => {
+            const btn = document.createElement('button'); btn.className = 'qf-unit-btn';
+            btn.textContent = 'S'+stage+'/U'+unit;
+            btn.onclick = () => selectWofUnit(stage, unit, btn);
+            unitsEl.appendChild(btn);
+          });
+      }
+
+      updateWofSummary();
     }
+
+    function selectWofUnit(stage, unit, btnEl) {
+      const topicsEl   = document.getElementById('wofTopics');
+      const topicLabel = document.getElementById('wofTopicLabel');
+      if (btnEl.classList.contains('active')) {
+        btnEl.classList.remove('active'); wofSelectedUnit = null;
+        topicsEl.innerHTML = ''; topicLabel.style.display = 'none';
+        // Remove this unit's topics from selection
+        const prefix = 'S'+stage+'/U'+unit;
+        const allWords = window.CUSTOM_CONTENT?.words || [];
+        allWords.filter(w => w.topic && w.topic.startsWith(prefix)).forEach(w => selectedWofTopics.delete(w.topic));
+        updateWofSummary(); return;
+      }
+      document.querySelectorAll('#wofUnits .qf-unit-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active'); wofSelectedUnit = {stage, unit};
+
+      const prefix = 'S'+stage+'/U'+unit;
+      const allWords = window.CUSTOM_CONTENT?.words || [];
+      const topics = [...new Set(allWords.filter(w => w.topic && w.topic.startsWith(prefix)).map(w => w.topic))].sort();
+
+      topicsEl.innerHTML = ''; topicLabel.style.display = 'block';
+      topics.forEach(t => {
+        const count = allWords.filter(w => w.topic===t).length;
+        const label = document.createElement('label'); label.className = 'qf-check-label';
+        const cb = document.createElement('input'); cb.type = 'checkbox';
+        cb.onchange = () => { if (cb.checked) selectedWofTopics.add(t); else selectedWofTopics.delete(t); updateWofSummary(); };
+        const span = document.createElement('span'); span.textContent = t;
+        const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = count;
+        label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
+        topicsEl.appendChild(label);
+      });
+      updateWofSummary();
+    }
+
 
     document.getElementById('startBtn').onclick=startGame;
     document.getElementById('newGameBtn').onclick=showSetup;
