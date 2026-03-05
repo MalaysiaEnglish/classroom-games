@@ -1399,6 +1399,91 @@ window.CUSTOM_CONTENT = {
     { word: "CHARISMATIC",         topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
     { word: "PROWESS",             topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
 
+    // ── S5/U8 ─────────────────────────────────────────────────────────────────
+    { word: "CULPRIT",        topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "DEDUCTION",      topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "SUSPECT",        topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "ALIBI",          topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "MOTIVE",         topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "EVIDENCE",       topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "ECCENTRIC",      topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "OBSERVANT",      topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "METHODICAL",     topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "SHREWD",         topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "CONSPIRATOR",    topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "PERPETRATOR",    topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "ACCOMPLICE",     topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "INTRIGUE",       topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "PREMEDITATED",   topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "INGENIOUS",      topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "REVELATION",     topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "CORPSE",         topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "CLUE",           topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "INVESTIGATION",  topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+
+
+
+    // ── S5/U8/L1 — Van Dine's Rules ──────────────────────────────────────────
+    { text: "A detective story is like a game; the author must play fair with the reader.",                                  correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "A detective story is like a game; the author can use any tricks to fool the reader.",                          correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+
+    { text: "According to Van Dine, the culprit must be determined by logical deductions, not by coincidence.",              correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "According to Van Dine, a lucky coincidence is the best way for the detective to solve a case.",                correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+
+    { text: "Van Dine states that the detective himself must never turn out to be the culprit.",                             correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine states that it is acceptable for the detective to be revealed as the criminal at the end.",            correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+
+    { text: "Van Dine's rules say there must be only one culprit, no matter how many murders occur.",                       correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine's rules say that having several culprits makes a detective story more realistic.",                     correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+
+    { text: "The culprit in a detective story must be someone the reader has already met in the story.",                    correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "The culprit in a detective story can be a stranger who is introduced only in the final chapter.",              correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+
+    { text: "Van Dine forbids using secret societies or the mafia as the cause of the crime.",                              correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine encourages writers to use secret societies and organised crime to add excitement.",                    correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+
+    { text: "Van Dine says the crime must never turn out to be an accident or a suicide.",                                  correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine says it is perfectly acceptable for the crime to turn out to be an accident.",                        correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+
+    // ── S5/U8/L2 — Show Don't Tell ────────────────────────────────────────────
+    { text: "Good writers show character through actions and behaviour rather than telling the reader what to think.",       correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Good writers tell the reader exactly what to think about a character using phrases like 'he was clever'.",      correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+
+    { text: "Conan Doyle shows Holmes's intelligence by having him deduce facts about Watson without being told them.",      correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Conan Doyle tells us Holmes is intelligent by writing 'Sherlock Holmes was the cleverest man in England'.",     correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+
+    { text: "Agatha Christie tells us Miss Marple is charming and innocent, rather than showing it through her actions.",    correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Agatha Christie avoids describing Miss Marple's appearance and focuses only on what she does.",                 correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+
+    { text: "A detective who notices a scratch on a door handle and studies it with a magnifying glass appears methodical.", correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "A detective described as 'very methodical' in the text is a better example of show don't tell.",               correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+
+    // ── S5/U8/L3 — Red Herrings & Story Planning ──────────────────────────────
+    { text: "A red herring is a false clue that misleads the reader and creates suspense.",                                  correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "A red herring is a vital piece of evidence that leads the detective directly to the culprit.",                  correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+
+    { text: "A detective story must be planned carefully so that clues and the solution are consistent throughout.",         correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "Unlike other genres, detective stories do not need to be planned because the writer can improvise.",            correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+
+    { text: "The setting, suspects and clues must all be appropriate for the type of detective in the story.",               correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "The setting and suspects can be entirely random and unconnected to the detective's background.",                correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+
+    { text: "In 'The Four Suspects', Miss Marple solved the mystery by noticing 'Honesty' was written with a capital H.",   correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "In 'The Four Suspects', Miss Marple solved the mystery by recognising a foreign stamp on a letter.",           correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+
+    // ── S5/U8/L4 — Story Openings & Tenses ───────────────────────────────────
+    { text: "The past perfect tense describes events that happened before the main story events began.",                     correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "The past perfect tense describes events happening at the same time as the main story events.",                  correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+
+    { text: "An effective detective story opening grabs the reader's attention and makes them want to read on.",             correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "An effective detective story opening should explain all the facts of the case so the reader is not confused.",  correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+
+    { text: "Starting a story 'in medias res' means beginning in the middle of the action before explaining the background.",correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "Starting a story 'in medias res' means beginning with a detailed description of all the main characters.",     correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+
+    { text: "In detective story writing, clues and red herrings should be revealed slowly to build suspense.",               correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "In detective story writing, all the clues should be revealed at the start so the reader can solve it early.",   correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+
 
   ]
 
