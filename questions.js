@@ -432,263 +432,53 @@ window.QUESTIONS = [
   { question: "How does the writer of the letter about the library try to persuade the MP?", answer: "By appealing to the MP's role as someone who cares about constituents.", distractors: ["By threatening to complain if the MP does not agree.", "By providing statistical evidence about library usage.", "By arguing that the library is the cheapest option."], topic: "Persuasive Writing — Letter", stage: 5, unit: 6, lesson: 4 },
 
   // ── S5/U8/L1 — Van Dine's Rules & Detective Genre ────────────────────────
-  {
-    question: "S.S. Van Dine's rules for detective stories were written for which publication?",
-    options: ["The New York Times", "The American Magazine", "The London Review", "The Detective Quarterly"],
-    answer: 1,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "According to Van Dine's rules, who must NEVER turn out to be the culprit?",
-    options: ["A servant", "A family member", "The detective himself", "A professional criminal"],
-    answer: 2,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "Van Dine's Rule 5 states that the culprit must be determined by what?",
-    options: ["Coincidence or accident", "Logical deductions", "A confession from guilt", "A supernatural vision"],
-    answer: 1,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "Which of these does Van Dine say there must always be in a detective novel?",
-    options: ["A love story", "A corpse", "A secret society", "A twin"],
-    answer: 1,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "According to Van Dine, how many culprits should a detective story have?",
-    options: ["As many as possible", "Exactly two", "Only one", "At least three"],
-    answer: 2,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "Who is believed to be the earliest detective in literary fiction?",
-    options: ["Sherlock Holmes", "Hercule Poirot", "C. Auguste Dupin", "Miss Marple"],
-    answer: 2,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "What does Van Dine compare the detective story to in terms of fairness?",
-    options: ["A scientific experiment", "A sporting event", "A court of law", "A chess game"],
-    answer: 1,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "According to Van Dine's rules, what should the motives for crimes always be?",
-    options: ["Political", "Financial", "Personal", "Accidental"],
-    answer: 2,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "Van Dine's Rule 18 states that a crime must never turn out to be what?",
-    options: ["Premeditated", "An accident or suicide", "Committed by a foreigner", "Motivated by jealousy"],
-    answer: 1,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "Which novelist created the character of Sherlock Holmes?",
-    options: ["Agatha Christie", "Edgar Allan Poe", "Arthur Conan Doyle", "S.S. Van Dine"],
-    answer: 2,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "Which of Van Dine's forbidden devices involves twins or look-alike relatives?",
-    options: ["The dog that does not bark", "Forged fingerprints", "Pinning the crime on a twin", "The dummy-figure alibi"],
-    answer: 2,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
-  {
-    question: "Van Dine says the reader must always have what, in relation to the detective?",
-    options: ["More clues than the detective", "Equal opportunity to solve the mystery", "Less information to keep suspense", "A different suspect in mind"],
-    answer: 1,
-    topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1
-  },
+    { question: "S.S. Van Dine's rules for detective stories were written for which publication?", answer: "The American Magazine", distractors: ["The New York Times", "The London Review", "The Detective Quarterly"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "According to Van Dine's rules, who must NEVER turn out to be the culprit?", answer: "The detective himself", distractors: ["A servant", "A family member", "A professional criminal"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "Van Dine's Rule 5 states that the culprit must be determined by what?", answer: "Logical deductions", distractors: ["Coincidence or accident", "A confession from guilt", "A supernatural vision"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "Which of these does Van Dine say there must always be in a detective novel?", answer: "A corpse", distractors: ["A love story", "A secret society", "A twin"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "According to Van Dine, how many culprits should a detective story have?", answer: "Only one", distractors: ["As many as possible", "Exactly two", "At least three"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "Who is believed to be the earliest detective in literary fiction?", answer: "C. Auguste Dupin", distractors: ["Sherlock Holmes", "Hercule Poirot", "Miss Marple"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "What does Van Dine compare the detective story to in terms of fairness?", answer: "A sporting event", distractors: ["A scientific experiment", "A court of law", "A chess game"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "According to Van Dine's rules, what should the motives for crimes always be?", answer: "Personal", distractors: ["Political", "Financial", "Accidental"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "Van Dine's Rule 18 states that a crime must never turn out to be what?", answer: "An accident or suicide", distractors: ["Premeditated", "Committed by a foreigner", "Motivated by jealousy"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "Which novelist created the character of Sherlock Holmes?", answer: "Arthur Conan Doyle", distractors: ["Agatha Christie", "Edgar Allan Poe", "S.S. Van Dine"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "Which of Van Dine's forbidden devices involves twins or look-alike relatives?", answer: "Pinning the crime on a twin", distractors: ["The dog that does not bark", "Forged fingerprints", "The dummy-figure alibi"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
+    { question: "Van Dine says the reader must always have what, in relation to the detective?", answer: "Equal opportunity to solve the mystery", distractors: ["More clues than the detective", "Less information to keep suspense", "A different suspect in mind"], topic: "S5/U8/L1 Detective Genre Rules", stage: 5, unit: 8, lesson: 1 },
 
   // ── S5/U8/L2 — Character Description & Show Don't Tell ───────────────────
-  {
-    question: "In Lesson 2, Watson first meets Holmes in which kind of room?",
-    options: ["A drawing room", "A chemistry laboratory", "A library", "A police station"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "What does Holmes immediately deduce about Watson when they first meet?",
-    options: ["That Watson is a doctor", "That Watson has been in Afghanistan", "That Watson is unmarried", "That Watson is left-handed"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "Which technique does Conan Doyle mainly use to reveal Holmes's character?",
-    options: ["Telling us directly he is brilliant", "Showing us his actions and behaviour", "Having Watson describe him physically", "Using Holmes's own diary entries"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "Which adjectives does Agatha Christie use to describe Miss Marple?",
-    options: ["Fierce and determined", "Charming and innocent", "Quiet and suspicious", "Eccentric and unstable"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "How does Miss Marple gain easy entry to the crime scene in 'A Pocketful of Rye'?",
-    options: ["She shows a police badge", "She looks like a harmless elderly relative", "She bribes the guards", "She knows the victim's family personally"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "In 'Show Don't Tell' writing, how should a writer convey that a detective is observant?",
-    options: ["Write 'the detective was very observant'", "Show the detective noticing tiny details others miss", "Tell us the detective passed detective school", "Have another character say 'you are observant'"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "Detective Finn in the 'Show Don't Tell' worksheet trips over a chair. What does this reveal?",
-    options: ["He is clumsy and incompetent", "He is humorous, playful and lively", "He is nervous and lacks confidence", "He is careless and unprofessional"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "Which personality trait does Inspector Quill show by balancing a teacup on his knee?",
-    options: ["Laziness", "Eccentricity", "Aggression", "Shyness"],
-    answer: 1,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "Holmes's discovery in the lab is described as being like finding a gold mine. This is an example of which literary device?",
-    options: ["Alliteration", "Personification", "Simile", "Onomatopoeia"],
-    answer: 2,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
-  {
-    question: "Which of the following best describes the purpose of a detective story opening, according to Lesson 2?",
-    options: ["To establish all the suspects immediately", "To reveal the detective's weakness before the case begins", "To place the detective in a scene that reveals their personality", "To describe the victim before they are murdered"],
-    answer: 2,
-    topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2
-  },
+    { question: "In Lesson 2, Watson first meets Holmes in which kind of room?", answer: "A chemistry laboratory", distractors: ["A drawing room", "A library", "A police station"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "What does Holmes immediately deduce about Watson when they first meet?", answer: "That Watson has been in Afghanistan", distractors: ["That Watson is a doctor", "That Watson is unmarried", "That Watson is left-handed"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "Which technique does Conan Doyle mainly use to reveal Holmes's character?", answer: "Showing us his actions and behaviour", distractors: ["Telling us directly he is brilliant", "Having Watson describe him physically", "Using Holmes's own diary entries"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "Which adjectives does Agatha Christie use to describe Miss Marple?", answer: "Charming and innocent", distractors: ["Fierce and determined", "Quiet and suspicious", "Eccentric and unstable"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "How does Miss Marple gain easy entry to the crime scene in 'A Pocketful of Rye'?", answer: "She looks like a harmless elderly relative", distractors: ["She shows a police badge", "She bribes the guards", "She knows the victim's family personally"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "In 'Show Don't Tell' writing, how should a writer convey that a detective is observant?", answer: "Show the detective noticing tiny details others miss", distractors: ["Write 'the detective was very observant'", "Tell us the detective passed detective school", "Have another character say 'you are observant'"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "Detective Finn in the 'Show Don't Tell' worksheet trips over a chair. What does this reveal?", answer: "He is humorous, playful and lively", distractors: ["He is clumsy and incompetent", "He is nervous and lacks confidence", "He is careless and unprofessional"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "Which personality trait does Inspector Quill show by balancing a teacup on his knee?", answer: "Eccentricity", distractors: ["Laziness", "Aggression", "Shyness"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "Holmes's discovery in the lab is described as being like finding a gold mine. This is an example of which literary device?", answer: "Simile", distractors: ["Alliteration", "Personification", "Onomatopoeia"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { question: "Which of the following best describes the purpose of a detective story opening, according to Lesson 2?", answer: "To place the detective in a scene that reveals their personality", distractors: ["To establish all the suspects immediately", "To reveal the detective's weakness before the case begins", "To describe the victim before they are murdered"], topic: "S5/U8/L2 Character and Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
 
   // ── S5/U8/L3 — Red Herrings, Plot & Story Planning ───────────────────────
-  {
-    question: "What is a 'red herring' in a detective story?",
-    options: ["A vital clue that solves the mystery", "A misleading clue designed to distract the reader", "A character who confesses to the crime", "A description of the murder weapon"],
-    answer: 1,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "In 'The Four Suspects' by Agatha Christie, who is the victim?",
-    options: ["Sir Henry Clithering", "Dr Rosen", "Colonel Bantry", "Miss Marple"],
-    answer: 1,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "In 'The Four Suspects', which detail does Miss Marple notice that solves the mystery?",
-    options: ["A foreign stamp on a letter", "A missing key from the drawer", "The word 'Honesty' spelt with a capital H", "A muddy footprint in the garden"],
-    answer: 2,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "In a detective story, the setting should be appropriate for which character?",
-    options: ["The victim", "The culprit", "The detective", "The narrator"],
-    answer: 2,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "Why is careful planning especially important for detective stories?",
-    options: ["Because the genre requires very long stories", "Because clues and the solution must be consistent from the start", "Because detective stories must follow real police procedures", "Because the detective must appear in every scene"],
-    answer: 1,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "If your detective is a school child, where should the murder most logically take place?",
-    options: ["An army base or government building", "A foreign country or embassy", "The school or the detective's neighbourhood", "A remote island with no other suspects"],
-    answer: 2,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "Why do authors include red herrings in detective stories?",
-    options: ["To make the story shorter and more exciting", "To mislead readers and create suspense", "To introduce the detective's backstory", "To explain the victim's past"],
-    answer: 1,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "In 'The Four Suspects', Fraulein Greta appears to be a red herring because she seems what?",
-    options: ["A foreign spy with a clear motive", "Suspiciously close to the victim", "Young and in love — therefore unlikely to be the killer", "Too nervous to have planned anything"],
-    answer: 2,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "Which of the following is NOT one of the essential story planning elements listed in Lesson 3?",
-    options: ["Setting", "Victim", "Publisher", "Suspects"],
-    answer: 2,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
-  {
-    question: "The secret organisation in 'The Four Suspects' is called the Schwarze Hand. What does this mean?",
-    options: ["The Black Hand", "The Dark Sword", "The Shadow Society", "The Silent Brotherhood"],
-    answer: 0,
-    topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3
-  },
+    { question: "What is a 'red herring' in a detective story?", answer: "A misleading clue designed to distract the reader", distractors: ["A vital clue that solves the mystery", "A character who confesses to the crime", "A description of the murder weapon"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "In 'The Four Suspects' by Agatha Christie, who is the victim?", answer: "Dr Rosen", distractors: ["Sir Henry Clithering", "Colonel Bantry", "Miss Marple"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "In 'The Four Suspects', which detail does Miss Marple notice that solves the mystery?", answer: "The word 'Honesty' spelt with a capital H", distractors: ["A foreign stamp on a letter", "A missing key from the drawer", "A muddy footprint in the garden"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "In a detective story, the setting should be appropriate for which character?", answer: "The detective", distractors: ["The victim", "The culprit", "The narrator"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "Why is careful planning especially important for detective stories?", answer: "Because clues and the solution must be consistent from the start", distractors: ["Because the genre requires very long stories", "Because detective stories must follow real police procedures", "Because the detective must appear in every scene"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "If your detective is a school child, where should the murder most logically take place?", answer: "The school or the detective's neighbourhood", distractors: ["An army base or government building", "A foreign country or embassy", "A remote island with no other suspects"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "Why do authors include red herrings in detective stories?", answer: "To mislead readers and create suspense", distractors: ["To make the story shorter and more exciting", "To introduce the detective's backstory", "To explain the victim's past"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "In 'The Four Suspects', Fraulein Greta appears to be a red herring because she seems what?", answer: "Young and in love — therefore unlikely to be the killer", distractors: ["A foreign spy with a clear motive", "Suspiciously close to the victim", "Too nervous to have planned anything"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "Which of the following is NOT one of the essential story planning elements listed in Lesson 3?", answer: "Publisher", distractors: ["Setting", "Victim", "Suspects"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { question: "The secret organisation in 'The Four Suspects' is called the Schwarze Hand. What does this mean?", answer: "The Black Hand", distractors: ["The Dark Sword", "The Shadow Society", "The Silent Brotherhood"], topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
 
   // ── S5/U8/L4 — Story Openings & Writing ──────────────────────────────────
-  {
-    question: "In the opening of 'Three is a Lucky Number', what is Ronald Torbay preparing to do?",
-    options: ["Flee the country with stolen money", "Commit his third murder", "Write a confession letter", "Meet with a police inspector"],
-    answer: 1,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "Why is the opening of a detective story compared to a menu?",
-    options: ["Because it lists all the ingredients of the story", "Because it tempts you to read on, just as a menu tempts you to order", "Because it should be short and have clear sections", "Because it must describe food and settings in detail"],
-    answer: 1,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "In 'The Murder up Mount Prestige' model story, which tense is mainly used for the intriguing opening?",
-    options: ["Present Simple", "Future Perfect", "Past Simple", "Present Perfect"],
-    answer: 2,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "Which tense is mainly used in the 'real introduction' section of the model detective story?",
-    options: ["Present Continuous", "Past Simple", "Future Perfect", "Past Perfect"],
-    answer: 3,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "In 'Three is a Lucky Number', how does Edyth survive Ronald's murder attempt?",
-    options: ["She escapes through the front door", "She climbs over the kitchen roof to the house next door", "The electricity fails before he can act", "A neighbour breaks down the door in time"],
-    answer: 1,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "What technique does Margery Allingham use at the very start of 'Three is a Lucky Number' to create intrigue?",
-    options: ["She describes the beautiful setting in vivid detail", "She tells us the murderer's name and his intention immediately", "She introduces the detective solving a previous case", "She opens with a conversation between two suspects"],
-    answer: 1,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "How had the police in 'Three is a Lucky Number' first identified Ronald as a suspect?",
-    options: ["His fingerprints matched a previous crime", "His second wife's brother gave photographs of him to the police", "A detective had been watching him for months", "Edyth had recognised him from a wanted poster"],
-    answer: 1,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "The 'Murder up Mount Prestige' model story begins with a scream, then flashes back. This is an example of what?",
-    options: ["A flashforward", "Starting in medias res — in the middle of the action", "A cliffhanger ending", "A narrative frame"],
-    answer: 1,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "Which of these is a tip given in Lesson 4 for writing your detective story?",
-    options: ["Write as fast as possible to cover everything", "Use lots of adjectives and adverbs to paint a picture", "Keep sentences short and never use dialogue", "Avoid describing suspects in detail to build mystery"],
-    answer: 1,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
-  {
-    question: "In the model story, who is most suspicious because they are absent from the crime scene?",
-    options: ["Billy Grant the chef", "Nancy Cartwright the maid", "Mr Spencer the manager", "Mr Johnson the groundskeeper"],
-    answer: 3,
-    topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4
-  },
+    { question: "In the opening of 'Three is a Lucky Number', what is Ronald Torbay preparing to do?", answer: "Commit his third murder", distractors: ["Flee the country with stolen money", "Write a confession letter", "Meet with a police inspector"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "Why is the opening of a detective story compared to a menu?", answer: "Because it tempts you to read on, just as a menu tempts you to order", distractors: ["Because it lists all the ingredients of the story", "Because it should be short and have clear sections", "Because it must describe food and settings in detail"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "In 'The Murder up Mount Prestige' model story, which tense is mainly used for the intriguing opening?", answer: "Past Simple", distractors: ["Present Simple", "Future Perfect", "Present Perfect"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "Which tense is mainly used in the 'real introduction' section of the model detective story?", answer: "Past Perfect", distractors: ["Present Continuous", "Past Simple", "Future Perfect"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "In 'Three is a Lucky Number', how does Edyth survive Ronald's murder attempt?", answer: "She climbs over the kitchen roof to the house next door", distractors: ["She escapes through the front door", "The electricity fails before he can act", "A neighbour breaks down the door in time"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "What technique does Margery Allingham use at the very start of 'Three is a Lucky Number' to create intrigue?", answer: "She tells us the murderer's name and his intention immediately", distractors: ["She describes the beautiful setting in vivid detail", "She introduces the detective solving a previous case", "She opens with a conversation between two suspects"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "How had the police in 'Three is a Lucky Number' first identified Ronald as a suspect?", answer: "His second wife's brother gave photographs of him to the police", distractors: ["His fingerprints matched a previous crime", "A detective had been watching him for months", "Edyth had recognised him from a wanted poster"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "The 'Murder up Mount Prestige' model story begins with a scream, then flashes back. This is an example of what?", answer: "Starting in medias res — in the middle of the action", distractors: ["A flashforward", "A cliffhanger ending", "A narrative frame"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "Which of these is a tip given in Lesson 4 for writing your detective story?", answer: "Use lots of adjectives and adverbs to paint a picture", distractors: ["Write as fast as possible to cover everything", "Keep sentences short and never use dialogue", "Avoid describing suspects in detail to build mystery"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
+    { question: "In the model story, who is most suspicious because they are absent from the crime scene?", answer: "Mr Johnson the groundskeeper", distractors: ["Billy Grant the chef", "Nancy Cartwright the maid", "Mr Spencer the manager"], topic: "S5/U8/L4 Story Openings and Writing", stage: 5, unit: 8, lesson: 4 },
 
 ];
