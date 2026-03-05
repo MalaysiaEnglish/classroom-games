@@ -28,7 +28,6 @@
       overflow-x: hidden;
     }
 
-    /* ── Background texture ── */
     body::before {
       content: '';
       position: fixed; inset: 0;
@@ -39,7 +38,6 @@
       z-index: 0;
     }
 
-    /* ── Header ── */
     header {
       position: relative;
       z-index: 1;
@@ -68,9 +66,7 @@
       color: var(--text);
     }
 
-    h1 span {
-      color: var(--accent);
-    }
+    h1 span { color: var(--accent); }
 
     .tagline {
       color: var(--muted);
@@ -80,7 +76,6 @@
       letter-spacing: 0.04em;
     }
 
-    /* ── Toolkit floating button ── */
     .toolkit-float {
       position: fixed;
       bottom: 24px;
@@ -98,99 +93,78 @@
       border: none;
       border-radius: 40px;
       font-family: 'Unbounded', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
       cursor: pointer;
       box-shadow: 0 4px 20px rgba(240,180,41,0.4);
       transition: all 0.2s;
-      text-decoration: none;
+      letter-spacing: 0.04em;
     }
+    .toolkit-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-    .toolkit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 28px rgba(240,180,41,0.55);
-    }
-
-    /* ── Stage tabs ── */
     .stage-nav {
       position: relative;
       z-index: 1;
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
       justify-content: center;
-      flex-wrap: wrap;
-      padding: 28px 24px 0;
+      padding: 20px 16px 0;
     }
 
     .stage-tab {
-      padding: 8px 18px;
-      border-radius: 40px;
+      padding: 7px 18px;
+      background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
-      background: var(--surface);
+      border-radius: 40px;
       color: var(--muted);
       font-family: 'Unbounded', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
       cursor: pointer;
       transition: all 0.2s;
+      letter-spacing: 0.04em;
       position: relative;
     }
+    .stage-tab:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+    .stage-tab.active { background: var(--accent); color: #0a0d14; border-color: var(--accent); }
+    .stage-tab.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
-    .stage-tab:hover:not(.disabled) {
-      border-color: rgba(255,255,255,0.2);
-      color: var(--text);
-    }
-
-    .stage-tab.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #0a0d14;
-      box-shadow: 0 0 20px rgba(240,180,41,0.3);
-    }
-
-    .stage-tab.disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    .stage-tab .coming {
+    .coming {
       position: absolute;
-      top: -6px; right: -6px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--muted);
+      top: -7px; right: -4px;
+      background: var(--accent2);
+      color: #0a0d14;
       font-size: 0.5rem;
+      font-weight: 800;
       padding: 1px 5px;
       border-radius: 20px;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
-    /* ── Main content ── */
     main {
       position: relative;
       z-index: 1;
-      max-width: 960px;
+      padding: 20px 16px 40px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 32px 20px 120px;
     }
 
-    /* ── Stage panel ── */
     .stage-panel { display: none; }
     .stage-panel.active { display: block; }
 
     .stage-label {
       font-family: 'Unbounded', sans-serif;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       color: var(--accent);
       text-transform: uppercase;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
+      padding-left: 2px;
     }
 
-    /* ── Unit cards ── */
     .units-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -201,32 +175,16 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow: hidden;
+      padding: 16px;
       transition: border-color 0.2s, transform 0.2s;
-      animation: fadeUp 0.4s ease both;
     }
-
-    .unit-card:hover {
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-3px);
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .unit-card:nth-child(1) { animation-delay: 0.05s; }
-    .unit-card:nth-child(2) { animation-delay: 0.10s; }
-    .unit-card:nth-child(3) { animation-delay: 0.15s; }
-    .unit-card:nth-child(4) { animation-delay: 0.20s; }
+    .unit-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-2px); }
 
     .unit-header {
-      padding: 16px 18px 12px;
-      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: flex-start;
       gap: 12px;
+      margin-bottom: 12px;
     }
 
     .unit-emoji {
@@ -235,166 +193,118 @@
       margin-top: 2px;
     }
 
-    .unit-meta {
-      flex: 1;
-    }
+    .unit-meta { flex: 1; min-width: 0; }
 
     .unit-number {
-      font-family: 'Unbounded', sans-serif;
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       font-weight: 700;
       letter-spacing: 0.1em;
-      color: var(--muted);
+      color: var(--accent);
       text-transform: uppercase;
+      margin-bottom: 2px;
     }
 
     .unit-title {
-      font-size: 1rem;
-      font-weight: 500;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--text);
-      margin-top: 2px;
       line-height: 1.3;
     }
 
     .unit-grammar {
-      font-size: 0.78rem;
-      color: var(--accent2);
+      font-size: 0.72rem;
+      color: var(--muted);
       margin-top: 3px;
+      line-height: 1.4;
     }
 
-    /* ── Game links inside unit ── */
     .unit-games {
-      padding: 12px 14px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      margin-bottom: 10px;
     }
 
     .game-link {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 12px;
-      border-radius: 8px;
+      padding: 8px 12px;
       background: rgba(255,255,255,0.04);
-      border: 1px solid transparent;
+      border: 1px solid var(--border);
+      border-radius: 9px;
       text-decoration: none;
       color: var(--text);
-      font-size: 0.88rem;
-      font-weight: 500;
       transition: all 0.18s;
     }
+    .game-link:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.14); }
 
-    .game-link:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: var(--border);
-      transform: translateX(3px);
-    }
-
-    .game-link .gl-icon { font-size: 1.1rem; flex-shrink: 0; }
-    .game-link .gl-label { flex: 1; }
-    .game-link .gl-type {
-      font-size: 0.68rem;
-      font-weight: 400;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-
-    /* ── Toolkit row inside unit ── */
-    .toolkit-row {
-      padding: 0 14px 14px;
-    }
-
-    .toolkit-unit-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      padding: 9px 12px;
-      border-radius: 8px;
-      background: rgba(240,180,41,0.08);
-      border: 1px solid rgba(240,180,41,0.2);
-      color: var(--accent);
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.18s;
-      font-family: 'DM Sans', sans-serif;
-      text-align: left;
-    }
-
-    .toolkit-unit-btn:hover {
-      background: rgba(240,180,41,0.14);
-      border-color: rgba(240,180,41,0.4);
-    }
-
-    /* ── Content loaded indicator ── */
-    .content-loaded {
-      padding: 8px 14px 0;
-    }
+    .gl-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .gl-label { flex: 1; font-size: 0.83rem; font-weight: 600; }
+    .gl-type { font-size: 0.67rem; color: var(--muted); white-space: nowrap; }
 
     .content-tag {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(62,207,207,0.08);
-      border: 1px solid rgba(62,207,207,0.2);
+      font-size: 0.7rem;
       color: var(--accent2);
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.03em;
+      background: rgba(62,207,207,0.08);
+      border: 1px solid rgba(62,207,207,0.18);
+      border-radius: 20px;
+      padding: 3px 9px;
     }
 
-    .content-tag .ct-dot {
+    .ct-dot {
       width: 5px; height: 5px;
       border-radius: 50%;
       background: var(--accent2);
       flex-shrink: 0;
     }
 
-    /* ── Toolkit modal ── */
+    .content-loaded { margin-top: 6px; }
+
+    .toolkit-row { margin-top: 8px; }
+
+    .toolkit-unit-btn {
+      width: 100%;
+      padding: 7px 12px;
+      background: rgba(240,180,41,0.06);
+      border: 1px solid rgba(240,180,41,0.18);
+      border-radius: 8px;
+      color: rgba(240,180,41,0.7);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+    }
+    .toolkit-unit-btn:hover { background: rgba(240,180,41,0.12); color: var(--accent); }
+
     .modal-overlay {
       display: none;
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
-      z-index: 200;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-
-    .modal-overlay.open {
-      display: flex;
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
+    .modal-overlay.open { display: flex; }
 
     .modal {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
+      background: #161b2e;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
       width: 100%;
-      max-width: 600px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      animation: slideUp 0.25s ease;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
+      max-width: 480px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
     }
 
     .modal-header {
-      padding: 22px 24px 16px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -420,7 +330,6 @@
       border-radius: 6px;
       transition: color 0.15s;
     }
-
     .modal-close:hover { color: var(--text); }
 
     .modal-body {
@@ -448,24 +357,11 @@
       font-weight: 500;
       transition: all 0.18s;
     }
-
-    .modal-game-link:hover {
-      background: rgba(255,255,255,0.09);
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-2px);
-    }
-
+    .modal-game-link:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
     .modal-game-link .mg-icon { font-size: 1.3rem; }
     .modal-game-link .mg-text { flex: 1; }
-    .modal-game-link .mg-text small {
-      display: block;
-      font-size: 0.7rem;
-      color: var(--muted);
-      font-weight: 400;
-      margin-top: 1px;
-    }
+    .modal-game-link .mg-text small { display: block; font-size: 0.7rem; color: var(--muted); font-weight: 400; margin-top: 1px; }
 
-    /* ── Content editor link ── */
     .editor-link {
       display: block;
       text-align: center;
@@ -483,11 +379,7 @@
       width: fit-content;
       margin-top: 32px;
     }
-
-    .editor-link:hover {
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-    }
+    .editor-link:hover { background: rgba(255,255,255,0.08); color: var(--text); }
 
     footer {
       text-align: center;
@@ -501,14 +393,10 @@
 </head>
 <body>
 
-  <!-- Floating toolkit button -->
   <div class="toolkit-float">
-    <button class="toolkit-btn" onclick="openToolkit()">
-      🧰 Toolkit
-    </button>
+    <button class="toolkit-btn" onclick="openToolkit()">🧰 Toolkit</button>
   </div>
 
-  <!-- Header -->
   <header>
     <div class="logo-row">
       <span class="logo-icon">🎮</span>
@@ -517,12 +405,11 @@
     <p class="tagline">IGCSE English · TEFL Malaysia · No login · Works offline</p>
   </header>
 
-  <!-- Stage tabs -->
   <nav class="stage-nav">
     <button class="stage-tab active" onclick="showStage('s5')">Stage 5</button>
     <button class="stage-tab" onclick="showStage('s6')">Stage 6</button>
     <button class="stage-tab disabled" title="Coming soon">Stage 7<span class="coming">soon</span></button>
-    <button class="stage-tab disabled" title="Coming soon">Stage 8<span class="coming">soon</span></button>
+    <button class="stage-tab" onclick="showStage('s8')">Stage 8</button>
     <button class="stage-tab disabled" title="Coming soon">Stage 9<span class="coming">soon</span></button>
     <button class="stage-tab disabled" title="Coming soon">Stage 10<span class="coming">soon</span></button>
   </nav>
@@ -563,7 +450,7 @@
           </div>
           <div class="content-loaded" data-words-stage="5" data-words-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="1"></div>
-          <div class="toolkit-row" style="margin-top:8px;">
+          <div class="toolkit-row">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
@@ -878,14 +765,13 @@
         <!-- S6 U7 -->
         <div class="unit-card">
           <div class="unit-header">
-            <div class="unit-emoji">🔬</div>
+            <div class="unit-emoji">🌍</div>
             <div class="unit-meta">
-              <div class="unit-number">Unit 7 · CLIL</div>
-              <div class="unit-title">Science &amp; Society</div>
+              <div class="unit-number">Unit 7</div>
+              <div class="unit-title">CLIL</div>
               <div class="unit-grammar">Space · Geography · History · Chemistry</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="6" data-words-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -909,6 +795,32 @@
             </a>
           </div>
           <div class="content-loaded" data-sentences-stage="6" data-sentences-unit="8"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── STAGE 8 ── -->
+    <div class="stage-panel" id="panel-s8">
+      <div class="stage-label">Stage 8</div>
+      <div class="units-grid">
+
+        <!-- S8 U8 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">⚖️</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 8</div>
+              <div class="unit-title">Choices and Decisions</div>
+              <div class="unit-grammar">Adverbs · Persuasive Writing · Argument Texts</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-stage="8" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1011,13 +923,11 @@
       if (e.key === 'Escape') closeToolkit();
     });
 
-    // ── Dynamic content counters ──────────────────────────────
     function updateContentBadges() {
       if (typeof window.CUSTOM_CONTENT === 'undefined') return;
       const words     = window.CUSTOM_CONTENT.words     || [];
       const sentences = window.CUSTOM_CONTENT.sentences || [];
 
-      // Words badges
       document.querySelectorAll('[data-words-stage]').forEach(el => {
         const stage = parseInt(el.dataset.wordsStage);
         const unit  = parseInt(el.dataset.wordsUnit);
@@ -1029,7 +939,6 @@
         el.innerHTML = `<span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · ${count} vocab words loaded${lessonTxt}</span>`;
       });
 
-      // Sentences badges
       document.querySelectorAll('[data-sentences-stage]').forEach(el => {
         const stage = parseInt(el.dataset.sentencesStage);
         const unit  = parseInt(el.dataset.sentencesUnit);
@@ -1039,7 +948,6 @@
       });
     }
 
-    // Questions badges — reads from questions.js
     function updateQuestionBadges() {
       if (typeof window.QUESTIONS === 'undefined') return;
       document.querySelectorAll('[data-questions-stage]').forEach(el => {

@@ -1421,6 +1421,32 @@ window.CUSTOM_CONTENT = {
     { word: "CLUE",           topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
     { word: "INVESTIGATION",  topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
 
+    // ── S8/U8 — Choices and Decisions ────────────────────────────
+    { word: "HAZARD",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "COUNTERFEIT",      topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "CASKET",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "SUITOR",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "SCROLL",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "DIVERGED",         topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
+    { word: "UNDERGROWTH",      topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
+    { word: "STANZA",           topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
+    { word: "RELINQUISH",       topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "IMPLICATIONS",     topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "FIXATION",         topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "DISSATISFIED",     topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "HYPOTHERMIA",      topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "PREPOSITIONAL",    topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "STAIRWELL",        topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "OUTBACK",          topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "DECIMATED",        topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "UNSPEAKABLE",      topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "PERISHED",         topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "RHETORICAL",       topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "PRIORITISE",       topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+    { word: "ARGUMENTATIVE",    topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+    { word: "BIAS",             topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+    { word: "PERSUASIVE",       topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+
 
 
     // ── S5/U8/L1 — Van Dine's Rules ──────────────────────────────────────────
@@ -1484,6 +1510,27 @@ window.CUSTOM_CONTENT = {
     { text: "In detective story writing, clues and red herrings should be revealed slowly to build suspense.",               correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
     { text: "In detective story writing, all the clues should be revealed at the start so the reader can solve it early.",   correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
 
+    // ── S8/U8/L2 — Adverbs of Manner and Degree ──────────────────
+    { text: "Oliver looked back hesitantly before stepping off the diving board.",                correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "Oliver looked back hesitant before stepping off the diving board.",                  correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "The divers hurtled aggressively towards the water with eyes fixed ahead.",           correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "The divers hurtled aggressive towards the water with eyes fixed ahead.",             correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "She greedily ate the food without offering any to the others.",                      correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "She greedy ate the food without offering any to the others.",                        correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "He was completely unaware that the train had already left the platform.",            correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "He was complete unaware that the train had already left the platform.",              correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "I almost fell over when I heard the news about the shipwreck.",                      correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "I nearly almost fell over when I heard the news about the shipwreck.",               correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+
+    // ── S8/U8/L3 — Linking and Time Adverbs ──────────────────────
+    { text: "First, I studied the map carefully. Next, I planned the route. Afterwards, we set off.",  correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "First, I studied the map careful. Next, I planned the route. Afterwards, we set off.",    correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "The experiment was difficult. Moreover, the results were inconclusive.",                  correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "The experiment was difficult. More over, the results were inconclusive.",                 correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "Recently, scientists have found new evidence to support this theory.",                    correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "Recent, scientists have found new evidence to support this theory.",                      correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "While it is true that choice brings freedom, it can also cause anxiety.",                 correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "While it is true that choice brings freedom, but it can also cause anxiety.",             correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
 
   ]
 
