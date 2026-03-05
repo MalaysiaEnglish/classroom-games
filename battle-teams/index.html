@@ -5,6 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Battle Teams</title>
   <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── Question filter bar ── */
+    .qf-bar { width:100%; background:rgba(10,18,30,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:12px; overflow:hidden; margin-bottom:8px; }
+    .qf-summary { display:flex; align-items:center; gap:10px; padding:8px 14px; cursor:pointer; user-select:none; font-size:0.82rem; color:#c8bfb0; }
+    .qf-summary:hover { background:rgba(255,255,255,0.04); }
+    .qf-summary-text { flex:1; }
+    .qf-chevron { font-size:0.7rem; transition:transform 0.2s; }
+    .qf-bar.open .qf-chevron { transform:rotate(180deg); }
+    .qf-detail { display:none; padding:10px 14px 14px; border-top:1px solid rgba(255,255,255,0.07); }
+    .qf-bar.open .qf-detail { display:block; }
+    .qf-row { display:flex; gap:8px; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; }
+    .qf-col { flex:1; min-width:120px; }
+    .qf-col-label { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:rgba(240,180,41,0.8); margin-bottom:5px; }
+    .qf-units { display:flex; flex-wrap:wrap; gap:4px; }
+    .qf-unit-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); color:#c8bfb0; padding:3px 9px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-unit-btn:hover { background:rgba(240,180,41,0.12); border-color:rgba(240,180,41,0.4); }
+    .qf-unit-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.65); color:#f0c842; font-weight:600; }
+    .qf-checks { display:flex; flex-wrap:wrap; gap:4px; }
+    .qf-check-label { display:flex; align-items:center; gap:5px; font-size:0.75rem; color:#c8bfb0; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:5px; padding:3px 8px; transition:all 0.15s; }
+    .qf-check-label:hover { background:rgba(240,180,41,0.1); }
+    .qf-check-label input { accent-color:#f0c842; }
+    .qf-count { font-size:0.65rem; color:rgba(240,180,41,0.7); margin-left:2px; }
+    .qf-empty { font-size:0.75rem; color:rgba(255,255,255,0.3); font-style:italic; }
+    .qf-status-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); margin-top:6px; }
+    .qf-status { font-size:0.75rem; color:#c8bfb0; }
+    .qf-mode-btns { display:flex; gap:5px; }
+    .qf-mode-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14); color:#c8bfb0; padding:3px 10px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-mode-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.6); color:#f0c842; font-weight:600; }
+
+    /* ── Question modal ── */
+    .q-modal-overlay { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:16px; }
+    .q-modal-box { background:#111828; border:2px solid rgba(240,180,41,0.35); border-radius:18px; padding:22px 24px; width:100%; max-width:520px; animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+    @keyframes popIn { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+    .q-team-label { font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px; }
+    .q-question-text { font-size:clamp(0.92rem,2.4vw,1.15rem); color:#f0e6d0; font-weight:500; line-height:1.45; margin-bottom:14px; }
+    .q-options { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+    .q-opt-btn { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#f0e6d0; padding:9px 14px; border-radius:9px; font-size:0.88rem; cursor:pointer; text-align:left; transition:all 0.18s; }
+    .q-opt-btn:hover { background:rgba(240,180,41,0.15); border-color:rgba(240,180,41,0.5); }
+    .q-opt-btn.correct { background:rgba(39,174,96,0.25); border-color:#27ae60; color:#7dffb3; pointer-events:none; }
+    .q-opt-btn.wrong   { background:rgba(192,57,43,0.2); border-color:#c0392b; color:#ff9b9b; pointer-events:none; }
+    .q-opt-btn.reveal  { background:rgba(39,174,96,0.15); border-color:rgba(39,174,96,0.4); }
+    .q-opt-btn.disabled { pointer-events:none; opacity:0.65; }
+    .q-ctrl-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+    .q-ctrl-btn { background:rgba(240,180,41,0.14); border:1px solid rgba(240,180,41,0.38); color:#f0c842; padding:7px 18px; border-radius:7px; font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
+    .q-ctrl-btn:hover { background:rgba(240,180,41,0.28); }
+    .q-ctrl-btn.primary { background:rgba(240,180,41,0.8); color:#0e0b08; font-weight:700; }
+    .q-ctrl-btn.primary:hover { background:#f0c842; }
+    .q-ctrl-btn.danger { background:rgba(192,57,43,0.2); border-color:#c0392b; color:#ff9b9b; }
+  </style>
 </head>
 
 <body>
@@ -21,8 +70,39 @@
     <button id="home">Home</button>
   </div>
 
-  <!-- ✅ Everything below is now inside the unified wrapper -->
   <div class="game-wrapper">
+
+    <!-- Question filter bar -->
+    <div class="qf-bar" id="qfBar">
+      <div class="qf-summary" onclick="toggleQF()">
+        <span>❓</span>
+        <span class="qf-summary-text" id="qfSummary">No questions — free play</span>
+        <span class="qf-chevron">▼</span>
+      </div>
+      <div class="qf-detail">
+        <div class="qf-row">
+          <div class="qf-col">
+            <div class="qf-col-label">Unit</div>
+            <div class="qf-units" id="qfUnits"><span class="qf-empty">Loading…</span></div>
+          </div>
+          <div class="qf-col">
+            <div class="qf-col-label">Topic</div>
+            <div class="qf-checks" id="qfTopics"><span class="qf-empty">Select a unit first</span></div>
+          </div>
+          <div class="qf-col">
+            <div class="qf-col-label">Lesson</div>
+            <div class="qf-checks" id="qfLessons"><span class="qf-empty">Select a unit first</span></div>
+          </div>
+        </div>
+        <div class="qf-status-bar">
+          <span class="qf-status" id="qfStatus">No questions selected — free play</span>
+          <div class="qf-mode-btns">
+            <button class="qf-mode-btn active" id="modeScreen" onclick="setQMode('screen')">On Screen</button>
+            <button class="qf-mode-btn" id="modeTeacher" onclick="setQMode('teacher')">Teacher Reads</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div id="currentTurn">Team 1's Turn!</div>
 
@@ -30,7 +110,7 @@
 
     <div class="scoreboard" id="scoreboard"></div>
 
-    <!-- ✅ Unified Modal -->
+    <!-- Target modal (for bombs/steals etc) -->
     <div id="targetModal" class="modal-overlay">
       <div class="modal-box">
         <h2 id="modalMessage">Choose a team</h2>
@@ -39,246 +119,298 @@
       </div>
     </div>
 
-  </div> <!-- end wrapper -->
+  </div>
+
+  <!-- Question modal -->
+  <div id="qModal" class="q-modal-overlay" style="display:none;">
+    <div class="q-modal-box">
+      <div class="q-team-label" id="qModalTeam"></div>
+      <div class="q-question-text" id="qModalQuestion"></div>
+      <div class="q-options" id="qModalOptions"></div>
+      <div class="q-ctrl-row" id="qModalCtrl"></div>
+    </div>
+  </div>
 
   <script>
     const gridEl = document.getElementById("grid");
     const scoreboard = document.getElementById("scoreboard");
     const currentTurnEl = document.getElementById("currentTurn");
 
-    // ✅ REAL EMOJI ICONS
-    const emojis = {
-      heart: '❤️',
-      safe: '🛡️',
-      skull: '💀',
-      dynamite: '💣',
-      steal: '💰',
-      pistol: '🔫',
-      swap: '🔄',
-      wings: '🪽',
-      twoX: '2️⃣×',
-      threeX: '3️⃣×'
-    };
+    const emojis = { heart:'❤️', safe:'🛡️', skull:'💀', dynamite:'💣', steal:'💰', pistol:'🔫', swap:'🔄', wings:'🪽', twoX:'2️⃣×', threeX:'3️⃣×' };
 
-    let teamSafe = [];
-    let currentTeam = 0;
-    let totalTeams = 0;
+    let teamSafe=[], currentTeam=0, totalTeams=0;
+    let awaitingAnswer=false, pendingTileEvent=null;
 
-    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+    // ── Question system ────────────────────────────────────
+    let qPool=[], qIndex=0, qMode='screen', selectedUnit=null;
+
+    function toggleQF() { document.getElementById('qfBar').classList.toggle('open'); }
+
+    function setQMode(m) {
+      qMode=m;
+      document.getElementById('modeScreen').classList.toggle('active',m==='screen');
+      document.getElementById('modeTeacher').classList.toggle('active',m==='teacher');
+      updateQFSummary();
+    }
+
+    function buildUnitButtons() {
+      const container=document.getElementById('qfUnits');
+      if (typeof window.QUESTIONS==='undefined'||!window.QUESTIONS.length) {
+        container.innerHTML='<span class="qf-empty">questions.js not loaded</span>'; return;
+      }
+      const unitMap=new Map();
+      window.QUESTIONS.forEach(q=>{ if(q.stage!=null&&q.unit!=null) { const key='S'+q.stage+'/U'+q.unit; if(!unitMap.has(key)) unitMap.set(key,{stage:q.stage,unit:q.unit}); } });
+      container.innerHTML='';
+      [...unitMap.values()].sort((a,b)=>a.stage!==b.stage?a.stage-b.stage:a.unit-b.unit).forEach(({stage,unit})=>{
+        const btn=document.createElement('button'); btn.className='qf-unit-btn'; btn.textContent='S'+stage+'/U'+unit;
+        btn.onclick=()=>selectUnit(stage,unit,btn); container.appendChild(btn);
+      });
+    }
+
+    function selectUnit(stage,unit,btnEl) {
+      if (btnEl.classList.contains('active')) {
+        btnEl.classList.remove('active'); selectedUnit=null;
+        document.getElementById('qfTopics').innerHTML='<span class="qf-empty">Select a unit first</span>';
+        document.getElementById('qfLessons').innerHTML='<span class="qf-empty">Select a unit first</span>';
+        rebuildPool(); return;
+      }
+      document.querySelectorAll('.qf-unit-btn').forEach(b=>b.classList.remove('active'));
+      btnEl.classList.add('active'); selectedUnit={stage:parseInt(stage),unit:parseInt(unit)};
+      buildTopicsAndLessons();
+    }
+
+    function questionsForUnit() {
+      if (!selectedUnit) return [];
+      return window.QUESTIONS.filter(q=>q.stage===selectedUnit.stage&&q.unit===selectedUnit.unit);
+    }
+
+    function buildTopicsAndLessons() {
+      const qs=questionsForUnit();
+      const topicsEl=document.getElementById('qfTopics'), lessonsEl=document.getElementById('qfLessons');
+      topicsEl.innerHTML='';
+      const topics=[...new Set(qs.map(q=>q.topic))].sort();
+      if (!topics.length) topicsEl.innerHTML='<span class="qf-empty">No topics</span>';
+      else topics.forEach(t=>{
+        const count=qs.filter(q=>q.topic===t).length;
+        const label=document.createElement('label'); label.className='qf-check-label';
+        const cb=document.createElement('input'); cb.type='checkbox'; cb.value=t; cb.addEventListener('change',rebuildPool);
+        const span=document.createElement('span'); span.textContent=t;
+        const cs=document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
+        label.appendChild(cb); label.appendChild(span); label.appendChild(cs); topicsEl.appendChild(label);
+      });
+      lessonsEl.innerHTML='';
+      const lessons=[...new Set(qs.filter(q=>q.lesson!=null).map(q=>q.lesson))].sort((a,b)=>a-b);
+      if (!lessons.length) lessonsEl.innerHTML='<span class="qf-empty">No lesson data</span>';
+      else lessons.forEach(l=>{
+        const count=qs.filter(q=>q.lesson===l).length;
+        const label=document.createElement('label'); label.className='qf-check-label';
+        const cb=document.createElement('input'); cb.type='checkbox'; cb.value=l; cb.addEventListener('change',rebuildPool);
+        const span=document.createElement('span'); span.textContent='Lesson '+l;
+        const cs=document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
+        label.appendChild(cb); label.appendChild(span); label.appendChild(cs); lessonsEl.appendChild(label);
+      });
+      rebuildPool();
+    }
 
     function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
+      for (let i=array.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [array[i],array[j]]=[array[j],array[i]]; }
       return array;
     }
 
-    function generateSymbolPool(size) {
-      let pool = ['safe'];
-      const probs = {
-        heart: 0.22, skull: 0.05, dynamite: 0.05, steal: 0.05, pistol: 0.05,
-        swap: 0.03, wings: 0.03, twoX: 0.02, threeX: 0.02
-      };
-      for (let sym in probs) {
-        let count = Math.round(size * probs[sym]);
-        for (let i = 0; i < count; i++) pool.push(sym);
+    function rebuildPool() {
+      const checkedTopics=[...document.querySelectorAll('#qfTopics input:checked')].map(i=>i.value);
+      const checkedLessons=[...document.querySelectorAll('#qfLessons input:checked')].map(i=>parseInt(i.value));
+      const candidates=questionsForUnit();
+      if (!checkedTopics.length&&!checkedLessons.length) { qPool=[]; }
+      else {
+        const seen=new Set();
+        qPool=shuffle(candidates.filter(q=>{
+          const hit=(checkedTopics.length&&checkedTopics.includes(q.topic))||(checkedLessons.length&&q.lesson!=null&&checkedLessons.includes(q.lesson));
+          if (!hit||seen.has(q.question)) return false; seen.add(q.question); return true;
+        }));
       }
-      while (pool.length < size) pool.push('heart');
+      qIndex=0; updateQFSummary();
+    }
+
+    function updateQFSummary() {
+      const el=document.getElementById('qfSummary'), st=document.getElementById('qfStatus');
+      if (!qPool.length) { el.textContent='No questions — free play'; st.textContent='No questions selected — free play'; }
+      else {
+        const topics=[...new Set(qPool.map(q=>q.topic))];
+        const unitStr=selectedUnit?'S'+selectedUnit.stage+'/U'+selectedUnit.unit+' · ':'';
+        const topicStr=topics.length===1?topics[0]:topics.length+' topics';
+        el.innerHTML=unitStr+'<strong>'+qPool.length+' questions</strong> · '+topicStr+' · '+(qMode==='teacher'?'Teacher reads':'On screen');
+        st.innerHTML='<strong>'+qPool.length+' questions</strong> ready — '+topicStr;
+      }
+    }
+
+    function showQuestion(teamNum, cb) {
+      if (!qPool.length) { cb(true); return; }
+      const q=qPool[qIndex%qPool.length]; qIndex++;
+      document.getElementById('qModal').style.display='flex';
+      document.getElementById('qModalTeam').textContent='Team '+teamNum+' — answer to reveal the tile!';
+      document.getElementById('qModalTeam').style.color='#f0c842';
+      document.getElementById('qModalQuestion').textContent=q.question;
+      const optsEl=document.getElementById('qModalOptions'), ctrlEl=document.getElementById('qModalCtrl');
+      optsEl.innerHTML=''; ctrlEl.innerHTML='';
+      const allOpts=shuffle([q.answer,...q.distractors]);
+      if (qMode==='screen') {
+        allOpts.forEach(opt=>{
+          const btn=document.createElement('button'); btn.className='q-opt-btn'; btn.textContent=opt;
+          btn.onclick=()=>{
+            document.querySelectorAll('.q-opt-btn').forEach(b=>{ b.classList.add('disabled'); if(b.textContent===q.answer) b.classList.add('correct'); });
+            btn.classList.add(opt===q.answer?'correct':'wrong');
+            setTimeout(()=>{ document.getElementById('qModal').style.display='none'; cb(opt===q.answer); },1100);
+          };
+          optsEl.appendChild(btn);
+        });
+      } else {
+        allOpts.forEach(opt=>{
+          const btn=document.createElement('button'); btn.className='q-opt-btn'; btn.textContent=opt;
+          btn.style.visibility='hidden'; btn.dataset.correct=opt===q.answer?'1':'0'; optsEl.appendChild(btn);
+        });
+        const revBtn=document.createElement('button'); revBtn.className='q-ctrl-btn'; revBtn.textContent='👁 Reveal Options';
+        revBtn.onclick=()=>{ document.querySelectorAll('.q-opt-btn').forEach(b=>{ b.style.visibility='visible'; if(b.dataset.correct==='1') b.classList.add('reveal'); }); revBtn.style.display='none'; };
+        const okBtn=document.createElement('button'); okBtn.className='q-ctrl-btn primary'; okBtn.textContent='✓ Correct — Reveal Tile';
+        okBtn.onclick=()=>{ document.getElementById('qModal').style.display='none'; cb(true); };
+        const wrongBtn=document.createElement('button'); wrongBtn.className='q-ctrl-btn danger'; wrongBtn.textContent='✗ Wrong — Skip Turn';
+        wrongBtn.onclick=()=>{ document.getElementById('qModal').style.display='none'; cb(false); };
+        ctrlEl.appendChild(revBtn); ctrlEl.appendChild(okBtn); ctrlEl.appendChild(wrongBtn);
+      }
+    }
+
+    // ── Game logic ─────────────────────────────────────────
+    function clamp(n,min,max) { return Math.max(min,Math.min(max,n)); }
+
+    function generateSymbolPool(size) {
+      let pool=['safe'];
+      const probs={heart:0.22,skull:0.05,dynamite:0.05,steal:0.05,pistol:0.05,swap:0.03,wings:0.03,twoX:0.02,threeX:0.02};
+      for (let sym in probs) { let count=Math.round(size*probs[sym]); for(let i=0;i<count;i++) pool.push(sym); }
+      while (pool.length<size) pool.push('heart');
       return shuffle(pool);
     }
 
     function resetCovers() {
-      document.querySelectorAll('.cover').forEach(c => c.classList.remove('hidden'));
-      document.querySelectorAll('.symbol').forEach(s => s.remove());
+      document.querySelectorAll('.cover').forEach(c=>c.classList.remove('hidden'));
+      document.querySelectorAll('.symbol').forEach(s=>s.remove());
     }
 
     function highlightActiveTeam() {
-      document.querySelectorAll('.team-container').forEach((c, i) =>
-        c.classList.toggle('active-team', i === currentTeam)
-      );
-      currentTurnEl.textContent = `Team ${currentTeam + 1}'s Turn!`;
+      document.querySelectorAll('.team-container').forEach((c,i)=>c.classList.toggle('active-team',i===currentTeam));
+      currentTurnEl.textContent='Team '+(currentTeam+1)+"'s Turn!";
     }
 
     function updateSafeIndicators() {
-      document.querySelectorAll('.safe-indicator').forEach((e, i) =>
-        e.textContent = teamSafe[i] ? '🛡️' : ''
-      );
+      document.querySelectorAll('.safe-indicator').forEach((e,i)=>e.textContent=teamSafe[i]?'🛡️':'');
     }
 
-    // ✅ Unified modal system
-    function showTargetModal(message, callback) {
-      document.getElementById('modalMessage').textContent = message;
-      const buttonsDiv = document.getElementById('modalButtons');
-      buttonsDiv.innerHTML = '';
-
-      let hasTarget = false;
-      for (let i = 0; i < totalTeams; i++) {
-        if (i !== currentTeam && !teamSafe[i]) {
-          hasTarget = true;
-          const btn = document.createElement('button');
-          btn.textContent = `Team ${i + 1}`;
-          btn.onclick = () => {
-            closeModal();
-            callback(i);
-          };
-          buttonsDiv.appendChild(btn);
+    function showTargetModal(message,callback) {
+      document.getElementById('modalMessage').textContent=message;
+      const buttonsDiv=document.getElementById('modalButtons'); buttonsDiv.innerHTML='';
+      let hasTarget=false;
+      for (let i=0;i<totalTeams;i++) {
+        if (i!==currentTeam&&!teamSafe[i]) {
+          hasTarget=true;
+          const btn=document.createElement('button'); btn.textContent='Team '+(i+1);
+          btn.onclick=()=>{ closeModal(); callback(i); }; buttonsDiv.appendChild(btn);
         }
       }
-
-      if (!hasTarget) {
-        alert("No valid targets!");
-        callback(null);
-      } else {
-        document.getElementById('targetModal').classList.add('show');
-      }
+      if (!hasTarget) { alert("No valid targets!"); callback(null); }
+      else document.getElementById('targetModal').classList.add('show');
     }
 
-    function closeModal() {
-      document.getElementById('targetModal').classList.remove('show');
-    }
+    function closeModal() { document.getElementById('targetModal').classList.remove('show'); }
 
     function getSymbolText(sym) {
-      const map = {
-        heart: '+1 Point', safe: 'SAFE!', skull: '-3 Points', dynamite: 'BOMB!',
-        steal: 'STEAL 3', pistol: 'SHOOT -2', swap: 'SWAP!', wings: 'DOUBLE!',
-        twoX: '×2 SCORE', threeX: '×3 SCORE'
-      };
-      return map[sym] || sym.toUpperCase();
+      const map={heart:'+1 Point',safe:'SAFE!',skull:'-3 Points',dynamite:'BOMB!',steal:'STEAL 3',pistol:'SHOOT -2',swap:'SWAP!',wings:'DOUBLE!',twoX:'×2 SCORE',threeX:'×3 SCORE'};
+      return map[sym]||sym.toUpperCase();
     }
 
-    function applySymbol(teamIndex, symbol, done) {
-      const inputs = document.querySelectorAll('.scoreboard input');
-      let score = parseInt(inputs[teamIndex].value) || 0;
-
-      const tile = event.target.closest('.tile');
-      const symDiv = document.createElement('div');
-      symDiv.className = 'symbol';
-      symDiv.innerHTML = `${emojis[symbol]}<div class="symbol-text">${getSymbolText(symbol)}</div>`;
+    function applySymbol(teamIndex,symbol,tile,done) {
+      const inputs=document.querySelectorAll('.scoreboard input');
+      let score=parseInt(inputs[teamIndex].value)||0;
+      const symDiv=document.createElement('div'); symDiv.className='symbol';
+      symDiv.innerHTML=emojis[symbol]+'<div class="symbol-text">'+getSymbolText(symbol)+'</div>';
       tile.appendChild(symDiv);
-
-      switch (symbol) {
-        case 'heart': score += 1; inputs[teamIndex].value = score; done(); break;
-        case 'safe': teamSafe[teamIndex] = true; updateSafeIndicators(); done(); break;
-        case 'skull': score -= 3; inputs[teamIndex].value = score; done(); break;
-
+      switch(symbol) {
+        case 'heart': score+=1; inputs[teamIndex].value=score; done(); break;
+        case 'safe':  teamSafe[teamIndex]=true; updateSafeIndicators(); done(); break;
+        case 'skull': score-=3; inputs[teamIndex].value=score; done(); break;
         case 'dynamite':
-          showTargetModal(`Team ${teamIndex + 1} found BOMB! Choose a team to wipe their score to zero:`,
-            i => { if (i !== null) inputs[i].value = 0; done(); });
+          showTargetModal('Team '+(teamIndex+1)+' found BOMB! Choose a team to wipe their score to zero:',
+            i=>{if(i!==null) inputs[i].value=0; done();});
           return;
-
         case 'steal':
-          showTargetModal(`Team ${teamIndex + 1} found STEAL! Choose team to steal 3 points from:`,
-            i => {
-              if (i === null) return done();
-              let v = parseInt(inputs[i].value) || 0;
-              const stolen = Math.min(3, v);
-              inputs[teamIndex].value = score + stolen;
-              inputs[i].value = v - stolen;
-              done();
-            });
+          showTargetModal('Team '+(teamIndex+1)+' found STEAL! Choose team to steal 3 points from:',
+            i=>{if(i===null) return done(); let v=parseInt(inputs[i].value)||0; const s=Math.min(3,v); inputs[teamIndex].value=score+s; inputs[i].value=v-s; done();});
           return;
-
         case 'pistol':
-          showTargetModal(`Team ${teamIndex + 1} found PISTOL! Choose team to shoot (-2):`,
-            i => { if (i !== null) inputs[i].value = (parseInt(inputs[i].value)||0)-2; done(); });
+          showTargetModal('Team '+(teamIndex+1)+' found PISTOL! Choose team to shoot (-2):',
+            i=>{if(i!==null) inputs[i].value=(parseInt(inputs[i].value)||0)-2; done();});
           return;
-
         case 'swap':
-          showTargetModal(`Team ${teamIndex + 1} found SWAP! Choose team to swap scores with:`,
-            i => {
-              if (i === null) return done();
-              const temp = inputs[i].value;
-              inputs[i].value = score;
-              inputs[teamIndex].value = temp;
-              done();
-            });
+          showTargetModal('Team '+(teamIndex+1)+' found SWAP! Choose team to swap scores with:',
+            i=>{if(i===null) return done(); const temp=inputs[i].value; inputs[i].value=score; inputs[teamIndex].value=temp; done();});
           return;
-
         case 'wings':
-          showTargetModal(`Team ${teamIndex + 1} found WINGS! Choose team to DOUBLE score:`,
-            i => {
-              if (i !== null) {
-                const s = parseInt(inputs[i].value) || 0;
-                if (s > 0) inputs[i].value = s * 2;
-              }
-              done();
-            });
+          showTargetModal('Team '+(teamIndex+1)+' found WINGS! Choose team to DOUBLE score:',
+            i=>{if(i!==null){const s=parseInt(inputs[i].value)||0; if(s>0) inputs[i].value=s*2;} done();});
           return;
-
-        case 'twoX': if (score > 0) score *= 2; inputs[teamIndex].value = score; done(); break;
-        case 'threeX': if (score > 0) score *= 3; inputs[teamIndex].value = score; done(); break;
+        case 'twoX':   if(score>0) score*=2; inputs[teamIndex].value=score; done(); break;
+        case 'threeX': if(score>0) score*=3; inputs[teamIndex].value=score; done(); break;
       }
     }
 
     function buildGrid() {
-      const cols = clamp(parseInt(document.getElementById('cols').value) || 6, 4, 12);
-      const rows = clamp(parseInt(document.getElementById('rows').value) || 5, 4, 5);
-      totalTeams = clamp(parseInt(document.getElementById('teams').value) || 6, 3, 10);
-
-      document.documentElement.style.setProperty('--cols', cols);
-      document.documentElement.style.setProperty('--rows', rows);
-
-      const pool = generateSymbolPool(cols * rows);
-      gridEl.innerHTML = '';
-      let num = 1;
-
-      pool.forEach(sym => {
-        const tile = document.createElement('div');
-        tile.className = 'tile';
-
-        const cover = document.createElement('div');
-        cover.className = 'cover';
-        cover.textContent = num++;
-
-        cover.onclick = function () {
-          cover.classList.add('hidden');
-          applySymbol(currentTeam, sym, () => {
-            currentTeam = (currentTeam + 1) % totalTeams;
-            highlightActiveTeam();
+      const cols=clamp(parseInt(document.getElementById('cols').value)||6,4,12);
+      const rows=clamp(parseInt(document.getElementById('rows').value)||5,4,5);
+      totalTeams=clamp(parseInt(document.getElementById('teams').value)||6,3,10);
+      document.documentElement.style.setProperty('--cols',cols);
+      document.documentElement.style.setProperty('--rows',rows);
+      const pool=generateSymbolPool(cols*rows);
+      gridEl.innerHTML=''; let num=1;
+      pool.forEach(sym=>{
+        const tile=document.createElement('div'); tile.className='tile';
+        const cover=document.createElement('div'); cover.className='cover'; cover.textContent=num++;
+        cover.onclick=function() {
+          if (awaitingAnswer) return;
+          const thisTile=tile;
+          awaitingAnswer=true;
+          showQuestion(currentTeam+1,(correct)=>{
+            awaitingAnswer=false;
+            if (correct) {
+              cover.classList.add('hidden');
+              applySymbol(currentTeam,sym,thisTile,()=>{
+                currentTeam=(currentTeam+1)%totalTeams; highlightActiveTeam();
+              });
+            } else {
+              // Wrong — tile stays hidden, turn passes
+              currentTeam=(currentTeam+1)%totalTeams; highlightActiveTeam();
+            }
           });
         };
-
-        tile.appendChild(cover);
-        gridEl.appendChild(tile);
+        tile.appendChild(cover); gridEl.appendChild(tile);
       });
-
-      scoreboard.innerHTML = '';
-      teamSafe = new Array(totalTeams).fill(false);
-
-      for (let i = 0; i < totalTeams; i++) {
-        const container = document.createElement('div');
-        container.className = 'team-container';
-
-        const nameDiv = document.createElement('div');
-        nameDiv.className = 'team-name';
-        nameDiv.innerHTML = `Team ${i + 1} <span class="safe-indicator"></span>`;
-
-        const inp = document.createElement('input');
-        inp.type = 'number';
-        inp.value = 0;
-
-        container.appendChild(nameDiv);
-        container.appendChild(inp);
-        scoreboard.appendChild(container);
+      scoreboard.innerHTML=''; teamSafe=new Array(totalTeams).fill(false);
+      for (let i=0;i<totalTeams;i++) {
+        const container=document.createElement('div'); container.className='team-container';
+        const nameDiv=document.createElement('div'); nameDiv.className='team-name';
+        nameDiv.innerHTML='Team '+(i+1)+' <span class="safe-indicator"></span>';
+        const inp=document.createElement('input'); inp.type='number'; inp.value=0;
+        container.appendChild(nameDiv); container.appendChild(inp); scoreboard.appendChild(container);
       }
-
-      currentTeam = 0;
-      highlightActiveTeam();
-      updateSafeIndicators();
+      currentTeam=0; highlightActiveTeam(); updateSafeIndicators();
     }
 
-    document.getElementById('build').onclick = buildGrid;
-    document.getElementById('reset').onclick = resetCovers;
-    document.getElementById('skipTurn').onclick = () => {
-      currentTeam = (currentTeam + 1) % totalTeams;
-      highlightActiveTeam();
-    };
-    document.getElementById('fullscreen').onclick = () => document.documentElement.requestFullscreen?.();
-    document.getElementById('home').onclick = () => window.location.href = '../index.html';
+    document.getElementById('build').onclick=buildGrid;
+    document.getElementById('reset').onclick=resetCovers;
+    document.getElementById('skipTurn').onclick=()=>{ currentTeam=(currentTeam+1)%totalTeams; highlightActiveTeam(); };
+    document.getElementById('fullscreen').onclick=()=>document.documentElement.requestFullscreen?.();
+    document.getElementById('home').onclick=()=>window.location.href='../index.html';
 
     buildGrid();
+    window.addEventListener('load', buildUnitButtons);
   </script>
-
+  <script src="../questions.js"></script>
 </body>
 </html>
