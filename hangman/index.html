@@ -6,6 +6,41 @@
   <title>Hangman Modes</title>
   <link rel="stylesheet" href="../style.css">
   <script src="../content.js" onerror="console.log('No content.js')"></script>
+  <style>
+    /* ── Word filter bar ── */
+    .qf-bar {
+      width:100%; background:rgba(10,18,30,0.92); border:1px solid rgba(255,255,255,0.1);
+      border-radius:12px; overflow:hidden; margin-bottom:8px;
+    }
+    .qf-summary { display:flex; align-items:center; gap:10px; padding:8px 14px; cursor:pointer; user-select:none; font-size:0.82rem; color:#c8bfb0; }
+    .qf-summary:hover { background:rgba(255,255,255,0.04); }
+    .qf-summary-text { flex:1; }
+    .qf-chevron { font-size:0.7rem; transition:transform 0.2s; }
+    .qf-bar.open .qf-chevron { transform:rotate(180deg); }
+    .qf-detail { display:none; padding:10px 14px 14px; border-top:1px solid rgba(255,255,255,0.07); }
+    .qf-bar.open .qf-detail { display:block; }
+    .qf-section-label { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:rgba(240,180,41,0.8); margin:8px 0 5px; }
+    .qf-section-label:first-child { margin-top:0; }
+    .qf-units { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
+    .qf-unit-btn {
+      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15);
+      color:#c8bfb0; padding:3px 9px; border-radius:5px; font-size:0.72rem;
+      cursor:pointer; transition:all 0.18s; white-space:nowrap;
+    }
+    .qf-unit-btn:hover { background:rgba(240,180,41,0.12); border-color:rgba(240,180,41,0.4); }
+    .qf-unit-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.65); color:#f0c842; font-weight:600; }
+    .qf-checks { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:4px; }
+    .qf-check-label {
+      display:flex; align-items:center; gap:5px; font-size:0.75rem; color:#c8bfb0;
+      cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+      border-radius:5px; padding:3px 8px; transition:all 0.15s;
+    }
+    .qf-check-label:hover { background:rgba(240,180,41,0.1); }
+    .qf-check-label input { accent-color:#f0c842; }
+    .qf-count { font-size:0.65rem; color:rgba(240,180,41,0.7); margin-left:2px; }
+    .qf-empty { font-size:0.75rem; color:rgba(255,255,255,0.3); font-style:italic; }
+    .qf-status { font-size:0.75rem; color:#c8bfb0; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); margin-top:6px; }
+  </style>
 </head>
 
 <body class="hangman-page">
@@ -43,13 +78,28 @@
       </div>
 
       <div class="hm-setup-section">
-
-      </div>
-
-      <div class="hm-setup-section">
-        <label>Word Topics <span id="wordlistCount" style="font-weight:400;font-size:0.8rem;color:var(--text-dim);margin-left:6px;">All topics selected</span></label>
-        <div class="hm-picker" id="wordlistPicker" style="display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;padding-right:4px;">
-          <!-- Populated dynamically -->
+        <label>Word Topics</label>
+        <!-- qf-bar style picker -->
+        <div class="qf-bar open" id="wordFilterBar">
+          <div class="qf-summary" onclick="document.getElementById('wordFilterBar').classList.toggle('open')">
+            <span>📚</span>
+            <span class="qf-summary-text" id="wordFilterSummary">All built-in topics</span>
+            <span class="qf-chevron">▼</span>
+          </div>
+          <div class="qf-detail">
+            <!-- Curriculum words (from content.js) -->
+            <div id="curriculumSection" style="display:none;">
+              <div class="qf-section-label">Curriculum (content.js)</div>
+              <div class="qf-units" id="curriculumUnits"></div>
+              <div class="qf-checks" id="curriculumTopics"><span class="qf-empty">Select a unit first</span></div>
+            </div>
+            <!-- Built-in categories -->
+            <div id="builtinSection">
+              <div class="qf-section-label">Built-in Topics</div>
+              <div class="qf-checks" id="builtinChecks"></div>
+            </div>
+            <div class="qf-status" id="wordFilterStatus">All built-in topics selected</div>
+          </div>
         </div>
       </div>
 
@@ -61,12 +111,10 @@
 
       <div id="currentTurn">Get ready!</div>
 
-      <!-- Top section: canvas + word board side by side -->
       <div class="hm-top">
         <canvas id="hangmanCanvas" width="220" height="260"></canvas>
         <div class="hm-word-col">
           <div class="hm-word-board" id="gameBoard"></div>
-          <!-- Diceman panel lives HERE, beside the word, not floating -->
           <div class="hm-diceman" id="dicePanel">
             <div class="hm-dice-face" id="diceFace">🎲</div>
             <table class="hm-dice-table">
@@ -81,15 +129,12 @@
         </div>
       </div>
 
-      <!-- Letter grid -->
       <div class="hm-letters" id="letters"></div>
-
-      <!-- Scoreboard -->
       <div class="scoreboard" id="scoreboard"></div>
 
-    </div><!-- end gameArea -->
+    </div>
 
-  </div><!-- end game-wrapper -->
+  </div>
 
   <script>
     const canvas = document.getElementById('hangmanCanvas');
@@ -99,109 +144,10 @@
     let currentWord = '', revealed = [], guessedLetters = new Set();
     let wrongGuesses = 0, totalScores = [], currentWordPoints = [];
     let currentTeam = 0, totalTeams = 0, mode = '', lastRolls = [];
-
-    const wordLists = {};   // filled from wordlists.json
     let words = [];
-    let selTeams = 4, selMode = 'basic', selList = '';
+    let selTeams = 4, selMode = 'basic';
 
-    // ── Build category picker (multi-select checkboxes) ─────
-    const selectedTopics = new Set(); // tracks which topic keys are ticked
-
-    function buildWordPool() {
-      if (selectedTopics.size === 0) {
-        words = buildRandomPool();
-      } else {
-        words = [];
-        for (const [key, cat] of Object.entries(wordLists)) {
-          if (selectedTopics.has(key)) words.push(...cat.words);
-        }
-        if (!words.length) words = buildRandomPool();
-      }
-    }
-
-    function buildCategoryPicker() {
-      const picker = document.getElementById('wordlistPicker');
-      picker.innerHTML = '';
-
-      // Collect topics — merge words from all matching entries per topic label
-      const topicMap = {};   // label → { keys[], words[] }
-      for (const [key, cat] of Object.entries(wordLists)) {
-        if (key.startsWith('_')) continue;
-        const lbl = cat.label;
-        if (!topicMap[lbl]) topicMap[lbl] = { keys: [], words: [] };
-        topicMap[lbl].keys.push(key);
-        topicMap[lbl].words.push(...cat.words);
-      }
-
-      // Helper: rebuild word pool and update count label
-      function refreshPool() {
-        buildWordPool();
-        const countEl = document.getElementById('wordlistCount');
-        if (countEl) {
-          if (selectedTopics.size === 0) {
-            countEl.textContent = 'All topics · ' + words.length + ' words';
-          } else {
-            countEl.textContent = selectedTopics.size + ' topic' + (selectedTopics.size > 1 ? 's' : '') + ' selected · ' + words.length + ' words';
-          }
-        }
-      }
-
-      // "All topics" toggle at the top
-      const allBtn = document.createElement('button');
-      allBtn.textContent = '🎲 All topics';
-      allBtn.className = 'hm-selected';
-      allBtn.style.cssText = 'margin-bottom:6px;';
-      allBtn.onclick = () => {
-        selectedTopics.clear();
-        picker.querySelectorAll('.topic-cb').forEach(cb => cb.checked = false);
-        allBtn.classList.add('hm-selected');
-        refreshPool();
-      };
-      picker.appendChild(allBtn);
-
-      // One checkbox row per topic
-      for (const [lbl, data] of Object.entries(topicMap)) {
-        const keys = data.keys;
-        const row = document.createElement('label');
-        row.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 10px;border-radius:8px;border:1px solid var(--glass-border);background:var(--glass);transition:background 0.15s;';
-        row.onmouseover = () => row.style.background = 'var(--glass-hi)';
-        row.onmouseout  = () => { if (!row.querySelector('input').checked) row.style.background = 'var(--glass)'; };
-
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.className = 'topic-cb';
-        cb.style.cssText = 'accent-color:var(--accent);width:15px;height:15px;cursor:pointer;';
-        cb.onchange = () => {
-          keys.forEach(k => cb.checked ? selectedTopics.add(k) : selectedTopics.delete(k));
-          // Update "All topics" button state
-          allBtn.classList.toggle('hm-selected', selectedTopics.size === 0);
-          row.style.background = cb.checked ? 'rgba(0,201,167,0.12)' : 'var(--glass)';
-          refreshPool();
-        };
-
-        const span = document.createElement('span');
-        span.textContent = lbl;
-        span.style.cssText = 'font-size:0.88rem;font-weight:600;';
-
-        row.appendChild(cb);
-        row.appendChild(span);
-        picker.appendChild(row);
-      }
-
-      // Initial pool
-      refreshPool();
-    }
-
-    function buildRandomPool() {
-      const pool = [];
-      for (const [key, cat] of Object.entries(wordLists)) {
-        if (key.startsWith('_')) continue;
-        pool.push(...cat.words);
-      }
-      return pool.length ? pool : ['ELEPHANT','TIGER','PENGUIN','DOLPHIN','GIRAFFE'];
-    }
-
-    // ── Full word list embedded (works without a server) ──
+    // ── Built-in word lists ────────────────────────────────
     const BUILT_IN = {
       "animals":    { label:"🐘 Animals",         words:["CAT","DOG","COW","PIG","HEN","FOX","OWL","BAT","BEE","ANT","FISH","FROG","BEAR","DUCK","DEER","LION","WOLF","CRAB","WORM","BIRD","TIGER","HORSE","SHARK","WHALE","EAGLE","SNAKE","MOUSE","RABBIT","PARROT","MONKEY","DOLPHIN","PENGUIN","GIRAFFE","CHEETAH","LEOPARD","GORILLA","FLAMINGO","CROCODILE","TORTOISE","HEDGEHOG","PORCUPINE","CHAMELEON","PELICAN","OCTOPUS","LOBSTER","SEAHORSE","JELLYFISH","STINGRAY","PIRANHA","TOUCAN","PEACOCK","OSTRICH","MEERKAT","PLATYPUS","CHIPMUNK","SQUIRREL","ORANGUTAN","CHIMPANZEE","HIPPOPOTAMUS","RHINOCEROS","ARMADILLO","AXOLOTL","KOMODO DRAGON","NARWHAL","CAPYBARA","PANGOLIN","OKAPI","CASSOWARY","MANATEE","DUGONG","BELUGA WHALE"] },
       "food":       { label:"🍕 Food",             words:["CAKE","RICE","BREAD","MILK","EGGS","SOUP","FISH","MEAT","CORN","APPLE","MANGO","GRAPE","MELON","PIZZA","PASTA","CHIPS","JUICE","TOAST","SALAD","NOODLES","BURGER","COOKIE","HONEY","BUTTER","CHEESE","YOGURT","CEREAL","WAFFLE","SUSHI","TACOS","LAKSA","SATAY","RENDANG","BIRYANI","CURRY","DUMPLING","ROTI CANAI","NASI LEMAK","SPRING ROLLS","CROISSANT","BROWNIE","CHEESECAKE","TIRAMISU","SMOOTHIE","MILKSHAKE","CAPPUCCINO","GUACAMOLE","HUMMUS","BRUSCHETTA","ENCHILADA","BURRITO","PAELLA","RISOTTO","GNOCCHI","FALAFEL","SHAWARMA","SAMOSA","PAKORA","BOUILLABAISSE","RATATOUILLE","COQ AU VIN","CEVICHE","CHIMICHURRI","EMPANADA","CHAR KUEY TEOW","CHILLI PAN MEE","HOKKIEN MEE","BAKKUT TEH","POUTINE","GOULASH","STROGANOFF","SCHNITZEL","MOUSSAKA","SHAKSHUKA","TAGINE","PHO","BIBIMBAP","OKONOMIYAKI"] },
@@ -213,45 +159,135 @@
       "science":    { label:"🔬 Science",          words:["PHOTOSYNTHESIS","MITOCHONDRIA","CHROMOSOME","ECOSYSTEM","EVOLUTION","RESPIRATION","DIGESTION","CIRCULATION","GERMINATION","COMBUSTION","GRAVITY","MAGNETISM","ELECTRICITY","RADIATION","REFRACTION","CONDENSATION","EVAPORATION","PRECIPITATION","SUBLIMATION","HYDROGEN","NITROGEN","OXYGEN","CARBON DIOXIDE","AMMONIA","ELEMENT","COMPOUND","MOLECULE","ATOM","NEUTRON","PROTON","ELECTROMAGNETISM","THERMODYNAMICS","BIOLUMINESCENCE","CHEMOSYNTHESIS","TECTONIC PLATES","SEISMOGRAPH","SPECTROSCOPY","ELECTROLYSIS","CATALYSIS","STOICHIOMETRY","QUANTUM MECHANICS","SUPERCONDUCTOR","SEMICONDUCTOR","TRANSISTOR","PHOTOELECTRIC","RADIOACTIVE DECAY","NUCLEAR FISSION","CENTRIPETAL FORCE"] },
       "technology": { label:"💻 Technology",       words:["ALGORITHM","ARTIFICIAL INTELLIGENCE","BLOCKCHAIN","ENCRYPTION","CYBERSECURITY","PROGRAMMING","DEBUGGING","FRAMEWORK","REPOSITORY","CLOUD STORAGE","VIRTUAL REALITY","AUGMENTED REALITY","MACHINE LEARNING","NEURAL NETWORK","DEEP LEARNING","SEMICONDUCTOR","MICROPROCESSOR","QUANTUM COMPUTING","BANDWIDTH","LATENCY","FIREWALL","MALWARE","PHISHING","OPEN SOURCE","CONTAINERISATION","VERSION CONTROL","AGILE METHODOLOGY"] },
       "jobs":       { label:"💼 Jobs",             words:["ARCHITECT","ACCOUNTANT","ASTRONAUT","ARCHAEOLOGIST","SURGEON","PHYSIOTHERAPIST","PHARMACIST","PARAMEDIC","ENGINEER","PROGRAMMER","TECHNICIAN","ELECTRICIAN","PLUMBER","JOURNALIST","PHOTOGRAPHER","FILMMAKER","BROADCASTER","BARRISTER","SOLICITOR","MAGISTRATE","DETECTIVE","AMBASSADOR","DIPLOMAT","POLITICIAN","CHOREOGRAPHER","CONDUCTOR","COMPOSER","ILLUSTRATOR","SCULPTOR","ENTREPRENEUR","CONSULTANT","ANALYST","VETERINARIAN","BOTANIST"] },
-    };;
-    // ── Load word lists: custom content.js if available, built-ins as fallback ──
-    const hasCustomWords = window.CUSTOM_CONTENT &&
-                           window.CUSTOM_CONTENT.words &&
-                           window.CUSTOM_CONTENT.words.length > 0;
+    };
 
-    // Always load built-in word lists as a base
-    Object.assign(wordLists, BUILT_IN);
+    // ── Word selection state ───────────────────────────────
+    // selectedSources: Set of keys — each key is either a builtin key or a curriculum topic string
+    const selectedSources = new Set(); // empty = all built-ins
+    let curriculumWordMap = {}; // topic → [words]
+    let selectedCurriculumUnit = null; // {stage, unit} or null
 
-    if (hasCustomWords) {
-      // Group custom words by topic → one category per topic, added on top of built-ins
-      const groups = {};
-      window.CUSTOM_CONTENT.words.forEach(w => {
-        const key  = w.topic || 'Custom';
-        if (!groups[key]) groups[key] = { label: key, words: [] };
-        groups[key].words.push(w.word);
+    function buildWordPool() {
+      if (selectedSources.size === 0) {
+        // All built-ins
+        return Object.values(BUILT_IN).flatMap(c => c.words);
+      }
+      const pool = [];
+      selectedSources.forEach(key => {
+        if (BUILT_IN[key]) pool.push(...BUILT_IN[key].words);
+        else if (curriculumWordMap[key]) pool.push(...curriculumWordMap[key]);
       });
-      Object.entries(groups).forEach(([key, cat]) => {
-        const safeKey = 'custom_' + key.toLowerCase().replace(/[^a-z0-9]/g, '_');
-        wordLists[safeKey] = cat;
-      });
+      return pool.length ? pool : Object.values(BUILT_IN).flatMap(c => c.words);
     }
 
-    // Try to load wordlists.json to add any extra lists (non-destructive merge)
-    fetch('../wordlists.json')
-      .then(r => r.json())
-      .then(data => {
-        Object.assign(wordLists, data);
-        selList = '';
-        buildCategoryPicker();
-      })
-      .catch(() => {
-        // JSON not available — use what we have
-        selList = '';
-        buildCategoryPicker();
+    function updateWordFilterSummary() {
+      const pool = buildWordPool();
+      const summaryEl = document.getElementById('wordFilterSummary');
+      const statusEl  = document.getElementById('wordFilterStatus');
+      if (selectedSources.size === 0) {
+        summaryEl.textContent = 'All built-in topics';
+        statusEl.textContent  = pool.length + ' words available';
+      } else {
+        summaryEl.textContent = selectedSources.size + ' topic' + (selectedSources.size > 1 ? 's' : '') + ' selected · ' + pool.length + ' words';
+        statusEl.textContent  = pool.length + ' words available';
+      }
+    }
+
+    function buildWordPicker() {
+      // ── Curriculum section ──
+      const hasCurriculum = window.CUSTOM_CONTENT?.words?.length > 0;
+      const currSection = document.getElementById('curriculumSection');
+      currSection.style.display = hasCurriculum ? 'block' : 'none';
+
+      if (hasCurriculum) {
+        // Build unit map
+        const unitMap = new Map();
+        window.CUSTOM_CONTENT.words.forEach(w => {
+          // topic format: "S5/U8/L3 Something" — extract stage/unit
+          const m = w.topic && w.topic.match(/^S(\d+)\/U(\d+)/);
+          if (m) {
+            const key = 'S'+m[1]+'/U'+m[2];
+            if (!unitMap.has(key)) unitMap.set(key, {stage:parseInt(m[1]), unit:parseInt(m[2])});
+          }
+          // Also build word map by topic
+          const t = w.topic || 'Custom';
+          if (!curriculumWordMap[t]) curriculumWordMap[t] = [];
+          curriculumWordMap[t].push(w.word);
+        });
+
+        const unitsEl = document.getElementById('curriculumUnits');
+        unitsEl.innerHTML = '';
+        [...unitMap.values()].sort((a,b) => a.stage!==b.stage ? a.stage-b.stage : a.unit-b.unit)
+          .forEach(({stage, unit}) => {
+            const btn = document.createElement('button');
+            btn.className = 'qf-unit-btn';
+            btn.textContent = 'S'+stage+'/U'+unit;
+            btn.onclick = () => selectCurriculumUnit(stage, unit, btn);
+            unitsEl.appendChild(btn);
+          });
+      }
+
+      // ── Built-in section ──
+      const builtinEl = document.getElementById('builtinChecks');
+      builtinEl.innerHTML = '';
+      Object.entries(BUILT_IN).forEach(([key, cat]) => {
+        const label = document.createElement('label'); label.className = 'qf-check-label';
+        const cb = document.createElement('input'); cb.type = 'checkbox';
+        cb.onchange = () => {
+          if (cb.checked) selectedSources.add(key);
+          else selectedSources.delete(key);
+          updateWordFilterSummary();
+        };
+        const span = document.createElement('span'); span.textContent = cat.label;
+        const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = cat.words.length;
+        label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
+        builtinEl.appendChild(label);
       });
 
+      updateWordFilterSummary();
+    }
+
+    function selectCurriculumUnit(stage, unit, btnEl) {
+      const topicsEl = document.getElementById('curriculumTopics');
+      if (btnEl.classList.contains('active')) {
+        // Deselect unit — remove all its topics from sources
+        btnEl.classList.remove('active');
+        selectedCurriculumUnit = null;
+        topicsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
+        // Remove any curriculum sources from this unit
+        const prefix = 'S'+stage+'/U'+unit;
+        [...selectedSources].forEach(k => { if (k.startsWith(prefix)) selectedSources.delete(k); });
+        updateWordFilterSummary(); return;
+      }
+      document.querySelectorAll('#curriculumUnits .qf-unit-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+      selectedCurriculumUnit = {stage, unit};
+
+      // Build topic checkboxes for this unit
+      topicsEl.innerHTML = '';
+      const unitPrefix = 'S'+stage+'/U'+unit;
+      const unitTopics = Object.keys(curriculumWordMap).filter(t => t.startsWith(unitPrefix)).sort();
+      if (!unitTopics.length) { topicsEl.innerHTML = '<span class="qf-empty">No words for this unit</span>'; return; }
+      unitTopics.forEach(topic => {
+        const words = curriculumWordMap[topic];
+        const label = document.createElement('label'); label.className = 'qf-check-label';
+        const cb = document.createElement('input'); cb.type = 'checkbox';
+        cb.onchange = () => {
+          if (cb.checked) selectedSources.add(topic);
+          else selectedSources.delete(topic);
+          updateWordFilterSummary();
+        };
+        const span = document.createElement('span'); span.textContent = topic;
+        const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = words.length;
+        label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
+        topicsEl.appendChild(label);
+      });
+      updateWordFilterSummary();
+    }
+
+    // ── Picker setup ───────────────────────────────────────
     function pickBtn(groupId, key, val) {
-      document.querySelectorAll(`#${groupId} button`).forEach(b =>
+      document.querySelectorAll('#'+groupId+' button').forEach(b =>
         b.classList.toggle('hm-selected', b.dataset[key] === val)
       );
     }
@@ -264,6 +300,8 @@
     );
 
     document.getElementById('startBtn').onclick = () => {
+      words = buildWordPool();
+      if (!words.length) words = Object.values(BUILT_IN).flatMap(c => c.words);
       document.getElementById('setupScreen').style.display = 'none';
       document.getElementById('gameArea').style.display    = 'flex';
       initGame(selTeams, selMode);
@@ -274,7 +312,7 @@
       document.getElementById('gameArea').style.display    = 'none';
     };
 
-    // ── Hangman drawing ──────────────────────────────
+    // ── Hangman drawing ────────────────────────────────────
     function drawHangman(s) {
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.lineWidth = 5; ctx.strokeStyle = '#222'; ctx.lineCap = 'round';
@@ -291,7 +329,6 @@
       if (s>=10) d(150,175,180,220);
     }
 
-    // ── Vowel locks ──────────────────────────────────
     function updateVowelLocks() {
       if (mode !== 'consonant') return;
       document.querySelectorAll('#letters button').forEach(btn => {
@@ -302,55 +339,42 @@
       });
     }
 
-    // ── Scoreboard ───────────────────────────────────
     function renderScoreboard() {
-      const sb = document.getElementById('scoreboard');
-      sb.innerHTML = '';
+      const sb = document.getElementById('scoreboard'); sb.innerHTML = '';
       totalScores.forEach((pts, i) => {
         const d = document.createElement('div');
         d.className = 'team-score' + (i === currentTeam ? ' active' : '');
-        d.innerHTML = `<strong>Team ${i+1}</strong><br>${pts}`;
-        if (currentWordPoints[i] > 0) d.innerHTML += `<br><small>+${currentWordPoints[i]} this word</small>`;
-        if (lastRolls[i])             d.innerHTML += `<br><small>${lastRolls[i]}</small>`;
+        d.innerHTML = '<strong>Team '+(i+1)+'</strong><br>'+pts;
+        if (currentWordPoints[i] > 0) d.innerHTML += '<br><small>+'+currentWordPoints[i]+' this word</small>';
+        if (lastRolls[i])             d.innerHTML += '<br><small>'+lastRolls[i]+'</small>';
         sb.appendChild(d);
       });
       updateVowelLocks();
     }
 
-    // ── Letter buttons ───────────────────────────────
     function buildLetters() {
-      const l = document.getElementById('letters');
-      l.innerHTML = '';
+      const l = document.getElementById('letters'); l.innerHTML = '';
       'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(ch => {
-        const b = document.createElement('button');
-        b.textContent = ch;
-        b.onclick = () => guessLetter(ch, b);
-        l.appendChild(b);
+        const b = document.createElement('button'); b.textContent = ch;
+        b.onclick = () => guessLetter(ch, b); l.appendChild(b);
       });
       updateVowelLocks();
     }
 
-    // ── Render word board ────────────────────────────
     function renderBoard() {
       const board = document.getElementById('gameBoard');
-      // Each char slot = 1 char + margins. Fit ALL chars on one line.
-      // Available width ≈ min(board.offsetWidth, 90vw) minus padding
       const available = (board.offsetWidth || window.innerWidth * 0.9) - 40;
-      // Number of character slots (spaces count as half a slot)
       const slots = revealed.reduce((n, ch) => n + (ch === '/' ? 0.6 : 1.2), 0);
-      // px per slot, capped between 14px and 48px
       const px = Math.min(48, Math.max(14, Math.floor(available / slots)));
       const size = px + 'px';
-      board.style.flexWrap = 'nowrap';
-      board.style.overflowX = 'auto';
+      board.style.flexWrap = 'nowrap'; board.style.overflowX = 'auto';
       board.innerHTML = revealed.map(ch => {
-        if (ch === '/') return `<span style="display:inline-block;width:${Math.round(px*0.6)}px;flex-shrink:0"> </span>`;
+        if (ch === '/') return '<span style="display:inline-block;width:'+Math.round(px*0.6)+'px;flex-shrink:0"> </span>';
         const isLetter = ch !== '_';
-        return `<span style="display:inline-block;width:${Math.round(px*1.05)}px;flex-shrink:0;text-align:center;font-size:${size};border-bottom:${Math.max(2,Math.round(px/14))}px solid #0f172a;margin:0 1px;line-height:1.4;font-weight:900;color:${isLetter?'#c0392b':'#0f172a'}">${isLetter?ch:'_'}</span>`;
+        return '<span style="display:inline-block;width:'+Math.round(px*1.05)+'px;flex-shrink:0;text-align:center;font-size:'+size+';border-bottom:'+Math.max(2,Math.round(px/14))+'px solid #0f172a;margin:0 1px;line-height:1.4;font-weight:900;color:'+(isLetter?'#c0392b':'#0f172a')+'">'+(isLetter?ch:'_')+'</span>';
       }).join('');
     }
 
-    // ── New word ─────────────────────────────────────
     function nextWord() {
       currentWord       = words[Math.floor(Math.random()*words.length)].toUpperCase();
       revealed          = currentWord.split('').map(c => c===' ' ? '/' : '_');
@@ -358,13 +382,9 @@
       wrongGuesses      = 0;
       currentWordPoints = Array(totalTeams).fill(0);
       lastRolls         = Array(totalTeams).fill(null);
-      renderBoard();
-      drawHangman(0);
-      renderScoreboard();
-      buildLetters();
+      renderBoard(); drawHangman(0); renderScoreboard(); buildLetters();
     }
 
-    // ── Init ─────────────────────────────────────────
     function initGame(teamCount, gameMode) {
       totalTeams        = teamCount;
       totalScores       = Array(teamCount).fill(0);
@@ -377,85 +397,68 @@
       nextWord();
     }
 
-    // ── Guess ────────────────────────────────────────
     function guessLetter(letter, btn) {
       if (guessedLetters.has(letter)) return;
       guessedLetters.add(letter);
       const isVowel = 'AEIOU'.includes(letter);
-
       if (mode==='consonant' && isVowel) {
         if (totalScores[currentTeam] < 1) {
-          document.getElementById('currentTurn').textContent = `Team ${currentTeam+1} needs 1 point to buy a vowel!`;
-          guessedLetters.delete(letter);
-          return;
+          document.getElementById('currentTurn').textContent = 'Team '+(currentTeam+1)+' needs 1 point to buy a vowel!';
+          guessedLetters.delete(letter); return;
         }
         totalScores[currentTeam]--;
       }
-
       btn.disabled = true;
       let hits = 0;
       currentWord.split('').forEach((ch,i) => { if(ch===letter){ revealed[i]=letter; hits++; } });
       renderBoard();
-
       if (hits === 0) {
-        wrongGuesses++;
-        drawHangman(wrongGuesses);
+        wrongGuesses++; drawHangman(wrongGuesses);
         currentTeam = (currentTeam+1) % totalTeams;
-        document.getElementById('currentTurn').textContent = `Wrong! Team ${currentTeam+1}'s turn`;
+        document.getElementById('currentTurn').textContent = 'Wrong! Team '+(currentTeam+1)+"'s turn";
         if (wrongGuesses >= MAX_WRONG) {
           setTimeout(() => {
-            document.getElementById('currentTurn').textContent = `Game over! The word was: ${currentWord}`;
+            document.getElementById('currentTurn').textContent = 'Game over! The word was: '+currentWord;
             setTimeout(nextWord, 3000);
           }, 500);
         }
       } else {
         if (mode==='consonant' && !isVowel) {
-          currentWordPoints[currentTeam] += hits;
-          totalScores[currentTeam]       += hits;
-        } else if (mode==='diceman') {
-          rollDie(hits);
-        } else {
-          totalScores[currentTeam] += hits;
-        }
+          currentWordPoints[currentTeam] += hits; totalScores[currentTeam] += hits;
+        } else if (mode==='diceman') { rollDie(hits);
+        } else { totalScores[currentTeam] += hits; }
       }
-
       renderScoreboard();
-
       if (!revealed.includes('_')) {
         setTimeout(() => {
-          document.getElementById('currentTurn').textContent = `🎉 Team ${currentTeam+1} solved it! +10 bonus!`;
-          totalScores[currentTeam] += 10;
-          renderScoreboard();
-          setTimeout(nextWord, 2500);
+          document.getElementById('currentTurn').textContent = '🎉 Team '+(currentTeam+1)+' solved it! +10 bonus!';
+          totalScores[currentTeam] += 10; renderScoreboard(); setTimeout(nextWord, 2500);
         }, 400);
       }
     }
 
-    // ── Dice ─────────────────────────────────────────
     function rollDie(hits) {
       const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
       const roll  = Math.floor(Math.random()*6)+1;
       document.getElementById('diceFace').textContent = faces[roll-1];
       let pts=0, effect='';
       switch(roll){
-        case 1: pts=hits*10;  effect=`×10 (+${pts})`; break;
-        case 2: pts=hits*20;  effect=`×20 (+${pts})`; break;
-        case 3: pts=hits*30;  effect=`×30 (+${pts})`; break;
+        case 1: pts=hits*10;  effect='×10 (+'+pts+')'; break;
+        case 2: pts=hits*20;  effect='×20 (+'+pts+')'; break;
+        case 3: pts=hits*30;  effect='×30 (+'+pts+')'; break;
         case 4: pts=-totalScores[currentTeam]; effect='💸 Bankrupt'; break;
-        case 5: pts=hits*50;  effect=`×50 (+${pts})`; break;
-        case 6: pts=hits*100; effect=`×100 (+${pts})`; break;
+        case 5: pts=hits*50;  effect='×50 (+'+pts+')'; break;
+        case 6: pts=hits*100; effect='×100 (+'+pts+')'; break;
       }
-      totalScores[currentTeam] += pts;
-      lastRolls[currentTeam]    = effect;
-      renderScoreboard();
+      totalScores[currentTeam] += pts; lastRolls[currentTeam] = effect; renderScoreboard();
     }
 
     document.getElementById('fullscreen').onclick = () => document.documentElement.requestFullscreen?.();
     document.getElementById('home').onclick       = () => window.location.href = '../index.html';
 
     drawHangman(0);
-    // Re-render on resize so word always fits
     window.addEventListener('resize', () => { if (currentWord) renderBoard(); });
+    window.addEventListener('load', buildWordPicker);
   </script>
 </body>
 </html>
