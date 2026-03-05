@@ -56,8 +56,9 @@
       0%,100% { opacity:0; transform:translateX(-100%); }
       50%      { opacity:1; transform:translateX(100%); }
     }
-    .bs-cell.sea:hover:not(.fired) { transform:scale(1.1); filter:brightness(1.4); z-index:2; }
+    .bs-cell.sea:hover:not(.fired):not(.q-pending) { transform:scale(1.1); filter:brightness(1.4); z-index:2; }
     .bs-cell.fired { cursor:default; }
+    .bs-cell.q-pending { cursor:default; filter:brightness(0.6); }
     .bs-cell.miss {
       background:radial-gradient(circle at center,#0d2a46 30%,#071929 100%) !important;
     }
@@ -157,6 +158,75 @@
     .bs-win .win-emoji { font-size:clamp(3rem,10vw,6rem); }
     .bs-win h2 { font-size:clamp(1.8rem,5vw,3rem); font-weight:900; color:var(--accent2); margin:10px 0; }
     .bs-win p  { color:var(--text-dim); }
+
+    /* ── Question filter panel ── */
+    .qf-bar {
+      width:100%; max-width:600px;
+      background:rgba(10,18,30,0.92); border:1px solid rgba(255,255,255,0.1);
+      border-radius:12px; overflow:hidden; margin-bottom:4px;
+    }
+    .qf-summary {
+      display:flex; align-items:center; gap:10px;
+      padding:8px 14px; cursor:pointer; user-select:none;
+      font-size:0.82rem; color:#c8bfb0;
+    }
+    .qf-summary:hover { background:rgba(255,255,255,0.04); }
+    .qf-summary-text { flex:1; }
+    .qf-chevron { font-size:0.7rem; transition:transform 0.2s; }
+    .qf-bar.open .qf-chevron { transform:rotate(180deg); }
+    .qf-detail { display:none; padding:10px 14px 14px; border-top:1px solid rgba(255,255,255,0.07); }
+    .qf-bar.open .qf-detail { display:block; }
+    .qf-row { display:flex; gap:8px; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; }
+    .qf-col { flex:1; min-width:120px; }
+    .qf-col-label { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:rgba(240,180,41,0.8); margin-bottom:5px; }
+    .qf-units { display:flex; flex-wrap:wrap; gap:4px; }
+    .qf-unit-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); color:#c8bfb0; padding:3px 9px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-unit-btn:hover { background:rgba(240,180,41,0.12); border-color:rgba(240,180,41,0.4); }
+    .qf-unit-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.65); color:#f0c842; font-weight:600; }
+    .qf-checks { display:flex; flex-wrap:wrap; gap:4px; }
+    .qf-check-label { display:flex; align-items:center; gap:5px; font-size:0.75rem; color:#c8bfb0; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:5px; padding:3px 8px; transition:all 0.15s; }
+    .qf-check-label:hover { background:rgba(240,180,41,0.1); }
+    .qf-check-label input { accent-color:#f0c842; }
+    .qf-count { font-size:0.65rem; color:rgba(240,180,41,0.7); margin-left:2px; }
+    .qf-empty { font-size:0.75rem; color:rgba(255,255,255,0.3); font-style:italic; }
+    .qf-status-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); margin-top:6px; }
+    .qf-status { font-size:0.75rem; color:#c8bfb0; }
+    .qf-mode-btns { display:flex; gap:5px; }
+    .qf-mode-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14); color:#c8bfb0; padding:3px 10px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-mode-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.6); color:#f0c842; font-weight:600; }
+
+    /* ── Question popup (modal) ── */
+    .q-modal-overlay {
+      position:fixed; inset:0; z-index:500;
+      background:rgba(0,0,0,0.6); backdrop-filter:blur(4px);
+      display:flex; align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .q-modal-box {
+      background:#111828; border:2px solid rgba(240,180,41,0.35);
+      border-radius:18px; padding:22px 24px; width:100%; max-width:520px;
+      animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+    .q-team-label { font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:rgba(240,180,41,0.8); margin-bottom:8px; }
+    .q-question-text { font-size:clamp(0.92rem,2.4vw,1.15rem); color:#f0e6d0; font-weight:500; line-height:1.45; margin-bottom:14px; }
+    .q-options { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+    .q-opt-btn {
+      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15);
+      color:#f0e6d0; padding:9px 14px; border-radius:9px;
+      font-size:0.88rem; cursor:pointer; text-align:left; transition:all 0.18s;
+    }
+    .q-opt-btn:hover { background:rgba(240,180,41,0.15); border-color:rgba(240,180,41,0.5); }
+    .q-opt-btn.correct { background:rgba(39,174,96,0.25); border-color:#27ae60; color:#7dffb3; pointer-events:none; }
+    .q-opt-btn.wrong   { background:rgba(192,57,43,0.2);  border-color:#c0392b; color:#ff9b9b; pointer-events:none; }
+    .q-opt-btn.reveal  { background:rgba(39,174,96,0.15); border-color:rgba(39,174,96,0.4); }
+    .q-opt-btn.disabled { pointer-events:none; opacity:0.65; }
+    .q-ctrl-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+    .q-ctrl-btn { background:rgba(240,180,41,0.14); border:1px solid rgba(240,180,41,0.38); color:#f0c842; padding:7px 18px; border-radius:7px; font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
+    .q-ctrl-btn:hover { background:rgba(240,180,41,0.28); }
+    .q-ctrl-btn.primary { background:rgba(240,180,41,0.8); color:#0e0b08; font-weight:700; }
+    .q-ctrl-btn.primary:hover { background:#f0c842; }
+    .q-ctrl-btn.danger { background:rgba(192,57,43,0.2); border-color:#c0392b; color:#ff9b9b; }
   </style>
 </head>
 
@@ -204,6 +274,39 @@
 
     <!-- GAME -->
     <div id="gameScreen" class="bs-game">
+
+      <!-- Question filter bar -->
+      <div class="qf-bar" id="qfBar">
+        <div class="qf-summary" onclick="toggleQF()">
+          <span>❓</span>
+          <span class="qf-summary-text" id="qfSummary">No questions — free play</span>
+          <span class="qf-chevron">▼</span>
+        </div>
+        <div class="qf-detail">
+          <div class="qf-row">
+            <div class="qf-col">
+              <div class="qf-col-label">Unit</div>
+              <div class="qf-units" id="qfUnits"><span class="qf-empty">Loading…</span></div>
+            </div>
+            <div class="qf-col">
+              <div class="qf-col-label">Topic</div>
+              <div class="qf-checks" id="qfTopics"><span class="qf-empty">Select a unit first</span></div>
+            </div>
+            <div class="qf-col">
+              <div class="qf-col-label">Lesson</div>
+              <div class="qf-checks" id="qfLessons"><span class="qf-empty">Select a unit first</span></div>
+            </div>
+          </div>
+          <div class="qf-status-bar">
+            <span class="qf-status" id="qfStatus">No questions selected — free play</span>
+            <div class="qf-mode-btns">
+              <button class="qf-mode-btn active" id="modeScreen" onclick="setQMode('screen')">On Screen</button>
+              <button class="qf-mode-btn" id="modeTeacher" onclick="setQMode('teacher')">Teacher Reads</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="bs-status" id="statusBar">Ready</div>
       <div class="bs-scores" id="scoreStrip"></div>
       <div class="bs-actions">
@@ -230,6 +333,16 @@
 
   </div>
 
+  <!-- Question modal -->
+  <div id="qModal" class="q-modal-overlay" style="display:none;">
+    <div class="q-modal-box">
+      <div class="q-team-label" id="qModalTeam"></div>
+      <div class="q-question-text" id="qModalQuestion"></div>
+      <div class="q-options" id="qModalOptions"></div>
+      <div class="q-ctrl-row" id="qModalCtrl"></div>
+    </div>
+  </div>
+
   <!-- OVERLAYS -->
   <div id="bombEl">💣</div>
   <div id="bangOverlay">
@@ -249,74 +362,248 @@
       10: [['Carrier',5,'🛳️'],['Battleship',4,'⛴️'],['Cruiser',3,'🚢'],['Submarine',3,'🤿'],['Destroyer',2,'⛵']],
     };
 
+    // ── Question system ────────────────────────────────────
+    let qPool = [], qIndex = 0, qMode = 'screen';
+    let selectedUnit = null;
+
+    function toggleQF() { document.getElementById('qfBar').classList.toggle('open'); }
+
+    function setQMode(m) {
+      qMode = m;
+      document.getElementById('modeScreen').classList.toggle('active', m==='screen');
+      document.getElementById('modeTeacher').classList.toggle('active', m==='teacher');
+      updateQFSummary();
+    }
+
+    function buildUnitButtons() {
+      const container = document.getElementById('qfUnits');
+      if (typeof window.QUESTIONS === 'undefined' || !window.QUESTIONS.length) {
+        container.innerHTML = '<span class="qf-empty">questions.js not loaded</span>'; return;
+      }
+      const unitMap = new Map();
+      window.QUESTIONS.forEach(q => {
+        if (q.stage != null && q.unit != null) {
+          const key = 'S'+q.stage+'/U'+q.unit;
+          if (!unitMap.has(key)) unitMap.set(key, {stage:q.stage, unit:q.unit});
+        }
+      });
+      container.innerHTML = '';
+      [...unitMap.values()]
+        .sort((a,b) => a.stage!==b.stage ? a.stage-b.stage : a.unit-b.unit)
+        .forEach(({stage,unit}) => {
+          const btn = document.createElement('button');
+          btn.className = 'qf-unit-btn';
+          btn.textContent = 'S'+stage+'/U'+unit;
+          btn.onclick = () => selectUnit(stage, unit, btn);
+          container.appendChild(btn);
+        });
+    }
+
+    function selectUnit(stage, unit, btnEl) {
+      if (btnEl.classList.contains('active')) {
+        btnEl.classList.remove('active'); selectedUnit = null;
+        document.getElementById('qfTopics').innerHTML = '<span class="qf-empty">Select a unit first</span>';
+        document.getElementById('qfLessons').innerHTML = '<span class="qf-empty">Select a unit first</span>';
+        rebuildPool(); return;
+      }
+      document.querySelectorAll('.qf-unit-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+      selectedUnit = {stage:parseInt(stage), unit:parseInt(unit)};
+      buildTopicsAndLessons();
+    }
+
+    function questionsForUnit() {
+      if (!selectedUnit) return [];
+      return window.QUESTIONS.filter(q => q.stage===selectedUnit.stage && q.unit===selectedUnit.unit);
+    }
+
+    function buildTopicsAndLessons() {
+      const qs = questionsForUnit();
+      const topicsEl = document.getElementById('qfTopics');
+      const lessonsEl = document.getElementById('qfLessons');
+      topicsEl.innerHTML = '';
+      const topics = [...new Set(qs.map(q => q.topic))].sort();
+      if (!topics.length) { topicsEl.innerHTML = '<span class="qf-empty">No topics</span>'; }
+      else {
+        topics.forEach(t => {
+          const count = qs.filter(q => q.topic===t).length;
+          const label = document.createElement('label'); label.className = 'qf-check-label';
+          const cb = document.createElement('input'); cb.type='checkbox'; cb.value=t;
+          cb.addEventListener('change', rebuildPool);
+          const span = document.createElement('span'); span.textContent = t;
+          const cs = document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
+          label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
+          topicsEl.appendChild(label);
+        });
+      }
+      lessonsEl.innerHTML = '';
+      const lessons = [...new Set(qs.filter(q=>q.lesson!=null).map(q=>q.lesson))].sort((a,b)=>a-b);
+      if (!lessons.length) { lessonsEl.innerHTML = '<span class="qf-empty">No lesson data</span>'; }
+      else {
+        lessons.forEach(l => {
+          const count = qs.filter(q=>q.lesson===l).length;
+          const label = document.createElement('label'); label.className = 'qf-check-label';
+          const cb = document.createElement('input'); cb.type='checkbox'; cb.value=l;
+          cb.addEventListener('change', rebuildPool);
+          const span = document.createElement('span'); span.textContent='Lesson '+l;
+          const cs = document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
+          label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
+          lessonsEl.appendChild(label);
+        });
+      }
+      rebuildPool();
+    }
+
+    function shuffle(arr) {
+      for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+      return arr;
+    }
+
+    function rebuildPool() {
+      const checkedTopics = [...document.querySelectorAll('#qfTopics input:checked')].map(i=>i.value);
+      const checkedLessons = [...document.querySelectorAll('#qfLessons input:checked')].map(i=>parseInt(i.value));
+      const candidates = questionsForUnit();
+      if (!checkedTopics.length && !checkedLessons.length) { qPool = []; }
+      else {
+        const seen = new Set();
+        qPool = shuffle(candidates.filter(q => {
+          const hit = (checkedTopics.length && checkedTopics.includes(q.topic)) ||
+                      (checkedLessons.length && q.lesson!=null && checkedLessons.includes(q.lesson));
+          if (!hit || seen.has(q.question)) return false;
+          seen.add(q.question); return true;
+        }));
+      }
+      qIndex = 0;
+      updateQFSummary();
+    }
+
+    function updateQFSummary() {
+      const el = document.getElementById('qfSummary');
+      const st = document.getElementById('qfStatus');
+      if (!qPool.length) {
+        el.textContent = 'No questions — free play';
+        st.textContent = 'No questions selected — free play';
+      } else {
+        const topics = [...new Set(qPool.map(q=>q.topic))];
+        const unitStr = selectedUnit ? 'S'+selectedUnit.stage+'/U'+selectedUnit.unit+' · ' : '';
+        const topicStr = topics.length===1 ? topics[0] : topics.length+' topics';
+        el.innerHTML = unitStr+'<strong>'+qPool.length+' questions</strong> · '+topicStr+' · '+(qMode==='teacher'?'Teacher reads':'On screen');
+        st.innerHTML = '<strong>'+qPool.length+' questions</strong> ready — '+topicStr;
+      }
+    }
+
+    // Show question modal; cb(true) = correct, cb(false) = wrong
+    function showQuestion(teamName, teamColor, cb) {
+      if (!qPool.length) { cb(true); return; } // free play — always proceed
+      const q = qPool[qIndex % qPool.length];
+      qIndex++;
+      document.getElementById('qModal').style.display = 'flex';
+      document.getElementById('qModalTeam').textContent = teamName + ' — answer to fire!';
+      document.getElementById('qModalTeam').style.color = teamColor;
+      document.getElementById('qModalQuestion').textContent = q.question;
+      const optsEl = document.getElementById('qModalOptions');
+      const ctrlEl = document.getElementById('qModalCtrl');
+      optsEl.innerHTML = ''; ctrlEl.innerHTML = '';
+
+      const allOpts = shuffle([q.answer, ...q.distractors]);
+
+      if (qMode === 'screen') {
+        allOpts.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'q-opt-btn'; btn.textContent = opt;
+          btn.onclick = () => {
+            document.querySelectorAll('.q-opt-btn').forEach(b => {
+              b.classList.add('disabled');
+              if (b.textContent === q.answer) b.classList.add('correct');
+            });
+            btn.classList.add(opt === q.answer ? 'correct' : 'wrong');
+            setTimeout(() => { document.getElementById('qModal').style.display='none'; cb(opt===q.answer); }, 1100);
+          };
+          optsEl.appendChild(btn);
+        });
+      } else {
+        // Teacher reads mode — options hidden, reveal button
+        allOpts.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'q-opt-btn'; btn.textContent = opt;
+          btn.style.visibility = 'hidden';
+          btn.dataset.correct = opt===q.answer ? '1':'0';
+          optsEl.appendChild(btn);
+        });
+        const revBtn = document.createElement('button');
+        revBtn.className = 'q-ctrl-btn'; revBtn.textContent = '👁 Reveal Options';
+        revBtn.onclick = () => {
+          document.querySelectorAll('.q-opt-btn').forEach(b => {
+            b.style.visibility='visible';
+            if (b.dataset.correct==='1') b.classList.add('reveal');
+          });
+          revBtn.style.display='none';
+        };
+        const okBtn = document.createElement('button');
+        okBtn.className = 'q-ctrl-btn primary'; okBtn.textContent = '✓ Correct — Fire!';
+        okBtn.onclick = () => { document.getElementById('qModal').style.display='none'; cb(true); };
+        const wrongBtn = document.createElement('button');
+        wrongBtn.className = 'q-ctrl-btn danger'; wrongBtn.textContent = '✗ Wrong — Pass';
+        wrongBtn.onclick = () => { document.getElementById('qModal').style.display='none'; cb(false); };
+        ctrlEl.appendChild(revBtn); ctrlEl.appendChild(okBtn); ctrlEl.appendChild(wrongBtn);
+      }
+    }
+
     // ── Audio ──────────────────────────────────────────────
     let actx = null;
-    function ac() {
-      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-      return actx;
-    }
+    function ac() { if (!actx) actx = new (window.AudioContext||window.webkitAudioContext)(); return actx; }
 
     function playWhistle(cb) {
-      const ctx = ac(), t = ctx.currentTime;
-      const o = ctx.createOscillator(); o.type = 'sawtooth';
-      o.frequency.setValueAtTime(1600, t);
-      o.frequency.exponentialRampToValueAtTime(160, t+0.5);
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0.22, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t+0.52);
-      o.connect(g); g.connect(ctx.destination);
-      o.start(t); o.stop(t+0.55);
-      setTimeout(cb, 520);
+      const ctx=ac(), t=ctx.currentTime;
+      const o=ctx.createOscillator(); o.type='sawtooth';
+      o.frequency.setValueAtTime(1600,t); o.frequency.exponentialRampToValueAtTime(160,t+0.5);
+      const g=ctx.createGain(); g.gain.setValueAtTime(0.22,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.52);
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.55);
+      setTimeout(cb,520);
     }
-
     function playExplosion() {
-      const ctx = ac(), t = ctx.currentTime;
-      const buf = ctx.createBuffer(1, ctx.sampleRate*0.8, ctx.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.18));
-      const src = ctx.createBufferSource(); src.buffer = buf;
-      const filt = ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=900;
-      const g = ctx.createGain(); g.gain.setValueAtTime(1.5,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.8);
+      const ctx=ac(),t=ctx.currentTime;
+      const buf=ctx.createBuffer(1,ctx.sampleRate*0.8,ctx.sampleRate);
+      const d=buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.18));
+      const src=ctx.createBufferSource(); src.buffer=buf;
+      const filt=ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=900;
+      const g=ctx.createGain(); g.gain.setValueAtTime(1.5,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.8);
       src.connect(filt); filt.connect(g); g.connect(ctx.destination); src.start(t);
-      const boom = ctx.createOscillator(); boom.type='sine';
+      const boom=ctx.createOscillator(); boom.type='sine';
       boom.frequency.setValueAtTime(90,t); boom.frequency.exponentialRampToValueAtTime(22,t+0.6);
-      const bg = ctx.createGain(); bg.gain.setValueAtTime(1.0,t); bg.gain.exponentialRampToValueAtTime(0.001,t+0.6);
+      const bg=ctx.createGain(); bg.gain.setValueAtTime(1.0,t); bg.gain.exponentialRampToValueAtTime(0.001,t+0.6);
       boom.connect(bg); bg.connect(ctx.destination); boom.start(t); boom.stop(t+0.6);
     }
-
     function playSplash() {
-      const ctx = ac(), t = ctx.currentTime;
-      const buf = ctx.createBuffer(1, ctx.sampleRate*0.5, ctx.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.06))*(1-i/(d.length*0.5));
-      const src = ctx.createBufferSource(); src.buffer = buf;
-      const g = ctx.createGain(); g.gain.setValueAtTime(0.7,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
-      const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1200;
-      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5000;
+      const ctx=ac(),t=ctx.currentTime;
+      const buf=ctx.createBuffer(1,ctx.sampleRate*0.5,ctx.sampleRate);
+      const d=buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.06))*(1-i/(d.length*0.5));
+      const src=ctx.createBufferSource(); src.buffer=buf;
+      const g=ctx.createGain(); g.gain.setValueAtTime(0.7,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+      const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1200;
+      const lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=5000;
       src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(ctx.destination); src.start(t);
-      const o = ctx.createOscillator(); o.type='sine';
+      const o=ctx.createOscillator(); o.type='sine';
       o.frequency.setValueAtTime(280,t); o.frequency.exponentialRampToValueAtTime(80,t+0.3);
-      const og = ctx.createGain(); og.gain.setValueAtTime(0.3,t); og.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+      const og=ctx.createGain(); og.gain.setValueAtTime(0.3,t); og.gain.exponentialRampToValueAtTime(0.001,t+0.3);
       o.connect(og); og.connect(ctx.destination); o.start(t); o.stop(t+0.3);
     }
-
     function playSunk() {
-      const ctx = ac(), t = ctx.currentTime;
-      [220,175,140,100].forEach((freq,i) => {
-        const st = t+i*0.22;
-        const o = ctx.createOscillator(); o.type='sawtooth';
+      const ctx=ac(),t=ctx.currentTime;
+      [220,175,140,100].forEach((freq,i)=>{
+        const st=t+i*0.22;
+        const o=ctx.createOscillator(); o.type='sawtooth';
         o.frequency.setValueAtTime(freq,st); o.frequency.exponentialRampToValueAtTime(freq*0.55,st+0.3);
-        const g = ctx.createGain(); g.gain.setValueAtTime(0.4,st); g.gain.exponentialRampToValueAtTime(0.001,st+0.35);
+        const g=ctx.createGain(); g.gain.setValueAtTime(0.4,st); g.gain.exponentialRampToValueAtTime(0.001,st+0.35);
         o.connect(g); g.connect(ctx.destination); o.start(st); o.stop(st+0.35);
       });
     }
-
     function playWin() {
-      const ctx = ac();
-      [523,659,784,1047,1319].forEach((f,i) => {
-        const t = ctx.currentTime+i*0.16;
-        const o = ctx.createOscillator(); o.type='triangle'; o.frequency.value=f;
-        const g = ctx.createGain(); g.gain.setValueAtTime(0.4,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.45);
+      const ctx=ac();
+      [523,659,784,1047,1319].forEach((f,i)=>{
+        const t=ctx.currentTime+i*0.16;
+        const o=ctx.createOscillator(); o.type='triangle'; o.frequency.value=f;
+        const g=ctx.createGain(); g.gain.setValueAtTime(0.4,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.45);
         o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.45);
       });
     }
@@ -342,21 +629,21 @@
     document.getElementById('newGameBtn').onclick = showSetup;
 
     function showSetup() {
-      document.getElementById('setupScreen').style.display = 'flex';
+      document.getElementById('setupScreen').style.display='flex';
       document.getElementById('gameScreen').classList.remove('active');
-      document.getElementById('winScreen').style.display = 'none';
+      document.getElementById('winScreen').style.display='none';
     }
 
     function placeShips(size) {
-      const fleet = FLEETS[size];
-      const grid = Array(size).fill(null).map(()=>Array(size).fill(0));
-      const ships = [];
+      const fleet=FLEETS[size];
+      const grid=Array(size).fill(null).map(()=>Array(size).fill(0));
+      const ships=[];
       for (const [name,len,emoji] of fleet) {
         let ok=false, attempts=0;
         while (!ok && attempts++<600) {
-          const horiz = Math.random()>0.5;
-          const r = Math.floor(Math.random()*(horiz?size:size-len+1));
-          const c = Math.floor(Math.random()*(horiz?size-len+1:size));
+          const horiz=Math.random()>0.5;
+          const r=Math.floor(Math.random()*(horiz?size:size-len+1));
+          const c=Math.floor(Math.random()*(horiz?size-len+1:size));
           let fits=true; const cells=[];
           for (let i=0;i<len;i++) {
             const rr=horiz?r:r+i, cc=horiz?c+i:c;
@@ -365,8 +652,7 @@
           }
           if (fits) {
             cells.forEach(([rr,cc])=>grid[rr][cc]=1);
-            ships.push({name,len,emoji,cells,hits:0,sunk:false});
-            ok=true;
+            ships.push({name,len,emoji,cells,hits:0,sunk:false}); ok=true;
           }
         }
       }
@@ -374,10 +660,9 @@
     }
 
     function startGame() {
-      numTeams=selTeams; gridSize=selGrid;
-      currentTeam=0; viewingTeam=0;
-      teams = Array.from({length:numTeams},(_,i)=>{
-        const {grid,ships} = placeShips(gridSize);
+      numTeams=selTeams; gridSize=selGrid; currentTeam=0; viewingTeam=0;
+      teams=Array.from({length:numTeams},(_,i)=>{
+        const {grid,ships}=placeShips(gridSize);
         return {name:TEAM_NAMES[i],color:TEAM_COLORS[i],grid,ships,fired:new Set(),hits:0,done:false};
       });
       document.getElementById('setupScreen').style.display='none';
@@ -387,64 +672,49 @@
     }
 
     function buildTabs() {
-      const tabs = document.getElementById('teamTabs');
-      tabs.innerHTML='';
+      const tabs=document.getElementById('teamTabs'); tabs.innerHTML='';
       teams.forEach((t,i)=>{
         const b=document.createElement('button');
-        b.className='bs-tab'+(i===0?' active':'');
-        b.id=`tab-${i}`;
+        b.className='bs-tab'+(i===0?' active':''); b.id='tab-'+i;
         b.onclick=()=>showTeam(i);
-        b.innerHTML=`${t.name}<span class="tab-fleet">${fleetPips(i)}</span>`;
+        b.innerHTML=t.name+'<span class="tab-fleet">'+fleetPips(i)+'</span>';
         tabs.appendChild(b);
       });
     }
-
     function fleetPips(i) { return teams[i].ships.map(s=>s.sunk?'💀':s.emoji).join(''); }
-
     function updateTabs() {
       teams.forEach((t,i)=>{
-        const el=document.getElementById(`tab-${i}`);
-        if (!el) return;
+        const el=document.getElementById('tab-'+i); if (!el) return;
         el.className='bs-tab'+(i===viewingTeam?' active':'')+(t.done?' done':'');
-        el.innerHTML=`${t.name}<span class="tab-fleet">${fleetPips(i)}</span>`;
+        el.innerHTML=t.name+'<span class="tab-fleet">'+fleetPips(i)+'</span>';
       });
     }
-
     function buildScoreStrip() {
-      const strip=document.getElementById('scoreStrip');
-      strip.innerHTML='';
+      const strip=document.getElementById('scoreStrip'); strip.innerHTML='';
       teams.forEach((t,i)=>{
         const c=document.createElement('div');
-        c.className='bs-score-card'+(i===0?' current':'');
-        c.id=`score-${i}`;
-        c.innerHTML=`<div class="sc-name" style="color:${t.color}">${t.name}</div>
-          <div class="sc-hits" id="hits-${i}">0</div>
-          <div class="sc-label">hits</div>`;
+        c.className='bs-score-card'+(i===0?' current':''); c.id='score-'+i;
+        c.innerHTML='<div class="sc-name" style="color:'+t.color+'">'+t.name+'</div><div class="sc-hits" id="hits-'+i+'">0</div><div class="sc-label">hits</div>';
         strip.appendChild(c);
       });
     }
-
     function updateScoreStrip() {
       teams.forEach((t,i)=>{
-        const c=document.getElementById(`score-${i}`);
-        if (!c) return;
+        const c=document.getElementById('score-'+i); if (!c) return;
         c.className='bs-score-card'+(i===currentTeam?' current':'')+(t.done?' winner':'');
         c.style.borderColor=i===currentTeam?t.color:'';
-        document.getElementById(`hits-${i}`).textContent=t.hits;
+        document.getElementById('hits-'+i).textContent=t.hits;
       });
     }
-
-    function showTeam(idx) {
-      viewingTeam=idx; updateTabs(); renderGrid(idx); renderFleet(idx);
-    }
+    function showTeam(idx) { viewingTeam=idx; updateTabs(); renderGrid(idx); renderFleet(idx); }
 
     function renderGrid(ti) {
       const team=teams[ti], G=gridSize;
       const grid=document.getElementById('mainGrid');
-      grid.style.gridTemplateColumns=`24px repeat(${G},1fr)`;
-      grid.style.gridTemplateRows=`24px repeat(${G},1fr)`;
-      const avail = Math.min(window.innerWidth-60, 560);
-      const cellSize = Math.min(48, Math.floor((avail-28)/(G)));
+      grid.style.gridTemplateColumns='24px repeat('+G+',1fr)';
+      grid.style.gridTemplateRows='24px repeat('+G+',1fr)';
+      const avail=Math.min(window.innerWidth-60,560);
+      const cellSize=Math.min(48,Math.floor((avail-28)/G));
       grid.style.maxWidth=(28+G*(cellSize+2))+'px';
       grid.innerHTML='';
       grid.appendChild(document.createElement('div'));
@@ -457,30 +727,49 @@
           const cell=document.createElement('div');
           cell.className='bs-cell sea';
           cell.style.setProperty('--d',r*G+c);
-          const key=`${r},${c}`, state=team.grid[r][c];
+          const key=r+','+c, state=team.grid[r][c];
           if (team.fired.has(key)) {
             cell.classList.add('fired');
             if (state===2) { cell.classList.add('miss'); cell.innerHTML='<div class="cell-icon">💧</div>'; }
             else if (state===3) { cell.classList.add('hit'); cell.innerHTML='<div class="cell-icon">🔥</div>'; }
             else if (state===4) { cell.classList.add('sunk'); cell.innerHTML='<div class="cell-icon">💀</div>'; }
           }
+          // Only clickable if it's this team's turn, not fired, not busy
           if (ti===currentTeam && !team.fired.has(key) && !team.done) {
-            cell.onclick=()=>fire(ti,r,c);
+            cell.onclick=()=>attemptFire(ti,r,c);
           }
           grid.appendChild(cell);
         }
       }
     }
-
     function renderFleet(ti) {
-      document.getElementById('fleetStatus').innerHTML =
-        teams[ti].ships.map(s=>`<span class="bs-ship-pip${s.sunk?' sunk':''}" title="${s.name} (${s.len})">${s.emoji}</span>`).join('');
+      document.getElementById('fleetStatus').innerHTML=
+        teams[ti].ships.map(s=>'<span class="bs-ship-pip'+(s.sunk?' sunk':'')+'" title="'+s.name+' ('+s.len+')">'+s.emoji+'</span>').join('');
+    }
+
+    // ── Fire with question gate ────────────────────────────
+    function attemptFire(ti, r, c) {
+      if (busy || ti!==currentTeam) return;
+      busy = true;
+      // Mark cell as pending so it dims and can't be double-clicked
+      const cellEl = document.getElementById('mainGrid').children[(r+1)*(gridSize+1)+(c+1)];
+      if (cellEl) cellEl.classList.add('q-pending');
+
+      showQuestion(teams[ti].name, teams[ti].color, (correct) => {
+        if (cellEl) cellEl.classList.remove('q-pending');
+        if (correct) {
+          fire(ti, r, c);
+        } else {
+          // Wrong — square stays unrevealed, turn passes
+          playSplash();
+          showBang('💧','WRONG!','Next team fires…','#60a5fa',false);
+          setTimeout(()=>{ nextTeam(); busy=false; }, 1500);
+        }
+      });
     }
 
     function fire(ti,r,c) {
-      if (busy||ti!==currentTeam) return;
-      busy=true;
-      const team=teams[ti], key=`${r},${c}`;
+      const team=teams[ti], key=r+','+c;
       team.fired.add(key);
       const isShip=team.grid[r][c]===1;
       dropBomb(()=>{
@@ -488,29 +777,27 @@
           team.grid[r][c]=3; team.hits++;
           let sunkShip=null;
           for (const ship of team.ships) {
-            if (!ship.sunk && ship.cells.every(([sr,sc])=>team.fired.has(`${sr},${sc}`))) {
+            if (!ship.sunk && ship.cells.every(([sr,sc])=>team.fired.has(sr+','+sc))) {
               ship.sunk=true; sunkShip=ship;
               ship.cells.forEach(([sr,sc])=>{team.grid[sr][sc]=4;});
             }
           }
-          showTeam(ti); updateScoreStrip();
-          playExplosion();
+          showTeam(ti); updateScoreStrip(); playExplosion();
           if (sunkShip) {
             playSunk();
-            showBang('💥','SHIP SUNK!',`${sunkShip.emoji} ${sunkShip.name}!`,'#f59e0b',true);
-            showSunkBanner(`${sunkShip.emoji} ${sunkShip.name} Sunk!`);
+            showBang('💥','SHIP SUNK!',sunkShip.emoji+' '+sunkShip.name+'!','#f59e0b',true);
+            showSunkBanner(sunkShip.emoji+' '+sunkShip.name+' Sunk!');
           } else {
-            showBang('💥','HIT!','Fire again! 🎯','#ef4444',true);
+            showBang('💥','HIT!','Answer another question to fire again! 🎯','#ef4444',true);
           }
           if (team.ships.every(s=>s.sunk)) {
             team.done=true;
             setTimeout(()=>{ checkWin(); busy=false; },1700);
           } else {
-            setTimeout(()=>{ updateStatus(`${team.name} — HIT! Fire again! 🎯`); updateTabs(); busy=false; },1600);
+            setTimeout(()=>{ updateStatus(team.name+' — HIT! Pick another square! 🎯'); updateTabs(); busy=false; },1600);
           }
         } else {
-          team.grid[r][c]=2; showTeam(ti);
-          playSplash();
+          team.grid[r][c]=2; showTeam(ti); playSplash();
           showBang('💧','MISS!','Next team fires…','#60a5fa',false);
           setTimeout(()=>{ nextTeam(); busy=false; },1500);
         }
@@ -530,32 +817,27 @@
       el.classList.remove('drop'); void el.offsetWidth; el.classList.add('drop');
       setTimeout(()=>{ el.classList.remove('drop'); cb(); },540);
     }
-
     function nextTeam() {
       let next=(currentTeam+1)%numTeams, loops=0;
       while (teams[next].done && loops++<numTeams) next=(next+1)%numTeams;
       currentTeam=next; viewingTeam=next;
       updateTabs(); updateScoreStrip(); showTeam(next); updateStatus();
     }
-
     function updateStatus(msg) {
       const el=document.getElementById('statusBar');
-      el.textContent=msg||`${teams[currentTeam].name} — pick a square to fire!`;
+      el.textContent=msg||teams[currentTeam].name+' — pick a square to fire!';
       el.style.color=teams[currentTeam].color;
     }
-
     function checkWin() {
-      const winner=teams.find(t=>t.done);
-      if (!winner) return;
+      const winner=teams.find(t=>t.done); if (!winner) return;
       playWin(); updateTabs();
       const others=[...teams].filter(t=>t!==winner).sort((a,b)=>b.hits-a.hits);
-      document.getElementById('winMsg').textContent=`${winner.name} Wins! 🎉`;
+      document.getElementById('winMsg').textContent=winner.name+' Wins! 🎉';
       document.getElementById('winDetail').textContent=
-        `Fleet destroyed with ${winner.hits} hits! `+others.map(t=>`${t.name}: ${t.hits} hits`).join(' · ');
+        'Fleet destroyed with '+winner.hits+' hits! '+others.map(t=>t.name+': '+t.hits+' hits').join(' · ');
       document.getElementById('gameScreen').classList.remove('active');
       document.getElementById('winScreen').style.display='block';
     }
-
     function showBang(emoji,text,sub,color,isHit) {
       const el=document.getElementById('bangOverlay');
       document.getElementById('bangEmoji').textContent=emoji;
@@ -565,16 +847,16 @@
       el.className=isHit?'show hit-bang':'show';
       setTimeout(()=>el.className='',1500);
     }
-
     function showSunkBanner(text) {
       const el=document.getElementById('sunkBanner');
       el.textContent=text; el.classList.add('show');
       setTimeout(()=>el.classList.remove('show'),2500);
     }
-
     window.addEventListener('resize',()=>{
       if (document.getElementById('gameScreen').classList.contains('active')) renderGrid(viewingTeam);
     });
+    window.addEventListener('load', buildUnitButtons);
   </script>
+  <script src="../questions.js"></script>
 </body>
 </html>
