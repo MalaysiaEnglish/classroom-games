@@ -406,6 +406,7 @@
       draggingId = parseInt(this.dataset.id);
       this.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', this.dataset.id);
     }
     function onChipDragEnd() {
       document.querySelectorAll('.sentence-chip').forEach(c => c.classList.remove('dragging'));
