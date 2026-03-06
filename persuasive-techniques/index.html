@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Persuasive Techniques</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .game-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      gap: 14px;
+    }
+
+    /* ── Source / sentence bank ── */
+    .sentence-bank {
+      width: 100%;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .bank-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .bank-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 48px;
+    }
+
+    /* ── Sentence chip ── */
+    .sentence-chip {
+      background: rgba(255,255,255,0.09);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 8px 13px;
+      font-size: clamp(0.75rem, 1.6vw, 0.86rem);
+      line-height: 1.45;
+      color: var(--text);
+      cursor: grab;
+      transition: background 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+      max-width: 320px;
+      user-select: none;
+    }
+    .sentence-chip:active { cursor: grabbing; }
+    .sentence-chip.dragging { opacity: 0.35; transform: scale(0.96); }
+    .sentence-chip.placed-correct {
+      background: rgba(34,197,94,0.15);
+      border-color: var(--safe);
+      cursor: default;
+      color: #a7ffcc;
+    }
+    .sentence-chip.placed-wrong {
+      background: rgba(239,68,68,0.15);
+      border-color: var(--danger);
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-6px); }
+      75%      { transform: translateX(6px); }
+    }
+
+    /* ── Technique columns ── */
+    .techniques-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+      width: 100%;
+    }
+
+    .technique-col {
+      background: var(--glass);
+      border: 2px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 120px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .technique-col.drag-target {
+      border-color: var(--accent);
+      background: rgba(0,201,167,0.07);
+    }
+    .technique-col.complete {
+      border-color: var(--safe);
+      background: rgba(34,197,94,0.06);
+    }
+
+    .tech-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .tech-icon { font-size: 1.3rem; }
+    .tech-name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--accent2);
+      line-height: 1.2;
+    }
+    .tech-definition {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-top: 1px;
+      line-height: 1.35;
+    }
+    .tech-count {
+      margin-left: auto;
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    .tech-count.done { color: var(--safe); font-weight: 700; }
+
+    .tech-drop-zone {
+      min-height: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .drop-placeholder {
+      border: 1.5px dashed rgba(255,255,255,0.12);
+      border-radius: 8px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.18);
+      font-style: italic;
+    }
+
+    /* ── Score bar ── */
+    .score-bar {
+      width: 100%;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+    .score-bar strong { color: var(--accent2); }
+    .progress-track {
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      flex: 1;
+      min-width: 80px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 3px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    /* ── Completion overlay ── */
+    .result-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.72);
+      z-index: 500;
+      align-items: center; justify-content: center;
+    }
+    .result-overlay.show { display: flex; }
+    .result-box {
+      background: rgba(10,22,30,0.97);
+      border: 2px solid var(--accent);
+      border-radius: 20px;
+      padding: 28px 36px;
+      text-align: center;
+      max-width: 420px;
+      width: 92%;
+    }
+    .result-box .score-big { font-size: 3rem; font-weight: 900; color: var(--accent2); display: block; margin-bottom: 6px; }
+    .result-box h2 { font-size: 1.5rem; margin-bottom: 8px; }
+    .result-box p  { color: var(--text-dim); margin-bottom: 20px; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>🎯 Persuasive Techniques</h1>
+
+  <div class="controls">
+    <button id="resetBtn" onclick="resetGame()" style="background:#0f766e;border-color:var(--accent);">↺ Reset</button>
+    <button id="fullscreen" onclick="document.documentElement.requestFullscreen?.()">⛶ Fullscreen</button>
+    <button id="home" onclick="window.location.href='../index.html'">⌂ Home</button>
+  </div>
+
+  <div class="game-wrapper">
+
+    <div class="score-bar">
+      <span>Placed: <strong id="placedCount">0</strong> / <strong id="totalCount">0</strong></span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span id="statusMsg" style="color:var(--text-dim);font-size:0.78rem;">Drag each quote into the correct technique category</span>
+    </div>
+
+    <!-- Sentence bank -->
+    <div class="sentence-bank">
+      <div class="bank-label">📰 Sentences from the refugee blog — drag each into its technique</div>
+      <div class="bank-cards" id="bankCards"></div>
+    </div>
+
+    <!-- Technique drop columns -->
+    <div class="techniques-grid" id="techniquesGrid"></div>
+
+  </div>
+
+  <!-- Result overlay -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-box">
+      <span class="score-big" id="resultScore"></span>
+      <h2 id="resultTitle"></h2>
+      <p id="resultMsg"></p>
+      <button onclick="resetGame()" style="background:var(--accent);color:#000;border-color:var(--accent);font-weight:800;padding:12px 32px;border-radius:40px;font-size:1rem;">Play Again</button>
+    </div>
+  </div>
+
+  <script>
+    // ── Data ──────────────────────────────────────────────────────────
+    const TECHNIQUES = [
+      {
+        id: "emotive",
+        icon: "💔",
+        name: "Emotive Language",
+        definition: "Words chosen to trigger a strong emotional response"
+      },
+      {
+        id: "rhetorical",
+        icon: "❓",
+        name: "Rhetorical Question",
+        definition: "A question asked for effect — no answer expected"
+      },
+      {
+        id: "hyperbole",
+        icon: "🚀",
+        name: "Hyperbole",
+        definition: "Deliberate exaggeration to emphasise a point"
+      },
+      {
+        id: "direct",
+        icon: "👉",
+        name: "Direct Address",
+        definition: "Speaking directly to the reader using 'you'"
+      },
+      {
+        id: "tripling",
+        icon: "✕3",
+        name: "Tripling / Rule of Three",
+        definition: "Three words or phrases grouped together for impact"
+      },
+      {
+        id: "metaphor",
+        icon: "🌊",
+        name: "Figurative Language",
+        definition: "Metaphor, simile or image used to make a point vivid"
+      },
+      {
+        id: "statistic",
+        icon: "📊",
+        name: "Statistic / Fact",
+        definition: "A number or fact used as evidence to add authority"
+      },
+      {
+        id: "contrast",
+        icon: "⚖️",
+        name: "Contrast",
+        definition: "Placing two opposing ideas side by side for effect"
+      }
+    ];
+
+    const SENTENCES = [
+      {
+        id: 0,
+        text: "Imagine leaving everything you have ever known — your home, your friends, your language — in a single desperate hour.",
+        technique: "direct",
+        explanation: "'Imagine' speaks directly to the reader, placing them in the situation."
+      },
+      {
+        id: 1,
+        text: "Around 500 men, women and children drowned when the vessel sank in the Mediterranean.",
+        technique: "statistic",
+        explanation: "A specific number used as factual evidence of the scale of tragedy."
+      },
+      {
+        id: 2,
+        text: "To be a refugee is to draw the wrong ticket in the game of life.",
+        technique: "metaphor",
+        explanation: "A metaphor comparing life's unfairness to a lottery — vivid and memorable."
+      },
+      {
+        id: 3,
+        text: "Would you risk drowning, starvation and violence to reach safety — if that were the only option left?",
+        technique: "rhetorical",
+        explanation: "A question asked to make the reader think, not to receive an answer."
+      },
+      {
+        id: 4,
+        text: "Families are forced to choose between the unspeakable horror of staying and the terrifying unknown of leaving.",
+        technique: "emotive",
+        explanation: "'Unspeakable horror' and 'terrifying unknown' are chosen to provoke fear and sympathy."
+      },
+      {
+        id: 5,
+        text: "Their homes have been decimated, their livelihoods destroyed and their futures stolen.",
+        technique: "tripling",
+        explanation: "Three parallel phrases: 'homes decimated', 'livelihoods destroyed', 'futures stolen'."
+      },
+      {
+        id: 6,
+        text: "While we debate quotas and policies, children are dying in the water.",
+        technique: "contrast",
+        explanation: "Political bureaucracy ('quotas and policies') is contrasted with human tragedy ('children dying')."
+      },
+      {
+        id: 7,
+        text: "The journey is not merely difficult — it is a thousand miles of suffering, starvation and fear.",
+        technique: "hyperbole",
+        explanation: "Exaggeration ('a thousand miles of suffering') intensifies the emotional impact."
+      }
+    ];
+
+    // ── State ─────────────────────────────────────────────────────────
+    let placed = 0;
+    let correct = 0;
+    let draggingId = null;
+
+    // ── Build UI ──────────────────────────────────────────────────────
+    function buildUI() {
+      // Sentence bank — shuffled
+      const bank = document.getElementById('bankCards');
+      bank.innerHTML = '';
+      const shuffled = [...SENTENCES].sort(() => Math.random() - 0.5);
+      shuffled.forEach(s => {
+        const chip = document.createElement('div');
+        chip.className = 'sentence-chip';
+        chip.id = 'chip-' + s.id;
+        chip.draggable = true;
+        chip.textContent = s.text;
+        chip.dataset.id = s.id;
+        chip.addEventListener('dragstart', onChipDragStart);
+        chip.addEventListener('dragend',   onChipDragEnd);
+        bank.appendChild(chip);
+      });
+
+      // Technique columns
+      const grid = document.getElementById('techniquesGrid');
+      grid.innerHTML = '';
+      TECHNIQUES.forEach(t => {
+        const col = document.createElement('div');
+        col.className = 'technique-col';
+        col.id = 'col-' + t.id;
+        col.innerHTML = `
+          <div class="tech-header">
+            <span class="tech-icon">${t.icon}</span>
+            <div>
+              <div class="tech-name">${t.name}</div>
+              <div class="tech-definition">${t.definition}</div>
+            </div>
+            <span class="tech-count" id="count-${t.id}">0/${countForTech(t.id)}</span>
+          </div>
+          <div class="tech-drop-zone" id="zone-${t.id}">
+            <div class="drop-placeholder">drop here</div>
+          </div>`;
+        col.addEventListener('dragover',  onColDragOver);
+        col.addEventListener('dragleave', onColDragLeave);
+        col.addEventListener('drop',      e => onColDrop(e, t.id));
+        grid.appendChild(col);
+      });
+
+      document.getElementById('totalCount').textContent = SENTENCES.length;
+      document.getElementById('placedCount').textContent = 0;
+      updateProgress();
+    }
+
+    function countForTech(techId) {
+      return SENTENCES.filter(s => s.technique === techId).length;
+    }
+
+    // ── Drag ──────────────────────────────────────────────────────────
+    function onChipDragStart(e) {
+      draggingId = parseInt(this.dataset.id);
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+    function onChipDragEnd() {
+      document.querySelectorAll('.sentence-chip').forEach(c => c.classList.remove('dragging'));
+      document.querySelectorAll('.technique-col').forEach(c => c.classList.remove('drag-target'));
+    }
+    function onColDragOver(e) {
+      e.preventDefault();
+      this.classList.add('drag-target');
+    }
+    function onColDragLeave() { this.classList.remove('drag-target'); }
+
+    function onColDrop(e, techId) {
+      e.preventDefault();
+      this.classList.remove('drag-target');
+      if (draggingId === null) return;
+
+      const sentence = SENTENCES[draggingId];
+      const chip = document.getElementById('chip-' + draggingId);
+      if (!chip || chip.classList.contains('placed-correct')) return;
+
+      const isCorrect = sentence.technique === techId;
+
+      if (isCorrect) {
+        // Move chip into zone
+        chip.classList.remove('sentence-chip');
+        chip.classList.add('sentence-chip', 'placed-correct');
+        chip.draggable = false;
+        chip.removeEventListener('dragstart', onChipDragStart);
+
+        // Add explanation
+        const expDiv = document.createElement('div');
+        expDiv.style.cssText = 'font-size:0.68rem;color:rgba(34,197,94,0.75);margin-top:4px;font-style:italic;line-height:1.35;';
+        expDiv.textContent = '✓ ' + sentence.explanation;
+        chip.appendChild(expDiv);
+
+        const zone = document.getElementById('zone-' + techId);
+        zone.querySelector('.drop-placeholder')?.remove();
+        zone.appendChild(chip);
+
+        correct++;
+        placed++;
+        updateTechCount(techId);
+        checkTechComplete(techId);
+      } else {
+        // Shake and return
+        chip.classList.add('placed-wrong');
+        document.getElementById('statusMsg').textContent = '✗ Not quite — try a different category!';
+        setTimeout(() => {
+          chip.classList.remove('placed-wrong');
+          document.getElementById('statusMsg').textContent = 'Drag each quote into the correct technique category';
+        }, 1400);
+      }
+
+      draggingId = null;
+      document.getElementById('placedCount').textContent = placed;
+      updateProgress();
+
+      if (placed === SENTENCES.length) setTimeout(showResult, 600);
+    }
+
+    function updateTechCount(techId) {
+      const total = countForTech(techId);
+      const done = SENTENCES.filter(s => s.technique === techId && document.getElementById('zone-' + techId)?.querySelector('#chip-' + SENTENCES.find(x => x.technique === techId && x.id)?.id)).length;
+      // Count placed chips in zone
+      const zone = document.getElementById('zone-' + techId);
+      const placedInZone = zone ? zone.querySelectorAll('.sentence-chip').length : 0;
+      const countEl = document.getElementById('count-' + techId);
+      if (countEl) {
+        countEl.textContent = `${placedInZone}/${total}`;
+        if (placedInZone >= total) countEl.classList.add('done');
+      }
+    }
+
+    function checkTechComplete(techId) {
+      const total = countForTech(techId);
+      const zone = document.getElementById('zone-' + techId);
+      const col  = document.getElementById('col-' + techId);
+      if (zone && zone.querySelectorAll('.sentence-chip').length >= total) {
+        col.classList.add('complete');
+        col.classList.remove('drag-target');
+      }
+    }
+
+    function updateProgress() {
+      const pct = SENTENCES.length > 0 ? (placed / SENTENCES.length) * 100 : 0;
+      document.getElementById('progressFill').style.width = pct + '%';
+    }
+
+    function showResult() {
+      const total = SENTENCES.length;
+      document.getElementById('resultScore').textContent = `${correct} / ${total}`;
+      if (correct === total) {
+        document.getElementById('resultTitle').textContent = '🏆 Expert!';
+        document.getElementById('resultMsg').textContent = 'You correctly identified every persuasive technique. You can spot how writers manipulate readers!';
+      } else if (correct >= total * 0.75) {
+        document.getElementById('resultTitle').textContent = '⭐ Well done!';
+        document.getElementById('resultMsg').textContent = 'Good understanding of persuasive writing techniques. Review the ones you missed.';
+      } else {
+        document.getElementById('resultTitle').textContent = '📖 Keep studying!';
+        document.getElementById('resultMsg').textContent = 'Persuasive writers use many techniques. Re-read the definitions and look at each sentence again.';
+      }
+      document.getElementById('resultOverlay').classList.add('show');
+    }
+
+    function resetGame() {
+      placed = 0; correct = 0; draggingId = null;
+      document.getElementById('resultOverlay').classList.remove('show');
+      buildUI();
+    }
+
+    buildUI();
+  </script>
+</body>
+</html>

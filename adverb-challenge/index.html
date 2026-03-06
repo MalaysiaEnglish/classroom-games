@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adverb Challenge</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .game-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 780px;
+      margin: 0 auto;
+      gap: 14px;
+    }
+
+    /* ── Topic tabs ── */
+    .topic-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+    .topic-tab {
+      padding: 5px 14px;
+      border-radius: 30px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+      letter-spacing: 0.04em;
+    }
+    .topic-tab.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    .topic-tab:hover:not(.active) { background: var(--glass-hi); color: var(--text); }
+
+    /* ── Progress ── */
+    .progress-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .progress-track {
+      flex: 1;
+      height: 7px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .progress-label { font-size: 0.78rem; color: var(--text-dim); white-space: nowrap; }
+    .progress-label strong { color: var(--accent2); }
+
+    /* ── Question card ── */
+    .question-card {
+      width: 100%;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      text-align: center;
+      position: relative;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .q-label {
+      position: absolute;
+      top: 12px; left: 16px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .q-type-badge {
+      position: absolute;
+      top: 12px; right: 16px;
+      font-size: 0.65rem;
+      background: rgba(247,183,49,0.15);
+      border: 1px solid rgba(247,183,49,0.3);
+      color: var(--accent2);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .q-sentence {
+      font-size: clamp(1rem, 2.8vw, 1.25rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .q-blank {
+      display: inline-block;
+      min-width: 120px;
+      border-bottom: 3px solid var(--accent);
+      color: var(--accent);
+      font-weight: 900;
+      padding: 0 6px;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .q-hint {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* ── Options ── */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .opt-btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 2px solid var(--glass-border);
+      background: var(--glass-hi);
+      color: var(--text);
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+      min-width: unset;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(0,201,167,0.12); transform: translateY(-2px); }
+    .opt-btn.correct  { border-color: var(--safe) !important; background: rgba(34,197,94,0.2) !important; color: #7dffb3 !important; pointer-events: none; }
+    .opt-btn.wrong    { border-color: var(--danger) !important; background: rgba(239,68,68,0.18) !important; color: #ff9b9b !important; pointer-events: none; }
+    .opt-btn.reveal   { border-color: rgba(34,197,94,0.5) !important; background: rgba(34,197,94,0.1) !important; pointer-events: none; }
+    .opt-btn:disabled { pointer-events: none; opacity: 0.6; }
+
+    /* ── Feedback strip ── */
+    .feedback-strip {
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.87rem;
+      font-weight: 600;
+      text-align: center;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .feedback-strip.correct { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: #7dffb3; }
+    .feedback-strip.wrong   { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #ff9b9b; }
+    .feedback-strip.idle    { background: transparent; border: 1px solid transparent; color: transparent; }
+
+    /* ── Scoreboard ── */
+    .score-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .score-box {
+      background: var(--glass);
+      border: 2px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 8px 18px;
+      text-align: center;
+      min-width: 80px;
+      transition: border-color 0.3s;
+    }
+    .score-box .sb-num { font-size: 1.6rem; font-weight: 900; color: var(--accent2); line-height: 1; }
+    .score-box .sb-lbl { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+    .score-box.correct-box { border-color: var(--safe); }
+    .score-box.wrong-box   { border-color: var(--danger); }
+
+    /* ── Next button ── */
+    #nextBtn {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 800;
+      min-width: 160px;
+      display: none;
+    }
+
+    /* ── Result overlay ── */
+    .result-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:500; align-items:center; justify-content:center; }
+    .result-overlay.show { display:flex; }
+    .result-box { background:rgba(10,20,28,0.97); border:2px solid var(--accent); border-radius:20px; padding:32px 40px; text-align:center; max-width:420px; width:92%; }
+    .result-box .score-big { font-size:3rem; font-weight:900; color:var(--accent2); display:block; margin-bottom:6px; }
+    .result-box h2 { margin-bottom:8px; }
+    .result-box p  { color:var(--text-dim); margin-bottom:20px; font-size:0.9rem; }
+
+    /* ── Grammar note ── */
+    .grammar-note {
+      width: 100%;
+      background: rgba(247,183,49,0.07);
+      border: 1px solid rgba(247,183,49,0.2);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: rgba(247,183,49,0.85);
+      line-height: 1.5;
+    }
+    .grammar-note strong { color: var(--accent2); }
+  </style>
+</head>
+<body>
+  <h1>⚡ Adverb Challenge</h1>
+
+  <div class="controls">
+    <button id="resetBtn" onclick="resetGame()" style="background:#0f766e;border-color:var(--accent);">↺ Reset</button>
+    <button id="fullscreen" onclick="document.documentElement.requestFullscreen?.()">⛶ Fullscreen</button>
+    <button id="home" onclick="window.location.href='../index.html'">⌂ Home</button>
+  </div>
+
+  <div class="game-wrapper">
+
+    <!-- Topic tabs -->
+    <div class="topic-tabs" id="topicTabs"></div>
+
+    <!-- Grammar reminder -->
+    <div class="grammar-note" id="grammarNote"></div>
+
+    <!-- Progress -->
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-label"><strong id="qNum">0</strong> / <span id="qTotal">0</span></span>
+    </div>
+
+    <!-- Score boxes -->
+    <div class="score-row">
+      <div class="score-box" id="correctBox">
+        <div class="sb-num" id="correctNum">0</div>
+        <div class="sb-lbl">Correct</div>
+      </div>
+      <div class="score-box" id="wrongBox">
+        <div class="sb-num" id="wrongNum">0</div>
+        <div class="sb-lbl">Wrong</div>
+      </div>
+      <div class="score-box">
+        <div class="sb-num" id="streakNum">0</div>
+        <div class="sb-lbl">Streak 🔥</div>
+      </div>
+    </div>
+
+    <!-- Question card -->
+    <div class="question-card" id="questionCard">
+      <span class="q-label" id="qLabel">Question 1</span>
+      <span class="q-type-badge" id="qTypeBadge"></span>
+      <div class="q-sentence" id="qSentence"></div>
+      <div class="q-hint" id="qHint"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback-strip idle" id="feedbackStrip">—</div>
+
+    <!-- Next button -->
+    <button id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+
+  </div>
+
+  <!-- Result overlay -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-box">
+      <span class="score-big" id="resultScore"></span>
+      <h2 id="resultTitle"></h2>
+      <p id="resultMsg"></p>
+      <button onclick="resetGame()" style="background:var(--accent);color:#000;border-color:var(--accent);font-weight:800;padding:12px 32px;border-radius:40px;font-size:1rem;">Play Again</button>
+    </div>
+  </div>
+
+  <script>
+    // ── Data ──────────────────────────────────────────────────────────
+    const TOPICS = [
+      {
+        id: "manner",
+        label: "Manner & Degree",
+        icon: "🎯",
+        note: "<strong>Adverbs of manner</strong> describe <em>how</em> something is done — formed by adding <strong>-ly</strong> to an adjective (quick → quickly). <strong>Adverbs of degree</strong> modify adjectives or other adverbs (completely, almost, barely).",
+        questions: [
+          {
+            sentence: "Oliver stared ___ at the water far below him.",
+            blank: "___",
+            answer: "nervously",
+            options: ["nervously", "nervous", "nervousness", "nerve"],
+            hint: "How was he staring? Adjective → adverb.",
+            feedback: { correct: "✓ 'Nervously' — adverb of manner modifying the verb 'stared'.", wrong: "Adjectives describe nouns. We need an adverb here to modify the verb 'stared'." }
+          },
+          {
+            sentence: "The diver entered the water ___ , barely making a splash.",
+            blank: "___",
+            answer: "cleanly",
+            options: ["cleanly", "clean", "cleaner", "cleaning"],
+            hint: "How did the diver enter? The base adjective is 'clean'.",
+            feedback: { correct: "✓ 'Cleanly' — adverb of manner showing how the diver entered.", wrong: "'Clean' is an adjective. Add -ly to make it an adverb modifying the verb." }
+          },
+          {
+            sentence: "He was ___ certain that he would never return to that path.",
+            blank: "___",
+            answer: "almost",
+            options: ["almost", "most", "mostly", "more"],
+            hint: "This adverb of degree modifies the adjective 'certain'. It means 'not quite but nearly'.",
+            feedback: { correct: "✓ 'Almost' — adverb of degree meaning 'very nearly'.", wrong: "'Almost' is the adverb of degree here — it tells us 'how certain' he was." }
+          },
+          {
+            sentence: "She was ___ exhausted by the time she reached the other side.",
+            blank: "___",
+            answer: "completely",
+            options: ["completely", "complete", "completion", "completed"],
+            hint: "Which word intensifies the adjective 'exhausted'?",
+            feedback: { correct: "✓ 'Completely' — adverb of degree intensifying the adjective 'exhausted'.", wrong: "'Complete' is an adjective. 'Completely' is the adverb form needed here." }
+          },
+          {
+            sentence: "The two roads appeared ___ the same in the yellow wood.",
+            blank: "___",
+            answer: "equally",
+            options: ["equally", "equal", "equality", "equals"],
+            hint: "How did they appear — the same to what degree? Adjective + -ly.",
+            feedback: { correct: "✓ 'Equally' — adverb modifying the adjective 'the same'.", wrong: "'Equal' is the adjective. 'Equally' is its adverb form." }
+          },
+          {
+            sentence: "Chad gripped the stairwell ___, knowing he could not let go.",
+            blank: "___",
+            answer: "desperately",
+            options: ["desperately", "desperate", "desperation", "despair"],
+            hint: "How did he grip? The base adjective is 'desperate'.",
+            feedback: { correct: "✓ 'Desperately' — adverb of manner describing how he gripped.", wrong: "We need an adverb to modify the verb 'gripped'. Add -ly to 'desperate'." }
+          }
+        ]
+      },
+      {
+        id: "linking",
+        label: "Linking & Time",
+        icon: "🔗",
+        note: "<strong>Linking adverbs</strong> show the relationship between sentences — contrast (<em>however, nevertheless</em>), addition (<em>moreover, furthermore</em>), result (<em>therefore, consequently</em>). <strong>Time adverbs</strong> show when — <em>recently, afterwards, previously, meanwhile</em>.",
+        questions: [
+          {
+            sentence: "Chad got off the train to stretch his legs. ___, the train began to move without him.",
+            blank: "___",
+            answer: "Meanwhile",
+            options: ["Meanwhile", "Therefore", "Moreover", "Nevertheless"],
+            hint: "Two things happening at the same time — which adverb shows this?",
+            feedback: { correct: "✓ 'Meanwhile' — shows that the train moving happened at the same time as Chad was stretching.", wrong: "'Meanwhile' is the time adverb — it links two simultaneous events." }
+          },
+          {
+            sentence: "The choice of roads was difficult. ___, the poet knew he could never come back.",
+            blank: "___",
+            answer: "Furthermore",
+            options: ["Furthermore", "However", "Previously", "Afterwards"],
+            hint: "He is adding another difficult point — which word adds to the previous idea?",
+            feedback: { correct: "✓ 'Furthermore' — adds an additional point reinforcing the first.", wrong: "'Furthermore' (or 'Moreover') adds to a previous point. We're building on the difficulty." }
+          },
+          {
+            sentence: "The writer argues that choice brings freedom. ___, research suggests it can also cause anxiety.",
+            blank: "___",
+            answer: "However",
+            options: ["However", "Therefore", "Afterwards", "Similarly"],
+            hint: "The second sentence contradicts the first — which word signals contrast?",
+            feedback: { correct: "✓ 'However' — signals a contrast or opposing idea.", wrong: "'However' (or 'Nevertheless') signals that the second idea contrasts with the first." }
+          },
+          {
+            sentence: "The volunteers were asked to pick a random item. ___, they were asked to rate their satisfaction.",
+            blank: "___",
+            answer: "Afterwards",
+            options: ["Afterwards", "Moreover", "However", "Consequently"],
+            hint: "This happened next in a sequence — which time adverb shows 'after this'?",
+            feedback: { correct: "✓ 'Afterwards' — a time adverb showing what happened next in sequence.", wrong: "'Afterwards' is the time adverb here — it means 'after that event'." }
+          },
+          {
+            sentence: "Refugees face dangerous sea crossings. ___, they must navigate complex legal systems on arrival.",
+            blank: "___",
+            answer: "Moreover",
+            options: ["Moreover", "However", "Previously", "Consequently"],
+            hint: "The writer is adding another hardship on top of the first — which word does this?",
+            feedback: { correct: "✓ 'Moreover' — adds another point to strengthen the argument.", wrong: "'Moreover' (or 'Furthermore') means 'in addition to that' — adding, not contrasting." }
+          },
+          {
+            sentence: "The decision-making experiment produced surprising results. ___, the researchers published their findings.",
+            blank: "___",
+            answer: "Subsequently",
+            options: ["Subsequently", "Nevertheless", "Moreover", "Similarly"],
+            hint: "This means 'later, as a result of this' — a formal time adverb.",
+            feedback: { correct: "✓ 'Subsequently' — a formal time adverb meaning 'after this / as a result'.", wrong: "'Subsequently' means 'after this happened' — it's a formal time adverb." }
+          }
+        ]
+      },
+      {
+        id: "position",
+        label: "Adverb Position",
+        icon: "📍",
+        note: "Adverbs can appear in <strong>different positions</strong> in a sentence. Front position (<em>Slowly, he walked</em>) adds drama. End position is most common (<em>He walked slowly</em>). Mid position is before the main verb (<em>He slowly walked</em>). The same adverb in different positions changes the <strong>emphasis</strong>.",
+        questions: [
+          {
+            sentence: "Which sentence places the adverb correctly for emphasis on the manner of speaking?",
+            blank: "",
+            answer: "Hesitantly, Oliver stepped to the edge.",
+            options: ["Hesitantly, Oliver stepped to the edge.", "Oliver hesitantly to the edge stepped.", "Oliver stepped hesitant to the edge.", "Hesitant Oliver stepped to the edge."],
+            hint: "Front position — places the adverb first for dramatic effect.",
+            feedback: { correct: "✓ Front-position adverb 'Hesitantly,' creates emphasis and a dramatic pause.", wrong: "The front-position adverb (followed by a comma) is the most dramatic choice here." }
+          },
+          {
+            sentence: "Which version uses the adverb incorrectly?",
+            blank: "",
+            answer: "She spoke confident to the audience.",
+            options: ["She spoke confidently to the audience.", "Confidently, she spoke to the audience.", "She spoke to the audience confidently.", "She spoke confident to the audience."],
+            hint: "One option uses an adjective where an adverb is needed.",
+            feedback: { correct: "✓ 'Confident' is an adjective — it cannot modify the verb 'spoke'. The correct form is 'confidently'.", wrong: "Look for the option that uses an adjective (no -ly) to modify a verb — that is the error." }
+          },
+          {
+            sentence: "The train ___ left before Chad could get back on board.",
+            blank: "___",
+            answer: "suddenly",
+            options: ["suddenly", "sudden", "more sudden", "suddenness"],
+            hint: "How did the train leave? This is a mid-position adverb of manner.",
+            feedback: { correct: "✓ 'Suddenly' — adverb of manner in mid position, before the main verb.", wrong: "We need an adverb to show how the train left. 'Sudden' is an adjective — add -ly." }
+          },
+          {
+            sentence: "Which sentence has the adverb in the most emphatic position?",
+            blank: "",
+            answer: "Desperately, he called for help.",
+            options: ["He called for help desperately.", "He desperately called for help.", "Desperately, he called for help.", "He called desperately for help."],
+            hint: "Which position gives most dramatic weight to 'desperately'?",
+            feedback: { correct: "✓ Front position with a comma gives the adverb the most dramatic emphasis.", wrong: "Front position — placing the adverb first, followed by a comma — is the most emphatic." }
+          }
+        ]
+      }
+    ];
+
+    // ── State ─────────────────────────────────────────────────────────
+    let currentTopic = 0;
+    let questionOrder = [];
+    let qIndex = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let streak = 0;
+    let answered = false;
+
+    // ── Init ──────────────────────────────────────────────────────────
+    function init() {
+      buildTabs();
+      loadTopic(0);
+    }
+
+    function buildTabs() {
+      const tabs = document.getElementById('topicTabs');
+      tabs.innerHTML = '';
+      TOPICS.forEach((t, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'topic-tab' + (i === 0 ? ' active' : '');
+        btn.textContent = t.icon + ' ' + t.label;
+        btn.onclick = () => { switchTopic(i); };
+        tabs.appendChild(btn);
+      });
+    }
+
+    function switchTopic(idx) {
+      currentTopic = idx;
+      correctCount = 0; wrongCount = 0; streak = 0;
+      document.querySelectorAll('.topic-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+      loadTopic(idx);
+    }
+
+    function loadTopic(idx) {
+      const topic = TOPICS[idx];
+      document.getElementById('grammarNote').innerHTML = topic.note;
+      questionOrder = topic.questions.map((_, i) => i);
+      shuffle(questionOrder);
+      qIndex = 0;
+      correctCount = 0; wrongCount = 0; streak = 0;
+      updateScores();
+      document.getElementById('qTotal').textContent = topic.questions.length;
+      document.getElementById('resultOverlay').classList.remove('show');
+      showQuestion();
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // ── Render question ───────────────────────────────────────────────
+    function showQuestion() {
+      answered = false;
+      const topic = TOPICS[currentTopic];
+      const q = topic.questions[questionOrder[qIndex]];
+
+      document.getElementById('qLabel').textContent = `Question ${qIndex + 1} of ${topic.questions.length}`;
+      document.getElementById('qTypeBadge').textContent = topic.label;
+      document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('feedbackStrip').className = 'feedback-strip idle';
+      document.getElementById('feedbackStrip').textContent = '—';
+
+      // Render sentence — replace blank marker
+      const sentenceEl = document.getElementById('qSentence');
+      if (q.blank) {
+        sentenceEl.innerHTML = q.sentence.replace(q.blank, `<span class="q-blank">${q.blank}</span>`);
+      } else {
+        sentenceEl.textContent = q.sentence;
+      }
+
+      document.getElementById('qHint').textContent = '💡 ' + q.hint;
+
+      // Options
+      const grid = document.getElementById('optionsGrid');
+      grid.innerHTML = '';
+      const opts = [...q.options].sort(() => Math.random() - 0.5);
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.textContent = opt;
+        btn.onclick = () => handleAnswer(btn, opt, q);
+        grid.appendChild(btn);
+      });
+
+      // Progress
+      document.getElementById('qNum').textContent = qIndex + 1;
+      document.getElementById('progressFill').style.width =
+        ((qIndex / topic.questions.length) * 100) + '%';
+    }
+
+    function handleAnswer(btn, chosen, q) {
+      if (answered) return;
+      answered = true;
+
+      const isCorrect = chosen === q.answer;
+
+      // Style all options
+      document.querySelectorAll('.opt-btn').forEach(b => {
+        b.disabled = true;
+        if (b.textContent === q.answer) b.classList.add('correct');
+      });
+      if (!isCorrect) btn.classList.add('wrong');
+
+      // Feedback
+      const fb = document.getElementById('feedbackStrip');
+      fb.className = 'feedback-strip ' + (isCorrect ? 'correct' : 'wrong');
+      fb.textContent = isCorrect ? q.feedback.correct : q.feedback.wrong;
+
+      // Scores
+      if (isCorrect) {
+        correctCount++;
+        streak++;
+        flashBox('correctBox', 'correct-box');
+      } else {
+        wrongCount++;
+        streak = 0;
+        flashBox('wrongBox', 'wrong-box');
+      }
+      updateScores();
+
+      // Next
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    }
+
+    function flashBox(id, cls) {
+      const box = document.getElementById(id);
+      box.classList.add(cls);
+      setTimeout(() => box.classList.remove(cls), 1000);
+    }
+
+    function nextQuestion() {
+      qIndex++;
+      const total = TOPICS[currentTopic].questions.length;
+      if (qIndex >= total) {
+        showResult();
+      } else {
+        showQuestion();
+      }
+    }
+
+    function updateScores() {
+      document.getElementById('correctNum').textContent = correctCount;
+      document.getElementById('wrongNum').textContent   = wrongCount;
+      document.getElementById('streakNum').textContent  = streak;
+    }
+
+    function showResult() {
+      const total = TOPICS[currentTopic].questions.length;
+      document.getElementById('resultScore').textContent = `${correctCount} / ${total}`;
+      document.getElementById('progressFill').style.width = '100%';
+      if (correctCount === total) {
+        document.getElementById('resultTitle').textContent = '🏆 Perfect!';
+        document.getElementById('resultMsg').textContent = 'Flawless — you understand adverb forms and usage completely.';
+      } else if (correctCount >= total * 0.75) {
+        document.getElementById('resultTitle').textContent = '⭐ Well done!';
+        document.getElementById('resultMsg').textContent = 'Strong work. Review the ones you missed and pay attention to adjective vs adverb forms.';
+      } else {
+        document.getElementById('resultTitle').textContent = '📖 Keep practising!';
+        document.getElementById('resultMsg').textContent = 'Remember: adjectives describe nouns; adverbs modify verbs, adjectives and other adverbs. Add -ly to form most adverbs.';
+      }
+      document.getElementById('resultOverlay').classList.add('show');
+    }
+
+    function resetGame() {
+      document.getElementById('resultOverlay').classList.remove('show');
+      loadTopic(currentTopic);
+    }
+
+    init();
+  </script>
+</body>
+</html>
