@@ -414,13 +414,13 @@
     function onColDragOver(e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
-      this.classList.add('drag-target');
+      e.currentTarget.classList.add('drag-target');
     }
-    function onColDragLeave() { this.classList.remove('drag-target'); }
+    function onColDragLeave(e) { e.currentTarget.classList.remove('drag-target'); }
 
     function onColDrop(e, techId) {
       e.preventDefault();
-      this.classList.remove('drag-target');
+      e.currentTarget.classList.remove('drag-target');
       if (draggingId === null) return;
 
       const sentence = SENTENCES[draggingId];
