@@ -1603,6 +1603,46 @@ window.CUSTOM_CONTENT = {
     { word: "PUN",            hint: "A type of wordplay that relies on a word with two meanings",                    topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
     { word: "SIGNIFYING",     hint: "Meaning or standing for something",                                             topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
 
+    // ── S9/U1/L1 — Relic (Darkparis) ─────────────────────────────────
+    { word: "FLICKERING",     hint: "Shining unsteadily",                                                            topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "NAIVE",          hint: "Lacking experience or wisdom",                                                  topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "CATACOMBS",      hint: "Underground tunnels originally used as mines, later as storage",                topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "FLASHBACK",      hint: "A part of a story that goes back in time to explain an event",                  topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "EXPLICIT",       hint: "Stated directly and clearly",                                                   topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+
+    // ── S9/U1/L2 — The Doorkeeper ────────────────────────────────────
+    { word: "REBOUNDED",      hint: "Bounced back",                                                                  topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "SCURRYING",      hint: "Moving quickly with short steps",                                               topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "ANTITHESIS",     hint: "The use of opposites or contrasting ideas",                                     topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "ELLIPSIS",       hint: "Three dots used to mark a pause or omission in speech",                         topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "CLIFFHANGER",    hint: "A dramatic ending which leaves the reader in suspense",                         topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "QUIVER",         hint: "A shake",                                                                       topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "PIERCING",       hint: "Cutting through",                                                               topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "LINGERS",        hint: "Hangs around",                                                                  topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+
+    // ── S9/U1/L3 — Reviewing Darkparis ───────────────────────────────
+    { word: "CONTEXT",        hint: "The situation within which something exists or happens",                        topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+    { word: "SUMMARISE",      hint: "To explain the main points of a text in a few words",                           topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+    { word: "SKIMMING",       hint: "Reading a text quickly to get the overall idea",                                topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+    { word: "SCANNING",       hint: "Looking through a text quickly to find particular details",                     topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+
+    // ── S9/U1/L4 — The Second Test (Play) ───────────────────────────
+    { word: "GAGGED",         hint: "Having a covering over the mouth so someone cannot speak",                      topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+    { word: "GESTURE",        hint: "Movements of the hands or arms to add emphasis or bring a story to life",       topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+    { word: "PACE",           hint: "The speed at which someone speaks or events take place in a story",             topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+    { word: "PROSE",          hint: "Written language in paragraphs, as opposed to verse or drama",                  topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+
+    // ── S9/U1/L5 — Visiting Coober Pedy ─────────────────────────────
+    { word: "OTHERWORLDLY",   hint: "Relating to a strange, alternative world",                                      topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+    { word: "UNNERVING",      hint: "Causing a loss of confidence",                                                  topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+    { word: "OPAL",           hint: "A precious stone",                                                              topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+    { word: "BLASTING",       hint: "Blowing up or breaking apart",                                                  topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+
+    // ── S9/U1/L6 — Living under the Ground ──────────────────────────
+    { word: "INVENTIVE",      hint: "Creative",                                                                      topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
+    { word: "DRONE",          hint: "A low continuous sound",                                                        topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
+    { word: "PINGING",        hint: "Making a short high-pitched sound",                                             topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
+
   ],
 
   // ════════════════════════════════════════════════════════════════
@@ -1667,6 +1707,24 @@ window.CUSTOM_CONTENT = {
     { text: "A soliloquy is a conversation between two characters who are hiding their true feelings from each other.",                                                correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
     { text: "An ambiguous ending leaves the meaning open so that different readers can reach different conclusions.",                                                  correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
     { text: "An ambiguous ending always means the writer ran out of ideas and could not decide how to finish the story.",                                              correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+
+    // ── S9/U1/L2 — Punctuation for Rhetorical Effect ─────────────────
+    { text: "The exclamation mark in 'Welcome to your new life!' conveys excitement and a sense of dramatic announcement.",                                           correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The exclamation mark in 'Welcome to your new life!' shows that the speaker is asking a question.",                                                      correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The ellipsis in 'There was a split second of inaction, and then . . .' creates suspense by pausing before a dramatic moment.",                          correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The ellipsis in 'There was a split second of inaction, and then . . .' shows that the writer forgot how to finish the sentence.",                       correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The question mark in 'You do know there is no going back, don't you, Louis?' makes The Doorkeeper sound threatening and in control.",                   correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The question mark in 'You do know there is no going back, don't you, Louis?' shows The Doorkeeper is genuinely unsure whether Louis understands.",      correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "'Which way now? Go on or go home?' are rhetorical questions — they express Louis's dilemma rather than expecting an answer.",                           correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "'Which way now? Go on or go home?' are direct questions addressed to Relic, waiting for her to give Louis directions.",                                  correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The antithesis in 'Paris is for the fearful, but Darkparis is for the fearless' creates contrast to show that the underground world is different from ordinary city life.", correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The antithesis in 'Paris is for the fearful, but Darkparis is for the fearless' uses a simile to compare the two places.",                              correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A flashback in a story goes back in time to give the reader information that helps explain current events.",                                             correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A flashback in a story jumps forward in time to show what will happen to the characters in the future.",                                                 correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A cliffhanger ending leaves the reader in suspense, making them want to find out what happens next.",                                                    correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A cliffhanger ending resolves all the main questions in a story so that the reader feels satisfied.",                                                    correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "An extended metaphor is a comparison that is developed and repeated throughout a piece of writing, not just used once.",                                 correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "An extended metaphor is a very long simile that uses the words 'like' or 'as' several times in the same sentence.",                                     correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
 
   ]
 
