@@ -1532,30 +1532,88 @@ window.CUSTOM_CONTENT = {
     { text: "While it is true that choice brings freedom, it can also cause anxiety.",                 correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
     { text: "While it is true that choice brings freedom, but it can also cause anxiety.",             correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
 
-    // ── S9/U8/L1 — I Want to Fly ─────────────────────────────────
-    { word: "FLAMBOYANT",     hint: "Confident and stylish",                                    topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
-    { word: "JUXTAPOSITION",  hint: "Placing two contrasting things side by side",              topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
-    { word: "GADGET",         hint: "A small device or tool, often electronic",                 topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
-    { word: "HYPOCRITE",      hint: "Someone who says one thing but does another",              topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
+    // ══════════════════════════════════════════════════════════════
+    //  STAGE 4
+    // ══════════════════════════════════════════════════════════════
 
-    // ── S9/U8/L3 — Just Crash Through It ─────────────────────────
-    { word: "ECSTATIC",       hint: "Extremely happy and excited",                              topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
-    { word: "PETRIFIED",      hint: "Extremely scared or terrified",                            topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
-    { word: "THALIDOMIDE",    hint: "A drug given in the 1950s–60s that caused birth defects", topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
-    { word: "CHRONOLOGICAL",  hint: "Arranged in the order events happened in time",            topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
+    // ── S4/U8/L1 — Vocabulary (Josh Hopkins / Shackleton) ────────
+    { word: "FRIGHTENING",  hint: "Making you feel scared or afraid",                          topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "REALIZED",     hint: "Suddenly understood or became aware of something",          topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "BATTERY",      hint: "The part of a phone or device that stores power",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "HORRIBLE",     hint: "Very unpleasant or awful",                                  topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "EXPEDITION",   hint: "An organised journey made for a special purpose",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "SEARCH",       hint: "To look carefully for someone or something",                topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "CHARGE",       hint: "To put electricity back into a battery",                    topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "SURVIVE",      hint: "To stay alive through a dangerous situation",               topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "RESCUE",       hint: "To save someone from a dangerous situation",                topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "DARKNESS",     hint: "When there is no light; the state of being dark",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "TRAPPED",      hint: "Unable to escape from a dangerous place or situation",      topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "JOURNEY",      hint: "Travelling from one place to another",                      topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
 
-    // ── S9/U8/L4 — He for She ────────────────────────────────────
-    { word: "GALVANISE",      hint: "To provoke or stir people into action",                   topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
-    { word: "ADVOCATES",      hint: "People who publicly support a cause",                     topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
-    { word: "COUNTERPARTS",   hint: "People who hold an equivalent position to another",       topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
-    { word: "MANTLE",         hint: "An important role or responsibility taken on by someone", topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
-    { word: "INEQUALITY",     hint: "Unfair differences in how people are treated",            topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
+    // ── S4/U8/L3 — Reading (Alison Wright / Kindness of Strangers)
+    { word: "STRANGER",     hint: "Someone you have never met before",                         topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "TREATMENT",    hint: "Medical care given to a sick or injured person",            topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "KINDNESS",     hint: "Being friendly, generous and caring to others",             topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "ALIVE",        hint: "Living; not dead",                                          topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "ACCIDENT",     hint: "Something bad that happens unexpectedly",                   topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "HOSPITAL",     hint: "A place where sick or injured people receive medical care", topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "BROKEN",       hint: "Damaged and no longer working or in one piece",             topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "RECOVER",      hint: "To get better after an illness or injury",                  topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
 
-    // ── S9/U8/L5 — Binti ─────────────────────────────────────────
-    { word: "PARIAH",         hint: "A social outcast rejected by their community",            topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
-    { word: "THRESHOLD",      hint: "A point between two places or states; a boundary",       topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
-    { word: "ASTROLABE",      hint: "A navigation device used on ships",                       topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
-    { word: "SCOWLED",        hint: "Frowned in an angry or bad-tempered way",                 topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
+    // ── S4/U8/L5 — Balto / additional survival vocab ─────────────
+    { word: "MEDICINE",     hint: "A substance used to treat illness or injury",               topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+    { word: "FROZEN",       hint: "Turned to ice because of very cold temperatures",           topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+    { word: "SURVIVED",     hint: "Stayed alive through a very dangerous experience",          topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+    { word: "FAMOUS",       hint: "Known by many people",                                      topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+
+    // ── S4/U8/L6 — Survival tips / Writing ───────────────────────
+    { word: "PROTECT",      hint: "To keep someone or something safe from harm",               topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+    { word: "DANGER",       hint: "The possibility of being hurt or killed",                   topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+    { word: "EQUIPMENT",    hint: "The tools and items needed for an activity",                topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+    { word: "IMPERATIVE",   hint: "A type of sentence that gives an instruction or command",   topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+
+  ],
+
+  // ════════════════════════════════════════════════════════════════
+  //  SENTENCES  (Grammar Auction)
+  // ════════════════════════════════════════════════════════════════
+  sentences: [
+
+    // ── S4/U8/L2 — Past Perfect Affirmative ──────────────────────
+    { text: "After the men had pulled the lifeboats across the ice, they arrived at the island.",           correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After the men had pull the lifeboats across the ice, they arrived at the island.",             correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "By the time they reached Elephant Island, the water had frozen solid.",                        correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "By the time they reached Elephant Island, the water had freeze solid.",                        correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "They set off for home after they had rescued everyone.",                                       correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "They set off for home after they had rescue everyone.",                                        correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had eaten all their food, they wanted to go home.",                                 correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had ate all their food, they wanted to go home.",                                   correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Josh turned his jacket inside out because the rescue team had not seen him.",                  correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Josh turned his jacket inside out because the rescue team had not saw him.",                   correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "When they arrived at the other side of the island, they had walked for 36 hours.",             correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "When they arrived at the other side of the island, they had walk for 36 hours.",               correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Shackleton was relieved because all of his men had survived.",                                 correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Shackleton was relieved because all of his men had survive.",                                  correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had rested for twenty minutes, they started walking again.",                        correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had rested for twenty minutes, they start walking again.",                          correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+
+    // ── S4/U8/L4 — Past Perfect Negative & Questions ─────────────
+    { text: "I hadn't known anything about Alison Wright before I read the text.",                          correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "I hadn't knew anything about Alison Wright before I read the text.",                           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "She hadn't been to Mexico before she visited her friend Rosa there last summer.",               correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "She hadn't been to Mexico before she had visited her friend Rosa there last summer.",           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "He hadn't charged his phone battery before he set off on his journey.",                        correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "He didn't charged his phone battery before he set off on his journey.",                        correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had she broken any bones in the accident?",                                                    correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had she broke any bones in the accident?",                                                     correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Where had she been before she got to Thailand?",                                               correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Where had she went before she got to Thailand?",                                               correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "By the time the rescue team found Josh, he hadn't eaten anything for hours.",                  correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "By the time the rescue team found Josh, he hadn't eat anything for hours.",                    correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had the men ever crossed mountains like that before?",                                         correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had the men ever cross mountains like that before?",                                           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Alison hadn't met the stranger before, but he drove her to hospital.",                         correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Alison didn't met the stranger before, but he drove her to hospital.",                         correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
 
   ]
 

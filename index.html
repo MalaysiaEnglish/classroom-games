@@ -406,6 +406,7 @@
   </header>
 
   <nav class="stage-nav">
+    <button class="stage-tab" onclick="showStage('s4')">Stage 4</button>
     <button class="stage-tab active" onclick="showStage('s5')">Stage 5</button>
     <button class="stage-tab" onclick="showStage('s6')">Stage 6</button>
     <button class="stage-tab disabled" title="Coming soon">Stage 7<span class="coming">soon</span></button>
@@ -415,6 +416,32 @@
   </nav>
 
   <main>
+
+    <!-- ── STAGE 4 ── -->
+    <div class="stage-panel" id="panel-s4">
+      <div class="stage-label">Stage 4</div>
+      <div class="units-grid">
+
+        <!-- S4 U8 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🐻</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 8</div>
+              <div class="unit-title">Tales of Survival</div>
+              <div class="unit-grammar">Past Perfect · Survival Vocabulary · Imperatives</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-stage="4" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="8"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <!-- ── STAGE 5 ── -->
     <div class="stage-panel active" id="panel-s5">
