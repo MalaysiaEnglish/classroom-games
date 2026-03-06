@@ -1726,6 +1726,50 @@ window.CUSTOM_CONTENT = {
     { text: "An extended metaphor is a comparison that is developed and repeated throughout a piece of writing, not just used once.",                                 correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
     { text: "An extended metaphor is a very long simile that uses the words 'like' or 'as' several times in the same sentence.",                                     correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
 
+    // ============================================================
+    // S9/U2 — Law and Order — Vocabulary
+    // ============================================================
+    { word: "conscience",       hint: "An inner sense telling you if your actions are right or wrong",                              topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "empathy",          hint: "The ability to understand and share the feelings of others",                                  topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "compassion",       hint: "Concern and pity for others",                                                                 topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "cooperate",        hint: "To work together towards a shared goal",                                                      topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "anticipation",     hint: "The feeling of expecting something to happen",                                                topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "decisive",         hint: "Able to make decisions quickly and confidently",                                              topic: "S9/U2/L2 Join the Police", stage: 9, unit: 2, lesson: 2 },
+    { word: "conviction",       hint: "A formal decision by a court that someone is guilty of a crime",                             topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
+    { word: "disposition",      hint: "A person's natural manner and personality",                                                   topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
+    { word: "deduction",        hint: "Working out a conclusion logically from the clues available",                                 topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
+    { word: "reconstruction",   hint: "Acting out a past event to help witnesses remember what happened",                            topic: "S9/U2/L4 Young Detectives", stage: 9, unit: 2, lesson: 4 },
+    { word: "conventions",      hint: "The accepted rules or typical features of a particular genre or type of writing",             topic: "S9/U2/L6 Detective Fiction", stage: 9, unit: 2, lesson: 6 },
+    { word: "bias",             hint: "An unfair preference for or against a person, idea or group",                                 topic: "S9/U2/L6 Detective Fiction", stage: 9, unit: 2, lesson: 6 },
+    { word: "possessor",        hint: "The owner or holder of something",                                                            topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
+    { word: "gangster",         hint: "A violent criminal who is a member of an organised gang",                                     topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
+    { word: "sheikh",           hint: "An Arab leader or chief",                                                                     topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
+
+    // ============================================================
+    // S9/U2 — Law and Order — Grammar Sentences
+    // L1 Sentence Types | L2 Colons and Semi-colons
+    // ============================================================
+
+    // Sentence Types (L1)
+    { text: "A simple sentence contains one main clause and expresses a complete thought on its own.",                                                        correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A simple sentence must contain at least two main clauses joined by 'and', 'but' or 'or'.",                                                      correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A compound sentence joins two main clauses using a coordinating conjunction such as 'and', 'but' or 'or'.",                                     correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A compound sentence is one that contains a main clause and at least one subordinate clause.",                                                    correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A complex sentence contains one main clause and one or more subordinate clauses that depend on it.",                                             correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A complex sentence contains two main clauses of equal importance, joined by a conjunction.",                                                     correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A minor sentence does not contain a main verb — for example, 'Easy? Maybe!' in the blog post.",                                                 correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A minor sentence is simply any very short sentence — it must be fewer than five words long.",                                                    correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "Placing a simple sentence after a longer, complex sentence can reinforce the main point and create a clear, direct impact.",                     correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "Placing a simple sentence after a longer sentence always makes the writing sound less formal and less intelligent.",                             correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+
+    // Colons and Semi-colons (L2)
+    { text: "A colon can be used to introduce an explanation, list or key word, creating a deliberate pause before the important information.",               correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "A colon can only be used to introduce a list — it is incorrect to use it before a single word or explanation.",                                  correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "A semi-colon can be used between two closely related main clauses to suggest a connection or explain a relationship between them.",              correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "A semi-colon works in exactly the same way as a full stop — it simply means the sentence has ended.",                                            correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon links two related ideas and draws them together.", correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon shows that the second idea contradicts the first.", correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+
   ]
 
 };
