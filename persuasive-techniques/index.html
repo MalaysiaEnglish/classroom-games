@@ -104,6 +104,7 @@
       margin-bottom: 8px;
       padding-bottom: 8px;
       border-bottom: 1px solid var(--glass-border);
+      pointer-events: none;
     }
     .tech-icon { font-size: 1.3rem; }
     .tech-name {
@@ -131,6 +132,7 @@
       display: flex;
       flex-direction: column;
       gap: 5px;
+      pointer-events: none;
     }
     .drop-placeholder {
       border: 1.5px dashed rgba(255,255,255,0.12);
@@ -142,6 +144,7 @@
       font-size: 0.7rem;
       color: rgba(255,255,255,0.18);
       font-style: italic;
+      pointer-events: none;
     }
 
     /* ── Score bar ── */
@@ -385,10 +388,6 @@
         col.addEventListener('dragover',  onColDragOver);
         col.addEventListener('dragleave', onColDragLeave);
         col.addEventListener('drop',      e => onColDrop(e, t.id));
-        const zone = col.querySelector('.tech-drop-zone');
-        zone.addEventListener('dragover',  onColDragOver);
-        zone.addEventListener('dragleave', onColDragLeave);
-        zone.addEventListener('drop',      e => onColDrop(e, t.id));
         grid.appendChild(col);
       });
 
@@ -414,6 +413,7 @@
     }
     function onColDragOver(e) {
       e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
       this.classList.add('drag-target');
     }
     function onColDragLeave() { this.classList.remove('drag-target'); }
