@@ -772,6 +772,8 @@
               <div class="unit-grammar">Space · Geography · History · Chemistry</div>
             </div>
           </div>
+          <div class="content-loaded" data-words-stage="6" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -957,7 +959,7 @@
         if (matching.length === 0) { el.style.display = 'none'; return; }
         const topics = [...new Set(matching.map(q => q.topic))].length;
         const topicTxt = topics > 1 ? ' across ' + topics + ' topics' : '';
-        el.innerHTML = '<span class="content-tag"><span class="ct-dot"></span>Connect 4 \u00b7 ' + matching.length + ' questions ready' + topicTxt + '</span>';
+        el.innerHTML = '<span class="content-tag"><span class="ct-dot"></span>Connect 4 \u00b7 Blockbusters \u00b7 Battleships \u00b7 Battle Teams \u00b7 N&amp;C \u00b7 ' + matching.length + ' questions ready' + topicTxt + '</span>';
         el.style.display = '';
       });
     }
