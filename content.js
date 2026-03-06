@@ -1532,6 +1532,31 @@ window.CUSTOM_CONTENT = {
     { text: "While it is true that choice brings freedom, it can also cause anxiety.",                 correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
     { text: "While it is true that choice brings freedom, but it can also cause anxiety.",             correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
 
+    // ── S9/U8/L1 — I Want to Fly ─────────────────────────────────
+    { word: "FLAMBOYANT",     hint: "Confident and stylish",                                    topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
+    { word: "JUXTAPOSITION",  hint: "Placing two contrasting things side by side",              topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
+    { word: "GADGET",         hint: "A small device or tool, often electronic",                 topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
+    { word: "HYPOCRITE",      hint: "Someone who says one thing but does another",              topic: "S9/U8/L1 I Want to Fly",          stage: 9, unit: 8, lesson: 1 },
+
+    // ── S9/U8/L3 — Just Crash Through It ─────────────────────────
+    { word: "ECSTATIC",       hint: "Extremely happy and excited",                              topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
+    { word: "PETRIFIED",      hint: "Extremely scared or terrified",                            topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
+    { word: "THALIDOMIDE",    hint: "A drug given in the 1950s–60s that caused birth defects", topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
+    { word: "CHRONOLOGICAL",  hint: "Arranged in the order events happened in time",            topic: "S9/U8/L3 Just Crash Through It",   stage: 9, unit: 8, lesson: 3 },
+
+    // ── S9/U8/L4 — He for She ────────────────────────────────────
+    { word: "GALVANISE",      hint: "To provoke or stir people into action",                   topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
+    { word: "ADVOCATES",      hint: "People who publicly support a cause",                     topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
+    { word: "COUNTERPARTS",   hint: "People who hold an equivalent position to another",       topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
+    { word: "MANTLE",         hint: "An important role or responsibility taken on by someone", topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
+    { word: "INEQUALITY",     hint: "Unfair differences in how people are treated",            topic: "S9/U8/L4 He for She",             stage: 9, unit: 8, lesson: 4 },
+
+    // ── S9/U8/L5 — Binti ─────────────────────────────────────────
+    { word: "PARIAH",         hint: "A social outcast rejected by their community",            topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
+    { word: "THRESHOLD",      hint: "A point between two places or states; a boundary",       topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
+    { word: "ASTROLABE",      hint: "A navigation device used on ships",                       topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
+    { word: "SCOWLED",        hint: "Frowned in an angry or bad-tempered way",                 topic: "S9/U8/L5 Binti",                  stage: 9, unit: 8, lesson: 5 },
+
   ]
 
 };
