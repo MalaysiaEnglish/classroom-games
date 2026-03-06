@@ -1572,6 +1572,37 @@ window.CUSTOM_CONTENT = {
     { word: "EQUIPMENT",    hint: "The tools and items needed for an activity",                topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
     { word: "IMPERATIVE",   hint: "A type of sentence that gives an instruction or command",   topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
 
+    // ── S9/U9/L1 — Stranger in a Strange Land ────────────────────────
+    { word: "EXHIBIT",        hint: "An object on display",                                                          topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+    { word: "IMPUDENCE",      hint: "Overconfidence; disrespectfulness",                                             topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+    { word: "POMEGRANATE",    hint: "A fruit with red flesh",                                                        topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+    { word: "INTIMATE",       hint: "Familiar and relaxed",                                                          topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+
+    // ── S9/U9/L2 — A Strange Meeting (Macbeth) ───────────────────────
+    { word: "SOLILOQUY",      hint: "A solo speech in which a character reveals their thoughts",                     topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
+    { word: "TRAGEDY",        hint: "A genre of drama in which the main character encounters problems and suffering", topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
+    { word: "HEREAFTER",      hint: "In the future",                                                                 topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
+
+    // ── S9/U9/L3 — Fun with Macbeth ──────────────────────────────────
+    { word: "DETRIMENT",      hint: "The state of being damaged or harmed",                                          topic: "S9/U9/L3 Fun with Macbeth", stage: 9, unit: 9, lesson: 3 },
+
+    // ── S9/U9/L4 — An Unusual Job ────────────────────────────────────
+    { word: "GRAVITATED",     hint: "Was attracted to",                                                              topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+    { word: "GRIT",           hint: "Determination",                                                                 topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+    { word: "LODGED",         hint: "Stuck",                                                                         topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+    { word: "PARAPHRASING",   hint: "Rewording something in a different way, usually to make it shorter or clearer", topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+
+    // ── S9/U9/L5 — Unusual Endings ───────────────────────────────────
+    { word: "CONVENTIONAL",   hint: "Following what is normally expected or traditionally done",                     topic: "S9/U9/L5 Unusual Endings", stage: 9, unit: 9, lesson: 5 },
+    { word: "UNCONVENTIONAL", hint: "Not following usual expectations; surprising or unexpected",                    topic: "S9/U9/L5 Unusual Endings", stage: 9, unit: 9, lesson: 5 },
+
+    // ── S9/U9/L6 — A Twist in the Tail ───────────────────────────────
+    { word: "INTERSTELLAR",   hint: "Between the stars; from space",                                                 topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "REPELLED",       hint: "Felt distaste or disgust",                                                      topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "HARNESSES",      hint: "A set of straps",                                                               topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "PUN",            hint: "A type of wordplay that relies on a word with two meanings",                    topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "SIGNIFYING",     hint: "Meaning or standing for something",                                             topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+
   ],
 
   // ════════════════════════════════════════════════════════════════
@@ -1614,6 +1645,28 @@ window.CUSTOM_CONTENT = {
     { text: "Had the men ever cross mountains like that before?",                                           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
     { text: "Alison hadn't met the stranger before, but he drove her to hospital.",                         correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
     { text: "Alison didn't met the stranger before, but he drove her to hospital.",                         correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+
+    // ── S9/U9/L6 — Puns and Double Meanings ──────────────────────────
+    { text: "The title 'How to Serve Man' works as a pun because 'serve' can mean both 'to help' and 'to prepare as food'.",                                           correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "The title 'How to Serve Man' is a pun because 'serve' only means 'to help other people', which is what the Kanamit are doing.",                          correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "In the sentence 'It suddenly struck him', the word 'struck' has two meanings: to physically hit someone, and to suddenly realise something.",             correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "In the sentence 'It suddenly struck him', the word 'struck' is a simile comparing the idea to a physical blow.",                                         correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "The phrase 'a twist in the tail' is a pun on 'a twist in the tale' — 'tail' and 'tale' are homophones with different meanings.",                         correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "The phrase 'a twist in the tail' uses the correct spelling — it refers to the tail of a snake as a symbol of danger.",                                   correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "Puns create humour by exploiting words that have more than one meaning in the same context.",                                                             correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "Puns are only effective in spoken language because readers cannot hear the two meanings at the same time.",                                               correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "In 'To Serve Man', the surprise ending works because the double meaning of 'serve' was hidden in plain sight throughout the story.",                      correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "In 'To Serve Man', the surprise ending doesn't work as a pun because the word 'serve' only ever means 'to help'.",                                       correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "Double meanings can be used for comic effect, but they can also create tragic or unsettling effects, as in 'To Serve Man'.",                              correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "Double meanings are always used for comedy — they cannot be used to create horror or tragedy in a text.",                                                 correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "An effective surprise ending needs clues planted earlier in the text so that the twist feels logical when re-read.",                                      correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "An effective surprise ending should give no clues at all so that the reader is completely shocked.",                                                      correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "Blending genres — such as combining science fiction with comedy — can create unexpected effects and subvert reader expectations.",                        correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "Blending genres weakens a story because readers don't know what kind of text they are reading.",                                                          correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "A soliloquy reveals a character's private thoughts, which is why Macbeth's 'Out, out, brief candle' speech feels so honest and raw.",                    correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "A soliloquy is a conversation between two characters who are hiding their true feelings from each other.",                                                correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "An ambiguous ending leaves the meaning open so that different readers can reach different conclusions.",                                                  correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
+    { text: "An ambiguous ending always means the writer ran out of ideas and could not decide how to finish the story.",                                              correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
 
   ]
 

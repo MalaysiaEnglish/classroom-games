@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genre Blender — S9 Strange and Unusual</title>
+<style>
+  :root {
+    --teal: #2a9d8f;
+    --dark: #1a1a2e;
+    --card-bg: #16213e;
+    --accent: #e76f51;
+    --correct: #2a9d8f;
+    --wrong: #e63946;
+    --neutral: #457b9d;
+    --text: #f1faee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--card-bg);
+    padding: 14px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--teal);
+  }
+  header h1 { font-size: 1.5rem; color: var(--teal); }
+  header span { font-size: 0.9rem; color: #aaa; }
+
+  /* ── SCREEN MANAGEMENT ── */
+  .screen { display: none; flex-direction: column; align-items: center; padding: 30px 20px; flex: 1; }
+  .screen.active { display: flex; }
+
+  /* ── WELCOME ── */
+  #welcome h2 { font-size: 2rem; margin-bottom: 10px; color: var(--teal); text-align: center; }
+  #welcome p { max-width: 600px; text-align: center; line-height: 1.7; color: #ccc; margin-bottom: 20px; }
+  .genre-key {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    max-width: 700px; margin-bottom: 30px;
+  }
+  .genre-badge {
+    padding: 8px 18px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;
+    border: 2px solid transparent;
+  }
+
+  /* ── GAME ── */
+  #game { width: 100%; max-width: 900px; }
+
+  .round-header {
+    text-align: center; margin-bottom: 20px;
+  }
+  .round-header h2 { font-size: 1.6rem; color: var(--teal); }
+  .round-header p { color: #aaa; font-size: 0.95rem; margin-top: 4px; }
+
+  #progress-bar-wrap {
+    width: 100%; background: #333; border-radius: 8px; height: 10px; margin-bottom: 24px;
+  }
+  #progress-bar { height: 10px; border-radius: 8px; background: var(--teal); transition: width 0.4s; }
+
+  /* CARD */
+  .card-wrap {
+    perspective: 1000px;
+    width: 100%; max-width: 700px;
+    margin: 0 auto 30px;
+    height: 200px;
+  }
+  .card {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px; text-align: center;
+    font-size: 1.15rem; line-height: 1.6;
+  }
+  .card-front { background: var(--card-bg); border: 2px solid var(--neutral); }
+  .card-front .card-label {
+    position: absolute; top: 12px; left: 16px;
+    font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .card-back { background: #0f3460; border: 2px solid var(--teal); transform: rotateY(180deg); }
+
+  /* GENRE BUTTONS */
+  .genre-buttons {
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    max-width: 700px; margin: 0 auto 20px;
+  }
+  .genre-btn {
+    padding: 12px 22px; border-radius: 10px; border: 2px solid transparent;
+    font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s;
+    color: white;
+  }
+  .genre-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+  .genre-btn.correct-choice { border-color: var(--correct) !important; box-shadow: 0 0 12px var(--correct); }
+  .genre-btn.wrong-choice { border-color: var(--wrong) !important; opacity: 0.5; }
+
+  /* FEEDBACK */
+  #feedback {
+    text-align: center; min-height: 40px; font-size: 1.1rem; font-weight: bold;
+    margin-bottom: 10px;
+  }
+  #feedback.correct { color: var(--correct); }
+  #feedback.wrong { color: var(--wrong); }
+
+  /* NEXT BTN */
+  #next-btn {
+    display: none; margin: 0 auto;
+    background: var(--teal); color: white; border: none;
+    padding: 12px 36px; border-radius: 10px; font-size: 1rem; font-weight: bold;
+    cursor: pointer;
+  }
+  #next-btn:hover { background: #21867a; }
+
+  /* SCOREBOARD */
+  .score-display {
+    font-size: 1.1rem; color: #aaa; text-align: center; margin-bottom: 20px;
+  }
+  .score-display span { color: var(--teal); font-weight: bold; font-size: 1.4rem; }
+
+  /* RESULTS */
+  #results { text-align: center; }
+  #results h2 { font-size: 2.2rem; color: var(--teal); margin-bottom: 10px; }
+  #results .final-score { font-size: 3rem; font-weight: bold; color: white; margin: 20px 0; }
+  #results p { color: #ccc; margin-bottom: 30px; font-size: 1.1rem; }
+  #results .result-breakdown {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px;
+  }
+  .result-tile {
+    background: var(--card-bg); border-radius: 12px; padding: 16px 24px; min-width: 160px;
+    border-left: 4px solid var(--teal);
+  }
+  .result-tile .rt-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .result-tile .rt-val { font-size: 1.8rem; font-weight: bold; color: var(--teal); margin-top: 4px; }
+
+  .btn-primary {
+    background: var(--accent); color: white; border: none;
+    padding: 14px 40px; border-radius: 10px; font-size: 1rem; font-weight: bold;
+    cursor: pointer; margin: 6px;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    background: transparent; color: var(--teal); border: 2px solid var(--teal);
+    padding: 12px 36px; border-radius: 10px; font-size: 1rem; font-weight: bold;
+    cursor: pointer; margin: 6px;
+  }
+
+  /* ROUND SELECT */
+  .round-grid {
+    display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 800px; margin: 20px auto;
+  }
+  .round-card {
+    background: var(--card-bg); border-radius: 14px; padding: 24px; min-width: 220px;
+    border: 2px solid #444; cursor: pointer; transition: all 0.2s; text-align: center;
+  }
+  .round-card:hover { border-color: var(--teal); transform: translateY(-3px); }
+  .round-card h3 { color: var(--teal); margin-bottom: 8px; font-size: 1.1rem; }
+  .round-card p { color: #aaa; font-size: 0.85rem; line-height: 1.5; }
+  .round-num { font-size: 2rem; margin-bottom: 8px; }
+
+  /* FLIP HINT */
+  .flip-hint { color: #666; font-size: 0.85rem; text-align: center; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎭 Genre Blender</h1>
+  <span>S9 · Strange and Unusual</span>
+</header>
+
+<!-- WELCOME -->
+<div id="welcome" class="screen active">
+  <h2>Genre Blender</h2>
+  <p>Read a quote or description from the unit and sort it into the right genre. Three rounds, fifteen cards each. Can your class beat the clock?</p>
+  <div class="genre-key" id="genre-key-display"></div>
+  <div class="round-grid" id="round-select"></div>
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen">
+  <div class="round-header">
+    <h2 id="round-title"></h2>
+    <p id="round-desc"></p>
+  </div>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+  <div class="score-display">Score: <span id="live-score">0</span> / <span id="live-total">0</span></div>
+
+  <div class="card-wrap">
+    <div class="card" id="main-card">
+      <div class="card-face card-front">
+        <span class="card-label">Which genre?</span>
+        <span id="card-text"></span>
+      </div>
+      <div class="card-face card-back" id="card-back-content"></div>
+    </div>
+  </div>
+  <p class="flip-hint">Click card to reveal the source text</p>
+
+  <div class="genre-buttons" id="genre-buttons"></div>
+  <div id="feedback"></div>
+  <button id="next-btn" onclick="nextCard()">Next Card ▶</button>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="screen">
+  <h2>Round Complete!</h2>
+  <div class="final-score" id="final-score-display"></div>
+  <p id="results-comment"></p>
+  <div class="result-breakdown" id="result-breakdown"></div>
+  <div>
+    <button class="btn-primary" onclick="returnToMenu()">↩ Choose Another Round</button>
+    <button class="btn-secondary" onclick="retryRound()">↺ Retry This Round</button>
+  </div>
+</div>
+
+<script>
+// ── GENRE DEFINITIONS ──
+const GENRES = [
+  { id: "tragedy",   label: "Tragedy",        color: "#6a0572", emoji: "💀" },
+  { id: "sci-fi",    label: "Sci-Fi",          color: "#0077b6", emoji: "🚀" },
+  { id: "detective", label: "Detective",       color: "#8b4513", emoji: "🔍" },
+  { id: "poetry",    label: "Poetry",          color: "#2a9d8f", emoji: "📜" },
+  { id: "comedy",    label: "Comedy / Parody", color: "#e76f51", emoji: "😄" },
+  { id: "thriller",  label: "Thriller",        color: "#c1121f", emoji: "😱" },
+];
+
+// ── ROUNDS ──
+const ROUNDS = [
+  {
+    id: 1,
+    title: "Round 1 — Spot the Genre",
+    desc: "Match each quote or description to its genre.",
+    genres: ["tragedy","sci-fi","detective","poetry","comedy"],
+    cards: [
+      { text: "\"All hail, Macbeth! That shalt be king hereafter.\"", genre: "tragedy", source: "Macbeth — the weird sisters prophesise Macbeth's future" },
+      { text: "\"Life's but a walking shadow, a poor player that struts and frets his hour upon the stage.\"", genre: "tragedy", source: "Macbeth's final soliloquy — despair at the meaninglessness of life" },
+      { text: "\"Binti is leaving home to go to university on a distant planet, carrying a mysterious gadget called an edan.\"", genre: "sci-fi", source: "Binti by Nnedi Okorafor — a futuristic space travel story" },
+      { text: "\"A series of night-time bank robberies have taken place. Each one is bigger and more spectacular than the last.\"", genre: "detective", source: "The Night Raids — a Jack Keys detective story set in Ireland" },
+      { text: "\"My eighth spring in England I walk among the silver birches of Putney Heath, stepping over twigs and stones: being stranger.\"", genre: "poetry", source: "'This Landscape, These People' by Zulfikar Ghose" },
+      { text: "\"It was the kind of day when you can do your washing without taking your clothes off. That's to say, damp.\"", genre: "comedy", source: "'Call Me Mac' — Macbeth retold as an American detective comedy" },
+      { text: "\"She wouldn't see ninety-five again. I looked up into the sky. Well, I thought she was talking about the weather!\"", genre: "comedy", source: "'Call Me Mac' — the narrator mishears 'Hail!' as weather" },
+      { text: "\"A child at a museum, England for me is an exhibit within a glass case.\"", genre: "poetry", source: "'This Landscape, These People' — the poet feels like an outsider in England" },
+      { text: "\"Once Binti leaves the planet, the focus switches to her family. A powerful criminal gang is seeking her edan.\"", genre: "sci-fi", source: "Binti — one of the alternative endings explored in the unit" },
+      { text: "\"Macbeth is tempted by the weird sisters' predictions. He kills King Duncan and commits other murders to keep power.\"", genre: "tragedy", source: "Summary of Macbeth's plot — a classic tragedy of ambition" },
+      { text: "\"In seventeen years in India, I swam along the silver beaches of Bombay, pulled coconuts from the sky.\"", genre: "poetry", source: "'This Landscape, These People' — section II, memories of India" },
+      { text: "\"The ship arrives at Ooma University. But Binti learns it is not a place of education — it is training her to conquer a neighbouring planet.\"", genre: "sci-fi", source: "Binti — alternative ending B, a dark sci-fi twist" },
+      { text: "\"Louis, a bored and lonely 17-year-old, meets an unusual girl who introduces him to the strange world below the streets of Paris.\"", genre: "sci-fi", source: "Darkparis — a fantasy/sci-fi story set underground" },
+      { text: "\"He got the Irish government to call in Jack Keys — the only man who could crack the case.\"", genre: "detective", source: "The Night Raids — Jack Keys detective series context" },
+      { text: "\"Scotland's a big place, and we had most of it to cross to get back home. A lot of the scenery looks as though someone backstage is having a joke.\"", genre: "comedy", source: "'Call Me Mac' — deadpan description of the Scottish landscape" },
+    ]
+  },
+  {
+    id: 2,
+    title: "Round 2 — Tragedy or Twist?",
+    desc: "Is this a conventional TRAGEDY ending, or a SURPRISE TWIST?",
+    genres: ["tragedy","thriller","sci-fi","comedy","detective"],
+    cards: [
+      { text: "\"Macbeth is killed by a soldier loyal to King Duncan. A new, rightful king takes charge.\"", genre: "tragedy", source: "Macbeth — the conventional tragic ending: the villain is defeated" },
+      { text: "\"The Kanamit have cured disease, ended wars, and improved human life. But the book they wrote is titled How to Serve Man. It's a cookbook.\"", genre: "thriller", source: "'To Serve Man' — the shocking twist ending" },
+      { text: "\"Poverty drives the ambition of the couple, thrusting them into a hitherto inaccessible new world. The recurring image of the fish gasping on the boat reflects Madhava's tragic fate.\"", genre: "tragedy", source: "Paddayi — Indian Macbeth retelling, a modern tragedy" },
+      { text: "\"At the very last moment, Binti decides to return home. Her family never realise she nearly left. But Binti becomes increasingly bitter as the years pass.\"", genre: "sci-fi", source: "Binti — alternative ending C: unexpected, unresolved, bittersweet" },
+      { text: "\"Lady Macbeth dies. His friends desert him. He faces death alone — the only possible end for a man who chose ambition over loyalty.\"", genre: "tragedy", source: "Macbeth — consequences of tragic flaws: ambition and murder" },
+      { text: "\"Three fat creatures in green harnesses sat at the United Nations table, politely watching each speaker. Their flat ears drooped over the earphones.\"", genre: "sci-fi", source: "'To Serve Man' — the unsettling arrival of the Kanamit" },
+      { text: "\"By the final scene, Binti has become a powerful and feared leader who will do anything to retain power.\"", genre: "sci-fi", source: "Binti — alternative ending B: Binti transformed into an anti-hero" },
+      { text: "\"Jack Keys cracked the case — the robbers were caught, the money recovered, the city safe again.\"", genre: "detective", source: "The Night Raids — conventional detective story ending" },
+      { text: "\"Macbeth sees ghosts. He hears voices. He can never sleep peacefully again. He has what he wanted — and nothing else.\"", genre: "tragedy", source: "Macbeth — psychological consequences of his crimes" },
+      { text: "\"'I've read the first paragraph of that book,' he said. 'Why do you suppose I haven't slept for a week?'\"", genre: "thriller", source: "'To Serve Man' — the moment the narrator's friend realises the truth" },
+      { text: "\"Stranger or an inhabitant, this is my home.\"", genre: "poetry", source: "'This Landscape, These People' — the ambiguous final line of the poem" },
+      { text: "\"Abiola gradually becomes emperor. But the play ends before we know whether his brother is safe — or whether Abiola will face the same fate.\"", genre: "tragedy", source: "Abiola — the Ethiopian tragedy, a Macbeth parallel" },
+      { text: "\"The Kanamit were nearly ready to announce methods of making humans taller, stronger, and healthier. The news was always good.\"", genre: "sci-fi", source: "'To Serve Man' — the world before the twist, full of false trust" },
+      { text: "\"'You got the wrong guy, ladies,' Mac told the three old dames. But they hadn't finished.\"", genre: "comedy", source: "'Call Me Mac' — Mac meets the weird sisters, played for laughs" },
+      { text: "\"Binti sat in the silence of her room, looking at her edan. Outside was dark. She looked into the sky, knowing the pink star was home.\"", genre: "sci-fi", source: "Binti — the actual published ending: thoughtful, conventional, hopeful" },
+    ]
+  },
+  {
+    id: 3,
+    title: "Round 3 — What's the Technique?",
+    desc: "Identify the key language technique being used.",
+    genres: ["tragedy","sci-fi","poetry","comedy","detective"],
+    cards: [
+      { text: "Life is compared to 'a poor player that struts and frets his hour upon the stage' — performing briefly before being forgotten.", genre: "tragedy", source: "Macbeth's soliloquy — extended metaphor of life as an actor's performance" },
+      { text: "The title 'How to Serve Man' uses the same word to mean two completely different things — helping someone and preparing them as food.", genre: "sci-fi", source: "'To Serve Man' — the central pun on which the entire story's twist depends" },
+      { text: "England is described as 'an antique chair with a rope across it' — something beautiful that the poet can admire but never fully use.", genre: "poetry", source: "'This Landscape, These People' — metaphor expressing exclusion from English society" },
+      { text: "'He suddenly struck him' — meaning both that the idea hit him instantly AND that lightning physically struck him.", genre: "comedy", source: "Language focus example — pun on the double meaning of 'struck'" },
+      { text: "The description of the weird sisters as women with beards — both human and inhuman, natural and supernatural.", genre: "tragedy", source: "Macbeth — characterisation through paradox and the uncanny" },
+      { text: "The fish gasping on the floor of the boat — a recurring visual that stands for Madhava's helplessness in a changing world.", genre: "tragedy", source: "Paddayi — symbolism used in the Indian adaptation of Macbeth" },
+      { text: "The Kanamit are described as friendly and helpful — curing disease, ending wars — before the true horror is revealed.", genre: "sci-fi", source: "'To Serve Man' — dramatic irony; the reader later realises the kindness was a trap" },
+      { text: "The youngest of the three women 'wouldn't see ninety-five again' — a jokey way of saying she was extremely old.", genre: "comedy", source: "'Call Me Mac' — understatement used for comic effect" },
+      { text: "Pomegranates 'to purple my tongue' and chillies 'to burn my mouth' — sensory images that make India feel vivid and physical.", genre: "poetry", source: "'This Landscape, These People' — imagery appealing to taste and sensation" },
+      { text: "Clues are hidden in the story all along — including the very title — so that the ending feels both shocking AND inevitable.", genre: "sci-fi", source: "'To Serve Man' — technique of foreshadowing to plant a surprise ending" },
+      { text: "The soliloquy 'If it were done when 'tis done' reveals Macbeth's inner conflict — he knows murder is wrong, but he is still tempted.", genre: "tragedy", source: "Macbeth — soliloquy as a device to reveal private thoughts" },
+      { text: "The narrator of 'Call Me Mac' uses slang like 'dames' and 'guys' to describe figures from a 400-year-old Scottish play.", genre: "comedy", source: "'Call Me Mac' — anachronistic language creates comic contrast" },
+      { text: "The road from Putney Hill 'runs across oceans into the harbour of Bombay' — England and India merge in the pond's reflection.", genre: "poetry", source: "'This Landscape, These People' — Part III, figurative language of connection" },
+      { text: "Binti's edan is carried throughout the story without explanation — its meaning is withheld to create mystery and suspense.", genre: "sci-fi", source: "Binti — structural withholding of information to create tension" },
+      { text: "The story describes a 'beautiful baby contest' where all three contestants would be easy losers — hyperbole for comic effect.", genre: "comedy", source: "'Call Me Mac' — comparing the three ugly weird sisters" },
+    ]
+  }
+];
+
+// ── STATE ──
+let currentRound = null;
+let currentCards = [];
+let cardIndex = 0;
+let score = 0;
+let answered = false;
+let genreStats = {};
+
+// ── INIT ──
+function init() {
+  // Genre key
+  const keyDiv = document.getElementById('genre-key-display');
+  GENRES.forEach(g => {
+    const b = document.createElement('div');
+    b.className = 'genre-badge';
+    b.style.background = g.color + '33';
+    b.style.borderColor = g.color;
+    b.style.color = g.color;
+    b.textContent = g.emoji + ' ' + g.label;
+    keyDiv.appendChild(b);
+  });
+
+  // Round cards
+  const grid = document.getElementById('round-select');
+  ROUNDS.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'round-card';
+    card.innerHTML = `<div class="round-num">${['🎭','🔀','🔬'][r.id-1]}</div><h3>${r.title}</h3><p>${r.desc}</p>`;
+    card.onclick = () => startRound(r);
+    grid.appendChild(card);
+  });
+}
+
+function startRound(round) {
+  currentRound = round;
+  currentCards = shuffle([...round.cards]);
+  cardIndex = 0;
+  score = 0;
+  answered = false;
+  genreStats = {};
+  round.genres.forEach(g => genreStats[g] = { correct: 0, total: 0 });
+
+  document.getElementById('round-title').textContent = round.title;
+  document.getElementById('round-desc').textContent = round.desc;
+
+  buildGenreButtons(round.genres);
+  showScreen('game');
+  loadCard();
+}
+
+function buildGenreButtons(genreIds) {
+  const wrap = document.getElementById('genre-buttons');
+  wrap.innerHTML = '';
+  genreIds.forEach(id => {
+    const g = GENRES.find(x => x.id === id);
+    const btn = document.createElement('button');
+    btn.className = 'genre-btn';
+    btn.id = 'gbtn-' + id;
+    btn.style.background = g.color;
+    btn.textContent = g.emoji + ' ' + g.label;
+    btn.onclick = () => guess(id);
+    wrap.appendChild(btn);
+  });
+}
+
+function loadCard() {
+  answered = false;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = '';
+  document.getElementById('next-btn').style.display = 'none';
+
+  // Reset card flip
+  const card = document.getElementById('main-card');
+  card.classList.remove('flipped');
+
+  // Reset buttons
+  currentRound.genres.forEach(id => {
+    const btn = document.getElementById('gbtn-' + id);
+    if (btn) {
+      btn.classList.remove('correct-choice', 'wrong-choice');
+      btn.disabled = false;
+    }
+  });
+
+  const c = currentCards[cardIndex];
+  document.getElementById('card-text').textContent = c.text;
+  document.getElementById('card-back-content').textContent = '📖 ' + c.source;
+
+  // Progress
+  const pct = (cardIndex / currentCards.length) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('live-total').textContent = cardIndex;
+}
+
+function guess(genreId) {
+  if (answered) return;
+  answered = true;
+  const c = currentCards[cardIndex];
+  const correct = genreId === c.genre;
+
+  // Flip card to reveal source
+  document.getElementById('main-card').classList.add('flipped');
+
+  // Update stats
+  if (genreStats[c.genre] !== undefined) {
+    genreStats[c.genre].total++;
+    if (correct) genreStats[c.genre].correct++;
+  }
+
+  // Button styles
+  const correctBtn = document.getElementById('gbtn-' + c.genre);
+  if (correctBtn) correctBtn.classList.add('correct-choice');
+
+  if (!correct) {
+    const wrongBtn = document.getElementById('gbtn-' + genreId);
+    if (wrongBtn) wrongBtn.classList.add('wrong-choice');
+  }
+
+  // Disable all
+  currentRound.genres.forEach(id => {
+    const btn = document.getElementById('gbtn-' + id);
+    if (btn) btn.disabled = true;
+  });
+
+  if (correct) {
+    score++;
+    document.getElementById('feedback').textContent = '✅ Correct!';
+    document.getElementById('feedback').className = 'correct';
+  } else {
+    const g = GENRES.find(x => x.id === c.genre);
+    document.getElementById('feedback').textContent = `❌ It was ${g.emoji} ${g.label}`;
+    document.getElementById('feedback').className = 'wrong';
+  }
+
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('live-total').textContent = cardIndex + 1;
+
+  if (cardIndex + 1 >= currentCards.length) {
+    document.getElementById('next-btn').textContent = 'See Results 🏆';
+  } else {
+    document.getElementById('next-btn').textContent = 'Next Card ▶';
+  }
+  document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextCard() {
+  cardIndex++;
+  if (cardIndex >= currentCards.length) {
+    showResults();
+  } else {
+    loadCard();
+  }
+}
+
+function showResults() {
+  const total = currentCards.length;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('final-score-display').textContent = score + ' / ' + total;
+
+  let comment = '';
+  if (pct >= 90) comment = 'Outstanding! The class has mastered genre recognition. 🌟';
+  else if (pct >= 70) comment = 'Great work! Most genres identified correctly. 👏';
+  else if (pct >= 50) comment = 'Good effort — review the tricky ones below. 💪';
+  else comment = 'Keep practising — re-read the texts and try again. 📚';
+  document.getElementById('results-comment').textContent = comment;
+
+  // Breakdown by genre
+  const breakdown = document.getElementById('result-breakdown');
+  breakdown.innerHTML = '';
+  Object.entries(genreStats).forEach(([id, s]) => {
+    if (s.total === 0) return;
+    const g = GENRES.find(x => x.id === id);
+    const tile = document.createElement('div');
+    tile.className = 'result-tile';
+    tile.innerHTML = `<div class="rt-label">${g.emoji} ${g.label}</div><div class="rt-val">${s.correct}/${s.total}</div>`;
+    breakdown.appendChild(tile);
+  });
+
+  showScreen('results');
+}
+
+function returnToMenu() {
+  showScreen('welcome');
+}
+
+function retryRound() {
+  startRound(currentRound);
+}
+
+// Card flip on click
+document.getElementById('main-card').addEventListener('click', function() {
+  this.classList.toggle('flipped');
+});
+
+// ── UTILS ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+init();
+</script>
+</body>
+</html>
