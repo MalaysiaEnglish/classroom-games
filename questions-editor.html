@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Questions Editor — Classroom Games</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .editor-wrapper { max-width: 980px; margin: 0 auto; }
+    .tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab-btn { padding: 10px 24px; border-radius: 10px 10px 0 0; border: 1px solid var(--glass-border); border-bottom: none; background: var(--glass); color: var(--text-dim); font-weight: 700; cursor: pointer; font-size: 0.95rem; transition: all 0.15s; }
+    .tab-btn.active { background: var(--glass-hi); border-color: var(--accent); color: var(--accent); }
+    .tab-panel { display: none; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 0 14px 14px 14px; padding: 20px; }
+    .tab-panel.active { display: block; }
+    .field-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 12px; }
+    .field-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 160px; }
+    .field-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+    .field-group input, .field-group select, .field-group textarea { padding: 9px 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.08); color: white; font-size: 0.95rem; font-family: inherit; }
+    .field-group input:focus, .field-group select:focus, .field-group textarea:focus { outline: none; border-color: var(--accent); }
+    .field-group textarea { resize: vertical; min-height: 60px; }
+    .item-list { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+    .item-card { display: flex; align-items: flex-start; gap: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px 14px; }
+    .item-card .badge { font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    .badge-q { background: rgba(99,102,241,0.2); color: #a5b4fc; border: 1px solid #6366f1; }
+    .item-main { flex: 1; font-size: 0.88rem; line-height: 1.5; }
+    .item-q { font-weight: 700; margin-bottom: 4px; }
+    .item-answer { color: #22c55e; font-size: 0.82rem; }
+    .item-distractors { color: var(--text-dim); font-size: 0.8rem; }
+    .item-meta { font-size: 0.74rem; color: var(--text-dim); margin-top: 4px; }
+    .btn-del { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1.2rem; padding: 2px 6px; border-radius: 6px; flex-shrink: 0; transition: color 0.15s, background 0.15s; }
+    .btn-del:hover { color: #ef4444; background: rgba(239,68,68,0.15); }
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+    .filter-bar select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.08); color: white; font-size: 0.85rem; }
+    .count-badge { font-size: 0.8rem; color: var(--text-dim); margin-left: auto; }
+    .output-box { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 10px; padding: 16px; font-family: 'Courier New', monospace; font-size: 0.78rem; color: #a8d8a8; white-space: pre; overflow-x: auto; max-height: 420px; overflow-y: auto; line-height: 1.5; }
+    .action-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .info-box { background: rgba(0,201,167,0.08); border: 1px solid rgba(0,201,167,0.3); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; font-size: 0.87rem; line-height: 1.6; color: var(--text-dim); }
+    .info-box strong { color: var(--accent); }
+    .empty-state { text-align: center; padding: 30px; color: var(--text-dim); font-size: 0.9rem; }
+    .section-title { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin: 16px 0 8px; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px; }
+    .distractor-group { display: flex; flex-direction: column; gap: 6px; }
+    .distractor-row { display: flex; gap: 8px; align-items: center; }
+    .distractor-row input { flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.08); color: white; font-size: 0.9rem; }
+    .distractor-row input:focus { outline: none; border-color: #f59e0b; }
+    .distractor-label { font-size: 0.72rem; font-weight: 700; color: #f59e0b; width: 20px; flex-shrink: 0; }
+    select, select option { background: #1a2a38 !important; color: white !important; }
+    .warn-box { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.4); border-radius: 8px; padding: 10px 14px; font-size: 0.84rem; color: #fcd34d; margin-bottom: 12px; }
+    .bulk-format-box { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; padding: 12px 14px; font-family: 'Courier New', monospace; font-size: 0.8rem; color: #a8d8a8; line-height: 1.7; margin: 8px 0 14px; }
+    #copyFeedback { font-size: 0.85rem; color: var(--accent); align-self: center; opacity: 0; transition: opacity 0.3s; }
+    #copyFeedback.show { opacity: 1; }
+    #dlFeedback { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; min-height: 28px; }
+  </style>
+</head>
+<body>
+  <h1>Questions Editor</h1>
+
+  <div class="controls">
+    <button id="home" onclick="window.location.href='index.html'">Home</button>
+    <button id="fullscreen" onclick="document.documentElement.requestFullscreen?.()">Fullscreen</button>
+  </div>
+
+  <div class="game-wrapper">
+  <div class="editor-wrapper">
+
+    <div class="info-box">
+      Use this editor to manage <strong>MCQ questions</strong> (used by Blockbusters, Connect 4, Battleships and all toolkit games).<br>
+      When finished, go to <strong>Export</strong> and download both files — upload them to GitHub and you're done. The editor patches itself automatically.
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('add')">➕ Add Question</button>
+      <button class="tab-btn" onclick="switchTab('browse')">🔍 Browse &amp; Delete</button>
+      <button class="tab-btn" onclick="switchTab('bulk')" style="background:rgba(240,180,41,0.12);border-color:rgba(240,180,41,0.4);">📥 Bulk Import</button>
+      <button class="tab-btn" onclick="switchTab('export')">⬇ Export</button>
+    </div>
+
+    <!-- ══ ADD TAB ══════════════════════════════════════════════ -->
+    <div id="tab-add" class="tab-panel active">
+      <div class="section-title">Question details</div>
+
+      <div class="field-row">
+        <div class="field-group" style="flex:4; min-width:280px;">
+          <label>Question</label>
+          <textarea id="qText" rows="2" placeholder="e.g. What is the capital of France?"></textarea>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group" style="flex:4; min-width:280px;">
+          <label>Correct Answer</label>
+          <input type="text" id="qAnswer" placeholder="e.g. Paris">
+        </div>
+      </div>
+
+      <div class="section-title">Wrong answers (distractors)</div>
+      <div class="distractor-group">
+        <div class="distractor-row"><span class="distractor-label">W1</span><input type="text" id="qD1" placeholder="Wrong answer 1"></div>
+        <div class="distractor-row"><span class="distractor-label">W2</span><input type="text" id="qD2" placeholder="Wrong answer 2"></div>
+        <div class="distractor-row"><span class="distractor-label">W3</span><input type="text" id="qD3" placeholder="Wrong answer 3"></div>
+      </div>
+
+      <div class="section-title">Topic &amp; classification</div>
+      <div class="field-row">
+        <div class="field-group" style="flex:3; min-width:200px;">
+          <label>Topic string</label>
+          <input type="text" id="qTopic" placeholder="e.g. S6/U4/L1 The United Kingdom" list="topicSuggestions" autocomplete="off">
+          <datalist id="topicSuggestions"></datalist>
+        </div>
+        <div class="field-group" style="min-width:80px; max-width:100px;">
+          <label>Stage</label>
+          <input type="number" id="qStage" min="1" max="12" placeholder="6">
+        </div>
+        <div class="field-group" style="min-width:80px; max-width:100px;">
+          <label>Unit</label>
+          <input type="number" id="qUnit" min="1" max="12" placeholder="4">
+        </div>
+        <div class="field-group" style="min-width:80px; max-width:100px;">
+          <label>Lesson</label>
+          <input type="number" id="qLesson" min="1" max="12" placeholder="1">
+        </div>
+      </div>
+
+      <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+        <button onclick="addQuestion()" style="padding:10px 28px; background:var(--accent); color:#000; border:none; border-radius:8px; font-weight:800; font-size:1rem; cursor:pointer;">+ Add Question</button>
+        <button onclick="clearAddForm()" style="padding:10px 18px; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--text-dim); border-radius:8px; font-weight:700; cursor:pointer;">Clear</button>
+        <span id="addFeedback" style="font-size:0.85rem; color:#22c55e; opacity:0; transition:opacity 0.3s;"></span>
+      </div>
+    </div>
+
+    <!-- ══ BROWSE TAB ════════════════════════════════════════════ -->
+    <div id="tab-browse" class="tab-panel">
+      <div class="filter-bar">
+        <label>Filter by topic:</label>
+        <select id="filterTopic" onchange="renderQuestions()">
+          <option value="">All topics</option>
+        </select>
+        <label>Stage:</label>
+        <select id="filterStage" onchange="filterByStage()">
+          <option value="">All</option>
+        </select>
+        <span class="count-badge" id="qCount"></span>
+      </div>
+      <div class="item-list" id="questionList">
+        <div class="empty-state">No questions loaded yet.</div>
+      </div>
+    </div>
+
+    <!-- ══ BULK IMPORT TAB ═══════════════════════════════════════ -->
+    <div id="tab-bulk" class="tab-panel">
+      <div class="info-box">
+        Paste multiple questions at once using the format below. Each question block must follow the exact pattern — blank lines between questions are ignored.
+      </div>
+
+      <div class="section-title">Format</div>
+      <div class="bulk-format-box">Q: What did Shackleton name his ship?
+A: Endurance
+W: Discovery
+W: Endeavour
+W: Resolution
+T: S4/U8/L1 Tales of Survival
+S: 4
+U: 8
+L: 1
+
+Q: What was Josh Hopkins' lucky break in the woods?
+A: His jacket was orange on the inside so he turned it inside out
+W: He climbed a tree to see further
+W: He started a fire using his phone screen
+W: He found a map in his backpack
+T: S4/U8/L1 Tales of Survival
+S: 4
+U: 8
+L: 1</div>
+
+      <div class="warn-box">
+        ⚠ <strong>Q:</strong> Question &nbsp;|&nbsp; <strong>A:</strong> Correct answer &nbsp;|&nbsp; <strong>W:</strong> Wrong answer (3 required) &nbsp;|&nbsp; <strong>T:</strong> Topic string &nbsp;|&nbsp; <strong>S/U/L:</strong> Stage / Unit / Lesson
+      </div>
+
+      <div class="field-row">
+        <div class="field-group" style="flex:1;">
+          <label>Paste questions here</label>
+          <textarea id="bulkInput" rows="16" placeholder="Q: Your question here&#10;A: Correct answer&#10;W: Wrong answer 1&#10;W: Wrong answer 2&#10;W: Wrong answer 3&#10;T: S6/U4/L1 Topic Name&#10;S: 6&#10;U: 4&#10;L: 1"></textarea>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:4px; flex-wrap:wrap; align-items:center;">
+        <button onclick="parseBulk()" style="padding:10px 24px; background:var(--accent); color:#000; border:none; border-radius:8px; font-weight:800; cursor:pointer;">🔍 Preview</button>
+        <button onclick="clearBulk()" style="padding:10px 18px; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--text-dim); border-radius:8px; font-weight:700; cursor:pointer;">Clear</button>
+        <span id="bulkParseError" style="color:#ef4444; font-size:0.85rem;"></span>
+      </div>
+
+      <div id="bulkPreviewArea" style="display:none; margin-top:16px;">
+        <div class="section-title" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Preview — <span id="bulkPreviewCount"></span></span>
+          <span style="font-size:0.76rem; color:var(--text-dim); font-weight:400;">Click × to remove before importing</span>
+        </div>
+        <div class="item-list" id="bulkPreviewList" style="max-height:340px;"></div>
+        <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
+          <button onclick="commitBulk()" id="bulkCommitBtn" style="padding:11px 28px; background:#22c55e; color:#000; border:none; border-radius:8px; font-weight:800; cursor:pointer; font-size:1rem;">✓ Add all to Editor</button>
+          <span id="bulkCommitFeedback" style="color:#22c55e; font-size:0.88rem; font-weight:700; opacity:0; transition:opacity 0.3s;"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ EXPORT TAB ════════════════════════════════════════════ -->
+    <div id="tab-export" class="tab-panel">
+      <div class="info-box">
+        Download <strong>questions.js</strong> and upload it to your GitHub repository. Cloudflare Pages will auto-deploy within a minute or two.<br>
+        Also download <strong>questions-editor.html</strong> to keep the editor in sync with the latest data.
+      </div>
+      <div class="section-title">Generated questions.js — <span id="exportCount" style="color:var(--accent); font-weight:800;"></span></div>
+      <div class="output-box" id="outputBox"></div>
+      <div class="action-bar">
+        <button onclick="downloadQuestionsJs()" style="padding:10px 22px; background:#22c55e; color:#000; border:none; border-radius:8px; font-weight:800; cursor:pointer;">⬇ Download questions.js</button>
+        <button onclick="downloadEditor()" style="padding:10px 22px; background:rgba(240,180,41,0.15); border:1px solid rgba(240,180,41,0.5); color:#f5c842; border-radius:8px; font-weight:800; cursor:pointer;">⬇ Download questions-editor.html</button>
+        <button onclick="copyOutput()" style="padding:10px 18px; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); color:var(--text-dim); border-radius:8px; font-weight:700; cursor:pointer;">📋 Copy to clipboard</button>
+        <span id="copyFeedback">✓ Copied!</span>
+      </div>
+      <div id="dlFeedback"></div>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- ═══ QUESTIONS DATA — replace this block with your questions.js contents ═══ -->
+  <script>
+window.QUESTIONS_DATA = [];
+  </script>
+  <!-- ════════════════════════════════════════════════════════════════════════════ -->
+
+  <script>
+    // ══ State ══════════════════════════════════════════════════════
+    let questions = [];
+    let bulkPreviewItems = [];
+
+    // ══ Load from embedded data ════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.QUESTIONS_DATA && window.QUESTIONS_DATA.length) {
+        questions = window.QUESTIONS_DATA.map((q, i) => ({ ...q, _id: i }));
+      }
+      refreshAll();
+    });
+
+    function refreshAll() {
+      renderQuestions();
+      updateFilters();
+      updateTopicSuggestions();
+    }
+
+    // ══ Tab switching ══════════════════════════════════════════════
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', ['add','browse','bulk','export'][i] === name);
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      if (name === 'export') generateOutput();
+    }
+
+    // ══ Add question ═══════════════════════════════════════════════
+    function addQuestion() {
+      const question   = document.getElementById('qText').value.trim();
+      const answer     = document.getElementById('qAnswer').value.trim();
+      const d1         = document.getElementById('qD1').value.trim();
+      const d2         = document.getElementById('qD2').value.trim();
+      const d3         = document.getElementById('qD3').value.trim();
+      const topic      = document.getElementById('qTopic').value.trim() || 'General';
+      const stage      = parseInt(document.getElementById('qStage').value) || 0;
+      const unit       = parseInt(document.getElementById('qUnit').value) || 0;
+      const lesson     = parseInt(document.getElementById('qLesson').value) || 0;
+
+      if (!question) { document.getElementById('qText').focus(); return; }
+      if (!answer)   { document.getElementById('qAnswer').focus(); return; }
+
+      const distractors = [d1, d2, d3].filter(d => d.length > 0);
+      if (distractors.length < 3) {
+        alert('Please enter all 3 wrong answers (distractors).');
+        document.getElementById('qD' + (distractors.length + 1)).focus();
+        return;
+      }
+
+      questions.push({ question, answer, distractors, topic, stage, unit, lesson, _id: Date.now() });
+      clearAddForm();
+
+      const fb = document.getElementById('addFeedback');
+      fb.textContent = '✓ Question added!';
+      fb.style.opacity = '1';
+      setTimeout(() => fb.style.opacity = '0', 2500);
+
+      refreshAll();
+    }
+
+    function clearAddForm() {
+      ['qText','qAnswer','qD1','qD2','qD3'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('qText').focus();
+    }
+
+    // ══ Delete question ════════════════════════════════════════════
+    function deleteQuestion(id) {
+      if (!confirm('Delete this question?')) return;
+      questions = questions.filter(q => q._id !== id);
+      refreshAll();
+    }
+
+    // ══ Render questions ═══════════════════════════════════════════
+    function renderQuestions() {
+      const ft   = document.getElementById('filterTopic').value;
+      const fs   = document.getElementById('filterStage').value;
+      const list = document.getElementById('questionList');
+
+      let filtered = questions;
+      if (ft) filtered = filtered.filter(q => q.topic === ft);
+      if (fs) filtered = filtered.filter(q => String(q.stage) === fs);
+
+      document.getElementById('qCount').textContent =
+        `${filtered.length} of ${questions.length} question${questions.length !== 1 ? 's' : ''}`;
+
+      if (!filtered.length) {
+        list.innerHTML = `<div class="empty-state">${questions.length ? 'No questions match this filter.' : 'No questions yet. Add one or use Bulk Import.'}</div>`;
+        return;
+      }
+      list.innerHTML = '';
+      filtered.forEach(q => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        const dText = q.distractors.map(d => `✗ ${d}`).join('  ·  ');
+        div.innerHTML = `
+          <span class="badge badge-q">MCQ</span>
+          <div class="item-main">
+            <div class="item-q">${escHtml(q.question)}</div>
+            <div class="item-answer">✓ ${escHtml(q.answer)}</div>
+            <div class="item-distractors">${escHtml(dText)}</div>
+            <div class="item-meta">${escHtml(q.topic)} · Stage ${q.stage} · Unit ${q.unit} · Lesson ${q.lesson}</div>
+          </div>
+          <button class="btn-del" onclick="deleteQuestion(${q._id})" title="Delete">×</button>`;
+        list.appendChild(div);
+      });
+    }
+
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ══ Filters ════════════════════════════════════════════════════
+    function updateFilters() {
+      const topics = [...new Set(questions.map(q => q.topic))].sort();
+      const stages = [...new Set(questions.map(q => q.stage))].sort((a,b) => a-b);
+      fillSelect('filterTopic', topics);
+      fillSelect('filterStage', stages);
+    }
+
+    function filterByStage() {
+      const fs = document.getElementById('filterStage').value;
+      const topics = fs
+        ? [...new Set(questions.filter(q => String(q.stage) === fs).map(q => q.topic))].sort()
+        : [...new Set(questions.map(q => q.topic))].sort();
+      fillSelect('filterTopic', topics);
+      document.getElementById('filterTopic').value = '';
+      renderQuestions();
+    }
+
+    function fillSelect(id, opts) {
+      const sel = document.getElementById(id);
+      const cur = sel.value;
+      sel.innerHTML = id === 'filterTopic' ? '<option value="">All topics</option>' : '<option value="">All</option>';
+      opts.forEach(o => {
+        const opt = document.createElement('option');
+        opt.value = o; opt.textContent = o;
+        if (String(o) === cur) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+
+    function updateTopicSuggestions() {
+      const topics = [...new Set(questions.map(q => q.topic))].sort();
+      const dl = document.getElementById('topicSuggestions');
+      dl.innerHTML = '';
+      topics.forEach(t => {
+        const opt = document.createElement('option'); opt.value = t; dl.appendChild(opt);
+      });
+    }
+
+    // ══ Bulk import ════════════════════════════════════════════════
+    function parseBulk() {
+      const raw    = document.getElementById('bulkInput').value.trim();
+      const errEl  = document.getElementById('bulkParseError');
+      errEl.textContent = '';
+      bulkPreviewItems = [];
+
+      if (!raw) { errEl.textContent = 'Nothing to parse — paste some questions first.'; return; }
+
+      // Split into blocks by blank lines
+      const blocks = raw.split(/\n\s*\n/).map(b => b.trim()).filter(b => b.length > 0);
+      const errors = [];
+
+      blocks.forEach((block, bi) => {
+        const lines = block.split('\n').map(l => l.trim()).filter(l => l);
+        const get = prefix => {
+          const found = lines.filter(l => l.toUpperCase().startsWith(prefix + ':'));
+          return found.map(l => l.slice(prefix.length + 1).trim());
+        };
+
+        const qArr = get('Q');
+        const aArr = get('A');
+        const wArr = get('W');
+        const tArr = get('T');
+        const sArr = get('S');
+        const uArr = get('U');
+        const lArr = get('L');
+
+        if (!qArr.length) { errors.push(`Block ${bi+1}: missing Q: line`); return; }
+        if (!aArr.length) { errors.push(`Block ${bi+1}: missing A: line`); return; }
+        if (wArr.length < 3) { errors.push(`Block ${bi+1}: need 3 W: lines (found ${wArr.length})`); return; }
+
+        bulkPreviewItems.push({
+          _pid: Date.now() + bi,
+          question:    qArr[0],
+          answer:      aArr[0],
+          distractors: wArr.slice(0, 3),
+          topic:       tArr[0] || 'General',
+          stage:       parseInt(sArr[0]) || 0,
+          unit:        parseInt(uArr[0]) || 0,
+          lesson:      parseInt(lArr[0]) || 0,
+        });
+      });
+
+      if (errors.length) {
+        errEl.textContent = errors.join(' | ');
+      }
+
+      if (!bulkPreviewItems.length) {
+        document.getElementById('bulkPreviewArea').style.display = 'none';
+        if (!errors.length) errEl.textContent = 'Could not parse any questions. Check the format.';
+        return;
+      }
+      renderBulkPreview();
+    }
+
+    function renderBulkPreview() {
+      const area  = document.getElementById('bulkPreviewArea');
+      const list  = document.getElementById('bulkPreviewList');
+      const count = document.getElementById('bulkPreviewCount');
+      area.style.display = 'block';
+      count.textContent  = bulkPreviewItems.length + ' question' + (bulkPreviewItems.length !== 1 ? 's' : '');
+      list.innerHTML = '';
+      document.getElementById('bulkCommitBtn').disabled = !bulkPreviewItems.length;
+      bulkPreviewItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        const dText = item.distractors.map(d => `✗ ${d}`).join('  ·  ');
+        div.innerHTML =
+          '<span class="badge badge-q">MCQ</span>' +
+          '<div class="item-main">' +
+            '<div class="item-q">' + escHtml(item.question) + '</div>' +
+            '<div class="item-answer">✓ ' + escHtml(item.answer) + '</div>' +
+            '<div class="item-distractors">' + escHtml(dText) + '</div>' +
+            '<div class="item-meta">' + escHtml(item.topic) + ' · S' + item.stage + ' U' + item.unit + ' L' + item.lesson + '</div>' +
+          '</div>' +
+          '<button class="btn-del" onclick="removeBulkItem(' + item._pid + ')" title="Remove">×</button>';
+        list.appendChild(div);
+      });
+    }
+
+    function removeBulkItem(pid) {
+      bulkPreviewItems = bulkPreviewItems.filter(i => i._pid !== pid);
+      renderBulkPreview();
+    }
+
+    function commitBulk() {
+      if (!bulkPreviewItems.length) return;
+      bulkPreviewItems.forEach(item => {
+        questions.push({ ...item, _id: Date.now() + Math.random() });
+      });
+      const added = bulkPreviewItems.length;
+      bulkPreviewItems = [];
+      document.getElementById('bulkInput').value = '';
+      refreshAll();
+      document.getElementById('bulkPreviewList').innerHTML =
+        `<div class="empty-state" style="color:#22c55e;">✓ ${added} question${added!==1?'s':''} added. Go to Export → download both files.</div>`;
+      const fb = document.getElementById('bulkCommitFeedback');
+      fb.textContent = `✓ ${added} question${added!==1?'s':''} added!`;
+      fb.style.opacity = '1';
+      setTimeout(() => fb.style.opacity = '0', 5000);
+    }
+
+    function clearBulk() {
+      document.getElementById('bulkInput').value = '';
+      document.getElementById('bulkParseError').textContent = '';
+      document.getElementById('bulkPreviewArea').style.display = 'none';
+      bulkPreviewItems = [];
+    }
+
+    // ══ Generate output ════════════════════════════════════════════
+    function generateOutput() {
+      const esc = s => String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+      const topics = [...new Set(questions.map(q => q.topic))].sort();
+      let lines = '';
+      topics.forEach(topic => {
+        lines += `\n  // ── ${topic} ${'─'.repeat(Math.max(0,50-topic.length))}\n`;
+        questions.filter(q => q.topic === topic).forEach(q => {
+          const dists = q.distractors.map(d => `"${esc(d)}"`).join(', ');
+          lines += `  { question: "${esc(q.question)}", answer: "${esc(q.answer)}", distractors: [${dists}], topic: "${esc(q.topic)}", stage: ${q.stage}, unit: ${q.unit}, lesson: ${q.lesson} },\n`;
+        });
+      });
+
+      const output = `/* ================================================================
+   CLASSROOM GAMES — MCQ Questions
+   Generated by Questions Editor on ${new Date().toLocaleDateString('en-GB')}
+   Total: ${questions.length} questions across ${topics.length} topics
+   ================================================================ */
+
+const QUESTIONS = [
+${lines}];`;
+      document.getElementById('outputBox').textContent = output;
+      document.getElementById('exportCount').textContent = `${questions.length} questions`;
+    }
+
+    function copyOutput() {
+      const text = document.getElementById('outputBox').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const fb = document.getElementById('copyFeedback');
+        fb.classList.add('show');
+        setTimeout(() => fb.classList.remove('show'), 2000);
+      });
+    }
+
+    function downloadQuestionsJs() {
+      generateOutput();
+      const text = document.getElementById('outputBox').textContent;
+      const a = document.createElement('a');
+      a.href = 'data:text/javascript;charset=utf-8,' + encodeURIComponent(text);
+      a.download = 'questions.js';
+      a.click();
+      flashFeedback('questions.js');
+    }
+
+    function downloadEditor() {
+      generateOutput();
+      const questionsData = questions.map(q => {
+        const { _id, ...rest } = q;
+        return rest;
+      });
+      const dataBlock = 'window.QUESTIONS_DATA = ' + JSON.stringify(questionsData, null, 2) + ';';
+
+      let html = document.documentElement.outerHTML;
+      const startMarker = '<!-- ═══ QUESTIONS DATA — replace this block with your questions.js contents ═══ -->';
+      const endMarker   = '<!-- ════════════════════════════════════════════════════════════════════════════ -->';
+
+      const startIdx = html.indexOf(startMarker);
+      const endIdx   = html.indexOf(endMarker);
+
+      if (startIdx === -1 || endIdx === -1) {
+        alert('Could not find the data markers in the page.\nThe editor HTML may have been modified.\nPlease use Download questions.js instead and manually update the editor.');
+        return;
+      }
+
+      const newBlock = startMarker + '\n  <script>\n' + dataBlock + '\n  <\/script>\n  ';
+      html = html.slice(0, startIdx) + newBlock + html.slice(endIdx);
+
+      const a = document.createElement('a');
+      a.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+      a.download = 'questions-editor.html';
+      a.click();
+      flashFeedback('questions-editor.html');
+    }
+
+    function flashFeedback(filename) {
+      const fb = document.getElementById('dlFeedback');
+      const pill = document.createElement('span');
+      pill.textContent = '✓ ' + filename + ' downloaded';
+      pill.style.cssText = 'padding:6px 14px; background:rgba(34,197,94,0.15); border:1px solid #22c55e; border-radius:20px; font-size:0.82rem; color:#22c55e;';
+      fb.appendChild(pill);
+      setTimeout(() => pill.remove(), 4000);
+    }
+  </script>
+
+</body>
+</html>
