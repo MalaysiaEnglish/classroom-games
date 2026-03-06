@@ -385,6 +385,10 @@
         col.addEventListener('dragover',  onColDragOver);
         col.addEventListener('dragleave', onColDragLeave);
         col.addEventListener('drop',      e => onColDrop(e, t.id));
+        const zone = col.querySelector('.tech-drop-zone');
+        zone.addEventListener('dragover',  onColDragOver);
+        zone.addEventListener('dragleave', onColDragLeave);
+        zone.addEventListener('drop',      e => onColDrop(e, t.id));
         grid.appendChild(col);
       });
 
