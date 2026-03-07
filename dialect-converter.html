@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dialect Converter</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1008;
+    --paper: #f5efe2;
+    --aged: #e8dcc8;
+    --rust: #b84c1c;
+    --gold: #c9922a;
+    --muted: #7a6a52;
+    --highlight: #fff8e8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(201,146,42,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(184,76,28,0.05) 0%, transparent 50%);
+  }
+
+  .masthead {
+    text-align: center;
+    padding: 2.5rem 1rem 1.5rem;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+
+  .masthead::before {
+    content: '— THE —';
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span { color: var(--rust); }
+
+  .masthead-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .ornament {
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Dialect Grid */
+  .dialect-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .dialect-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dialect-btn {
+    background: var(--aged);
+    border: 1.5px solid transparent;
+    border-radius: 2px;
+    padding: 0.45rem 0.9rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--ink);
+    transition: all 0.15s ease;
+    position: relative;
+  }
+
+  .dialect-btn:hover {
+    border-color: var(--gold);
+    background: var(--highlight);
+  }
+
+  .dialect-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .dialect-btn .flag {
+    font-size: 1rem;
+    margin-right: 0.3rem;
+  }
+
+  /* Two-panel layout */
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 600px) {
+    .panels { grid-template-columns: 1fr; }
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .char-count {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  textarea {
+    width: 100%;
+    height: 200px;
+    background: white;
+    border: 1.5px solid var(--aged);
+    border-radius: 2px;
+    padding: 1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink);
+    resize: vertical;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  textarea:focus { border-color: var(--gold); }
+  textarea::placeholder { color: var(--muted); font-style: italic; }
+
+  .output-box {
+    width: 100%;
+    min-height: 200px;
+    background: var(--highlight);
+    border: 1.5px solid var(--aged);
+    border-radius: 2px;
+    padding: 1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink);
+    position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .output-box.loading {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .output-box.empty {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Dot animation */
+  .dots::after {
+    content: '';
+    animation: dots 1.2s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+  }
+
+  /* Convert button */
+  .btn-row {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .convert-btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.8rem 2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .convert-btn:hover:not(:disabled) {
+    background: var(--rust);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(184,76,28,0.25);
+  }
+
+  .convert-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Copy button */
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+    font-family: 'Source Serif 4', serif;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .copy-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .copy-btn.copied { border-color: #4a7c4e; color: #4a7c4e; }
+
+  /* Dialect info strip */
+  .dialect-info {
+    background: var(--aged);
+    border-left: 3px solid var(--gold);
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--muted);
+    font-style: italic;
+    min-height: 2.5rem;
+    transition: all 0.3s;
+  }
+
+  .dialect-info strong { color: var(--ink); font-style: normal; }
+
+  /* Error */
+  .error-msg {
+    color: var(--rust);
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: 0.5rem 0;
+  }
+
+  /* Footer rule */
+  .footer-rule {
+    text-align: center;
+    border-top: 1px solid var(--aged);
+    padding-top: 1rem;
+    margin-top: 2rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>English <span>Dialect</span> Converter</h1>
+  <div class="ornament">❧</div>
+  <p class="masthead-sub">Enter Standard English · Receive a Regional Rendition</p>
+</div>
+
+<div class="container">
+
+  <div class="dialect-label">Choose your dialect</div>
+  <div class="dialect-grid" id="dialectGrid"></div>
+
+  <div class="dialect-info" id="dialectInfo">
+    Select a dialect above to begin.
+  </div>
+
+  <div class="panels">
+    <div>
+      <div class="panel-head">
+        <span class="panel-title">Standard English</span>
+        <span class="char-count" id="charCount">0 chars</span>
+      </div>
+      <textarea id="inputText" placeholder="Type your sentence here, like…&#10;&#10;"Hello! Are you coming to the shops with me? I haven't got much money but we could get some chips."" maxlength="800"></textarea>
+    </div>
+    <div>
+      <div class="panel-head">
+        <span class="panel-title" id="outputTitle">Dialect Output</span>
+        <button class="copy-btn" id="copyBtn" onclick="copyOutput()">Copy</button>
+      </div>
+      <div class="output-box empty" id="outputBox">Your converted text will appear here…</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="convert-btn" id="convertBtn" onclick="convert()" disabled>
+      Convert Dialect
+    </button>
+  </div>
+
+  <div id="errorMsg" class="error-msg" style="display:none"></div>
+
+  <div class="footer-rule">Powered by Claude AI · For Classroom Use</div>
+</div>
+
+<script>
+const DIALECTS = [
+  {
+    id: 'geordie',
+    name: 'Geordie',
+    flag: '🏙️',
+    region: 'Newcastle upon Tyne, North East England',
+    note: 'Known for <strong>canny</strong> (good/nice), <strong>gan</strong> (go), <strong>bairn</strong> (child), <strong>nowt</strong> (nothing), dropping "g" from -ing endings.',
+    prompt: `You are a Geordie dialect expert from Newcastle upon Tyne. Convert the following Standard English text into authentic Geordie dialect.
+Key features: use "gan" for go, "bairn" for child, "canny" for good/nice, "nowt" for nothing, "owt" for anything, "divvent" for don't, "howay" for come on, "pet" as a term of endearment, "aye" for yes, "ne" for no, "wor" for our, "thor" for there, drop the "g" in -ing words (runnin', talkin'), "mebbes" for maybe, "neet" for night, "reet" for right. Keep it natural and readable.`
+  },
+  {
+    id: 'scouse',
+    name: 'Scouse',
+    flag: '🎵',
+    region: 'Liverpool, Merseyside',
+    note: 'Distinctive for <strong>la</strong>/<strong>lad</strong> (mate), <strong>boss</strong> (great), <strong>dead</strong> (very), <strong>sound</strong> (good), hard "k" sounds, and unique rhythm.',
+    prompt: `You are a Scouse dialect expert from Liverpool. Convert the following Standard English text into authentic Scouse dialect.
+Key features: use "la" or "lad" as terms of address, "boss" for great/brilliant, "dead" as an intensifier (dead good, dead funny), "sound" for fine/ok, "made up" for pleased, "mint" for brilliant, "bizzies" for police, "ozzy" for hospital, "tarrar" for goodbye, "youse" for you plural, "me" instead of "my", soft "th" becoming "d" (dere, dem, dis), dropped h's, "gerrin" for get in, "bevvy" for drink.`
+  },
+  {
+    id: 'scots',
+    name: 'Scots',
+    flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+    region: 'Scotland',
+    note: 'Features <strong>wee</strong> (small), <strong>braw</strong> (fine), <strong>och</strong> (oh), <strong>dinnae</strong> (don\'t), <strong>aye</strong> (yes), <strong>ken</strong> (know).',
+    prompt: `You are a Scots dialect expert. Convert the following Standard English text into authentic Scots dialect (Lowland Scots / Scots English).
+Key features: use "wee" for small, "braw" for fine/good, "aye" for yes, "nae" for no/not, "dinnae" for don't, "cannae" for can't, "ken" for know, "och" as exclamation, "loch" naturally, "bairn" for child, "bonnie" for pretty, "dreich" for miserable weather, "messages" for shopping, "outwith" for outside of, "mind" for remember, "outwith", "wee" frequently, "oot" for out, "aboot" for about, "hoose" for house, "guid" for good.`
+  },
+  {
+    id: 'cockney',
+    name: 'Cockney',
+    flag: '🎪',
+    region: 'East London',
+    note: 'Famous for <strong>rhyming slang</strong> — "plates" (feet), "apples" (stairs), "dog" (phone). Also drops h\'s and "th" → "f/v".',
+    prompt: `You are a Cockney dialect expert from East London. Convert the following Standard English text into authentic Cockney dialect.
+Key features: use rhyming slang naturally (plates of meat = feet, apples and pears = stairs, dog and bone = phone, trouble and strife = wife, mince pies = eyes, use these abbreviated: "me plates", "up the apples", "on the dog"); drop h's at word starts ('ave, 'ello, 'ow), "th" becomes "f" or "v" (fink for think, wiv for with, bruvver for brother), "ain't" freely, "cor blimey", "bloke", "mate", "geezer", glottal stops (bu'er for butter), "innit" tag.`
+  },
+  {
+    id: 'yorkshire',
+    name: 'Yorkshire',
+    flag: '🌹',
+    region: 'Yorkshire, Northern England',
+    note: 'Famous for <strong>"by \'eck"</strong>, <strong>tha</strong> (you), <strong>nowt</strong> (nothing), <strong>reight</strong> (really), and dropping the article "the" to just "t\'".',
+    prompt: `You are a Yorkshire dialect expert. Convert the following Standard English text into authentic Yorkshire dialect.
+Key features: use "tha" or "tha's" for you/you are, "'appen" for perhaps, "reight" or "right" as intensifier, "nowt" for nothing, "owt" for anything, "by 'eck" as exclamation, "ee by gum", "grand" for great, "nay" for no, "summat" for something, "t'" for "the" (go t'shop, up t'road), "brass" for money, "mardy" for soft/cowardly, drop g from -ing, "while" for until, "breadcake" for bread roll, "ta" for thanks, flat vowels.`
+  },
+  {
+    id: 'brummie',
+    name: 'Brummie',
+    flag: '🏭',
+    region: 'Birmingham, West Midlands',
+    note: 'Known for the characteristic <strong>rising intonation</strong>, <strong>"bab"</strong> (term of address), <strong>"bostin"</strong> (great), and Midlands vocabulary.',
+    prompt: `You are a Brummie dialect expert from Birmingham. Convert the following Standard English text into authentic Birmingham (Brummie) dialect.
+Key features: use "bab" or "babs" as a term of endearment/address, "bostin" for brilliant/great, "yampy" for daft/crazy, "ay it" for hasn't it / isn't it, "mom" instead of "mum", "ta-ra" for goodbye, "wicked" for good, "goo" for go, "cor" for can't, "doh" for don't, "ay" for isn't/aren't/haven't, "our" before names (our Karen), "I cor" for I can't, "fizzing" for angry, flat Midlands accent features.`
+  },
+  {
+    id: 'west-country',
+    name: 'West Country',
+    flag: '🍎',
+    region: 'Somerset, Devon, Dorset',
+    note: 'Rhotic accent with strong <strong>"r"</strong> sounds. <strong>"Alright me lover"</strong>, <strong>"proper job"</strong>, <strong>"gurt"</strong> (great/big).',
+    prompt: `You are a West Country dialect expert from Somerset/Devon. Convert the following Standard English text into authentic West Country dialect.
+Key features: use "gurt" for great/big, "proper" as an intensifier (proper job, proper lovely), "me lover" or "me handsome" as terms of address, "thee" and "tha" for you (informal), "be" instead of "am/is/are" (I be, you be, it be), "zummerset" style z/s swaps (zider for cider, varm for farm), "yer" for here, "thicky" for that one, "dreckly" for directly/soon, "tis" for it is, "twas" for it was, strong rhoticity (emphasise r), "ansome" for handsome.`
+  },
+  {
+    id: 'welsh-english',
+    name: 'Welsh English',
+    flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+    region: 'Wales',
+    note: 'Features <strong>"isn\'t it"</strong>/<strong>"init"</strong> tags, <strong>"there\'s lovely"</strong>, <strong>"cwtch"</strong> (cuddle/small space), <strong>"lush"</strong> (lovely).',
+    prompt: `You are a Welsh English dialect expert. Convert the following Standard English text into authentic Welsh English dialect (English spoken with Welsh influence).
+Key features: use "isn't it" or "innit" as a tag question at the end of sentences, "there's lovely/nice/bad" (adjective fronting), "now in a minute" for soon, "cwtch" for cuddle or small space, "lush" for lovely/nice, "tidy" for good/decent, "butt" or "mun" as terms of address, "I do be" construction, "gone to the doctor's I have" (verb-subject inversion), "dull" for boring, "aye" for yes, "fair play" as agreement, "like" frequently, "by here/by there" for here/there.`
+  },
+];
+
+let selectedDialect = null;
+let isConverting = false;
+
+// Build dialect buttons
+const grid = document.getElementById('dialectGrid');
+DIALECTS.forEach(d => {
+  const btn = document.createElement('button');
+  btn.className = 'dialect-btn';
+  btn.innerHTML = `<span class="flag">${d.flag}</span>${d.name}`;
+  btn.onclick = () => selectDialect(d.id);
+  btn.id = 'btn-' + d.id;
+  grid.appendChild(btn);
+});
+
+function selectDialect(id) {
+  selectedDialect = DIALECTS.find(d => d.id === id);
+  document.querySelectorAll('.dialect-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + id).classList.add('active');
+  document.getElementById('dialectInfo').innerHTML =
+    `<strong>${selectedDialect.name}</strong> · <em>${selectedDialect.region}</em><br>${selectedDialect.note}`;
+  document.getElementById('outputTitle').textContent = selectedDialect.name + ' Output';
+  updateConvertBtn();
+}
+
+const inputText = document.getElementById('inputText');
+inputText.addEventListener('input', () => {
+  const len = inputText.value.length;
+  document.getElementById('charCount').textContent = len + ' chars';
+  updateConvertBtn();
+});
+
+function updateConvertBtn() {
+  const btn = document.getElementById('convertBtn');
+  btn.disabled = !selectedDialect || inputText.value.trim().length < 3 || isConverting;
+}
+
+async function convert() {
+  if (!selectedDialect || isConverting) return;
+  const text = inputText.value.trim();
+  if (!text) return;
+
+  isConverting = true;
+  updateConvertBtn();
+
+  const outBox = document.getElementById('outputBox');
+  outBox.className = 'output-box loading';
+  outBox.innerHTML = '<span class="dots">Converting</span>';
+  document.getElementById('errorMsg').style.display = 'none';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: selectedDialect.prompt + '\n\nConvert ONLY the text provided. Do not explain or add commentary. Output only the converted dialect text.',
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) throw new Error(data.error.message);
+
+    const result = data.content?.[0]?.text || '';
+    outBox.className = 'output-box';
+    outBox.textContent = result;
+
+  } catch (err) {
+    outBox.className = 'output-box empty';
+    outBox.textContent = 'Your converted text will appear here…';
+    const errEl = document.getElementById('errorMsg');
+    errEl.textContent = 'Conversion failed: ' + (err.message || 'Unknown error');
+    errEl.style.display = 'block';
+  }
+
+  isConverting = false;
+  updateConvertBtn();
+}
+
+function copyOutput() {
+  const text = document.getElementById('outputBox').textContent;
+  if (!text || text === 'Your converted text will appear here…') return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// Enter key shortcut
+inputText.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) convert();
+});
+</script>
+</body>
+</html>
