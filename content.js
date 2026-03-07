@@ -1788,6 +1788,26 @@ window.CUSTOM_CONTENT = {
     { word: "denouement", hint: "The final part of a story where everything is explained and resolved", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
     { word: "morality", hint: "Principles about right and wrong behaviour", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
 
+    // S9/U4 — TIME
+    { word: "optimistic", hint: "Having a hopeful, positive outlook about the future", topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+    { word: "solemn", hint: "Serious and sincere in manner", topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+    { word: "stanza", hint: "A group of lines in a poem that form a unit", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { word: "personification", hint: "Describing an object or idea as if it has human qualities", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { word: "carpe diem", hint: "Latin phrase meaning 'seize the day' — make the most of your time now", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { word: "seclusion", hint: "The state of being kept away from other people", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "taboo", hint: "Something that is forbidden by social or religious custom", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "attire", hint: "Clothing or dress", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "confiscate", hint: "To officially take something away from someone", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "hyperbole", hint: "Exaggerated language used for dramatic or persuasive effect", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "phalanx", hint: "A group of people or soldiers moving closely together", topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
+    { word: "pharaoh", hint: "A ruler of ancient Egypt", topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
+    { word: "luminous", hint: "Bright or shining, often in the dark", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { word: "punctual", hint: "Arriving or doing something at the agreed time", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { word: "connotations", hint: "The feelings or ideas associated with a word beyond its literal meaning", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { word: "transcript", hint: "A written record of spoken words or a conversation", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { word: "implant", hint: "To insert something into the body, or to fix an idea firmly", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { word: "chairperson", hint: "The person who leads and manages a meeting or discussion", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+
   ]
 
 };
