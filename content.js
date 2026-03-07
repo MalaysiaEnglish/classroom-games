@@ -1770,6 +1770,24 @@ window.CUSTOM_CONTENT = {
     { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon links two related ideas and draws them together.", correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
     { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon shows that the second idea contradicts the first.", correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
 
+
+    // S9/U3 Vocabulary
+    { word: "deduce", hint: "To reach a conclusion through reasoning from evidence", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "morphology", hint: "The study of how words are formed and their relationships with other words", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "etymology", hint: "The study of the origins and historical development of words", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "nominal", hint: "In name only; very small or token in value", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "eligible", hint: "Satisfying the conditions required to qualify for something", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "vacancy", hint: "An available job or unoccupied position", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "sympathetic", hint: "Describing a character the reader identifies with and responds positively to", topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
+    { word: "improvise", hint: "To perform or speak without preparation", topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
+    { word: "sovereign", hint: "A British gold coin used as currency in Victorian times", topic: "S9/U3/L3 The End of the League", stage: 9, unit: 3, lesson: 3 },
+    { word: "evidently", hint: "Clearly; in a way that is obvious or plain to see", topic: "S9/U3/L4 Investigating the Street", stage: 9, unit: 3, lesson: 4 },
+    { word: "narrative", hint: "A series of connected events that are written or spoken", topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+    { word: "tactile", hint: "Relating to the sense of touch", topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+    { word: "ascertain", hint: "To find out or confirm something with certainty", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+    { word: "denouement", hint: "The final part of a story where everything is explained and resolved", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+    { word: "morality", hint: "Principles about right and wrong behaviour", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+
   ]
 
 };
