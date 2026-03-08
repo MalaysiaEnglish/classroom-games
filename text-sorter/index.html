@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Sorter – Formal vs Informal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@400;600&display=swap');
+
+  :root {
+    --formal-col: #1a3a5c;
+    --formal-light: #d6e8f7;
+    --formal-mid: #2e6da4;
+    --informal-col: #8b1a00;
+    --informal-light: #fde8d8;
+    --informal-mid: #d44f1e;
+    --bg: #f5f0e8;
+    --card-bg: #fffdf8;
+    --text: #1a1a1a;
+    --shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(26,58,92,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(139,26,0,0.06) 0%, transparent 50%);
+  }
+
+  header {
+    text-align: center;
+    padding: 28px 20px 16px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  header h1 span.formal { color: var(--formal-mid); }
+  header h1 span.informal { color: var(--informal-mid); }
+  header p {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    color: #555;
+    font-style: italic;
+  }
+
+  /* Score bar */
+  .scorebar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .score-pill {
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+  }
+  .score-pill.f { background: var(--formal-light); color: var(--formal-col); border: 2px solid var(--formal-mid); }
+  .score-pill.i { background: var(--informal-light); color: var(--informal-col); border: 2px solid var(--informal-mid); }
+  .score-pill.total { background: #eee; color: #333; border: 2px solid #999; }
+
+  /* Card area */
+  .card-area {
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px 16px;
+  }
+  .sentence-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 28px 36px;
+    max-width: 720px;
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    line-height: 1.6;
+    font-style: italic;
+    border: 2px solid #e0d8c8;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .sentence-card .card-num {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 0.75rem;
+    font-style: normal;
+    color: #aaa;
+    font-family: 'Playfair Display', serif;
+  }
+  .sentence-card.flash-correct { animation: flashGreen 0.5s ease; }
+  .sentence-card.flash-wrong   { animation: flashRed 0.5s ease; }
+
+  @keyframes flashGreen {
+    0%   { background: var(--card-bg); }
+    40%  { background: #d4f7dc; box-shadow: 0 0 0 3px #3a9e5f; }
+    100% { background: var(--card-bg); }
+  }
+  @keyframes flashRed {
+    0%   { background: var(--card-bg); }
+    40%  { background: #fde0dc; box-shadow: 0 0 0 3px #c0392b; }
+    100% { background: var(--card-bg); }
+  }
+
+  /* Button row */
+  .btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 20px 20px;
+    flex-wrap: wrap;
+  }
+  .sort-btn {
+    flex: 1;
+    max-width: 280px;
+    padding: 18px 24px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    letter-spacing: 0.01em;
+  }
+  .sort-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+  .sort-btn:active { transform: translateY(0); }
+  .sort-btn.formal-btn {
+    background: var(--formal-col);
+    color: #fff;
+  }
+  .sort-btn.informal-btn {
+    background: var(--informal-col);
+    color: #fff;
+  }
+
+  /* Columns */
+  .columns {
+    display: flex;
+    gap: 16px;
+    padding: 0 20px 30px;
+    max-width: 960px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+  .col {
+    flex: 1;
+    min-width: 260px;
+    border-radius: 12px;
+    padding: 14px;
+    min-height: 120px;
+  }
+  .col.formal-col { background: var(--formal-light); border: 2px solid var(--formal-mid); }
+  .col.informal-col { background: var(--informal-light); border: 2px solid var(--informal-mid); }
+  .col-header {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid currentColor;
+  }
+  .col.formal-col .col-header { color: var(--formal-col); }
+  .col.informal-col .col-header { color: var(--informal-col); }
+
+  .placed-item {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .placed-item .tick { font-style: normal; font-size: 1rem; flex-shrink: 0; }
+  .placed-item.correct-place { border-left: 4px solid #3a9e5f; }
+  .placed-item.wrong-place { border-left: 4px solid #c0392b; }
+
+  /* Feedback */
+  .feedback-bar {
+    text-align: center;
+    min-height: 32px;
+    padding: 4px 20px 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: opacity 0.3s;
+  }
+  .feedback-bar.correct { color: #2a7a4f; }
+  .feedback-bar.wrong { color: #c0392b; }
+
+  /* End screen */
+  .end-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .end-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+  .end-screen .final-score {
+    font-size: 3rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    color: var(--formal-mid);
+    margin: 10px 0;
+  }
+  .end-screen p { color: #555; margin-bottom: 24px; }
+  .restart-btn {
+    background: var(--formal-col);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 36px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .restart-btn:hover { transform: translateY(-2px); }
+
+  .progress-bar-wrap {
+    max-width: 720px;
+    margin: 0 auto 10px;
+    padding: 0 20px;
+  }
+  .progress-bar-bg {
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--formal-mid), var(--informal-mid));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Text Sorter: <span class="formal">Formal</span> vs <span class="informal">Informal</span></h1>
+  <p>Oak Island — two articles, two very different styles. Sort each sentence into the right column.</p>
+</header>
+
+<div class="scorebar">
+  <div class="score-pill f">📰 Formal: <span id="score-f">0</span></div>
+  <div class="score-pill i">🏴‍☠️ Informal: <span id="score-i">0</span></div>
+  <div class="score-pill total">✅ <span id="score-total">0</span> / <span id="score-max">0</span></div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<div class="card-area">
+  <div class="sentence-card" id="sentence-card">
+    <span class="card-num" id="card-num"></span>
+    <span id="sentence-text"></span>
+  </div>
+</div>
+
+<div class="feedback-bar" id="feedback-bar"></div>
+
+<div class="btn-row">
+  <button class="sort-btn formal-btn" onclick="sortCard('formal')">📰 Formal</button>
+  <button class="sort-btn informal-btn" onclick="sortCard('informal')">🏴‍☠️ Informal</button>
+</div>
+
+<div class="columns">
+  <div class="col formal-col">
+    <div class="col-header">📰 Formal — Encyclopaedia</div>
+    <div id="formal-list"></div>
+  </div>
+  <div class="col informal-col">
+    <div class="col-header">🏴‍☠️ Informal — Magazine</div>
+    <div id="informal-list"></div>
+  </div>
+</div>
+
+<div class="end-screen" id="end-screen">
+  <h2>All sorted! ⚓</h2>
+  <div class="final-score" id="final-score-text"></div>
+  <p id="end-msg"></p>
+  <button class="restart-btn" onclick="restart()">🔄 Play Again</button>
+</div>
+
+<script>
+const SENTENCES = [
+  // FORMAL sentences
+  { text: "Oak Island is a small island located off the south shore of Nova Scotia, Canada.", type: "formal", hint: "encyclopaedia-style location fact" },
+  { text: "In 1799, a young man named Daniel McGinnis discovered a circular depression in the ground on the island.", type: "formal", hint: "precise historical account" },
+  { text: "The excavation revealed a series of wooden platforms at regular intervals, suggesting deliberate construction.", type: "formal", hint: "technical, passive voice" },
+  { text: "Despite numerous excavation attempts over two centuries, no treasure has been conclusively recovered.", type: "formal", hint: "neutral, factual conclusion" },
+  { text: "The site has attracted considerable scholarly and commercial interest due to the unusual nature of the underground chambers.", type: "formal", hint: "formal noun phrases" },
+  { text: "It is widely believed that the complex system of tunnels may have been constructed to flood the central shaft when disturbed.", type: "formal", hint: "impersonal, hedged language" },
+  { text: "The Triton Alliance, a syndicate of investors, undertook extensive excavation work during the 1960s and 1970s.", type: "formal", hint: "factual, third person" },
+  { text: "Geological surveys indicate the presence of an elaborate drainage system, the origins of which remain unknown.", type: "formal", hint: "technical vocabulary" },
+
+  // INFORMAL sentences
+  { text: "Avast, ye treasure hunters — Oak Island is the most bonkers mystery in the whole wide ocean!", type: "informal", hint: "pirate slang, exclamation" },
+  { text: "So get this: back in 1799, some kid called Danny stumbled across a massive hole in the ground!", type: "informal", hint: "conversational opener, nickname" },
+  { text: "They was diggin' and diggin', findin' all sorts of weird wooden stuff down there — spooky or what?!", type: "informal", hint: "dropped g's, non-standard grammar" },
+  { text: "Treasure hunters have been trying to crack this mystery for over 200 years — and still zippo!", type: "informal", hint: "slang, dash for effect" },
+  { text: "The kool kidz of the Triton Alliance spent years searchin' for the loot — but the hole just swallowed their dreams!", type: "informal", hint: "misspelling, pirate voice" },
+  { text: "Everyone reckons there's some sneaky booby trap that floods the whole thing if you get too close — genius!", type: "informal", hint: "colloquial verb, exclamation" },
+  { text: "Honestly? The whole island is basically one giant puzzle box and nobody's cracked it yet — maybe YOU will!", type: "informal", hint: "direct address, conversational" },
+  { text: "Cameras, drills, the lot — they chucked everything at it and the island just went 'nope, my treasure!'", type: "informal", hint: "colloquial, personification" },
+];
+
+let items = [];
+let current = 0;
+let correctCount = 0;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function init() {
+  items = shuffle([...SENTENCES]);
+  current = 0;
+  correctCount = 0;
+  document.getElementById('score-f').textContent = '0';
+  document.getElementById('score-i').textContent = '0';
+  document.getElementById('score-total').textContent = '0';
+  document.getElementById('score-max').textContent = items.length;
+  document.getElementById('formal-list').innerHTML = '';
+  document.getElementById('informal-list').innerHTML = '';
+  document.getElementById('feedback-bar').textContent = '';
+  document.getElementById('feedback-bar').className = 'feedback-bar';
+  document.getElementById('end-screen').style.display = 'none';
+  document.querySelector('.card-area').style.display = 'flex';
+  document.querySelector('.btn-row').style.display = 'flex';
+  updateProgress();
+  showCard();
+}
+
+function showCard() {
+  if (current >= items.length) { showEnd(); return; }
+  const card = document.getElementById('sentence-card');
+  card.className = 'sentence-card';
+  document.getElementById('sentence-text').textContent = `"${items[current].text}"`;
+  document.getElementById('card-num').textContent = `${current + 1} / ${items.length}`;
+}
+
+function sortCard(choice) {
+  if (current >= items.length) return;
+  const item = items[current];
+  const correct = choice === item.type;
+  const card = document.getElementById('sentence-card');
+
+  // Flash
+  card.classList.add(correct ? 'flash-correct' : 'flash-wrong');
+
+  // Feedback
+  const fb = document.getElementById('feedback-bar');
+  if (correct) {
+    fb.textContent = correct ? '✓ Correct!' : '';
+    fb.className = 'feedback-bar correct';
+    correctCount++;
+  } else {
+    fb.textContent = `✗ That one is ${item.type} — look at the vocabulary and sentence structure.`;
+    fb.className = 'feedback-bar wrong';
+  }
+
+  // Update scores
+  const fScore = parseInt(document.getElementById('score-f').textContent);
+  const iScore = parseInt(document.getElementById('score-i').textContent);
+  if (item.type === 'formal') document.getElementById('score-f').textContent = fScore + 1;
+  else document.getElementById('score-i').textContent = iScore + 1;
+  document.getElementById('score-total').textContent = current + 1;
+
+  // Add to correct column
+  const list = document.getElementById(item.type === 'formal' ? 'formal-list' : 'informal-list');
+  const div = document.createElement('div');
+  div.className = `placed-item ${correct ? 'correct-place' : 'wrong-place'}`;
+  div.innerHTML = `<span class="tick">${correct ? '✓' : '✗'}</span><span>${item.text}</span>`;
+  list.appendChild(div);
+
+  current++;
+  updateProgress();
+
+  setTimeout(() => {
+    showCard();
+  }, correct ? 600 : 1200);
+}
+
+function updateProgress() {
+  const pct = items.length ? (current / items.length) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function showEnd() {
+  document.querySelector('.card-area').style.display = 'none';
+  document.querySelector('.btn-row').style.display = 'none';
+  document.getElementById('feedback-bar').textContent = '';
+  const end = document.getElementById('end-screen');
+  end.style.display = 'block';
+  const pct = Math.round((correctCount / items.length) * 100);
+  document.getElementById('final-score-text').textContent = `${correctCount} / ${items.length}`;
+  let msg = '';
+  if (pct === 100) msg = 'Perfect! You have a sharp eye for register and style.';
+  else if (pct >= 75) msg = 'Great work — you can clearly spot the difference between formal and informal writing.';
+  else if (pct >= 50) msg = 'Good effort. Review the vocabulary and grammar clues in the ones you missed.';
+  else msg = 'Keep practising — look for vocabulary, punctuation and sentence structure as clues.';
+  document.getElementById('end-msg').textContent = msg;
+}
+
+function restart() { init(); }
+
+init();
+</script>
+</body>
+</html>

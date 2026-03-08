@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technique Spotter – Persuasive Writing</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0f1923;
+    --card-bg: #162330;
+    --accent: #f0a500;
+    --accent2: #e05a2b;
+    --text: #e8e0d0;
+    --muted: #8a9baa;
+    --correct: #2ecc71;
+    --wrong: #e74c3c;
+    --border: #2a3a4a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(240,165,0,0.03) 40px, rgba(240,165,0,0.03) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(240,165,0,0.03) 40px, rgba(240,165,0,0.03) 41px);
+  }
+
+  header {
+    background: linear-gradient(135deg, #0f1923 0%, #162330 100%);
+    border-bottom: 3px solid var(--accent);
+    padding: 20px 24px 16px;
+    text-align: center;
+  }
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-shadow: 0 0 30px rgba(240,165,0,0.3);
+  }
+  header p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Score bar */
+  .scorebar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 20px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.05em;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .stat-divider { width: 1px; height: 40px; background: var(--border); }
+
+  /* Progress */
+  .progress-wrap {
+    padding: 0 24px 8px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .progress-bg {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* Sentence card */
+  .card-wrap {
+    padding: 12px 24px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .sentence-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px 32px;
+    text-align: center;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    font-style: italic;
+    line-height: 1.65;
+    color: var(--text);
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    transition: border-color 0.3s;
+  }
+  .sentence-card .card-counter {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 0.7rem;
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    font-style: normal;
+  }
+  .sentence-card.flash-ok  { animation: glowGreen 0.5s ease; }
+  .sentence-card.flash-bad { animation: glowRed 0.5s ease; }
+
+  @keyframes glowGreen {
+    0%   { border-color: var(--border); }
+    40%  { border-color: var(--correct); box-shadow: 0 0 20px rgba(46,204,113,0.3); }
+    100% { border-color: var(--border); }
+  }
+  @keyframes glowRed {
+    0%   { border-color: var(--border); }
+    40%  { border-color: var(--wrong); box-shadow: 0 0 20px rgba(231,76,60,0.3); }
+    100% { border-color: var(--border); }
+  }
+
+  /* Technique buttons grid */
+  .techniques-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 8px 24px 16px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .tech-btn {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    text-align: left;
+    line-height: 1.2;
+  }
+  .tech-btn .btn-icon { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+  .tech-btn:hover {
+    border-color: var(--accent);
+    background: rgba(240,165,0,0.08);
+    transform: translateY(-2px);
+  }
+  .tech-btn.correct-ans {
+    border-color: var(--correct);
+    background: rgba(46,204,113,0.15);
+  }
+  .tech-btn.wrong-ans {
+    border-color: var(--wrong);
+    background: rgba(231,76,60,0.15);
+  }
+
+  /* Feedback */
+  .feedback-area {
+    text-align: center;
+    min-height: 56px;
+    padding: 4px 24px 8px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .feedback-area .fb-result {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .feedback-area .fb-result.ok { color: var(--correct); }
+  .feedback-area .fb-result.bad { color: var(--wrong); }
+  .feedback-area .fb-explain {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Definition panel */
+  .definitions {
+    max-width: 760px;
+    margin: 0 auto 30px;
+    padding: 0 24px;
+  }
+  .def-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .def-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .def-grid {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  .def-grid.open { display: grid; }
+  .def-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+  .def-item strong {
+    display: block;
+    color: var(--accent);
+    font-size: 0.88rem;
+    margin-bottom: 3px;
+  }
+  .def-item span { color: var(--muted); }
+
+  /* End screen */
+  .end-screen {
+    display: none;
+    text-align: center;
+    padding: 50px 24px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .end-screen h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+  }
+  .end-screen .big-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: var(--text);
+    line-height: 1;
+    margin: 12px 0;
+  }
+  .end-screen p { color: var(--muted); margin-bottom: 28px; font-style: italic; }
+  .restart-btn {
+    background: var(--accent);
+    color: #0f1923;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: transform 0.15s, filter 0.15s;
+  }
+  .restart-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎯 Technique Spotter</h1>
+  <p>Identify the persuasive technique used in each sentence</p>
+</header>
+
+<div class="scorebar">
+  <div class="stat">
+    <div class="stat-num" id="score-correct">0</div>
+    <div class="stat-label">Correct</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num" id="score-streak">0</div>
+    <div class="stat-label">Streak 🔥</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num" id="score-total">0</div>
+    <div class="stat-label">Done</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num" id="score-max">0</div>
+    <div class="stat-label">Total</div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bg"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+</div>
+
+<div class="card-wrap">
+  <div class="sentence-card" id="sentence-card">
+    <span class="card-counter" id="card-counter"></span>
+    <span id="sentence-text"></span>
+  </div>
+</div>
+
+<div class="feedback-area" id="feedback-area"></div>
+
+<div class="techniques-grid" id="tech-grid"></div>
+
+<div class="definitions">
+  <button class="def-toggle" onclick="toggleDefs()">📖 Show / hide technique definitions</button>
+  <div class="def-grid" id="def-grid"></div>
+</div>
+
+<div class="end-screen" id="end-screen">
+  <h2>Spotted them all!</h2>
+  <div class="big-score" id="end-score"></div>
+  <p id="end-msg"></p>
+  <button class="restart-btn" onclick="restart()">🔄 Play Again</button>
+</div>
+
+<script>
+const TECHNIQUES = [
+  { id: "rhetorical",  label: "Rhetorical Question", icon: "❓", def: "A question that makes a point — no answer expected" },
+  { id: "triple",      label: "Triples / Rule of Three", icon: "3️⃣", def: "Three words or phrases used together for effect" },
+  { id: "emotive",     label: "Emotive Language", icon: "💔", def: "Words chosen to appeal to the reader's emotions" },
+  { id: "direct",      label: "Direct Address", icon: "👉", def: "Speaking directly to the reader using 'you'" },
+  { id: "imperative",  label: "Imperative / Command", icon: "📢", def: "An order or instruction telling the reader what to do" },
+  { id: "statistic",   label: "Statistic / Fact", icon: "📊", def: "A number or verifiable fact used as evidence" },
+  { id: "hyperbole",   label: "Hyperbole", icon: "🚀", def: "Deliberate exaggeration for emphasis or effect" },
+  { id: "counterarg",  label: "Counter-argument", icon: "⚖️", def: "Acknowledging the other side before dismissing it" },
+];
+
+const SENTENCES = [
+  { text: "Don't you think every child deserves access to a safe, reliable internet connection?", technique: "rhetorical", explain: "The question is designed to make you agree — it doesn't expect a real reply." },
+  { text: "Smartphones are destroying our children's concentration, their confidence, and their childhood.", technique: "triple", explain: "Three nouns ('concentration, confidence, childhood') used together for persuasive emphasis." },
+  { text: "Think about the terrified parents who have watched their children become addicted to these devices.", technique: "emotive", explain: "'Terrified' and 'addicted' are chosen to trigger an emotional response in the reader." },
+  { text: "You have the power to make this change — and you must use it.", technique: "direct", explain: "'You' speaks directly to the reader, making them feel personally responsible." },
+  { text: "Ban smartphones from schools. Protect our children. Act now.", technique: "imperative", explain: "All three are commands — they tell the reader what to do using the imperative form." },
+  { text: "Research shows that teenagers who spend more than four hours a day on screens score 23% lower in reading tests.", technique: "statistic", explain: "A specific number (23%) is used to make the argument seem credible and factual." },
+  { text: "We are drowning in a tsunami of misinformation, fake news, and digital poison.", technique: "hyperbole", explain: "'Drowning' and 'tsunami' are extreme exaggerations used for dramatic effect." },
+  { text: "Some people argue that the internet is simply a tool — but a knife is simply a tool too.", technique: "counterarg", explain: "The writer mentions the opposing view ('simply a tool') before dismissing it with a comparison." },
+  { text: "Will you stand by and watch the next generation lose the ability to communicate face to face?", technique: "rhetorical", explain: "The question implies you should act — it doesn't genuinely ask for a yes or no answer." },
+  { text: "The internet has given us knowledge, connection, and opportunity on a scale never seen before.", technique: "triple", explain: "Three nouns ('knowledge, connection, opportunity') used as a persuasive list." },
+  { text: "Vulnerable young children are being exploited, manipulated, and damaged by social media companies.", technique: "emotive", explain: "'Vulnerable', 'exploited', and 'damaged' all appeal to protective emotions in the reader." },
+  { text: "Ask yourself: when did you last have a conversation without checking your phone?", technique: "direct", explain: "The writer addresses the reader directly as 'you', making the challenge personal." },
+  { text: "Stop scrolling. Start living.", technique: "imperative", explain: "Two sharp commands using the imperative form — no subject, just an instruction." },
+  { text: "Over 60% of teenagers report feeling anxious when they cannot access their phones.", technique: "statistic", explain: "The percentage (60%) gives the argument the appearance of scientific authority." },
+  { text: "Social media has turned an entire generation into mindless, hollow, screen-obsessed zombies.", technique: "hyperbole", explain: "'Zombies' is a wild exaggeration — deliberately over the top for shock and humour." },
+  { text: "Admittedly, technology has brought real benefits to education — however, the risks to mental health cannot be ignored.", technique: "counterarg", explain: "The writer concedes a point ('admittedly') before pivoting back to the main argument ('however')." },
+  { text: "Imagine a world where every child grows up curious, confident, and free from the tyranny of likes and followers.", technique: "triple", explain: "Three adjectives ('curious, confident, free') used to paint an appealing picture." },
+  { text: "The damage is real. The harm is proven. The time to act is now.", technique: "triple", explain: "Three short parallel sentences — a triple structure that builds momentum and urgency." },
+];
+
+let items = [];
+let current = 0;
+let correct = 0;
+let streak = 0;
+let defsOpen = false;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildTechButtons() {
+  const grid = document.getElementById('tech-grid');
+  grid.innerHTML = '';
+  TECHNIQUES.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tech-btn';
+    btn.id = 'btn-' + t.id;
+    btn.innerHTML = `<span class="btn-icon">${t.icon}</span>${t.label}`;
+    btn.onclick = () => choose(t.id);
+    grid.appendChild(btn);
+  });
+}
+
+function buildDefs() {
+  const grid = document.getElementById('def-grid');
+  grid.innerHTML = '';
+  TECHNIQUES.forEach(t => {
+    const div = document.createElement('div');
+    div.className = 'def-item';
+    div.innerHTML = `<strong>${t.icon} ${t.label}</strong><span>${t.def}</span>`;
+    grid.appendChild(div);
+  });
+}
+
+function toggleDefs() {
+  defsOpen = !defsOpen;
+  document.getElementById('def-grid').classList.toggle('open', defsOpen);
+}
+
+function init() {
+  items = shuffle([...SENTENCES]);
+  current = 0; correct = 0; streak = 0;
+  updateStats();
+  document.getElementById('score-max').textContent = items.length;
+  document.getElementById('feedback-area').innerHTML = '';
+  document.getElementById('end-screen').style.display = 'none';
+  document.querySelector('.card-wrap').style.display = 'block';
+  document.getElementById('tech-grid').style.display = 'grid';
+  buildTechButtons();
+  buildDefs();
+  showCard();
+}
+
+function showCard() {
+  if (current >= items.length) { showEnd(); return; }
+  resetBtns();
+  document.getElementById('feedback-area').innerHTML = '';
+  const card = document.getElementById('sentence-card');
+  card.className = 'sentence-card';
+  document.getElementById('sentence-text').textContent = `"${items[current].text}"`;
+  document.getElementById('card-counter').textContent = `${current + 1} / ${items.length}`;
+  updateProgress();
+}
+
+function resetBtns() {
+  TECHNIQUES.forEach(t => {
+    const btn = document.getElementById('btn-' + t.id);
+    if (btn) { btn.className = 'tech-btn'; btn.disabled = false; }
+  });
+}
+
+function choose(techId) {
+  if (current >= items.length) return;
+  const item = items[current];
+  const isCorrect = techId === item.technique;
+  const card = document.getElementById('sentence-card');
+
+  // Disable all buttons briefly
+  TECHNIQUES.forEach(t => {
+    const btn = document.getElementById('btn-' + t.id);
+    if (btn) btn.disabled = true;
+  });
+
+  // Highlight chosen and correct
+  document.getElementById('btn-' + techId).classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
+  if (!isCorrect) document.getElementById('btn-' + item.technique).classList.add('correct-ans');
+
+  card.classList.add(isCorrect ? 'flash-ok' : 'flash-bad');
+
+  if (isCorrect) { correct++; streak++; }
+  else { streak = 0; }
+  updateStats();
+
+  // Feedback
+  const fb = document.getElementById('feedback-area');
+  fb.innerHTML = `
+    <div class="fb-result ${isCorrect ? 'ok' : 'bad'}">${isCorrect ? '✓ Correct!' : `✗ That's ${TECHNIQUES.find(t=>t.id===item.technique).label}`}</div>
+    <div class="fb-explain">${item.explain}</div>
+  `;
+
+  current++;
+  document.getElementById('score-total').textContent = current;
+
+  setTimeout(showCard, isCorrect ? 1200 : 2000);
+}
+
+function updateStats() {
+  document.getElementById('score-correct').textContent = correct;
+  document.getElementById('score-streak').textContent = streak;
+  document.getElementById('score-total').textContent = current;
+}
+
+function updateProgress() {
+  const pct = items.length ? (current / items.length) * 100 : 0;
+  document.getElementById('prog').style.width = pct + '%';
+}
+
+function showEnd() {
+  document.querySelector('.card-wrap').style.display = 'none';
+  document.getElementById('tech-grid').style.display = 'none';
+  document.getElementById('feedback-area').innerHTML = '';
+  const end = document.getElementById('end-screen');
+  end.style.display = 'block';
+  document.getElementById('end-score').textContent = `${correct} / ${items.length}`;
+  const pct = Math.round((correct / items.length) * 100);
+  let msg = '';
+  if (pct === 100) msg = 'Perfect — you can spot every technique. Master persuader!';
+  else if (pct >= 80) msg = 'Excellent work. You have a strong grasp of persuasive techniques.';
+  else if (pct >= 60) msg = 'Good effort. Review the definitions for the ones you missed.';
+  else msg = 'Keep practising — use the definitions panel to help you learn each technique.';
+  document.getElementById('end-msg').textContent = msg;
+}
+
+function restart() { init(); }
+
+init();
+</script>
+</body>
+</html>
