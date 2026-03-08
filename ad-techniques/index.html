@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ad Techniques Spotter — S6/U8</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5f0e8;--ink:#1a1208;--card:#ffffff;--accent:#e63946;--accent2:#2b9348;
+      --gold:#f4a261;--muted:#8a7f6e;--radius:10px;--shadow:0 4px 20px rgba(0,0,0,0.12);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+    /* Halftone texture */
+    body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.06) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;z-index:0}
+
+    header{position:relative;z-index:1;background:var(--ink);color:var(--bg);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--accent)}
+    .home-btn{color:var(--bg);opacity:.6;text-decoration:none;font-size:.85rem;transition:opacity .2s}
+    .home-btn:hover{opacity:1}
+    .hdr-c{text-align:center}
+    .hdr-c h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.5rem,4vw,2.2rem);letter-spacing:.04em;color:var(--accent)}
+    .hdr-c p{font-size:.72rem;opacity:.55;text-transform:uppercase;letter-spacing:.12em;margin-top:1px}
+    .score-badge{background:var(--accent);color:#fff;border-radius:6px;padding:8px 14px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;min-width:70px;text-align:center}
+
+    main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:32px 20px 60px;display:flex;flex-direction:column;align-items:center;gap:22px}
+
+    /* ── Intro ── */
+    #intro{display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
+    .techniques-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:600px}
+    .tech-tag{padding:6px 14px;border-radius:4px;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border:2px solid}
+    .tg-hyp{border-color:#e63946;color:#e63946;background:rgba(230,57,70,.07)}
+    .tg-ban{border-color:#f4a261;color:#c97a2a;background:rgba(244,162,97,.1)}
+    .tg-cel{border-color:#2b9348;color:#2b9348;background:rgba(43,147,72,.07)}
+    .tg-rep{border-color:#457b9d;color:#457b9d;background:rgba(69,123,157,.07)}
+    .tg-rhe{border-color:#a371f7;color:#7145c4;background:rgba(163,113,247,.07)}
+    .tg-sca{border-color:#e76f51;color:#c45228;background:rgba(231,111,81,.07)}
+    .tg-fac{border-color:#1d3557;color:#1d3557;background:rgba(29,53,87,.07)}
+    .tg-emo{border-color:#e63946;color:#e63946;background:rgba(230,57,70,.07)}
+    .intro-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,4.5rem);letter-spacing:.04em;line-height:1;color:var(--ink)}
+    .intro-title span{color:var(--accent)}
+    .intro-desc{max-width:460px;color:var(--muted);line-height:1.65;font-size:.93rem}
+    .start-btn{padding:16px 48px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.08em;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+    .start-btn:hover{transform:translateY(-2px);background:#c62633}
+
+    /* ── Game ── */
+    #game{display:none;flex-direction:column;align-items:center;gap:18px;width:100%}
+    .progress-row{width:100%;display:flex;align-items:center;gap:12px}
+    .progress-track{flex:1;height:5px;background:rgba(0,0,0,.1);border-radius:4px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+    .progress-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+
+    /* Ad display card — looks like a real advert */
+    .ad-card{width:100%;background:var(--card);border:3px solid var(--ink);border-radius:4px;box-shadow:var(--shadow);overflow:hidden}
+    .ad-banner{background:var(--accent);color:#fff;padding:10px 20px;font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:.15em;display:flex;justify-content:space-between;align-items:center}
+    .ad-body{padding:32px 36px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+    .ad-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,5vw,2.8rem);letter-spacing:.04em;line-height:1.1;color:var(--ink)}
+    .ad-copy{font-size:clamp(.9rem,2vw,1.05rem);color:var(--ink);line-height:1.65;max-width:520px}
+    .ad-question{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px}
+
+    /* Technique options */
+    .opts-grid{width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+    .opt-btn{padding:14px 16px;background:var(--card);border:2px solid rgba(0,0,0,.12);border-radius:var(--radius);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;color:var(--ink);transition:all .18s;display:flex;align-items:center;gap:8px}
+    .opt-btn .opt-emoji{font-size:1.2rem}
+    .opt-btn:hover:not([disabled]){border-color:var(--accent);background:rgba(230,57,70,.04);transform:translateY(-1px)}
+    .opt-btn.correct{border-color:var(--accent2);background:rgba(43,147,72,.08);color:var(--accent2)}
+    .opt-btn.wrong{border-color:var(--accent);background:rgba(230,57,70,.07);color:var(--accent);opacity:.7}
+    .opt-btn[disabled]{cursor:default}
+
+    .feedback{width:100%;padding:14px 22px;border-radius:var(--radius);font-size:.9rem;line-height:1.55;display:none}
+    .feedback.show{display:block}
+    .feedback.ok{background:rgba(43,147,72,.07);border:2px solid rgba(43,147,72,.25);color:#1e7a35}
+    .feedback.bad{background:rgba(230,57,70,.06);border:2px solid rgba(230,57,70,.2);color:#c62633}
+    .next-btn{align-self:flex-end;padding:12px 30px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;cursor:pointer;transition:all .2s;display:none}
+    .next-btn.show{display:block}
+    .next-btn:hover{transform:translateY(-1px);background:#c62633}
+
+    /* ── End ── */
+    #end{display:none;flex-direction:column;align-items:center;gap:20px;text-align:center}
+    .end-icon{font-size:5rem}
+    .end-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4rem);letter-spacing:.04em}
+    .end-score{font-size:3.5rem;font-weight:800;color:var(--accent);font-family:'Bebas Neue',sans-serif;letter-spacing:.04em}
+    .end-sub{color:var(--muted)}
+    .end-stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .stat-pill{padding:9px 18px;background:var(--card);border:2px solid rgba(0,0,0,.1);border-radius:40px;font-size:.88rem}
+    .stat-pill span{color:var(--accent);font-weight:700}
+    .end-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .replay-btn{padding:13px 32px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.06em;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .replay-btn:hover{transform:translateY(-2px);background:#c62633}
+    .replay-btn.secondary{background:var(--card);border:2px solid rgba(0,0,0,.15);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0}
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-c">
+    <h1>Ad Techniques Spotter</h1>
+    <p>S6 · Unit 8 · Advertising</p>
+  </div>
+  <div class="score-badge" id="scoreBadge">0 / 0</div>
+</header>
+<main>
+
+<!-- ── INTRO ── -->
+<section id="intro">
+  <div class="techniques-grid">
+    <div class="tech-tag tg-hyp">Hyperbole</div>
+    <div class="tech-tag tg-ban">Bandwagon</div>
+    <div class="tech-tag tg-cel">Celebrity Endorsement</div>
+    <div class="tech-tag tg-rep">Repetition / Rule of Three</div>
+    <div class="tech-tag tg-rhe">Rhetorical Question</div>
+    <div class="tech-tag tg-sca">Scarcity Tactic</div>
+    <div class="tech-tag tg-fac">Facts &amp; Statistics</div>
+    <div class="tech-tag tg-emo">Emotional Appeal</div>
+  </div>
+  <h2 class="intro-title">SPOT THE<br><span>TECHNIQUE</span></h2>
+  <p class="intro-desc">Read each advertisement extract. Identify which persuasive technique is being used — then see why it works.</p>
+  <button class="start-btn" onclick="startGame()">START GAME</button>
+</section>
+
+<!-- ── GAME ── -->
+<section id="game">
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 0</div>
+  </div>
+  <div class="ad-card">
+    <div class="ad-banner"><span id="adBrand">★ ADVERTISEMENT</span><span id="adCategory"></span></div>
+    <div class="ad-body">
+      <div class="ad-headline" id="adHeadline"></div>
+      <div class="ad-copy" id="adCopy"></div>
+      <div class="ad-question">Which persuasive technique is used above?</div>
+    </div>
+  </div>
+  <div class="opts-grid" id="optsGrid"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">NEXT →</button>
+</section>
+
+<!-- ── END ── -->
+<section id="end">
+  <div class="end-icon">📢</div>
+  <div class="end-title">Campaign Complete!</div>
+  <div class="end-score" id="endScore"></div>
+  <div class="end-sub" id="endSub"></div>
+  <div class="end-stats" id="endStats"></div>
+  <div class="end-btns">
+    <button class="replay-btn" onclick="location.reload()">Play Again</button>
+    <a href="../index.html" class="replay-btn secondary">← Home</a>
+  </div>
+</section>
+
+</main>
+<script>
+const TECHNIQUES = [
+  { id:'hyperbole',   label:'Hyperbole',              emoji:'🔥', desc:'Extreme exaggeration to emphasise a point.' },
+  { id:'bandwagon',   label:'Bandwagon',               emoji:'🌊', desc:'Everyone is doing it — so should you.' },
+  { id:'celebrity',   label:'Celebrity Endorsement',   emoji:'⭐', desc:'A famous person promotes the product.' },
+  { id:'rule3',       label:'Repetition / Rule of 3',  emoji:'3️⃣', desc:'Key words or three parallel phrases for impact.' },
+  { id:'rhetorical',  label:'Rhetorical Question',     emoji:'❓', desc:'A question asked for effect, not a real answer.' },
+  { id:'scarcity',    label:'Scarcity Tactic',         emoji:'⏰', desc:'Limited supply or time creates urgency to buy.' },
+  { id:'facts',       label:'Facts & Statistics',      emoji:'📊', desc:'Numbers and data to build credibility and trust.' },
+  { id:'emotional',   label:'Emotional Appeal',        emoji:'❤️', desc:'Targets feelings — fear, joy, guilt or love.' },
+];
+
+const ALL_ADS = [
+  { brand:'BLAZO ENERGY', cat:'Drinks', headline:'THE GREATEST ENERGY DRINK EVER MADE.', copy:'Nothing on Earth comes close to the explosive, mind-blowing, universe-shattering power of Blazo. One sip and you\'ll never be the same again.', tech:'hyperbole', explain:'The phrases "greatest ever made", "universe-shattering" and "never be the same again" are wild exaggerations — classic hyperbole used to create excitement.' },
+  { brand:'FIZZY RUSH', cat:'Drinks', headline:'9 out of 10 teens choose Fizzy Rush.', copy:'97% of young people say Fizzy Rush is their number one drink. Backed by independent research. Trusted by millions.', tech:'facts', explain:'Specific statistics ("9 out of 10", "97%") are used to build trust and suggest scientific authority — this is the facts & statistics technique.' },
+  { brand:'GLOSHINE', cat:'Beauty', headline:'Don\'t you deserve the best?', copy:'Your skin works hard for you every day. Isn\'t it time you gave something back? Try Gloshine — because you\'re worth it.', tech:'rhetorical', explain:'"Don\'t you deserve the best?" and "Isn\'t it time you gave something back?" are rhetorical questions — asked for effect to make you agree, not to get a real answer.' },
+  { brand:'TRAINERS CO.', cat:'Fashion', headline:'Join the millions who already know.', copy:'Over 50 million people worldwide wear TrainersC0. The world\'s most popular trainer. Your friends are wearing them. Your idols are wearing them. Are you?', tech:'bandwagon', explain:'This ad pressures you to join the crowd — "millions", "your friends", "your idols" all suggest you\'ll be left out if you don\'t buy. Classic bandwagon.' },
+  { brand:'LUXE PERFUME', cat:'Beauty', headline:'AMAZING. UNFORGETTABLE. YOURS.', copy:'Three words. One fragrance. Luxe. Because some things cannot be described — only experienced.', tech:'rule3', explain:'"Amazing. Unforgettable. Yours." is a rule of three — three short, punchy words in parallel for maximum impact and memorability.' },
+  { brand:'ATLAS WATCHES', cat:'Luxury', headline:'"I only wear Atlas." — Marco Bellini, World Champion.', copy:'Marco Bellini has won more races than any other driver in history. And off the track, there\'s only one watch he trusts.', tech:'celebrity', explain:'Using a world champion to endorse the product is classic celebrity endorsement — the idea being that his success and status transfer to the brand.' },
+  { brand:'CLEARANCE SALE', cat:'Retail', headline:'LAST 48 HOURS. NEVER AGAIN AT THESE PRICES.', copy:'These deals expire Sunday midnight. Once they\'re gone, they\'re gone. Over 200 lines — up to 70% off — ending soon. Don\'t wait.', tech:'scarcity', explain:'"Last 48 hours", "once they\'re gone, they\'re gone" and "don\'t wait" all create urgency through artificial scarcity — making you act before you miss out.' },
+  { brand:'PAWFECT', cat:'Pet Food', headline:'Because they can\'t ask for better.', copy:'Your dog trusts you completely. Every wag of their tail is a reminder of that pure, unconditional love. Give them the nutrition they deserve with Pawfect.', tech:'emotional', explain:'This ad targets the emotional bond between owner and pet — guilt ("they can\'t ask for better"), love ("unconditional love") and responsibility. Pure emotional appeal.' },
+  { brand:'HYDRO PLUS', cat:'Health', headline:'THE ONLY WATER YOUR BODY WILL EVER NEED.', copy:'Containing 47 essential minerals, clinically tested in three independent laboratories. Hydro Plus. The last water you\'ll ever buy.', tech:'hyperbole', explain:'"The only water your body will ever need" and "the last water you\'ll ever buy" are hyperbolic claims — impossible to prove, but designed to sound definitive and impressive.' },
+  { brand:'SPORTWEAR X', cat:'Fashion', headline:'Everyone\'s switching to SportwearX. Have you?', copy:'From school runs to stadium runs, SportwearX is the brand the whole country is talking about. 3 million sold this year. Join them.', tech:'bandwagon', explain:'"Everyone\'s switching", "the whole country is talking about" and "join them" are all bandwagon — using crowd behaviour to pressure the reader into buying.' },
+  { brand:'BRIGHTSMILE', cat:'Health', headline:'"I trusted BrightSmile before the biggest night of my career."', copy:'— Zara Jones, lead singer, The Velvet Sparrows. When the spotlight is on you, every smile counts.', tech:'celebrity', explain:'Zara Jones is a celebrity endorser — her fame and success are used to create aspiration and trust in the product.' },
+  { brand:'NOVA SKINCARE', cat:'Beauty', headline:'Pure. Proven. Perfect.', copy:'Three years of research. Three award-winning formulas. Three reasons to switch today.', tech:'rule3', explain:'"Pure. Proven. Perfect." is a textbook rule of three — alliterative, parallel and punchy. The repetition of "three" throughout reinforces the pattern.' },
+  { brand:'HELPING HANDS', cat:'Charity', headline:'For just £1 a day, you can change a life.', copy:'Every child deserves warmth, food and safety. Right now, thousands are going without. You can be the reason one of them smiles tonight.', tech:'emotional', explain:'This charity ad uses emotional appeal — targeting sympathy, guilt and the desire to help. "You can be the reason" makes it feel personal and urgent.' },
+  { brand:'TECHPRO', cat:'Electronics', headline:'Rated #1 by TechWorld Magazine. Five years running.', copy:'Independent tests confirm: TechPro laptops outperform competitors in speed, battery life and reliability. 4.9 stars from 40,000 reviews.', tech:'facts', explain:'Specific, verifiable data — "#1 rated", "five years running", "4.9 stars from 40,000 reviews" — builds credibility through the facts & statistics technique.' },
+  { brand:'FLASH DEALS', cat:'Retail', headline:'ONLY 3 LEFT IN STOCK.', copy:'This price expires at midnight. We can\'t hold these deals. Thousands already snapped up — grab yours before it\'s too late.', tech:'scarcity', explain:'"Only 3 left", "expires at midnight" and "before it\'s too late" are all classic scarcity tactics — manufacturing urgency to push you into an immediate decision.' },
+  { brand:'VITABURST', cat:'Health', headline:'Don\'t you want to feel this good every single day?', copy:'Picture yourself full of energy, sharp and focused, ready for anything. VitaBurst gives you that feeling — every morning, guaranteed.', tech:'rhetorical', explain:'"Don\'t you want to feel this good every single day?" is a rhetorical question — you obviously do, which is exactly the point. It makes you agree before you\'ve even thought about it.' },
+];
+
+let questions=[], current=0, score=0;
+
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+
+function startGame(){
+  questions = shuffle(ALL_ADS);
+  current=0; score=0;
+  document.getElementById('intro').style.display='none';
+  document.getElementById('game').style.display='flex';
+  renderQ();
+}
+
+function renderQ(){
+  const q=questions[current];
+  const total=questions.length;
+  document.getElementById('progressFill').style.width=(current/total*100)+'%';
+  document.getElementById('progressLabel').textContent=(current+1)+' / '+total;
+  document.getElementById('scoreBadge').textContent=score+' / '+current;
+  document.getElementById('adBrand').textContent='★ '+q.brand;
+  document.getElementById('adCategory').textContent=q.cat.toUpperCase();
+  document.getElementById('adHeadline').textContent=q.headline;
+  document.getElementById('adCopy').textContent=q.copy;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').className='next-btn';
+
+  // Build options — correct + 3 random wrong
+  const wrong = shuffle(TECHNIQUES.filter(t=>t.id!==q.tech)).slice(0,3);
+  const opts = shuffle([TECHNIQUES.find(t=>t.id===q.tech),...wrong]);
+
+  const grid=document.getElementById('optsGrid');
+  grid.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML=`<span class="opt-emoji">${opt.emoji}</span>${opt.label}`;
+    btn.onclick=()=>pick(btn, opt.id===q.tech, q, opt);
+    grid.appendChild(btn);
+  });
+}
+
+function pick(btn, isCorrect, q, chosen){
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    b.disabled=true;
+    const techId=TECHNIQUES.find(t=>b.textContent.includes(t.label))?.id;
+    if(techId===q.tech) b.classList.add('correct');
+  });
+  if(!isCorrect) btn.classList.add('wrong');
+  if(isCorrect) score++;
+  document.getElementById('scoreBadge').textContent=score+' / '+(current+1);
+
+  const fb=document.getElementById('feedback');
+  const correctTech=TECHNIQUES.find(t=>t.id===q.tech);
+  fb.className='feedback show '+(isCorrect?'ok':'bad');
+  fb.innerHTML=(isCorrect?`<strong>✓ Correct!</strong> `:
+    `<strong>✗ Not quite — this is ${correctTech.label}.</strong> `)+
+    `<strong>${correctTech.label}:</strong> ${correctTech.desc} ${q.explain}`;
+  document.getElementById('nextBtn').className='next-btn show';
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=questions.length){ showEnd(); return; }
+  renderQ();
+}
+
+function showEnd(){
+  document.getElementById('game').style.display='none';
+  const end=document.getElementById('end');
+  end.style.display='flex';
+  const total=questions.length;
+  const pct=Math.round(score/total*100);
+  document.getElementById('endScore').textContent=score+' / '+total;
+  document.getElementById('endSub').textContent=pct>=80?'You\'ve mastered advertising techniques! 🎉':pct>=60?'Good work — you\'re getting the eye for it! 👍':'Keep studying — these techniques are everywhere once you know them! 💪';
+  document.getElementById('endStats').innerHTML=`<div class="stat-pill">Score: <span>${pct}%</span></div><div class="stat-pill">Correct: <span>${score}</span></div><div class="stat-pill">Wrong: <span>${total-score}</span></div>`;
+}
+</script>
+</body>
+</html>
