@@ -1569,7 +1569,6 @@ window.QUESTIONS = [
   { question: "Who is the caretaker/handyman figure in the village who admires Danny's father?", answer: "The Vicar is mentioned as a supporter, along with Doc Spencer and other villagers", distractors: ["Sergeant Samways secretly admires Danny's father but cannot say so", "Captain Lancaster supports him privately though he maintains discipline at school", "There is no named caretaker — support comes from Doc Spencer alone"], topic: "S5/U7 Danny Champion of the World", stage: 5, unit: 7 },
   { question: "What does Danny's father's skill as a mechanic suggest about his character?", answer: "That he is highly intelligent and capable — his genius is just applied to cars and poaching rather than to wealth and status", distractors: ["That he would rather be a mechanic than do anything adventurous", "That practical skills are more important to Dahl than imagination", "That Danny's father came from a wealthy background and received good training"], topic: "S5/U7 Danny Champion of the World", stage: 5, unit: 7 },
 
-];
 
   // S9/U8 L1 — The Aeroplane (I Want to Fly — Thembelihle Moyo)
   { question: "What is the setting of the play 'I Want to Fly'?", answer: "Zimbabwe", distractors: ["South Africa", "Nigeria", "Kenya"], topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
@@ -1722,3 +1721,4 @@ window.QUESTIONS = [
   { question: "What does the word 'dilapidated' mean?", answer: "In a state of disrepair — falling apart through age or neglect", distractors: ["Extremely clean and well-maintained", "Very large and impressive", "Newly built and unfamiliar"], topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
   { question: "What does 'illuminating' mean?", answer: "Helping to explain something clearly; also literally — giving off light", distractors: ["Making something more complicated", "Covering something in shadow", "Causing great surprise"], topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
   { question: "What does 'unleash' mean?", answer: "To release something powerful that was previously held back", distractors: ["To lock something away safely", "To describe something in vivid detail", "To slow something down gradually"], topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
+];
