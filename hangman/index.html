@@ -375,6 +375,22 @@
       }).join('');
     }
 
+    function showNextWordButton() {
+      // disable all letter buttons while waiting
+      document.querySelectorAll('.letter-btn').forEach(b => b.disabled = true);
+      let btn = document.getElementById('nextWordBtn');
+      if (!btn) {
+        btn = document.createElement('button');
+        btn.id = 'nextWordBtn';
+        btn.style.cssText = 'display:block;margin:1rem auto;padding:0.75rem 2rem;font-size:1.4rem;background:#22c55e;color:#fff;border:none;border-radius:0.5rem;cursor:pointer;font-weight:bold;';
+        btn.textContent = '▶ Next Word';
+        const board = document.getElementById('board');
+        board.parentNode.insertBefore(btn, board.nextSibling);
+      }
+      btn.style.display = 'block';
+      btn.onclick = () => { btn.style.display = 'none'; nextWord(); };
+    }
+
     function nextWord() {
       currentWord       = words[Math.floor(Math.random()*words.length)].toUpperCase();
       revealed          = currentWord.split('').map(c => c===' ' ? '/' : '_');
@@ -419,7 +435,7 @@
         if (wrongGuesses >= MAX_WRONG) {
           setTimeout(() => {
             document.getElementById('currentTurn').textContent = 'Game over! The word was: '+currentWord;
-            setTimeout(nextWord, 3000);
+            showNextWordButton();
           }, 500);
         }
       } else {
@@ -432,7 +448,7 @@
       if (!revealed.includes('_')) {
         setTimeout(() => {
           document.getElementById('currentTurn').textContent = '🎉 Team '+(currentTeam+1)+' solved it! +10 bonus!';
-          totalScores[currentTeam] += 10; renderScoreboard(); setTimeout(nextWord, 2500);
+          totalScores[currentTeam] += 10; renderScoreboard(); showNextWordButton();
         }, 400);
       }
     }
