@@ -1070,6 +1070,24 @@ window.CUSTOM_CONTENT = {
 
     { text: "The active voice shows who is doing something by placing the subject before the verb; the passive voice places the person or thing acted upon before the verb.", correct: true, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
     { text: "The passive voice is more direct than the active voice and is therefore preferred in all formal report writing.", correct: false, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+
+    { text: "Writers sometimes begin sentences with coordinating conjunctions like 'And' or 'But' for deliberate effect — creating a pause and making the writing feel more personal and emotional.", correct: true, topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+    { text: "Beginning a sentence with 'And' or 'But' is always a grammatical error and should never appear in published writing.", correct: false, topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+
+    { text: "An extended metaphor is a single comparison that is developed and explored across several lines or an entire text, not just used once.", correct: true, topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
+    { text: "An extended metaphor is a metaphor that uses particularly long or complex sentences to make the comparison seem more impressive.", correct: false, topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
+
+    { text: "An autobiography is a text in which the writer gives an account of their own life and experiences, written in their own words.", correct: true, topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+    { text: "An autobiography is a text written by one person about the life of another, usually a famous or historically important individual.", correct: false, topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+
+    { text: "A present participle verb form is made by adding '-ing' to the base verb; when placed at the start of a sentence it can make the action feel immediate and ongoing.", correct: true, topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+    { text: "A present participle verb form is used only in the past tense and is always formed by adding '-ed' to the base verb.", correct: false, topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+
+    { text: "The moral message of a story is the lesson about right and wrong that the writer conveys through the events and outcomes of the narrative.", correct: true, topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
+    { text: "The moral message of a story is a direct speech given by one of the characters at the end, summarising what everyone in the story has learnt.", correct: false, topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
+
+    { text: "An epilogue is a section at the end of a story that shows what happens to the characters after the main events have concluded, providing a sense of resolution.", correct: true, topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
+    { text: "An epilogue is an introduction placed before the first chapter that gives the reader background information about the setting and characters.", correct: false, topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
   ],
 
   words: [
@@ -2393,6 +2411,33 @@ window.CUSTOM_CONTENT = {
     { word: "passive voice", hint: "A sentence where the verb acts upon the subject — the doer comes after the verb, or is omitted", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
     { word: "formal report", hint: "A structured factual document using headings, neutral tone, and clear precise language", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
     { word: "discourse marker", hint: "A word or phrase used to organise speech or writing into sections, such as right, so or firstly", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+
+    // S8 U9 Endings
+    { word: "intervals", hint: "Short periods of time — brief visits rather than permanent stays", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+    { word: "pithy", hint: "Short and meaningful; concise but full of substance", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+    { word: "implied meaning", hint: "A meaning that is suggested rather than directly stated — the reader must read between the lines", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+    { word: "coordinating conjunction", hint: "A word such as 'and', 'but', 'or' or 'so' that links two clauses of equal importance", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+
+    { word: "loping", hint: "Moving unevenly with large strides", topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
+    { word: "silhouettes", hint: "The dark outlines of people seen against a lighter background", topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
+    { word: "extended metaphor", hint: "A metaphor developed across several lines or an entire text, exploring one comparison in detail", topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
+
+    { word: "autobiography", hint: "A text in which the writer gives an account of their own life and experiences", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+    { word: "voiceover", hint: "Words spoken by a narrator over the top of film visuals, without the narrator being seen on screen", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+    { word: "unscripted", hint: "Performed without having the words written down in advance; improvised", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+    { word: "spindly", hint: "Very thin; long and thin in an awkward way", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+
+    { word: "tedious", hint: "Dull and uninteresting; boring", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+    { word: "revered", hint: "Highly respected and admired by everyone", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+    { word: "disciple", hint: "A follower or pupil who learns from a master", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+    { word: "present participle", hint: "The base verb with '-ing' added, used to show a continuous or ongoing action", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+
+    { word: "moral message", hint: "A lesson about right and wrong conveyed through the events and outcomes of a story", topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
+    { word: "poaching", hint: "Hunting or catching animals illegally", topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
+
+    { word: "epilogue", hint: "A section at the end of a story showing what happens after the main events conclude", topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
+    { word: "listlessly", hint: "Without any energy or enthusiasm; in a tired, uninterested way", topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
+    { word: "theme", hint: "A central idea or message explored throughout a story, such as family, courage or justice", topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
   ],
 
 };
