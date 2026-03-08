@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conditional Builder — S5/U3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0d1117;--card:#161b22;--border:rgba(255,255,255,0.08);--text:#e6edf3;--muted:rgba(230,237,243,0.45);
+      --c1:#7c9ef5;--c2:#f5a623;--c3:#56d364;--c4:#f778ba;--c5:#a371f7;--radius:14px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(124,158,245,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 35% at 85% 80%,rgba(163,113,247,.05) 0%,transparent 60%);pointer-events:none;z-index:0}
+    header{position:relative;z-index:1;width:100%;max-width:960px;padding:28px 24px 0;display:flex;align-items:center;justify-content:space-between}
+    .home-btn{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:40px;color:var(--muted);text-decoration:none;font-size:.85rem;transition:all .2s}
+    .home-btn:hover{color:var(--text);border-color:var(--c1)}
+    .hdr-c{text-align:center}
+    .hdr-c h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,3.5vw,1.9rem)}
+    .hdr-c p{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+    .score-badge{background:var(--card);border:1px solid var(--border);border-radius:40px;padding:8px 14px;font-size:.85rem;font-weight:700;color:var(--c1);min-width:70px;text-align:center}
+    main{position:relative;z-index:1;width:100%;max-width:960px;padding:28px 20px 60px;display:flex;flex-direction:column;align-items:center;gap:20px}
+
+    /* ── Intro ── */
+    #intro{display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center}
+    .type-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    .type-pill{padding:7px 18px;border-radius:40px;font-size:.82rem;font-weight:600;border:1.5px solid;text-transform:uppercase;letter-spacing:.06em}
+    .tp1{border-color:var(--c1);color:var(--c1);background:rgba(124,158,245,.08)}
+    .tp2{border-color:var(--c2);color:var(--c2);background:rgba(245,166,35,.08)}
+    .tp3{border-color:var(--c3);color:var(--c3);background:rgba(86,211,100,.08)}
+    .tp4{border-color:var(--c4);color:var(--c4);background:rgba(247,120,186,.08)}
+    .tp5{border-color:var(--c5);color:var(--c5);background:rgba(163,113,247,.08)}
+    .intro-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,3rem);line-height:1.15}
+    .intro-title em{font-style:italic;color:var(--c1)}
+    .intro-desc{max-width:500px;color:var(--muted);line-height:1.65;font-size:.95rem}
+    .filter-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    .filter-btn{padding:9px 20px;border-radius:40px;font-size:.85rem;background:var(--card);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .18s}
+    .filter-btn.active,.filter-btn:hover{border-color:var(--c1);color:var(--text);background:rgba(124,158,245,.08)}
+    .start-btn{padding:15px 44px;background:var(--c1);border:none;border-radius:40px;color:#fff;font-family:'Playfair Display',serif;font-size:1.2rem;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(124,158,245,.25)}
+    .start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,158,245,.4)}
+
+    /* ── Game ── */
+    #game{display:none;flex-direction:column;align-items:center;gap:18px;width:100%}
+    .progress-row{width:100%;display:flex;align-items:center;gap:12px}
+    .progress-track{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--c1);border-radius:4px;transition:width .4s}
+    .progress-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+
+    .q-card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 32px;display:flex;flex-direction:column;gap:20px}
+    .q-tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600}
+    .q-tag span{padding:3px 10px;border-radius:20px;border:1px solid;margin-left:6px}
+    .tag-1{border-color:var(--c1);color:var(--c1)}
+    .tag-2{border-color:var(--c2);color:var(--c2)}
+    .tag-3{border-color:var(--c3);color:var(--c3)}
+    .tag-m{border-color:var(--c5);color:var(--c5)}
+    .tag-w{border-color:var(--c4);color:var(--c4)}
+    .if-clause{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.8vw,1.5rem);font-style:italic;color:var(--text);line-height:1.5;text-align:center;padding:16px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--border)}
+    .q-instruction{font-size:.82rem;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.08em}
+
+    .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:600px){.options-grid{grid-template-columns:1fr}}
+    .opt-btn{padding:16px 20px;background:rgba(255,255,255,.02);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--text);transition:all .18s;line-height:1.45}
+    .opt-btn:hover:not([disabled]){border-color:var(--c1);background:rgba(124,158,245,.06);transform:translateY(-1px)}
+    .opt-btn.correct{border-color:var(--c3);background:rgba(86,211,100,.1);color:#7ee787}
+    .opt-btn.wrong{border-color:#e85d5d;background:rgba(232,93,93,.08);color:#f08080;opacity:.7}
+    .opt-btn[disabled]{cursor:default}
+
+    .feedback{width:100%;padding:14px 22px;border-radius:var(--radius);font-size:.9rem;line-height:1.55;display:none}
+    .feedback.show{display:block}
+    .feedback.ok{background:rgba(86,211,100,.07);border:1px solid rgba(86,211,100,.22);color:#7ee787}
+    .feedback.bad{background:rgba(232,93,93,.07);border:1px solid rgba(232,93,93,.2);color:#f08080}
+    .next-btn{align-self:flex-end;padding:11px 28px;background:var(--c1);border:none;border-radius:40px;color:#fff;font-family:'Playfair Display',serif;font-size:1rem;cursor:pointer;transition:all .2s;display:none}
+    .next-btn.show{display:block}
+    .next-btn:hover{transform:translateY(-1px)}
+
+    /* ── End ── */
+    #end{display:none;flex-direction:column;align-items:center;gap:20px;text-align:center}
+    .end-icon{font-size:5rem}
+    .end-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem)}
+    .end-score{font-size:3.5rem;font-weight:800;color:var(--c1);font-family:'Playfair Display',serif}
+    .end-sub{color:var(--muted)}
+    .end-stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .stat-pill{padding:9px 18px;background:var(--card);border:1px solid var(--border);border-radius:40px;font-size:.88rem}
+    .stat-pill span{color:var(--c1);font-weight:700}
+    .end-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .replay-btn{padding:13px 32px;background:var(--c1);border:none;border-radius:40px;color:#fff;font-family:'Playfair Display',serif;font-size:1.1rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .replay-btn:hover{transform:translateY(-2px)}
+    .replay-btn.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-c">
+    <h1>Conditional Builder</h1>
+    <p>S5 · Unit 3 · Conditionals</p>
+  </div>
+  <div class="score-badge" id="scoreBadge">0 / 0</div>
+</header>
+<main>
+
+<!-- ── INTRO ── -->
+<section id="intro">
+  <div class="type-pills">
+    <div class="type-pill tp1">1st Conditional</div>
+    <div class="type-pill tp2">2nd Conditional</div>
+    <div class="type-pill tp3">3rd Conditional</div>
+    <div class="type-pill tp5">Mixed</div>
+    <div class="type-pill tp4">I Wish</div>
+  </div>
+  <h2 class="intro-title">Complete the<br><em>Conditional</em></h2>
+  <p class="intro-desc">Match each if-clause to the correct result clause. Choose which types to practise, then pick the right ending to build a grammatically perfect sentence.</p>
+  <div class="filter-row" id="filterRow">
+    <button class="filter-btn active" data-type="all">All Types</button>
+    <button class="filter-btn" data-type="1st">1st Conditional</button>
+    <button class="filter-btn" data-type="2nd">2nd Conditional</button>
+    <button class="filter-btn" data-type="3rd">3rd Conditional</button>
+    <button class="filter-btn" data-type="mixed">Mixed</button>
+    <button class="filter-btn" data-type="wish">I Wish / Should Have</button>
+  </div>
+  <button class="start-btn" onclick="startGame()">Start Game</button>
+</section>
+
+<!-- ── GAME ── -->
+<section id="game">
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 0</div>
+  </div>
+  <div class="q-card">
+    <div class="q-tag">If-clause <span id="typeTag" class="tag-1"></span></div>
+    <div class="if-clause" id="ifClause"></div>
+    <div class="q-instruction">Choose the correct result clause:</div>
+    <div class="options-grid" id="optionsGrid"></div>
+  </div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
+</section>
+
+<!-- ── END ── -->
+<section id="end">
+  <div class="end-icon">🏆</div>
+  <div class="end-title">Well done!</div>
+  <div class="end-score" id="endScore"></div>
+  <div class="end-sub" id="endSub"></div>
+  <div class="end-stats" id="endStats"></div>
+  <div class="end-btns">
+    <button class="replay-btn" onclick="location.reload()">Play Again</button>
+    <a href="../index.html" class="replay-btn secondary">← Home</a>
+  </div>
+</section>
+
+</main>
+<script>
+// ── All conditional questions ─────────────────────────────────────────────────
+const ALL_QUESTIONS = [
+  // 1st Conditional
+  { type:'1st', if:'If it rains tomorrow,', correct:'we will cancel the match.', distractors:['we would cancel the match.','we would have cancelled the match.','we cancel the match.'], explain:'1st conditional: If + present simple → will + infinitive. Real, possible future situation.' },
+  { type:'1st', if:'If she studies hard,', correct:'she will pass the exam.', distractors:['she would pass the exam.','she would have passed the exam.','she passes the exam.'], explain:'1st conditional uses "will" in the result clause for a likely future outcome.' },
+  { type:'1st', if:'If you leave now,', correct:'you will catch the last bus.', distractors:['you would catch the last bus.','you would have caught the last bus.','you catch the last bus.'], explain:'Real, likely situation: If + present simple → will + infinitive.' },
+  { type:'1st', if:'If they don\'t hurry,', correct:'they will miss the flight.', distractors:['they would miss the flight.','they would have missed the flight.','they are missing the flight.'], explain:'Negative first conditional — the warning is real and possible.' },
+  { type:'1st', if:'If he apologises,', correct:'she will forgive him.', distractors:['she would forgive him.','she would have forgiven him.','she forgives him.'], explain:'If + present simple → will + infinitive for a real possible future.' },
+  { type:'1st', if:'If we recycle more,', correct:'we will reduce pollution.', distractors:['we would reduce pollution.','we would have reduced pollution.','we reduced pollution.'], explain:'First conditional for a genuinely achievable future result.' },
+
+  // 2nd Conditional
+  { type:'2nd', if:'If I had more time,', correct:'I would learn to play the guitar.', distractors:['I will learn to play the guitar.','I would have learnt to play the guitar.','I learn to play the guitar.'], explain:'2nd conditional: If + past simple → would + infinitive. Imaginary present/future.' },
+  { type:'2nd', if:'If she were taller,', correct:'she would join the basketball team.', distractors:['she will join the basketball team.','she would have joined the basketball team.','she joins the basketball team.'], explain:'"Were" is used for all persons in formal 2nd conditional. Would + infinitive follows.' },
+  { type:'2nd', if:'If he knew the answer,', correct:'he would tell us.', distractors:['he will tell us.','he would have told us.','he tells us.'], explain:'He doesn\'t know — this is an imaginary situation, so we use would + infinitive.' },
+  { type:'2nd', if:'If they lived closer,', correct:'we would see them more often.', distractors:['we will see them more often.','we would have seen them more often.','we see them more often.'], explain:'Imaginary present condition → would + infinitive in the result.' },
+  { type:'2nd', if:'If I were the president,', correct:'I would lower taxes.', distractors:['I will lower taxes.','I would have lowered taxes.','I lower taxes.'], explain:'"If I were" signals an imaginary situation. Result uses would + infinitive.' },
+  { type:'2nd', if:'If Danny\'s father weren\'t a poacher,', correct:'they would have a very different life.', distractors:['they will have a very different life.','they would have had a very different life.','they have a very different life.'], explain:'Imaginary present: If + past simple → would + infinitive.' },
+
+  // 3rd Conditional
+  { type:'3rd', if:'If she had left earlier,', correct:'she would have caught the train.', distractors:['she will have caught the train.','she would catch the train.','she catches the train.'], explain:'3rd conditional: If + past perfect → would have + past participle. Past that didn\'t happen.' },
+  { type:'3rd', if:'If he had studied,', correct:'he would have passed the exam.', distractors:['he will have passed the exam.','he would pass the exam.','he passed the exam.'], explain:'He didn\'t study — this is an imaginary past. Would have + past participle.' },
+  { type:'3rd', if:'If they had listened to the warning,', correct:'they would have avoided the accident.', distractors:['they will have avoided the accident.','they would avoid the accident.','they avoided the accident.'], explain:'Past perfect in the if-clause, would have + past participle in the result.' },
+  { type:'3rd', if:'If Danny hadn\'t been so brave,', correct:'his father would have been stuck in the woods all night.', distractors:['his father will have been stuck in the woods all night.','his father would be stuck in the woods all night.','his father is stuck in the woods all night.'], explain:'Third conditional reflects on a past event that actually happened differently.' },
+  { type:'3rd', if:'If the sleeping pills had been weaker,', correct:'the pheasants would have woken up on time.', distractors:['the pheasants will have woken up on time.','the pheasants would wake up on time.','the pheasants woke up on time.'], explain:'If + past perfect → would have + past participle for an imaginary past outcome.' },
+  { type:'3rd', if:'If she hadn\'t forgotten her umbrella,', correct:'she wouldn\'t have got soaked.', distractors:['she won\'t have got soaked.','she wouldn\'t get soaked.','she doesn\'t get soaked.'], explain:'Negative third conditional — wouldn\'t have + past participle.' },
+
+  // Mixed
+  { type:'mixed', if:'If I had taken that job offer,', correct:'I would be living in Paris now.', distractors:['I would have lived in Paris now.','I will be living in Paris now.','I lived in Paris now.'], explain:'Mixed conditional: past condition (3rd) + present result (2nd). The past decision affects now.' },
+  { type:'mixed', if:'If she hadn\'t trained so hard as a child,', correct:'she wouldn\'t be a champion today.', distractors:['she wouldn\'t have been a champion today.','she won\'t be a champion today.','she isn\'t a champion today.'], explain:'Past perfect if-clause + would + be now = classic mixed conditional.' },
+  { type:'mixed', if:'If he had emigrated earlier,', correct:'he would be fluent in the language by now.', distractors:['he would have been fluent in the language by now.','he will be fluent in the language by now.','he is fluent in the language by now.'], explain:'The past action (emigrating) has a consequence in the present — would + infinitive.' },
+  { type:'mixed', if:'If Danny\'s father had gone to university,', correct:'his life would look very different now.', distractors:['his life would have looked very different now.','his life will look very different now.','his life looked very different now.'], explain:'Past hypothetical → present consequence: would + infinitive (not would have).' },
+
+  // I Wish / Should Have / Needn't Have
+  { type:'wish', if:'I wish I', correct:'lived by the sea.', distractors:['will live by the sea.','had lived by the sea.','live by the sea.'], explain:'"I wish + past simple" expresses a desire to change a present situation.' },
+  { type:'wish', if:'I wish I', correct:'hadn\'t said that.', distractors:['didn\'t say that.','won\'t say that.','haven\'t said that.'], explain:'"I wish + past perfect" expresses regret about something in the past.' },
+  { type:'wish', if:'She wishes she', correct:'could speak French.', distractors:['can speak French.','will speak French.','has spoken French.'], explain:'"Wish + could" expresses a wish about a present ability.' },
+  { type:'wish', if:'You should have', correct:'called before coming.', distractors:['call before coming.','be calling before coming.','called to come.'], explain:'"Should have + past participle" = criticism about a past action that didn\'t happen.' },
+  { type:'wish', if:'She needn\'t have', correct:'bought so much food — there\'s plenty left.', distractors:['buy so much food — there\'s plenty left.','been buying so much food — there\'s plenty left.','to buy so much food — there\'s plenty left.'], explain:'"Needn\'t have + past participle" = did something that turned out to be unnecessary.' },
+  { type:'wish', if:'He shouldn\'t have', correct:'left without saying goodbye.', distractors:['leave without saying goodbye.','been left without saying goodbye.','to leave without saying goodbye.'], explain:'"Shouldn\'t have + past participle" = it was wrong that he did this.' },
+];
+
+let filtered = [], current = 0, score = 0, total = 0, activeType = 'all';
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeType = btn.dataset.type;
+  });
+});
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function typeLabel(t){ return {1:'1st Conditional','2nd':'2nd Conditional','3rd':'3rd Conditional',mixed:'Mixed',wish:'I Wish / Should Have'}[t]||t; }
+function typeClass(t){ return {1:'tag-1','2nd':'tag-2','3rd':'tag-3',mixed:'tag-m',wish:'tag-w'}[t]||'tag-1'; }
+// fix key lookup — type stored as '1st' string
+function typeLabelFixed(t){
+  const map={'1st':'1st Conditional','2nd':'2nd Conditional','3rd':'3rd Conditional','mixed':'Mixed','wish':'I Wish / Should Have'};
+  return map[t]||t;
+}
+function typeClassFixed(t){
+  const map={'1st':'tag-1','2nd':'tag-2','3rd':'tag-3','mixed':'tag-m','wish':'tag-w'};
+  return map[t]||'tag-1';
+}
+
+function startGame(){
+  filtered = activeType==='all' ? shuffle(ALL_QUESTIONS) : shuffle(ALL_QUESTIONS.filter(q=>q.type===activeType));
+  if(!filtered.length){ alert('No questions for that filter.'); return; }
+  current=0; score=0; total=filtered.length;
+  document.getElementById('intro').style.display='none';
+  document.getElementById('game').style.display='flex';
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = filtered[current];
+  document.getElementById('progressFill').style.width = (current/total*100)+'%';
+  document.getElementById('progressLabel').textContent = (current+1)+' / '+total;
+  document.getElementById('scoreBadge').textContent = score+' / '+current;
+  const tag = document.getElementById('typeTag');
+  tag.textContent = typeLabelFixed(q.type);
+  tag.className = typeClassFixed(q.type);
+  document.getElementById('ifClause').textContent = q.if;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('nextBtn').className='next-btn';
+
+  const opts = shuffle([q.correct,...q.distractors]);
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.textContent = q.if+' '+opt;
+    btn.onclick=()=>answer(btn, opt===q.correct, q);
+    grid.appendChild(btn);
+  });
+}
+
+function answer(btn, isCorrect, q){
+  document.querySelectorAll('.opt-btn').forEach(b=>{ b.disabled=true; if(b.textContent===q.if+' '+q.correct) b.classList.add('correct'); });
+  btn.classList.add(isCorrect?'correct':'wrong');
+  if(isCorrect) score++;
+  const fb=document.getElementById('feedback');
+  fb.className='feedback show '+(isCorrect?'ok':'bad');
+  fb.textContent=(isCorrect?'✓ Correct! ':'✗ Not quite. ')+q.explain;
+  document.getElementById('scoreBadge').textContent=score+' / '+(current+1);
+  document.getElementById('nextBtn').className='next-btn show';
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=total){ showEnd(); return; }
+  renderQuestion();
+}
+
+function showEnd(){
+  document.getElementById('game').style.display='none';
+  const end=document.getElementById('end');
+  end.style.display='flex';
+  document.getElementById('endScore').textContent=score+' / '+total;
+  const pct=Math.round(score/total*100);
+  document.getElementById('endSub').textContent=pct>=80?'Excellent conditional grammar! 🎉':pct>=60?'Good work — keep practising! 👍':'Keep at it — conditionals take time! 💪';
+  document.getElementById('endStats').innerHTML=`<div class="stat-pill">Score: <span>${pct}%</span></div><div class="stat-pill">Correct: <span>${score}</span></div><div class="stat-pill">Wrong: <span>${total-score}</span></div>`;
+}
+</script>
+</body>
+</html>
