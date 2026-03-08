@@ -998,6 +998,78 @@ window.CUSTOM_CONTENT = {
 
     { text: "Adverbs add detail and meaning to verbs and can show how a character is feeling or behaving.", correct: true, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
     { text: "Adverbs describe nouns and are usually placed directly before the noun they modify.", correct: false, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+
+    { text: "A writer's narrative voice and their own personal views are not necessarily the same thing.", correct: true, topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+    { text: "The narrator of a text is always the same person as the writer who created the text.", correct: false, topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+
+    { text: "A discussion text considers different opinions in a balanced way and usually concludes with the writer's overall view.", correct: true, topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+    { text: "A discussion text argues strongly for one point of view and uses persuasive techniques to change the reader's mind.", correct: false, topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+
+    { text: "A writer can create humour by placing short simple sentences after longer ones to deliver an unexpected punchline.", correct: true, topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
+    { text: "Short simple sentences should always be avoided in entertaining writing because they make the text too easy to read.", correct: false, topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
+
+    { text: "Dystopian fiction is popular partly because it explores human fears about being controlled by those more powerful.", correct: true, topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+    { text: "Dystopian fiction is set in an ideal future world where technology has solved all of humanity's problems.", correct: false, topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+
+    { text: "Writers choose synonyms carefully because different words with similar meanings can create very different effects.", correct: true, topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+    { text: "In creative writing, writers should always choose the most complex synonym available to impress the reader.", correct: false, topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+
+    { text: "Withholding information in a narrative can create tension and mystery, encouraging the reader to keep reading.", correct: true, topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+    { text: "A writer should always reveal all information to the reader as quickly as possible to avoid confusion.", correct: false, topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+
+    { text: "A coordinating conjunction such as 'but' or 'although' joins a main clause to a subordinate clause.", correct: false, topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+    { text: "A subordinating conjunction such as 'although' or 'while' joins a main clause to a subordinate clause.", correct: true, topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+
+    { text: "Writers can combine techniques such as figurative language, sentence types and punctuation to create a powerful overall effect.", correct: true, topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
+    { text: "Using only one technique at a time is more effective than combining techniques, as too many features confuse the reader.", correct: false, topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
+
+    { text: "Phonetic spelling and elision in dialogue can make a character's voice sound realistic and reveal something about their background.", correct: true, topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+    { text: "All fictional dialogue should be written in standard English so that readers can understand what characters are saying.", correct: false, topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+
+    { text: "In advice texts, modal verbs like 'must', 'should' and 'may' show different levels of obligation and possibility.", correct: true, topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+    { text: "Advice texts should avoid using imperative verbs as these sound too aggressive and may put readers off.", correct: false, topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+
+    { text: "A superhero film typically features a secret identity, an origin story explaining the hero's powers, and a conflict with a supervillain.", correct: true, topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
+    { text: "Superhero films are unusual in that they rarely use exaggeration and instead aim to portray their characters as completely realistic.", correct: false, topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
+
+    { text: "A film script includes detailed descriptions of camera shots and settings because film is a visual medium that tells its story through images.", correct: true, topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
+    { text: "Film scripts are identical to stage play scripts because both are performed by actors speaking lines of dialogue.", correct: false, topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
+
+    { text: "Emotive language uses words chosen to produce a strong emotional response in the reader, such as shock, fear or sympathy.", correct: true, topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+    { text: "Emotive language is always neutral and factual, designed to give readers accurate information without influencing their feelings.", correct: false, topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+
+    { text: "A healthy fear of the dark is deeply ingrained in humans because throughout evolutionary history, darkness placed us in genuine danger.", correct: true, topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+    { text: "Children's fear of the dark is caused entirely by horror films and monster stories, and does not have any natural or biological basis.", correct: false, topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+
+    { text: "A fable is a short story designed to teach a moral lesson, often using symbolic characters and a simple style.", correct: true, topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { text: "A fable is a long realistic novel that explores the complex inner lives of its characters without any moral message.", correct: false, topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+
+    { text: "In 'The Selfish Giant', the giant undergoes a character journey, transforming from a selfish antagonist into a kind and generous figure through the influence of the little boy.", correct: true, topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+    { text: "In 'The Selfish Giant', the giant remains selfish and cruel from the beginning to the end of the story, and never shows any change in character.", correct: false, topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+
+    { text: "A comparative adjective compares two things and is usually formed by adding -er to the adjective or using the word 'more' before it.", correct: true, topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { text: "A comparative adjective describes the most extreme version of something and is formed using -est or 'most'.", correct: false, topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+
+    { text: "An extended metaphor is a comparison that is developed and sustained throughout an entire piece of writing, building up a layered picture of its subject.", correct: true, topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+    { text: "An extended metaphor is a very long simile that uses the word 'like' or 'as' many times in a single sentence.", correct: false, topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+
+    { text: "Imagery in fiction writing can include aural, visual and tactile details that help the reader experience the setting through their senses.", correct: true, topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+    { text: "Imagery in fiction writing refers only to visual descriptions — it is never used to describe sounds or physical sensations.", correct: false, topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+
+    { text: "Explicit information in a text is stated directly and clearly, while implicit information is suggested through clues and must be inferred by the reader.", correct: true, topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+    { text: "Explicit and implicit information mean the same thing — both refer to details the reader must work out from clues in the text.", correct: false, topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+
+    { text: "A monologue is a long speech given by a single character, used to reveal their thoughts, feelings and point of view.", correct: true, topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+    { text: "A monologue is a conversation between two characters that reveals their contrasting points of view on a shared problem.", correct: false, topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+
+    { text: "When using multiple adjectives before a noun, the correct order is: opinion, then size, shape, age, colour, origin, material and qualifier.", correct: true, topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+    { text: "When using multiple adjectives before a noun, colour should always come first, followed by size, then opinion and finally age.", correct: false, topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+
+    { text: "Contrast is a structural technique where two different things are placed side by side to highlight their differences and create a particular effect on the reader.", correct: true, topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+    { text: "Contrast in fiction always involves two characters who hold opposing views, and is only effective when one of them changes their mind by the end.", correct: false, topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+
+    { text: "The active voice shows who is doing something by placing the subject before the verb; the passive voice places the person or thing acted upon before the verb.", correct: true, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+    { text: "The passive voice is more direct than the active voice and is therefore preferred in all formal report writing.", correct: false, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
   ],
 
   words: [
@@ -2187,6 +2259,140 @@ window.CUSTOM_CONTENT = {
     { word: "morphology", hint: "The study of how words are formed and how prefixes and suffixes change their meaning", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
     { word: "mistrust", hint: "A feeling of doubt or suspicion about someone", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
     { word: "constellations", hint: "Groups of stars that form a pattern in the sky and are given names", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+
+    { word: "ARPAnet", hint: "The early US military computer network that eventually led to the internet", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+    { word: "hypertext", hint: "A system of text that links to other documents or pages online", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+    { word: "infophile", hint: "Someone who enjoys finding and collecting information", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+    { word: "formality", hint: "The level of seriousness and officialness in language or behaviour", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+
+    { word: "bias", hint: "Being unfairly prejudiced for or against a particular person, group or idea", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+    { word: "rhetorical", hint: "Describing a question asked to make a point rather than to get an answer", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+    { word: "emotive", hint: "Language designed to appeal to feelings and emotions", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+    { word: "imperative", hint: "A word or phrase that gives an order or command", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+    { word: "blog", hint: "A web page where someone regularly writes and posts articles, like an online journal", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+
+    { word: "prediction", hint: "A statement about what you think will happen in the future", topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
+    { word: "artificial intelligence", hint: "Machines such as computers and robots that can perform tasks requiring human-like thinking", topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
+    { word: "humour", hint: "When things are funny or comical; the quality that makes people laugh", topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
+
+    { word: "dystopian", hint: "Describing an imaginary future society where things have gone badly wrong", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+    { word: "permit", hint: "An official licence that grants permission to do something", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+    { word: "sector", hint: "A defined area or part of a city or region", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+    { word: "context", hint: "The circumstances and background surrounding an event or text that help explain it", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+
+    { word: "synonym", hint: "A word or phrase that has the same or similar meaning to another word", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+    { word: "syllable", hint: "A unit of pronunciation forming a word or part of a word, containing one vowel sound", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+    { word: "menacing", hint: "Threatening or suggesting danger", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+    { word: "dread", hint: "Great fear or anxiety about something that might happen", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+
+    { word: "narrative", hint: "A series of connected events told as a story", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+    { word: "climax", hint: "The most exciting or important moment in a story", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+    { word: "claustrophobia", hint: "A fear of being trapped in small or enclosed spaces", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+    { word: "weary", hint: "Very tired, especially after a lot of effort or hardship", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+
+    { word: "perspective", hint: "The angle or point of view a story or account is told from — whose eyes you see events through", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+    { word: "discrimination", hint: "When people are treated unfairly, often because of their race, sex or age", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+    { word: "selflessness", hint: "Caring more about others than yourself; putting other people's needs first", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+    { word: "counter-argument", hint: "An argument that presents the opposing side of a debate", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+    { word: "modal verb", hint: "One of nine verbs — can, may, must, shall, will, could, might, should, would — used to show possibility or obligation", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+
+    { word: "disorientated", hint: "Confused about which direction to go in; unsure of your surroundings", topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
+    { word: "excessive", hint: "More than is necessary or reasonable; too much of something", topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
+    { word: "dithering", hint: "Wasting time by not making a decision; being slow and hesitant", topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
+
+    { word: "phonetic spelling", hint: "Writing words as they sound rather than using standard spelling", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+    { word: "elision", hint: "Missing out letters from words, as often happens in spoken or informal language", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+    { word: "silhouetted", hint: "Shown as a dark shape against a bright background", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+    { word: "subsided", hint: "Gradually faded away or became less intense", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+
+    { word: "empathy", hint: "The ability to understand and share other people's feelings", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+    { word: "assertiveness", hint: "Confident, sometimes forceful behaviour when expressing your needs or opinions", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+    { word: "buoyancy", hint: "An optimistic, cheerful attitude even in difficult situations", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+    { word: "frankness", hint: "Being honest and direct, even when it is difficult", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+
+    { word: "exaggeration", hint: "Making something seem much worse, better or more extreme than it really is", topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
+    { word: "inadvertently", hint: "Accidentally, without meaning to", topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
+    { word: "lair", hint: "A secret hideout, especially one used by a villain or hero", topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
+
+    { word: "establishing shot", hint: "The first image in a film sequence, showing the viewer where the scene takes place", topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
+    { word: "storyboard", hint: "A series of drawings or images showing the planned order of key events in a film story", topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
+    { word: "exterior shot", hint: "A camera image showing the outside of a building or location", topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
+
+    // S8 U6 Monsters
+    { word: "devouring", hint: "Eating something quickly and greedily", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+    { word: "gruesome", hint: "Causing horror; unpleasantly shocking to see", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+    { word: "eyewitness", hint: "A person who saw an event happen with their own eyes", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+    { word: "emotive language", hint: "Words and phrases chosen to produce a strong emotional response in the reader", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+    { word: "exaggerated", hint: "Made to seem much more extreme or dramatic than it really is", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+
+    { word: "psyche", hint: "The mind — especially the part that shapes feelings, thoughts and behaviour", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+    { word: "instinctively", hint: "Without conscious thought; as a natural, automatic response", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+    { word: "evolutionary", hint: "Related to the slow process by which living things change over many generations", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+    { word: "teraphobia", hint: "The technical term for an intense fear of monsters", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+    { word: "ingrained", hint: "So deeply fixed in someone's mind or habits that it is very hard to change", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+
+    { word: "fable", hint: "A short story written to teach a moral lesson, often using symbolic characters", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { word: "antagonist", hint: "The character who creates problems in a story; the villain who opposes the hero", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { word: "eponymous character", hint: "The character whose name appears in the title of the story or work", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { word: "prosecuted", hint: "Taken to court for committing a crime or breaking the law", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { word: "personification", hint: "A literary technique that gives human qualities or actions to non-human things", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { word: "time connective", hint: "A word or phrase that shows how events are linked in time — such as then, next or after", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+
+    { word: "secondary character", hint: "A supporting character who is not the main character but who affects the story", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+    { word: "crept", hint: "Moved quietly and carefully so as not to be noticed", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+    { word: "hastened", hint: "Moved quickly; hurried towards something", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+    { word: "blossom", hint: "The flowers that appear on a tree, especially in spring", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+    { word: "feeble", hint: "Weak and lacking strength or energy", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+
+    { word: "rhythm", hint: "A regular, repeating pattern of sound or beat in music or poetry", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { word: "rhyme", hint: "When the end sounds of words match, as in feet and meat", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { word: "comparative adjective", hint: "An adjective comparing two things, usually formed with -er or more", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { word: "chronological order", hint: "The order in which events occurred in time — earliest to most recent", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { word: "paralysed", hint: "Unable to move; frozen in place, often by fear", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { word: "seared", hint: "Burned deeply; fixed vividly and permanently in the memory", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+
+    { word: "fatberg", hint: "A giant mass of solidified fat and waste that blocks underground sewers", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+    { word: "sewer", hint: "An underground pipe or tunnel that carries waste water away", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+    { word: "colossal", hint: "Extremely large; enormous", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+    { word: "extended metaphor", hint: "A comparison developed and sustained throughout an entire piece of writing", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+    { word: "sensationalised", hint: "Described in an exaggerated or dramatic way to attract the reader's attention", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+    { word: "spew", hint: "To force something out in large quantities", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+
+    // S8 U7 The Plantation
+    { word: "harmattan", hint: "A dry wind that blows over west Africa from the desert", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+    { word: "abstractedly", hint: "Lost in thought; not fully paying attention to your surroundings", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+    { word: "brooding", hint: "Deep in thought, possibly sad or angry", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+    { word: "thicket", hint: "A dense group of bushes or trees growing closely together", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+    { word: "imagery", hint: "Descriptive language that appeals to the senses — sight, sound, touch, taste or smell", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+
+    { word: "rallied", hint: "Acted together in support of each other; joined forces", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+    { word: "appraised", hint: "Judged or considered the value or character of someone", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+    { word: "treachery", hint: "Betrayal; the act of being disloyal to people who trust you", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+    { word: "explicit", hint: "Stated clearly and directly in the text — nothing needs to be worked out", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+    { word: "implicit", hint: "Suggested or hinted at but not directly stated — the reader must infer it", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+
+    { word: "cowering", hint: "Crouching or shrinking away, usually in fear", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+    { word: "admonishing", hint: "Firmly warning or reprimanding someone", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+    { word: "rigidness", hint: "Inability to change one's mind or accept other ideas; stubbornness", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+    { word: "monologue", hint: "A long speech given by one character, revealing their thoughts and feelings", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+    { word: "strode", hint: "Walked quickly and purposefully with long paces", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+
+    { word: "accosted", hint: "Approached aggressively and confronted by someone", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+    { word: "wayward", hint: "Difficult to control; unpredictable and hard to manage", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+    { word: "countered", hint: "Responded in a slightly hostile or defensive way", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+    { word: "sweltering", hint: "Extremely hot and humid", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+    { word: "swarmed", hint: "Moved quickly in a large group all at once", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+
+    { word: "adversary", hint: "An opponent or enemy", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+    { word: "engulfed", hint: "Surrounded or swallowed up completely", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+    { word: "frenziedly", hint: "In an out-of-control, frantic and wild way", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+    { word: "petered out", hint: "Gradually got weaker and weaker before stopping completely", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+    { word: "contrast", hint: "Placing two different things side by side to highlight their differences", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+
+    { word: "active voice", hint: "A sentence where the subject performs the action — the doer comes before the verb", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+    { word: "passive voice", hint: "A sentence where the verb acts upon the subject — the doer comes after the verb, or is omitted", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+    { word: "formal report", hint: "A structured factual document using headings, neutral tone, and clear precise language", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+    { word: "discourse marker", hint: "A word or phrase used to organise speech or writing into sections, such as right, so or firstly", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
   ],
 
 };
