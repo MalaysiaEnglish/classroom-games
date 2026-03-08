@@ -978,6 +978,26 @@ window.CUSTOM_CONTENT = {
     { text: "The villain was final exposed after years of careful deception.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
     { text: "Foreshadowing hints at future events without revealing them directly.", correct: true, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
     { text: "Foreshadowing hints at future events without reveal them directly.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+
+    { text: "The phrase 'an open secret' is an example of an oxymoron because it combines two contradictory ideas.", correct: true, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { text: "The phrase 'an open secret' is an example of a simile because it compares two different things.", correct: false, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { text: "Non-standard English includes words and grammatical patterns that fall outside conventional forms of the language.", correct: true, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { text: "Non-standard English is simply English that contains spelling mistakes and should always be corrected.", correct: false, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+
+    { text: "Dashes create a more conversational and informal effect than commas in a sentence.", correct: true, topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
+    { text: "Brackets and commas always create exactly the same effect in a sentence.", correct: false, topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
+
+    { text: "Ben Gunn's non-standard English and contractions help to create a distinctive and believable character voice.", correct: true, topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { text: "Ben Gunn speaks in formal, standard English throughout the novel to show that he is well-educated.", correct: false, topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+
+    { text: "In a drama script, stage directions tell actors how to move and speak, and help the reader picture the scene.", correct: true, topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
+    { text: "Stage directions are optional in a script and are usually removed before the play is performed.", correct: false, topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
+
+    { text: "A compound-complex sentence contains two main clauses and at least one subordinate clause.", correct: true, topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+    { text: "A compound-complex sentence contains one main clause and two subordinate clauses.", correct: false, topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+
+    { text: "Adverbs add detail and meaning to verbs and can show how a character is feeling or behaving.", correct: true, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+    { text: "Adverbs describe nouns and are usually placed directly before the noun they modify.", correct: false, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
   ],
 
   words: [
@@ -2133,6 +2153,40 @@ window.CUSTOM_CONTENT = {
     { word: "genre", hint: "A particular type of text — such as adventure, folk tale, comedy or science fiction", topic: "S8/U2/L6 Grandmother's Song", stage: 8, unit: 2, lesson: 6 },
     { word: "conventions", hint: "The 'rules' of how a story is told or a piece of writing is set out", topic: "S8/U2/L6 Grandmother's Song", stage: 8, unit: 2, lesson: 6 },
     { word: "blurb", hint: "The information on the back cover of a book that tells the reader about the story", topic: "S8/U2/L6 Grandmother's Song", stage: 8, unit: 2, lesson: 6 },
+
+    { word: "hoard", hint: "A collection of valuable things, often kept hidden", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { word: "oxymoron", hint: "A figure of speech that combines two contradictory ideas, e.g. 'an open secret'", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { word: "hyperbole", hint: "An exaggerated statement used for effect, not meant to be taken literally", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { word: "stereotype", hint: "A familiar but oversimplified idea of a type of person or character", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { word: "intrigued", hint: "Fascinated and curious, wanting to find out more", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+
+    { word: "uninhabited", hint: "Not lived in by people; empty of human residents", topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
+    { word: "formality", hint: "The level of seriousness or officialness in language or behaviour", topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
+    { word: "subsidiary", hint: "Less important or secondary; supporting the main idea", topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
+
+    { word: "hoarse", hint: "Having a rough, croaky-sounding voice", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { word: "marooned", hint: "Left behind alone on a deserted island as a punishment", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { word: "desolate", hint: "Empty, bleak and uninhabited", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { word: "buccaneers", hint: "Pirates; lawless sailors who attacked ships", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { word: "monologue", hint: "A long speech or story told by a single character", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { word: "musket", hint: "An old type of long-barrelled gun", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+
+    { word: "script", hint: "The written text of a play, including dialogue and stage directions", topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
+    { word: "dialogue", hint: "A conversation between two or more characters in a story or play", topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
+    { word: "confidential", hint: "Meant to be kept secret; private", topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
+
+    { word: "transfixed", hint: "So fascinated or shocked that you cannot move", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+    { word: "recede", hint: "To go back or get smaller; to move away", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+    { word: "shallows", hint: "Areas of water that are not very deep", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+    { word: "fantasy", hint: "An imaginative story set in a strange or magical world with unusual characters", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+    { word: "particles", hint: "Tiny pieces or fragments of a substance", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+
+    { word: "adverb", hint: "A word that adds detail or information to a verb, often ending in -ly", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+    { word: "abruptly", hint: "Suddenly and unexpectedly", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+    { word: "backstory", hint: "The fictional history or background created for a character in a story", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+    { word: "morphology", hint: "The study of how words are formed and how prefixes and suffixes change their meaning", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+    { word: "mistrust", hint: "A feeling of doubt or suspicion about someone", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+    { word: "constellations", hint: "Groups of stars that form a pattern in the sky and are given names", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
   ],
 
 };
