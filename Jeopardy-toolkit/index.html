@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeopardy Quiz</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --bg:     #0a0f1e;
+  --panel:  #111827;
+  --border: rgba(255,255,255,0.1);
+  --gold:   #f7b731;
+  --gold2:  #e6a817;
+  --accent: #00c9a7;
+  --red:    #ef4444;
+  --text:   #f1f5f9;
+  --dim:    rgba(241,245,249,0.5);
+
+  /* Category palette — cycles if more than 6 cats */
+  --cat0: #1e3a5f;
+  --cat1: #1a5c2a;
+  --cat2: #4a1a6b;
+  --cat3: #7a2a0e;
+  --cat4: #0d4a3a;
+  --cat5: #3a2a00;
+
+  --cat0-lit: #60a5fa;
+  --cat1-lit: #4ade80;
+  --cat2-lit: #c084fc;
+  --cat3-lit: #fb923c;
+  --cat4-lit: #2dd4bf;
+  --cat5-lit: #fbbf24;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif; min-height:100vh; }
+select, select option { background:#1a2a38; color:white; }
+
+/* ── HEADER ── */
+header {
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  border-bottom:3px solid var(--gold);
+  padding:10px 20px; display:flex; align-items:center;
+  justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+header h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1rem,2.5vw,1.5rem);
+  color:var(--gold); letter-spacing:0.04em;
+  transition: all 0.3s;
+}
+.header-btns { display:flex; gap:8px; }
+.hbtn {
+  padding:6px 14px; border-radius:6px; border:1px solid var(--border);
+  background:rgba(255,255,255,0.07); color:var(--text);
+  font-family:'Lora',serif; font-size:0.8rem; cursor:pointer; transition:all 0.2s;
+}
+.hbtn:hover { background:rgba(255,255,255,0.15); }
+.hbtn.gold { background:var(--gold); color:#000; border-color:var(--gold); font-weight:700; }
+
+/* ── SETUP ── */
+#setupScreen {
+  max-width:760px; margin:30px auto; padding:0 16px;
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+.setup-title {
+  font-family:'Playfair Display',serif; font-size:2rem;
+  color:var(--gold); text-align:center; margin-bottom:2px;
+}
+.setup-sub { color:var(--dim); text-align:center; font-size:0.88rem; }
+.setup-section { width:100%; }
+.setup-label {
+  font-size:0.72rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.12em; color:var(--accent); margin-bottom:8px; display:block;
+}
+
+/* Title input */
+.title-input {
+  width:100%; padding:10px 14px; background:rgba(255,255,255,0.05);
+  border:1px solid var(--border); border-radius:8px;
+  color:white; font-family:'Playfair Display',serif; font-size:1.1rem;
+  outline:none; transition:border 0.2s;
+}
+.title-input:focus { border-color:var(--gold); }
+.title-input::placeholder { color:var(--dim); font-style:italic; }
+
+/* Question textarea */
+.q-paste-wrap { position:relative; width:100%; }
+textarea.q-paste {
+  width:100%; min-height:260px; padding:14px 16px;
+  background:rgba(255,255,255,0.04); border:1px solid var(--border);
+  border-radius:10px; color:var(--text); font-family:'Lora',serif;
+  font-size:0.82rem; line-height:1.7; resize:vertical; outline:none;
+  transition:border 0.2s;
+}
+textarea.q-paste:focus { border-color:var(--gold); }
+textarea.q-paste::placeholder { color:rgba(241,245,249,0.25); font-style:italic; }
+
+/* Format guide */
+.format-guide {
+  margin-top:8px; padding:12px 16px;
+  background:rgba(0,201,167,0.06); border:1px solid rgba(0,201,167,0.2);
+  border-radius:8px; font-size:0.75rem; color:var(--dim); line-height:1.8;
+}
+.format-guide strong { color:var(--accent); }
+.format-guide code { color:var(--gold); font-family:monospace; font-size:0.78rem; }
+
+/* Parse error */
+.parse-error {
+  display:none; margin-top:8px; padding:10px 14px;
+  background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3);
+  border-radius:8px; color:#fca5a5; font-size:0.82rem;
+}
+.parse-error.visible { display:block; }
+
+/* Teams */
+.team-setup { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.team-row {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.05); border:1px solid var(--border);
+  border-radius:8px; padding:8px 12px; flex:1; min-width:200px; max-width:240px;
+}
+.team-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+.team-row input {
+  flex:1; background:none; border:none; color:white;
+  font-family:'Lora',serif; font-size:0.9rem; outline:none;
+}
+.team-toggle {
+  width:20px; height:20px; border-radius:4px; border:1px solid var(--border);
+  background:rgba(255,255,255,0.05); cursor:pointer; display:flex;
+  align-items:center; justify-content:center; font-size:0.75rem;
+  color:var(--dim); transition:all 0.2s;
+}
+.team-toggle.on { background:var(--accent); color:#000; border-color:var(--accent); }
+
+.start-btn {
+  padding:14px 52px; font-size:1.1rem; font-weight:700;
+  background:var(--gold); color:#000; border:none; border-radius:10px;
+  cursor:pointer; font-family:'Lora',serif; letter-spacing:0.06em;
+  transition:all 0.2s; box-shadow:0 4px 20px rgba(247,183,49,0.4);
+}
+.start-btn:hover { background:var(--gold2); transform:scale(1.03); }
+
+/* ── SCORE BAR ── */
+#scoreBar {
+  display:flex; gap:6px; padding:8px 12px;
+  background:rgba(0,0,0,0.3); border-bottom:1px solid var(--border);
+  overflow-x:auto; flex-wrap:wrap;
+}
+.score-chip {
+  display:flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,0.06); border:2px solid transparent;
+  border-radius:8px; padding:5px 12px; transition:all 0.3s; white-space:nowrap;
+}
+.score-chip.active-team { border-color:var(--gold); background:rgba(247,183,49,0.12); }
+.score-chip.stealing   { border-color:var(--accent); background:rgba(0,201,167,0.1); animation:pulse 0.8s ease infinite alternate; }
+@keyframes pulse { from{opacity:0.7;} to{opacity:1;} }
+.chip-dot   { width:10px; height:10px; border-radius:50%; }
+.chip-name  { font-weight:700; font-size:0.82rem; }
+.chip-score { font-size:1rem; font-weight:900; color:var(--gold); margin-left:4px; }
+
+/* ── BOARD ── */
+#boardScreen { display:none; }
+.board-wrap { padding:10px 8px; }
+
+.cat-headers { display:grid; gap:6px; margin-bottom:6px; }
+.cat-header {
+  border-radius:8px 8px 0 0; padding:10px 6px; text-align:center;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(0.6rem,1.5vw,0.88rem);
+  font-weight:900; letter-spacing:0.03em; line-height:1.2;
+}
+
+.board-grid { display:grid; gap:6px; }
+.q-cell {
+  aspect-ratio:1.6; border-radius:6px; display:flex; align-items:center;
+  justify-content:center; cursor:pointer; transition:all 0.2s;
+  font-family:'Playfair Display',serif; font-size:clamp(1rem,2.5vw,1.8rem);
+  font-weight:900; color:var(--gold); border:2px solid rgba(255,255,255,0.1);
+  user-select:none;
+}
+.q-cell:hover:not(.used) { filter:brightness(1.4); transform:scale(1.03); border-color:var(--gold); }
+.q-cell.used { background:rgba(255,255,255,0.04) !important; color:rgba(255,255,255,0.15); cursor:default; border-color:transparent; }
+
+.turn-bar {
+  text-align:center; padding:8px; font-size:clamp(0.85rem,2vw,1.1rem);
+  font-weight:700; color:var(--gold); margin-bottom:6px;
+}
+
+/* ── QUESTION MODAL ── */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200;
+  display:flex; align-items:center; justify-content:center; padding:16px;
+}
+.modal-box {
+  background:#1e293b; border-radius:16px; padding:28px 32px;
+  max-width:700px; width:100%;
+  border:2px solid rgba(255,255,255,0.15);
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes modalIn { from{transform:scale(0.8);opacity:0;} to{transform:scale(1);opacity:1;} }
+.modal-cat {
+  font-size:0.7rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:0.15em; margin-bottom:6px;
+}
+.modal-points {
+  font-family:'Playfair Display',serif; font-size:2.5rem;
+  font-weight:900; color:var(--gold); margin-bottom:14px; line-height:1;
+}
+.modal-q {
+  font-size:clamp(1rem,2.5vw,1.25rem); line-height:1.7;
+  margin-bottom:18px; color:white;
+}
+.modal-q em { color:var(--gold); font-style:normal; font-weight:700; }
+.modal-answer {
+  background:rgba(0,201,167,0.1); border:1px solid var(--accent);
+  border-radius:8px; padding:12px 16px; margin-bottom:18px;
+  font-size:1rem; color:var(--accent); font-weight:600;
+  display:none;
+}
+.modal-answer.visible { display:block; animation:fadeIn 0.4s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:translateY(0);} }
+
+.modal-btns { display:flex; gap:8px; flex-wrap:wrap; }
+.mbtn {
+  flex:1; min-width:100px; padding:10px 14px; border-radius:8px;
+  border:none; font-family:'Lora',serif; font-size:0.9rem;
+  font-weight:700; cursor:pointer; transition:all 0.2s;
+}
+.mbtn-reveal  { background:rgba(255,255,255,0.1); color:white; border:1px solid var(--border); }
+.mbtn-reveal:hover { background:rgba(255,255,255,0.2); }
+.mbtn-correct { background:#22c55e; color:white; }
+.mbtn-correct:hover { background:#16a34a; }
+.mbtn-wrong   { background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid #ef4444; }
+.mbtn-wrong:hover { background:rgba(239,68,68,0.35); }
+.mbtn-close   { background:rgba(255,255,255,0.07); color:var(--dim); border:1px solid var(--border); }
+.mbtn-close:hover { background:rgba(255,255,255,0.15); }
+
+/* Steal */
+.steal-picker {
+  background:rgba(0,0,0,0.3); border-radius:10px; padding:14px;
+  margin-bottom:14px; display:none;
+}
+.steal-picker.visible { display:block; animation:fadeIn 0.3s ease; }
+.steal-label { font-size:0.72rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:0.12em; color:var(--accent); margin-bottom:8px; }
+.steal-teams { display:flex; gap:8px; flex-wrap:wrap; }
+.steal-team-btn {
+  padding:8px 16px; border-radius:6px; border:1px solid var(--border);
+  background:rgba(255,255,255,0.06); color:white; cursor:pointer;
+  font-family:'Lora',serif; font-weight:700; font-size:0.85rem;
+  display:flex; align-items:center; gap:6px; transition:all 0.2s;
+}
+.steal-team-btn:hover { border-color:var(--accent); background:rgba(0,201,167,0.12); }
+.steal-team-btn.selected { background:var(--accent); color:#000; border-color:var(--accent); }
+.stealing-banner {
+  background:rgba(0,201,167,0.15); border:1px solid var(--accent);
+  border-radius:8px; padding:8px 14px; margin-bottom:14px;
+  font-size:0.9rem; color:var(--accent); font-weight:600; display:none;
+}
+.stealing-banner.visible { display:block; }
+
+/* ── WIN ── */
+.win-overlay {
+  position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.88);
+  display:flex; align-items:center; justify-content:center;
+}
+.win-box {
+  background:#1e293b; border:2px solid var(--gold);
+  border-radius:20px; padding:36px 44px; text-align:center;
+  animation:modalIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  max-width:500px; width:90%;
+}
+.win-trophy { font-size:4rem; margin-bottom:8px; }
+.win-title  { font-family:'Playfair Display',serif; font-size:2rem; color:var(--gold); margin-bottom:6px; }
+.win-name   { font-size:1.5rem; font-weight:900; margin-bottom:16px; }
+.final-scores { display:flex; flex-direction:column; gap:6px; margin-bottom:20px; }
+.final-row {
+  display:flex; align-items:center; gap:10px;
+  background:rgba(255,255,255,0.05); border-radius:8px; padding:8px 14px;
+}
+.final-row.winner { background:rgba(247,183,49,0.15); border:1px solid var(--gold); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="headerTitle">🎯 Jeopardy Quiz</h1>
+  <div class="header-btns">
+    <button class="hbtn" onclick="showSetup()">⚙ Setup</button>
+    <button class="hbtn" onclick="document.documentElement.requestFullscreen?.()">⛶ Fullscreen</button>
+  </div>
+</header>
+
+<!-- ══ SETUP ══ -->
+<div id="setupScreen">
+  <div class="setup-title">🎯 Jeopardy Builder</div>
+  <p class="setup-sub">Paste your questions below, set up teams, and play.</p>
+
+  <!-- Quiz title -->
+  <div class="setup-section">
+    <label class="setup-label">Quiz Title</label>
+    <input class="title-input" id="quizTitle" type="text" placeholder="e.g. History of Language, Romeo & Juliet, Of Mice and Men…" maxlength="80">
+  </div>
+
+  <!-- Question paste -->
+  <div class="setup-section">
+    <label class="setup-label">Questions — paste your content below</label>
+    <div class="q-paste-wrap">
+      <textarea class="q-paste" id="qPaste" spellcheck="false" placeholder="CATEGORY: Middle English
+Q: What language did the Normans bring to England?
+A: French (Norman French)
+Q: What does the Middle English word 'wif' mean in modern English?
+A: Woman (later narrowed to 'wife')
+Q: Give one example of a Middle English word still unchanged today.
+A: Good, fair, face (accept any)
+
+CATEGORY: Word Evolution
+Q: What is 'semantic narrowing'? Give an example.
+A: When a word's meaning becomes more restricted — e.g. 'deer' once meant any animal
+
+(3–6 categories, 3–5 questions each. Points auto-assigned: 100/200/300…)"></textarea>
+    </div>
+    <div class="format-guide">
+      <strong>Format guide:</strong><br>
+      <code>CATEGORY: Your Category Name</code> — starts each section<br>
+      <code>Q: Your question text here</code> — one question per line<br>
+      <code>A: The answer</code> — immediately follows its Q<br>
+      Blank lines between categories are fine. <strong>3–6 categories, 3–5 questions each.</strong>
+      Points are assigned automatically (100, 200, 300…).
+    </div>
+    <div class="parse-error" id="parseError"></div>
+  </div>
+
+  <!-- Teams -->
+  <div class="setup-section">
+    <label class="setup-label">Teams (toggle on/off · click name to rename)</label>
+    <div class="team-setup" id="teamSetup"></div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">▶ START QUIZ</button>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="boardScreen">
+  <div id="scoreBar"></div>
+  <div class="board-wrap">
+    <div class="turn-bar" id="turnBar">— Pick a question —</div>
+    <div class="cat-headers" id="catHeaders"></div>
+    <div class="board-grid"  id="boardGrid"></div>
+  </div>
+</div>
+
+<!-- ══ QUESTION MODAL ══ -->
+<div class="modal-overlay" id="qModal" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-cat"    id="mCat"></div>
+    <div class="modal-points" id="mPts"></div>
+    <div class="modal-q"      id="mQ"></div>
+    <div class="modal-answer" id="mAns"></div>
+    <div class="stealing-banner" id="stealBanner"></div>
+    <div class="steal-picker"    id="stealPicker">
+      <div class="steal-label">Which team is stealing?</div>
+      <div class="steal-teams" id="stealTeams"></div>
+    </div>
+    <div class="modal-btns" id="mBtns"></div>
+  </div>
+</div>
+
+<!-- ══ WIN ══ -->
+<div class="win-overlay" id="winOverlay" style="display:none;">
+  <div class="win-box">
+    <div class="win-trophy">🏆</div>
+    <div class="win-title">Game Over!</div>
+    <div class="win-name" id="winName"></div>
+    <div class="final-scores" id="finalScores"></div>
+    <button class="hbtn gold" onclick="showSetup()">Play Again</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  PARSE QUESTIONS FROM PASTE
+// ══════════════════════════════════════════════════════════════
+function parseQuestions(raw) {
+  // Returns { categories: [{name, questions:[{pts,q,a}]}] } or throws error string
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  const categories = [];
+  let current = null;
+  let pendingQ = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (/^CATEGORY\s*:/i.test(line)) {
+      if (pendingQ) throw `Question without answer before "${line}". Every Q: needs an A: on the next line.`;
+      const name = line.replace(/^CATEGORY\s*:\s*/i, '').trim();
+      if (!name) throw 'Found a CATEGORY: line with no name.';
+      current = { name, questions: [] };
+      categories.push(current);
+
+    } else if (/^Q\s*:/i.test(line)) {
+      if (!current) throw 'Found a Q: line before any CATEGORY: heading.';
+      if (pendingQ) throw `Two Q: lines in a row — missing an A: after: "${pendingQ}"`;
+      pendingQ = line.replace(/^Q\s*:\s*/i, '').trim();
+      if (!pendingQ) throw 'Found a Q: with no question text.';
+
+    } else if (/^A\s*:/i.test(line)) {
+      if (!pendingQ) throw `Found an A: line without a preceding Q: — near: "${line}"`;
+      const answer = line.replace(/^A\s*:\s*/i, '').trim();
+      if (!answer) throw 'Found an A: with no answer text.';
+      current.questions.push({ q: pendingQ, a: answer });
+      pendingQ = null;
+    }
+    // Ignore any other lines (blank lines already filtered, comments etc.)
+  }
+
+  if (pendingQ) throw `Last question has no answer: "${pendingQ}"`;
+
+  // Validate dimensions
+  if (categories.length < 2) throw 'Please include at least 2 categories.';
+  if (categories.length > 6) throw `Too many categories (${categories.length}). Maximum is 6.`;
+
+  for (const cat of categories) {
+    if (cat.questions.length < 2) throw `Category "${cat.name}" has fewer than 2 questions. Please add more.`;
+    if (cat.questions.length > 5) throw `Category "${cat.name}" has more than 5 questions (${cat.questions.length}). Maximum is 5 per category.`;
+  }
+
+  // Check all cats have same number of questions
+  const qCounts = categories.map(c => c.questions.length);
+  const minQ = Math.min(...qCounts);
+  const maxQ = Math.max(...qCounts);
+  // Trim to min if uneven (lenient) — or warn
+  if (minQ !== maxQ) {
+    // Trim longer categories silently to match shortest
+    for (const cat of categories) {
+      cat.questions = cat.questions.slice(0, minQ);
+    }
+  }
+
+  // Assign points: 100 per row
+  const pts = [100,200,300,400,500];
+  for (const cat of categories) {
+    cat.questions.forEach((q, i) => { q.pts = pts[i] || (i+1)*100; });
+  }
+
+  return categories;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TEAM CONFIG
+// ══════════════════════════════════════════════════════════════
+const TEAM_COLORS   = ['#00c9a7','#f7b731','#ef4444','#a29bfe','#38bdf8','#fb923c'];
+const DEFAULT_NAMES = ['Team 1','Team 2','Team 3','Team 4','Team 5','Team 6'];
+let teamConfig = DEFAULT_NAMES.map((n,i) => ({ name:n, color:TEAM_COLORS[i], active: i < 3 }));
+
+function buildTeamSetup() {
+  const el = document.getElementById('teamSetup'); el.innerHTML = '';
+  teamConfig.forEach((t,i) => {
+    const row = document.createElement('div'); row.className = 'team-row';
+    row.innerHTML = `
+      <div class="team-dot" style="background:${t.color}"></div>
+      <input type="text" value="${t.name}"
+        onchange="teamConfig[${i}].name=this.value" placeholder="Team ${i+1}">
+      <div class="team-toggle ${t.active?'on':''}"
+        onclick="toggleTeam(${i})" title="Toggle team">${t.active?'✓':'+'}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function toggleTeam(i) {
+  const active = teamConfig.filter(t=>t.active);
+  if (teamConfig[i].active && active.length <= 2) return;
+  teamConfig[i].active = !teamConfig[i].active;
+  buildTeamSetup();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════════════════════════════
+let CATEGORIES = [];
+let QUESTIONS  = [];   // QUESTIONS[catIdx][rowIdx] = {pts,q,a}
+
+let teams          = [];
+let used           = [];
+let currentTeamIdx = 0;
+let stealTeamIdx   = -1;
+let currentCell    = null;
+let answerRevealed = false;
+let stealing       = false;
+
+// Cat colour palette (bg / lit accent)
+const CAT_BG  = ['var(--cat0)','var(--cat1)','var(--cat2)','var(--cat3)','var(--cat4)','var(--cat5)'];
+const CAT_LIT = ['var(--cat0-lit)','var(--cat1-lit)','var(--cat2-lit)','var(--cat3-lit)','var(--cat4-lit)','var(--cat5-lit)'];
+
+function startGame() {
+  // Parse questions
+  const raw = document.getElementById('qPaste').value.trim();
+  const errEl = document.getElementById('parseError');
+  errEl.classList.remove('visible');
+
+  if (!raw) {
+    errEl.textContent = 'Please paste your questions above before starting.';
+    errEl.classList.add('visible'); return;
+  }
+
+  let parsed;
+  try {
+    parsed = parseQuestions(raw);
+  } catch(e) {
+    errEl.textContent = '⚠ ' + e;
+    errEl.classList.add('visible'); return;
+  }
+
+  CATEGORIES = parsed;
+  QUESTIONS  = parsed.map(cat => cat.questions);
+
+  // Teams
+  teams = teamConfig.filter(t=>t.active).map(t=>({ name:t.name, color:t.color, score:0 }));
+  if (teams.length < 2) { alert('Please enable at least 2 teams.'); return; }
+
+  // Init state
+  used = CATEGORIES.map(cat => cat.questions.map(() => false));
+  currentTeamIdx = 0; stealing = false; stealTeamIdx = -1;
+
+  // Update header title
+  const title = document.getElementById('quizTitle').value.trim();
+  document.getElementById('headerTitle').textContent = title ? '🎯 ' + title : '🎯 Jeopardy Quiz';
+
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('boardScreen').style.display = 'block';
+  renderBoard(); renderScoreBar(); updateTurnBar();
+}
+
+function showSetup() {
+  document.getElementById('winOverlay').style.display   = 'none';
+  document.getElementById('boardScreen').style.display  = 'none';
+  document.getElementById('setupScreen').style.display  = 'flex';
+  buildTeamSetup();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  BOARD
+// ══════════════════════════════════════════════════════════════
+function renderBoard() {
+  const numCats = CATEGORIES.length;
+  const numRows = QUESTIONS[0].length;
+
+  // Set grid columns dynamically
+  const colTemplate = `repeat(${numCats},1fr)`;
+  document.getElementById('catHeaders').style.gridTemplateColumns = colTemplate;
+  document.getElementById('boardGrid').style.gridTemplateColumns  = colTemplate;
+
+  // Category headers
+  const headers = document.getElementById('catHeaders'); headers.innerHTML = '';
+  CATEGORIES.forEach((cat, i) => {
+    const h = document.createElement('div');
+    h.className = 'cat-header';
+    h.style.background = CAT_BG[i % CAT_BG.length];
+    h.textContent = cat.name;
+    headers.appendChild(h);
+  });
+
+  // Grid rows × cols
+  const grid = document.getElementById('boardGrid'); grid.innerHTML = '';
+  for (let row = 0; row < numRows; row++) {
+    for (let cat = 0; cat < numCats; cat++) {
+      const cell = document.createElement('div');
+      const pts  = QUESTIONS[cat][row].pts;
+      const isUsed = used[cat][row];
+      cell.className = 'q-cell' + (isUsed ? ' used' : '');
+      cell.style.background = isUsed ? '' : CAT_BG[cat % CAT_BG.length];
+      cell.textContent = isUsed ? '' : `£${pts}`;
+      cell.dataset.cat = cat; cell.dataset.row = row;
+      if (!isUsed) cell.onclick = () => openQuestion(cat, row);
+      grid.appendChild(cell);
+    }
+  }
+}
+
+function updateCell(cat, row) {
+  document.querySelectorAll('.q-cell').forEach(c => {
+    if (+c.dataset.cat === cat && +c.dataset.row === row) {
+      c.classList.add('used');
+      c.style.background = '';
+      c.textContent = '';
+      c.onclick = null;
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SCORE BAR
+// ══════════════════════════════════════════════════════════════
+function renderScoreBar() {
+  const bar = document.getElementById('scoreBar'); bar.innerHTML = '';
+  teams.forEach((t, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'score-chip'
+      + (i === currentTeamIdx && !stealing ? ' active-team' : '')
+      + (stealing && i === stealTeamIdx    ? ' stealing'    : '');
+    chip.id = `chip-${i}`;
+    chip.innerHTML = `<div class="chip-dot" style="background:${t.color}"></div>
+      <span class="chip-name">${t.name}</span>
+      <span class="chip-score">£${t.score}</span>`;
+    bar.appendChild(chip);
+  });
+}
+
+function updateTurnBar(msg) {
+  const t = teams[currentTeamIdx];
+  const el = document.getElementById('turnBar');
+  el.textContent = msg || `${t.name}'s turn — pick a question`;
+  el.style.color  = t.color;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  QUESTION MODAL
+// ══════════════════════════════════════════════════════════════
+function openQuestion(cat, row) {
+  currentCell = { cat, row };
+  stealing = false; stealTeamIdx = -1; answerRevealed = false;
+  const q = QUESTIONS[cat][row];
+
+  document.getElementById('mCat').textContent = CATEGORIES[cat].name;
+  document.getElementById('mCat').style.color = CAT_LIT[cat % CAT_LIT.length];
+  document.getElementById('mPts').textContent = `£${q.pts}`;
+  document.getElementById('mQ').textContent   = q.q;
+  document.getElementById('mAns').textContent = `✓ Answer: ${q.a}`;
+  document.getElementById('mAns').classList.remove('visible');
+  document.getElementById('stealBanner').classList.remove('visible');
+  document.getElementById('stealPicker').classList.remove('visible');
+
+  buildModalBtns('initial');
+  document.getElementById('qModal').style.display = 'flex';
+}
+
+function buildModalBtns(state) {
+  const btns = document.getElementById('mBtns'); btns.innerHTML = '';
+  if (state === 'initial') {
+    add('Reveal Answer','mbtn-reveal', revealAnswer);
+    add('✓ Correct',    'mbtn-correct', () => judgeAnswer(true));
+    add('✗ Wrong',      'mbtn-wrong',   () => judgeAnswer(false));
+    add('✕ Skip',       'mbtn-close',   closeModal);
+  } else if (state === 'steal') {
+    add('✓ Correct (steal)', 'mbtn-correct', () => judgeSteal(true));
+    add('✗ Wrong (steal)',   'mbtn-wrong',   () => judgeSteal(false));
+    add('✕ No steal',        'mbtn-close',   () => { closeModal(); advanceTurn(); });
+  } else if (state === 'revealed-initial') {
+    add('✓ Correct', 'mbtn-correct', () => judgeAnswer(true));
+    add('✗ Wrong',   'mbtn-wrong',   () => judgeAnswer(false));
+    add('✕ Skip',    'mbtn-close',   closeModal);
+  } else if (state === 'revealed-steal') {
+    add('✓ Correct (steal)', 'mbtn-correct', () => judgeSteal(true));
+    add('✗ Wrong (steal)',   'mbtn-wrong',   () => judgeSteal(false));
+    add('✕ No steal',        'mbtn-close',   () => { closeModal(); advanceTurn(); });
+  }
+  function add(label, cls, fn) {
+    const b = document.createElement('button');
+    b.className = `mbtn ${cls}`; b.textContent = label; b.onclick = fn;
+    btns.appendChild(b);
+  }
+}
+
+function revealAnswer() {
+  answerRevealed = true;
+  document.getElementById('mAns').classList.add('visible');
+  buildModalBtns(stealing ? 'revealed-steal' : 'revealed-initial');
+}
+
+function judgeAnswer(correct) {
+  const q = QUESTIONS[currentCell.cat][currentCell.row];
+  if (correct) {
+    teams[currentTeamIdx].score += q.pts;
+    playCorrect(); markUsed(); closeModal(); advanceTurn();
+  } else {
+    playWrong(); stealing = true; showStealPicker();
+  }
+}
+
+function showStealPicker() {
+  const banner = document.getElementById('stealBanner');
+  banner.textContent = `${teams[currentTeamIdx].name} got it wrong! Another team can steal…`;
+  banner.classList.add('visible');
+  const picker = document.getElementById('stealPicker');
+  picker.classList.add('visible');
+  const stealTeamsEl = document.getElementById('stealTeams'); stealTeamsEl.innerHTML = '';
+  teams.forEach((t, i) => {
+    if (i === currentTeamIdx) return;
+    const btn = document.createElement('button');
+    btn.className = 'steal-team-btn' + (i === stealTeamIdx ? ' selected' : '');
+    btn.innerHTML = `<span style="width:8px;height:8px;border-radius:50%;background:${t.color};display:inline-block;"></span> ${t.name}`;
+    btn.onclick = () => { stealTeamIdx = i; renderScoreBar(); showStealPicker(); buildModalBtns(answerRevealed ? 'revealed-steal' : 'steal'); };
+    stealTeamsEl.appendChild(btn);
+  });
+  buildModalBtns(answerRevealed ? 'revealed-steal' : 'steal');
+  renderScoreBar();
+}
+
+function judgeSteal(correct) {
+  if (stealTeamIdx === -1) { alert('Please select a stealing team first.'); return; }
+  const q = QUESTIONS[currentCell.cat][currentCell.row];
+  if (correct) { teams[stealTeamIdx].score += q.pts; playCorrect(); }
+  else { playWrong(); }
+  markUsed(); closeModal();
+  if (correct) currentTeamIdx = stealTeamIdx;
+  advanceTurn();
+}
+
+function markUsed() {
+  const { cat, row } = currentCell;
+  used[cat][row] = true;
+  updateCell(cat, row);
+}
+
+function closeModal() {
+  document.getElementById('qModal').style.display = 'none';
+  stealing = false; stealTeamIdx = -1;
+  renderScoreBar();
+}
+
+function advanceTurn() {
+  const allDone = used.every(col => col.every(v => v));
+  if (allDone) { setTimeout(showWin, 400); return; }
+  currentTeamIdx = (currentTeamIdx + 1) % teams.length;
+  renderScoreBar(); updateTurnBar();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  WIN
+// ══════════════════════════════════════════════════════════════
+function showWin() {
+  const sorted = [...teams].sort((a,b) => b.score - a.score);
+  const winner = sorted[0];
+  document.getElementById('winName').textContent = `🎉 ${winner.name} wins with £${winner.score}!`;
+  document.getElementById('winName').style.color = winner.color;
+  const fs = document.getElementById('finalScores'); fs.innerHTML = '';
+  sorted.forEach((t, i) => {
+    const row = document.createElement('div');
+    row.className = 'final-row' + (i === 0 ? ' winner' : '');
+    row.innerHTML = `<span style="width:10px;height:10px;border-radius:50%;background:${t.color};display:inline-block;"></span>
+      <span style="flex:1;font-weight:700">${t.name}</span>
+      <span style="font-size:1.2rem;font-weight:900;color:var(--gold)">£${t.score}</span>`;
+    fs.appendChild(row);
+  });
+  document.getElementById('winOverlay').style.display = 'flex';
+  playWin();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  AUDIO
+// ══════════════════════════════════════════════════════════════
+let actx = null;
+function ac() { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); return actx; }
+function playCorrect() {
+  const ctx = ac();
+  [523,659,784].forEach((f,i) => {
+    const t = ctx.currentTime + i*0.1;
+    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.3,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.25);
+    o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.25);
+  });
+}
+function playWrong() {
+  const ctx = ac(), t = ctx.currentTime;
+  [300,220].forEach((f,i) => {
+    const st = t + i*0.15;
+    const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.25,st); g.gain.exponentialRampToValueAtTime(0.001,st+0.2);
+    o.connect(g); g.connect(ctx.destination); o.start(st); o.stop(st+0.2);
+  });
+}
+function playWin() {
+  const ctx = ac();
+  [523,659,784,1047,1319].forEach((f,i) => {
+    const t = ctx.currentTime + i*0.13;
+    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.35,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+    o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+0.4);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+buildTeamSetup();
+</script>
+</body>
+</html>
