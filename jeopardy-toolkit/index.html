@@ -42,7 +42,7 @@ select, select option { background:#1a2a38; color:white; }
 header {
   background:linear-gradient(135deg,#0f172a,#1e293b);
   border-bottom:3px solid var(--gold);
-  padding:10px 20px; display:flex; align-items:center;
+  padding:6px 16px; display:flex; align-items:center;
   justify-content:space-between; gap:12px; flex-wrap:wrap;
 }
 header h1 {
@@ -145,7 +145,7 @@ textarea.q-paste::placeholder { color:rgba(241,245,249,0.25); font-style:italic;
 
 /* ── SCORE BAR ── */
 #scoreBar {
-  display:flex; gap:6px; padding:8px 12px;
+  display:flex; gap:5px; padding:5px 10px;
   background:rgba(0,0,0,0.3); border-bottom:1px solid var(--border);
   overflow-x:auto; flex-wrap:wrap;
 }
@@ -163,21 +163,22 @@ textarea.q-paste::placeholder { color:rgba(241,245,249,0.25); font-style:italic;
 
 /* ── BOARD ── */
 #boardScreen { display:none; }
-.board-wrap { padding:10px 8px; }
+.board-wrap { padding:4px 6px; }
 
-.cat-headers { display:grid; gap:6px; margin-bottom:6px; }
+.cat-headers { display:grid; gap:4px; margin-bottom:4px; }
 .cat-header {
-  border-radius:8px 8px 0 0; padding:10px 6px; text-align:center;
+  border-radius:6px 6px 0 0; padding:6px 4px; text-align:center;
   font-family:'Playfair Display',serif;
-  font-size:clamp(0.6rem,1.5vw,0.88rem);
+  font-size:clamp(0.55rem,1.2vw,0.82rem);
   font-weight:900; letter-spacing:0.03em; line-height:1.2;
 }
 
-.board-grid { display:grid; gap:6px; }
+.board-grid { display:grid; gap:4px; }
 .q-cell {
-  aspect-ratio:1.6; border-radius:6px; display:flex; align-items:center;
+  height: clamp(44px, 9.5vh, 80px);
+  border-radius:5px; display:flex; align-items:center;
   justify-content:center; cursor:pointer; transition:all 0.2s;
-  font-family:'Playfair Display',serif; font-size:clamp(1rem,2.5vw,1.8rem);
+  font-family:'Playfair Display',serif; font-size:clamp(0.9rem,2.2vw,1.6rem);
   font-weight:900; color:var(--gold); border:2px solid rgba(255,255,255,0.1);
   user-select:none;
 }
@@ -185,8 +186,8 @@ textarea.q-paste::placeholder { color:rgba(241,245,249,0.25); font-style:italic;
 .q-cell.used { background:rgba(255,255,255,0.04) !important; color:rgba(255,255,255,0.15); cursor:default; border-color:transparent; }
 
 .turn-bar {
-  text-align:center; padding:8px; font-size:clamp(0.85rem,2vw,1.1rem);
-  font-weight:700; color:var(--gold); margin-bottom:6px;
+  text-align:center; padding:4px; font-size:clamp(0.78rem,1.6vw,0.95rem);
+  font-weight:700; color:var(--gold); margin-bottom:4px;
 }
 
 /* ── QUESTION MODAL ── */
