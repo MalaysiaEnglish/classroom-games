@@ -19,7 +19,8 @@ window.CUSTOM_CONTENT = {
   sentences: [
 
 
-    // ── Generic Grammar — Passive Voice ───────────────────────
+
+    // ── Generic Grammar ──
     { text: "The letter was written by the student.",          correct: true,  topic: "Passive Voice" },
     { text: "The cake was ate by the children.",               correct: false, topic: "Passive Voice" },
     { text: "English is spoken all over the world.",           correct: true,  topic: "Passive Voice" },
@@ -30,8 +31,6 @@ window.CUSTOM_CONTENT = {
     { text: "The homework should been done before class.",     correct: false, topic: "Passive Voice" },
     { text: "The books were returned to the library.",         correct: true,  topic: "Passive Voice" },
     { text: "The car has been drove to the garage.",           correct: false, topic: "Passive Voice" },
-
-    // ── Generic Grammar — Present Tense ───────────────────────
     { text: "She goes to school every day.",                   correct: true,  topic: "Present Tense" },
     { text: "He don't like spicy food.",                       correct: false, topic: "Present Tense" },
     { text: "They are playing football right now.",            correct: true,  topic: "Present Tense" },
@@ -39,8 +38,6 @@ window.CUSTOM_CONTENT = {
     { text: "She doesn't know the answer.",                    correct: true,  topic: "Present Tense" },
     { text: "We go always to the market on Sunday.",           correct: false, topic: "Present Tense" },
     { text: "He is having a car.",                             correct: false, topic: "Present Tense" },
-
-    // ── Generic Grammar — Past Tense ──────────────────────────
     { text: "We went to the cinema last night.",               correct: true,  topic: "Past Tense" },
     { text: "She didn't came to class yesterday.",             correct: false, topic: "Past Tense" },
     { text: "They were playing when it started raining.",      correct: true,  topic: "Past Tense" },
@@ -48,8 +45,6 @@ window.CUSTOM_CONTENT = {
     { text: "He had already eaten before we arrived.",         correct: true,  topic: "Past Tense" },
     { text: "Did you went to the party?",                      correct: false, topic: "Past Tense" },
     { text: "We didn't saw him at the shop.",                  correct: false, topic: "Past Tense" },
-
-    // ── Generic Grammar — Conditionals ────────────────────────
     { text: "If it rains, we will stay inside.",               correct: true,  topic: "Conditionals" },
     { text: "If I would have money, I will buy a car.",        correct: false, topic: "Conditionals" },
     { text: "She would travel more if she had more time.",     correct: true,  topic: "Conditionals" },
@@ -57,8 +52,6 @@ window.CUSTOM_CONTENT = {
     { text: "If they had left earlier, they wouldn't have missed the bus.", correct: true,  topic: "Conditionals" },
     { text: "I would have helped if you would have asked.",    correct: false, topic: "Conditionals" },
     { text: "Unless you hurry, we will be late.",              correct: true,  topic: "Conditionals" },
-
-    // ── Generic Grammar — Reported Speech ─────────────────────
     { text: "She said that she was tired.",                    correct: true,  topic: "Reported Speech" },
     { text: "He told me he will come tomorrow.",               correct: false, topic: "Reported Speech" },
     { text: "They asked if I had seen the film.",              correct: true,  topic: "Reported Speech" },
@@ -66,22 +59,16 @@ window.CUSTOM_CONTENT = {
     { text: "She asked where did I live.",                     correct: false, topic: "Reported Speech" },
     { text: "They said they had already finished.",            correct: true,  topic: "Reported Speech" },
     { text: "He told that he was feeling unwell.",             correct: false, topic: "Reported Speech" },
-
-    // ── Generic Grammar — Articles ────────────────────────────
     { text: "She is a honest person.",                         correct: false, topic: "Articles" },
     { text: "He plays the guitar every evening.",              correct: true,  topic: "Articles" },
     { text: "I had a egg for breakfast.",                      correct: false, topic: "Articles" },
     { text: "The sun rises in the east.",                      correct: true,  topic: "Articles" },
     { text: "She gave him an useful advice.",                  correct: false, topic: "Articles" },
-
-    // ── Generic Grammar — Comparatives ────────────────────────
     { text: "She is more taller than her sister.",             correct: false, topic: "Comparatives" },
     { text: "This is the most expensive phone in the shop.",   correct: true,  topic: "Comparatives" },
     { text: "This book is more better than that one.",         correct: false, topic: "Comparatives" },
     { text: "She is the cleverest student I know.",            correct: true,  topic: "Comparatives" },
     { text: "It was the most worst day of my life.",           correct: false, topic: "Comparatives" },
-
-    // ── Generic Grammar — Figurative Language ─────────────────
     { text: "The classroom was a zoo — noisy and chaotic.",    correct: true,  topic: "Figurative Language" },
     { text: "Time is a thief that steals our years.",          correct: true,  topic: "Figurative Language" },
     { text: "The wind whispered secrets through the trees.",   correct: true,  topic: "Figurative Language" },
@@ -90,11 +77,223 @@ window.CUSTOM_CONTENT = {
     { text: "Life is a journey with no map.",                  correct: true,  topic: "Figurative Language" },
     { text: "The old house groaned under the weight of its memories.", correct: true, topic: "Figurative Language" },
 
-    // ════════════════════════════════════════════════════════════════
-    // S5 / U2 — Infinitives and -ing
-    // ════════════════════════════════════════════════════════════════
+    // ── S4/U1 — A Good Start ──
+    { sentence: "I'm going to study harder this year — it's my resolution.", correct: true, stage: 4, unit: 1 },
+    { sentence: "I will to study harder this year — it's my resolution.", correct: false, stage: 4, unit: 1 },
+    { sentence: "Look at those clouds. It's going to rain.", correct: true, stage: 4, unit: 1 },
+    { sentence: "Look at those clouds. It will to rain.", correct: false, stage: 4, unit: 1 },
+    { sentence: "I'll carry that box for you — let me help.", correct: true, stage: 4, unit: 1 },
+    { sentence: "I'm going to carry that box for you — let me help.", correct: false, stage: 4, unit: 1 },
+    { sentence: "She's meeting her science group after school tomorrow.", correct: true, stage: 4, unit: 1 },
+    { sentence: "She meets her science group after school tomorrow.", correct: false, stage: 4, unit: 1 },
+    { sentence: "They're catching the early bus on Friday.", correct: true, stage: 4, unit: 1 },
+    { sentence: "They will catching the early bus on Friday.", correct: false, stage: 4, unit: 1 },
+    { sentence: "We're going to plant trees to help the environment.", correct: true, stage: 4, unit: 1 },
+    { sentence: "We will going to plant trees to help the environment.", correct: false, stage: 4, unit: 1 },
 
-    // ── S5/U2/L1 — Verb Patterns: -ing vs to + infinitive ────────
+    // ── S4/U2 — Amazing Animals ──
+    { sentence: "If we don't protect bees, many plants will disappear.", correct: true, stage: 4, unit: 2 },
+    { sentence: "If we don't protect bees, many plants would disappear.", correct: false, stage: 4, unit: 2 },
+    { sentence: "If you touch a rattlesnake's tail, it will frighten you.", correct: true, stage: 4, unit: 2 },
+    { sentence: "If you touched a rattlesnake's tail, it will frighten you.", correct: false, stage: 4, unit: 2 },
+    { sentence: "If I were a marine biologist, I would study sea creatures.", correct: true, stage: 4, unit: 2 },
+    { sentence: "If I were a marine biologist, I will study sea creatures.", correct: false, stage: 4, unit: 2 },
+    { sentence: "If animals became extinct, it would damage the balance of nature.", correct: true, stage: 4, unit: 2 },
+    { sentence: "If animals became extinct, it will damage the balance of nature.", correct: false, stage: 4, unit: 2 },
+    { sentence: "If bees disappear, we will lose many of our food crops.", correct: true, stage: 4, unit: 2 },
+    { sentence: "If bees disappear, we would lose many of our food crops.", correct: false, stage: 4, unit: 2 },
+    { sentence: "If I had a spider monkey's tail, I would use it to swing through trees.", correct: true, stage: 4, unit: 2 },
+    { sentence: "If I have a spider monkey's tail, I would use it to swing through trees.", correct: false, stage: 4, unit: 2 },
+
+    // ── S4/U3 — Working Outdoors ──
+    { sentence: "She's looking at something under the microscope.", correct: true, stage: 4, unit: 3 },
+    { sentence: "She's looking at anything under the microscope.", correct: false, stage: 4, unit: 3 },
+    { sentence: "Is there anyone in the science laboratory?", correct: true, stage: 4, unit: 3 },
+    { sentence: "Is there someone in the science laboratory?", correct: false, stage: 4, unit: 3 },
+    { sentence: "I don't know anything about Iceland.", correct: true, stage: 4, unit: 3 },
+    { sentence: "I don't know nothing about Iceland.", correct: false, stage: 4, unit: 3 },
+    { sentence: "She enjoys taking care of animals, doesn't she?", correct: true, stage: 4, unit: 3 },
+    { sentence: "She enjoys taking care of animals, isn't she?", correct: false, stage: 4, unit: 3 },
+    { sentence: "He has an interesting job, doesn't he?", correct: true, stage: 4, unit: 3 },
+    { sentence: "He has an interesting job, hasn't he?", correct: false, stage: 4, unit: 3 },
+    { sentence: "You can paint murals, can't you?", correct: true, stage: 4, unit: 3 },
+    { sentence: "You can paint murals, can you?", correct: false, stage: 4, unit: 3 },
+    { sentence: "I'm late, aren't I?", correct: true, stage: 4, unit: 3 },
+    { sentence: "I'm late, am I?", correct: false, stage: 4, unit: 3 },
+
+    // ── S4/U4 — Let's Get Technical ──
+    { sentence: "Computers are used every day.", correct: true, stage: 4, unit: 4 },
+    { sentence: "Computers are use every day.", correct: false, stage: 4, unit: 4 },
+    { sentence: "The first computer was invented by scientists a long time ago.", correct: true, stage: 4, unit: 4 },
+    { sentence: "The first computer was invent by scientists a long time ago.", correct: false, stage: 4, unit: 4 },
+    { sentence: "The internet is used by more than four billion people.", correct: true, stage: 4, unit: 4 },
+    { sentence: "The internet is using by more than four billion people.", correct: false, stage: 4, unit: 4 },
+    { sentence: "This photo was taken by a camera trap hidden in a tree.", correct: true, stage: 4, unit: 4 },
+    { sentence: "This photo was took by a camera trap hidden in a tree.", correct: false, stage: 4, unit: 4 },
+    { sentence: "Technology is being used more and more in photography.", correct: true, stage: 4, unit: 4 },
+    { sentence: "Technology is been used more and more in photography.", correct: false, stage: 4, unit: 4 },
+    { sentence: "New camera traps are being designed by photo engineers.", correct: true, stage: 4, unit: 4 },
+    { sentence: "New camera traps are being design by photo engineers.", correct: false, stage: 4, unit: 4 },
+    { sentence: "My laptop isn't being used right now.", correct: true, stage: 4, unit: 4 },
+    { sentence: "My laptop isn't been used right now.", correct: false, stage: 4, unit: 4 },
+
+    // ── S4/U5 — Going Places ──
+    { sentence: "Most mountains have been climbed, but a few haven't been climbed yet.", correct: true, stage: 4, unit: 5 },
+    { sentence: "Most mountains have been climbed, but a few haven't climbed yet.", correct: false, stage: 4, unit: 5 },
+    { sentence: "The Australian desert has been crossed by Robyn Davidson.", correct: true, stage: 4, unit: 5 },
+    { sentence: "The Australian desert has crossed by Robyn Davidson.", correct: false, stage: 4, unit: 5 },
+    { sentence: "A new bridge has been built across the river.", correct: true, stage: 4, unit: 5 },
+    { sentence: "A new bridge has been build across the river.", correct: false, stage: 4, unit: 5 },
+    { sentence: "Where is German spoken?", correct: true, stage: 4, unit: 5 },
+    { sentence: "Where does German spoken?", correct: false, stage: 4, unit: 5 },
+    { sentence: "How was the old bridge damaged?", correct: true, stage: 4, unit: 5 },
+    { sentence: "How did the old bridge damaged?", correct: false, stage: 4, unit: 5 },
+    { sentence: "Why has the tunnel been built?", correct: true, stage: 4, unit: 5 },
+    { sentence: "Why has the tunnel been build?", correct: false, stage: 4, unit: 5 },
+    { sentence: "How often is the World Cup played?", correct: true, stage: 4, unit: 5 },
+    { sentence: "How often does the World Cup played?", correct: false, stage: 4, unit: 5 },
+
+    // ── S4/U6 — Fantastic Festivals ──
+    { sentence: "People in Japan have been celebrating cherry blossoms for centuries.", correct: true, stage: 4, unit: 6 },
+    { sentence: "People in Japan have been celebrate cherry blossoms for centuries.", correct: false, stage: 4, unit: 6 },
+    { sentence: "She has been dancing since six o'clock.", correct: true, stage: 4, unit: 6 },
+    { sentence: "She has been dancing since three hours.", correct: false, stage: 4, unit: 6 },
+    { sentence: "The Boryeong Mud Festival has been taking place every summer since 1998.", correct: true, stage: 4, unit: 6 },
+    { sentence: "The Boryeong Mud Festival has been taking place every summer for 1998.", correct: false, stage: 4, unit: 6 },
+    { sentence: "I'm not hungry because I've been eating delicious food all day.", correct: true, stage: 4, unit: 6 },
+    { sentence: "I'm not hungry because I've been eat delicious food all day.", correct: false, stage: 4, unit: 6 },
+    { sentence: "Our feet are sore because we've been dancing at the festival all day.", correct: true, stage: 4, unit: 6 },
+    { sentence: "Our feet are sore because we've been dance at the festival all day.", correct: false, stage: 4, unit: 6 },
+    { sentence: "Have people been celebrating o-hanami for a long time?", correct: true, stage: 4, unit: 6 },
+    { sentence: "Have people been celebrate o-hanami for a long time?", correct: false, stage: 4, unit: 6 },
+    { sentence: "I've been studying English since I was small.", correct: true, stage: 4, unit: 6 },
+    { sentence: "I've been studying English for I was small.", correct: false, stage: 4, unit: 6 },
+
+    // ── S4/U7 — Extreme Sports ──
+    { sentence: "You have to wear a helmet when you go rock climbing.", correct: true, stage: 4, unit: 7 },
+    { sentence: "You must to wear a helmet when you go rock climbing.", correct: false, stage: 4, unit: 7 },
+    { sentence: "You don't have to wear a helmet when you play tennis.", correct: true, stage: 4, unit: 7 },
+    { sentence: "You don't must wear a helmet when you play tennis.", correct: false, stage: 4, unit: 7 },
+    { sentence: "Some expert rock climbers don't need to use ropes.", correct: true, stage: 4, unit: 7 },
+    { sentence: "Some expert rock climbers don't need use ropes.", correct: false, stage: 4, unit: 7 },
+    { sentence: "You must not climb on the castle walls.", correct: true, stage: 4, unit: 7 },
+    { sentence: "You should not to climb on the castle walls.", correct: false, stage: 4, unit: 7 },
+    { sentence: "We should get more exercise — it's good for us.", correct: true, stage: 4, unit: 7 },
+    { sentence: "We should to get more exercise — it's good for us.", correct: false, stage: 4, unit: 7 },
+    { sentence: "I taught myself to kayak.", correct: true, stage: 4, unit: 7 },
+    { sentence: "I taught me to kayak.", correct: false, stage: 4, unit: 7 },
+    { sentence: "He hurt himself when he was playing football.", correct: true, stage: 4, unit: 7 },
+    { sentence: "He hurt him when he was playing football.", correct: false, stage: 4, unit: 7 },
+
+    // ── S4/U8 — Tales of Survival ──
+    { text: "After the men had pulled the lifeboats across the ice, they arrived at the island.",           correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After the men had pull the lifeboats across the ice, they arrived at the island.",             correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "By the time they reached Elephant Island, the water had frozen solid.",                        correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "By the time they reached Elephant Island, the water had freeze solid.",                        correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "They set off for home after they had rescued everyone.",                                       correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "They set off for home after they had rescue everyone.",                                        correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had eaten all their food, they wanted to go home.",                                 correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had ate all their food, they wanted to go home.",                                   correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Josh turned his jacket inside out because the rescue team had not seen him.",                  correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Josh turned his jacket inside out because the rescue team had not saw him.",                   correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "When they arrived at the other side of the island, they had walked for 36 hours.",             correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "When they arrived at the other side of the island, they had walk for 36 hours.",               correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Shackleton was relieved because all of his men had survived.",                                 correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "Shackleton was relieved because all of his men had survive.",                                  correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had rested for twenty minutes, they started walking again.",                        correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "After they had rested for twenty minutes, they start walking again.",                          correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    { text: "I hadn't known anything about Alison Wright before I read the text.",                          correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "I hadn't knew anything about Alison Wright before I read the text.",                           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "She hadn't been to Mexico before she visited her friend Rosa there last summer.",               correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "She hadn't been to Mexico before she had visited her friend Rosa there last summer.",           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "He hadn't charged his phone battery before he set off on his journey.",                        correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "He didn't charged his phone battery before he set off on his journey.",                        correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had she broken any bones in the accident?",                                                    correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had she broke any bones in the accident?",                                                     correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Where had she been before she got to Thailand?",                                               correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Where had she went before she got to Thailand?",                                               correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "By the time the rescue team found Josh, he hadn't eaten anything for hours.",                  correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "By the time the rescue team found Josh, he hadn't eat anything for hours.",                    correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had the men ever crossed mountains like that before?",                                         correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Had the men ever cross mountains like that before?",                                           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Alison hadn't met the stranger before, but he drove her to hospital.",                         correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { text: "Alison didn't met the stranger before, but he drove her to hospital.",                         correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    { sentence: "No one had ever crossed these mountains before.", correct: true, stage: 4, unit: 8 },
+    { sentence: "No one have ever crossed these mountains before.", correct: false, stage: 4, unit: 8 },
+    { sentence: "After the men had landed safely, they ate dinner.", correct: true, stage: 4, unit: 8 },
+    { sentence: "After the men landed safely, they had eaten dinner.", correct: false, stage: 4, unit: 8 },
+    { sentence: "The ship could not move because the water had frozen around it.", correct: true, stage: 4, unit: 8 },
+    { sentence: "The ship could not move because the water froze around it before.", correct: false, stage: 4, unit: 8 },
+    { sentence: "Alison hadn't met the stranger before he helped her.", correct: true, stage: 4, unit: 8 },
+    { sentence: "Alison didn't meet the stranger before he helped her.", correct: false, stage: 4, unit: 8 },
+    { sentence: "Had she broken any bones in the accident?", correct: true, stage: 4, unit: 8 },
+    { sentence: "Did she break any bones in the accident before?", correct: false, stage: 4, unit: 8 },
+    { sentence: "Where had Shackleton been before he set off on the expedition?", correct: true, stage: 4, unit: 8 },
+    { sentence: "Where did Shackleton went before he set off on the expedition?", correct: false, stage: 4, unit: 8 },
+
+    // ── S4/U9 — Exploring the World ──
+    { sentence: "If Ed hadn't met Cho, he would have walked alone.", correct: true, stage: 4, unit: 9 },
+    { sentence: "If Ed didn't meet Cho, he would have walked alone.", correct: false, stage: 4, unit: 9 },
+    { sentence: "If he had run out of food, he would have been very hungry.", correct: true, stage: 4, unit: 9 },
+    { sentence: "If he run out of food, he would have been very hungry.", correct: false, stage: 4, unit: 9 },
+    { sentence: "If I had brought my camera, I would have taken a lot of photos.", correct: true, stage: 4, unit: 9 },
+    { sentence: "If I would bring my camera, I would have taken a lot of photos.", correct: false, stage: 4, unit: 9 },
+    { sentence: "If the insect hadn't stung me, I wouldn't have had a sore arm.", correct: true, stage: 4, unit: 9 },
+    { sentence: "If the insect didn't sting me, I wouldn't have had a sore arm.", correct: false, stage: 4, unit: 9 },
+    { sentence: "Would Philip have found the tooth if he had stayed indoors?", correct: true, stage: 4, unit: 9 },
+    { sentence: "Would Philip have found the tooth if he stayed indoors?", correct: false, stage: 4, unit: 9 },
+    { sentence: "If you hadn't touched that snake, it wouldn't have bitten you.", correct: true, stage: 4, unit: 9 },
+    { sentence: "If you haven't touched that snake, it wouldn't have bitten you.", correct: false, stage: 4, unit: 9 },
+
+    // ── S4/U10 — Great Museums ──
+    { sentence: "My friend said there was an underwater café.", correct: true, stage: 4, unit: 10 },
+    { sentence: "My friend said there is an underwater café.", correct: false, stage: 4, unit: 10 },
+    { sentence: "Ferran said that he wanted to go back again soon.", correct: true, stage: 4, unit: 10 },
+    { sentence: "Ferran said that he wants to go back again soon.", correct: false, stage: 4, unit: 10 },
+    { sentence: "The guide told us she was going to turn off the lights.", correct: true, stage: 4, unit: 10 },
+    { sentence: "The guide told she was going to turn off the lights.", correct: false, stage: 4, unit: 10 },
+    { sentence: "The teacher told her she could dig for fossils.", correct: true, stage: 4, unit: 10 },
+    { sentence: "The teacher told her she can dig for fossils.", correct: false, stage: 4, unit: 10 },
+    { sentence: "Marta and Ferran said they had seen a fascinating movie.", correct: true, stage: 4, unit: 10 },
+    { sentence: "Marta and Ferran said they saw a fascinating movie.", correct: false, stage: 4, unit: 10 },
+    { sentence: "My friend said I should bring my sleeping bag.", correct: true, stage: 4, unit: 10 },
+    { sentence: "My friend said me I should bring my sleeping bag.", correct: false, stage: 4, unit: 10 },
+    { sentence: "The guide told the children they could put their sleeping bags under the blue whale.", correct: true, stage: 4, unit: 10 },
+    { sentence: "The guide said the children they could put their sleeping bags under the blue whale.", correct: false, stage: 4, unit: 10 },
+
+    // ── S4/U11 — Very Mysterious! ──
+    { sentence: "The presenter asked the expert why he liked birds.", correct: true, stage: 4, unit: 11 },
+    { sentence: "The presenter asked the expert why does he like birds.", correct: false, stage: 4, unit: 11 },
+    { sentence: "The boy asked if the birds had left.", correct: true, stage: 4, unit: 11 },
+    { sentence: "The boy asked if the birds did leave.", correct: false, stage: 4, unit: 11 },
+    { sentence: "My sister asked where those birds were from.", correct: true, stage: 4, unit: 11 },
+    { sentence: "My sister asked where are those birds from.", correct: false, stage: 4, unit: 11 },
+    { sentence: "Mark told his friends to look at the floating man.", correct: true, stage: 4, unit: 11 },
+    { sentence: "Mark told his friends look at the floating man.", correct: false, stage: 4, unit: 11 },
+    { sentence: "Rashid asked me to explain the mystery of the flying cars.", correct: true, stage: 4, unit: 11 },
+    { sentence: "Rashid asked me explain the mystery of the flying cars.", correct: false, stage: 4, unit: 11 },
+    { sentence: "The teacher told the children not to cross the road.", correct: true, stage: 4, unit: 11 },
+    { sentence: "The teacher asked the children don't cross the road.", correct: false, stage: 4, unit: 11 },
+    { sentence: "Kara asked her sister not to show the photos to everyone.", correct: true, stage: 4, unit: 11 },
+    { sentence: "Kara told her sister not show the photos to everyone.", correct: false, stage: 4, unit: 11 },
+
+    // ── S4/U12 — Fascinating Places ──
+    { sentence: "I wish I lived by the ocean.", correct: true, stage: 4, unit: 12 },
+    { sentence: "I wish I live by the ocean.", correct: false, stage: 4, unit: 12 },
+    { sentence: "I wish I could be a successful photographer.", correct: true, stage: 4, unit: 12 },
+    { sentence: "I wish I can be a successful photographer.", correct: false, stage: 4, unit: 12 },
+    { sentence: "She wishes she had a camera to use underwater.", correct: true, stage: 4, unit: 12 },
+    { sentence: "She wishes she has a camera to use underwater.", correct: false, stage: 4, unit: 12 },
+    { sentence: "We wish we didn't live so far away from our friends.", correct: true, stage: 4, unit: 12 },
+    { sentence: "We wish we don't live so far away from our friends.", correct: false, stage: 4, unit: 12 },
+    { sentence: "Watch out! It's a long way down.", correct: true, stage: 4, unit: 12 },
+    { sentence: "Watch! It's a long way down.", correct: false, stage: 4, unit: 12 },
+    { sentence: "We're really looking forward to our vacation.", correct: true, stage: 4, unit: 12 },
+    { sentence: "We're really looking forward our vacation.", correct: false, stage: 4, unit: 12 },
+    { sentence: "I wish I could get away from all the noise.", correct: true, stage: 4, unit: 12 },
+    { sentence: "I wish I could get away of all the noise.", correct: false, stage: 4, unit: 12 },
+
+    // ── S5/U2 ──
     { text: "I enjoy walking around the city centre looking at old buildings.",          correct: true,  topic: "S5/U2/L1 Verb Patterns", stage: 5, unit: 2, lesson: 1 },
     { text: "I enjoy to walk around the city centre looking at old buildings.",          correct: false, topic: "S5/U2/L1 Verb Patterns", stage: 5, unit: 2, lesson: 1 },
     { text: "Many people enjoy listening to live music.",                                correct: true,  topic: "S5/U2/L1 Verb Patterns", stage: 5, unit: 2, lesson: 1 },
@@ -123,8 +322,6 @@ window.CUSTOM_CONTENT = {
     { text: "They agreed stopping fighting and being friends.",                          correct: false, topic: "S5/U2/L1 Verb Patterns", stage: 5, unit: 2, lesson: 1 },
     { text: "I always avoid crossing that rickety old bridge.",                          correct: true,  topic: "S5/U2/L1 Verb Patterns", stage: 5, unit: 2, lesson: 1 },
     { text: "I always avoid to cross that rickety old bridge.",                          correct: false, topic: "S5/U2/L1 Verb Patterns", stage: 5, unit: 2, lesson: 1 },
-
-    // ── S5/U2/L3 — Advanced Patterns & Stop/Remember/Forget/Try ──
     { text: "They wanted her to go to university.",                                      correct: true,  topic: "S5/U2/L3 Advanced Patterns", stage: 5, unit: 2, lesson: 3 },
     { text: "They wanted her go to university.",                                         correct: false, topic: "S5/U2/L3 Advanced Patterns", stage: 5, unit: 2, lesson: 3 },
     { text: "They wanted her going to university.",                                      correct: false, topic: "S5/U2/L3 Advanced Patterns", stage: 5, unit: 2, lesson: 3 },
@@ -145,8 +342,6 @@ window.CUSTOM_CONTENT = {
     { text: "I'll never forget to visit the Empire State Building.",                     correct: false, topic: "S5/U2/L3 Advanced Patterns", stage: 5, unit: 2, lesson: 3 },
     { text: "I tried to stand up, but I couldn't. (= I attempted but failed)",          correct: true,  topic: "S5/U2/L3 Advanced Patterns", stage: 5, unit: 2, lesson: 3 },
     { text: "I tried standing up, but I still couldn't see. (= I experimented)",        correct: true,  topic: "S5/U2/L3 Advanced Patterns", stage: 5, unit: 2, lesson: 3 },
-
-    // ── S5/U2/L4 — Active and Passive ────────────────────────────
     { text: "Apple computers was founded by Steve Jobs and Steve Wozniak.",              correct: true,  topic: "S5/U2/L4 Active and Passive", stage: 5, unit: 2, lesson: 4 },
     { text: "Apple computers were founded by Steve Jobs and Steve Wozniak.",             correct: false, topic: "S5/U2/L4 Active and Passive", stage: 5, unit: 2, lesson: 4 },
     { text: "The iPhone was launched in 2007 and it was an instant success.",            correct: true,  topic: "S5/U2/L4 Active and Passive", stage: 5, unit: 2, lesson: 4 },
@@ -169,12 +364,7 @@ window.CUSTOM_CONTENT = {
     { text: "The telephone was invented by Alexander Graham Bell.",                      correct: true,  topic: "S5/U2/L4 Active and Passive", stage: 5, unit: 2, lesson: 4 },
     { text: "The telephone invented by Alexander Graham Bell.",                          correct: false, topic: "S5/U2/L4 Active and Passive", stage: 5, unit: 2, lesson: 4 },
 
-
-    // ════════════════════════════════════════════════════════════════
-    // S5 / U3 — Conditionals
-    // ════════════════════════════════════════════════════════════════
-
-    // ── S5/U3/L1 — First Conditional ─────────────────────────────
+    // ── S5/U3 ──
     { text: "If you study hard, you will pass your exam.",                               correct: true,  topic: "S5/U3/L1 First Conditional", stage: 5, unit: 3, lesson: 1 },
     { text: "If you study hard, you would pass your exam.",                              correct: false, topic: "S5/U3/L1 First Conditional", stage: 5, unit: 3, lesson: 1 },
     { text: "If you will study hard, you will pass your exam.",                          correct: false, topic: "S5/U3/L1 First Conditional", stage: 5, unit: 3, lesson: 1 },
@@ -190,8 +380,6 @@ window.CUSTOM_CONTENT = {
     { text: "If she eats too much chocolate, she would feel sick.",                      correct: false, topic: "S5/U3/L1 First Conditional", stage: 5, unit: 3, lesson: 1 },
     { text: "If, she eats too much chocolate, she will feel sick.",                      correct: false, topic: "S5/U3/L1 First Conditional", stage: 5, unit: 3, lesson: 1 },
     { text: "She will feel sick if she eats too much chocolate.",                        correct: true,  topic: "S5/U3/L1 First Conditional", stage: 5, unit: 3, lesson: 1 },
-
-    // ── S5/U3/L1–L2 — Second Conditional ─────────────────────────
     { text: "If I lived in Spain, I would fight a bull.",                                correct: true,  topic: "S5/U3/L2 Second Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If I live in Spain, I would fight a bull.",                                 correct: false, topic: "S5/U3/L2 Second Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If I lived in Spain, I will fight a bull.",                                 correct: false, topic: "S5/U3/L2 Second Conditional", stage: 5, unit: 3, lesson: 2 },
@@ -206,8 +394,6 @@ window.CUSTOM_CONTENT = {
     { text: "If she was older, they will let her into the club.",                        correct: false, topic: "S5/U3/L2 Second Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If he scored more goals, we would win more games.",                         correct: true,  topic: "S5/U3/L2 Second Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If he scores more goals, we would win more games.",                         correct: false, topic: "S5/U3/L2 Second Conditional", stage: 5, unit: 3, lesson: 2 },
-
-    // ── S5/U3/L2 — Third Conditional ─────────────────────────────
     { text: "If there hadn't been a power cut, William wouldn't have woken up late.",   correct: true,  topic: "S5/U3/L2 Third Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If there wasn't a power cut, William wouldn't have woken up late.",         correct: false, topic: "S5/U3/L2 Third Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If there hadn't been a power cut, William wouldn't wake up late.",          correct: false, topic: "S5/U3/L2 Third Conditional", stage: 5, unit: 3, lesson: 2 },
@@ -222,8 +408,6 @@ window.CUSTOM_CONTENT = {
     { text: "If he wrapped his breakfast properly, it wouldn't have ruined his documents.", correct: false, topic: "S5/U3/L2 Third Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If he had sung in the competition, he would have won.",                     correct: true,  topic: "S5/U3/L2 Third Conditional", stage: 5, unit: 3, lesson: 2 },
     { text: "If he had sung in the competition, he would won.",                          correct: false, topic: "S5/U3/L2 Third Conditional", stage: 5, unit: 3, lesson: 2 },
-
-    // ── S5/U3/L3 — Should / Needn't Have ─────────────────────────
     { text: "She shouldn't have laughed at her brother.",                                correct: true,  topic: "S5/U3/L3 Should-Needn't Have", stage: 5, unit: 3, lesson: 3 },
     { text: "She should have laughed at her brother.",                                   correct: false, topic: "S5/U3/L3 Should-Needn't Have", stage: 5, unit: 3, lesson: 3 },
     { text: "She needn't have laughed at her brother. (= it was unnecessary)",          correct: false, topic: "S5/U3/L3 Should-Needn't Have", stage: 5, unit: 3, lesson: 3 },
@@ -237,8 +421,6 @@ window.CUSTOM_CONTENT = {
     { text: "Mark shouldn't have taken his camera — he didn't take any photos.",        correct: false, topic: "S5/U3/L3 Should-Needn't Have", stage: 5, unit: 3, lesson: 3 },
     { text: "We needn't have taken sun cream — it rained every day.",                   correct: true,  topic: "S5/U3/L3 Should-Needn't Have", stage: 5, unit: 3, lesson: 3 },
     { text: "We needn't have take sun cream — it rained every day.",                    correct: false, topic: "S5/U3/L3 Should-Needn't Have", stage: 5, unit: 3, lesson: 3 },
-
-    // ── S5/U3/L4 — Mixed Conditionals ────────────────────────────
     { text: "If I had worked harder at school, I would be rich now.",                    correct: true,  topic: "S5/U3/L4 Mixed Conditionals", stage: 5, unit: 3, lesson: 4 },
     { text: "If I had worked harder at school, I would have been rich now.",             correct: false, topic: "S5/U3/L4 Mixed Conditionals", stage: 5, unit: 3, lesson: 4 },
     { text: "If I worked harder at school, I would be rich now.",                        correct: false, topic: "S5/U3/L4 Mixed Conditionals", stage: 5, unit: 3, lesson: 4 },
@@ -253,8 +435,6 @@ window.CUSTOM_CONTENT = {
     { text: "If I lived in London, I would go to the match.",                            correct: false, topic: "S5/U3/L4 Mixed Conditionals", stage: 5, unit: 3, lesson: 4 },
     { text: "If you hadn't used all the hot water, we could have coffee now.",           correct: true,  topic: "S5/U3/L4 Mixed Conditionals", stage: 5, unit: 3, lesson: 4 },
     { text: "If you hadn't used all the hot water, we can have coffee now.",             correct: false, topic: "S5/U3/L4 Mixed Conditionals", stage: 5, unit: 3, lesson: 4 },
-
-    // ── S5/U3/L4 — I Wish & Unreal Present ───────────────────────
     { text: "I wish I lived in Paris. (= unreal present — I don't live there)",         correct: true,  topic: "S5/U3/L4 I Wish", stage: 5, unit: 3, lesson: 4 },
     { text: "I wish I live in Paris.",                                                   correct: false, topic: "S5/U3/L4 I Wish", stage: 5, unit: 3, lesson: 4 },
     { text: "I wish I will live in Paris.",                                              correct: false, topic: "S5/U3/L4 I Wish", stage: 5, unit: 3, lesson: 4 },
@@ -271,11 +451,7 @@ window.CUSTOM_CONTENT = {
     { text: "I'd sooner we left it until after our exams.",                              correct: true,  topic: "S5/U3/L4 I Wish", stage: 5, unit: 3, lesson: 4 },
     { text: "I'd sooner we leave it until after our exams.",                             correct: false, topic: "S5/U3/L4 I Wish", stage: 5, unit: 3, lesson: 4 },
 
-    // ════════════════════════════════════════════════════════════════
-    // S5 / U4 — The Hero's Journey
-    // ════════════════════════════════════════════════════════════════
-
-    // ── S5/U4/L1 — The Monomyth & 7 Steps ───────────────────────
+    // ── S5/U4 ──
     { text: "The hero's journey is a narrative archetype found in stories from many different cultures.",  correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
     { text: "The hero's journey is a narrative archetype founded in stories from many different cultures.", correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
     { text: "The three essential stages of the hero's journey are the Departure, the Initiation and the Return.", correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
@@ -292,8 +468,6 @@ window.CUSTOM_CONTENT = {
     { text: "The hero usually accepts the call to adventure immediately without any hesitation.",                    correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
     { text: "It is possible to twist the monomyth — many modern stories have a female hero.",                       correct: true,  topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
     { text: "It is not possible to twist the monomyth — the hero must always be male.",                             correct: false, topic: "S5/U4/L1 The Monomyth", stage: 5, unit: 4, lesson: 1 },
-
-    // ── S5/U4/L2 — Character Development ────────────────────────
     { text: "Starting with a vulnerable hero gives us sympathy for the character and room for them to grow.",        correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
     { text: "Starting with a vulnerable hero gives us sympathy for the character and room for them to shrink.",     correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
     { text: "It is always better to show the reader a character's difficulty than to simply tell the reader about it.", correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
@@ -304,8 +478,6 @@ window.CUSTOM_CONTENT = {
     { text: "A character's motivation must always be grand and world-changing to engage the reader.",                correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
     { text: "Little details help to draw the world of the character for the audience.",                             correct: true,  topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
     { text: "Little details distract the audience from the main events of the story.",                              correct: false, topic: "S5/U4/L2 Character Development", stage: 5, unit: 4, lesson: 2 },
-
-    // ── S5/U4/L3 — Villains & Supporting Characters ──────────────
     { text: "The villain is often the opposite side of the coin from the hero.",                                     correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
     { text: "The villain is often the same side of the coin as the hero.",                                           correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
     { text: "Just as the hero needs a motivation, the villain also needs a conflicting motivation.",                 correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
@@ -316,8 +488,6 @@ window.CUSTOM_CONTENT = {
     { text: "Supporting characters should always be very similar to the hero so the reader is not confused.",       correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
     { text: "An important part of the hero's journey is that the hero defeats the villain near the end of the story.", correct: true,  topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
     { text: "An important part of the hero's journey is that the villain defeats the hero near the end of the story.", correct: false, topic: "S5/U4/L3 Villains and Supporting Characters", stage: 5, unit: 4, lesson: 3 },
-
-    // ── S5/U4/L4 — Planning & Genre ──────────────────────────────
     { text: "Planning a story helps the narrative to flow and stops the writer from getting stuck.",                 correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
     { text: "Planning a story is unnecessary — the best writing always happens spontaneously.",                     correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
     { text: "A good first step in planning a story is to condense the plot into just one sentence.",                 correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
@@ -335,11 +505,7 @@ window.CUSTOM_CONTENT = {
     { text: "The end of a story should resolve all the loose ends — unless a sequel is planned.",                   correct: true,  topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
     { text: "The end of a story should always leave the main conflict unresolved to maintain suspense.",            correct: false, topic: "S5/U4/L4 Planning and Genre", stage: 5, unit: 4, lesson: 4 },
 
-    // ════════════════════════════════════════════════════════════════
-    // S5 / U5 — Talking About the Past
-    // ════════════════════════════════════════════════════════════════
-
-    // ── S5/U5/L1 — Past Simple & Past Continuous ─────────────────
+    // ── S5/U5 ──
     { text: "The past simple tense is used for completed actions in the past.",                                      correct: true,  topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
     { text: "The past simple tense is used for actions that were still in progress in the past.",                   correct: false, topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
     { text: "We use the past continuous to describe a background action that was in progress when another event occurred.", correct: true,  topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
@@ -352,16 +518,12 @@ window.CUSTOM_CONTENT = {
     { text: "'When my friends arrived, I cooked dinner' suggests the cooking was already finished before they arrived.", correct: false, topic: "S5/U5/L1 Past Simple", stage: 5, unit: 5, lesson: 1 },
     { text: "'When my friends arrived, I was making a cake' suggests the cake-making was in progress when they arrived.", correct: true,  topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
     { text: "'When my friends arrived, I was making a cake' suggests the cake was already finished when they arrived.", correct: false, topic: "S5/U5/L1 Past Continuous", stage: 5, unit: 5, lesson: 1 },
-
-    // ── S5/U5/L1 — Past Passive ──────────────────────────────────
     { text: "The past simple passive is formed with was/were + past participle.",                                    correct: true,  topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
     { text: "The past simple passive is formed with had + past participle.",                                        correct: false, topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
     { text: "In 'my car was being repaired', the repair was still in progress when I arrived.",                     correct: true,  topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
     { text: "In 'my car was being repaired', the repair had already been completed when I arrived.",                correct: false, topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
     { text: "In 'my car had been repaired', the repair was already finished before I arrived at the garage.",       correct: true,  topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
     { text: "In 'my car had been repaired', the repair was still in progress when I arrived at the garage.",        correct: false, topic: "S5/U5/L1 Past Passive", stage: 5, unit: 5, lesson: 1 },
-
-    // ── S5/U5/L2 — Past Perfect Simple ───────────────────────────
     { text: "The past perfect simple is formed with had + past participle.",                                        correct: true,  topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
     { text: "The past perfect simple is formed with had been + -ing.",                                             correct: false, topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
     { text: "We use the past perfect simple to show an action that happened before another action in the past.",   correct: true,  topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
@@ -370,8 +532,6 @@ window.CUSTOM_CONTENT = {
     { text: "'When Sarah arrived, Paul had already gone home' incorrectly uses the past perfect — Paul left after Sarah.", correct: false, topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
     { text: "With stative verbs like 'know' or 'be', we use the past perfect simple (not continuous) with for/since.", correct: true,  topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
     { text: "With stative verbs like 'know' or 'be', we use the past perfect continuous with for/since.",           correct: false, topic: "S5/U5/L2 Past Perfect Simple", stage: 5, unit: 5, lesson: 2 },
-
-    // ── S5/U5/L2 — Past Perfect Continuous ───────────────────────
     { text: "The past perfect continuous is formed with had been + -ing.",                                          correct: true,  topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
     { text: "The past perfect continuous is formed with was/were + -ing.",                                          correct: false, topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
     { text: "We use the past perfect continuous to show the cause of something in the past.",                       correct: true,  topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
@@ -380,8 +540,6 @@ window.CUSTOM_CONTENT = {
     { text: "'His hands were dirty because he had been gardening' incorrectly uses the past perfect continuous.",   correct: false, topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
     { text: "With action verbs, we use the past perfect continuous with for/since to show how long an action was in progress.", correct: true,  topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
     { text: "With action verbs, we use the past perfect simple with for/since to show how long an action was in progress.", correct: false, topic: "S5/U5/L2 Past Perfect Continuous", stage: 5, unit: 5, lesson: 2 },
-
-    // ── S5/U5/L3 — Sequencing Clauses ────────────────────────────
     { text: "'After + -ing' is used for an action that happens before another action.",                             correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
     { text: "'After + -ing' is used for an action that happens at the same time as another action.",                correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
     { text: "'Having + past participle' is used for an action that happens before another action.",                 correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
@@ -392,14 +550,120 @@ window.CUSTOM_CONTENT = {
     { text: "When using a participle clause, the subjects of the two clauses can be different.",                    correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
     { text: "'Crossing the road, she was hit by a car' is correct because both clauses share the same subject.",    correct: true,  topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
     { text: "'Crossing the road, a car hit her' is correct because it uses a present participle.",                  correct: false, topic: "S5/U5/L3 Sequencing Clauses", stage: 5, unit: 5, lesson: 3 },
-
-    // ── S5/U5/L4 — Adverbs in narrative ──────────────────────────
     { text: "Adverbs in narrative writing describe how people act and feel, making the story more vivid.",          correct: true,  topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
     { text: "Adverbs in narrative writing should be avoided as they make the writing seem too informal.",           correct: false, topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
     { text: "In a short story, using a mix of long and short sentences can make key events more dramatic.",         correct: true,  topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
     { text: "In a short story, all sentences should be the same length to maintain a consistent pace.",             correct: false, topic: "S5/U5/L4 Adverbs", stage: 5, unit: 5, lesson: 4 },
 
-    // ── S6/U1/L2 — Unsolved Mysteries: Defining Relative Clauses ──
+    // ── S5/U6 ──
+    { text: "We use 'will' to make predictions about the future.",                                                    correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'must' to make predictions about the future.",                                                    correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We can use the future continuous to make assumptions about the present: 'She'll be driving to work.'",   correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use the future continuous to make predictions, not assumptions about the present.",                    correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'must' to conclude that something is almost certainly true: 'Dad isn't home — he must be at work.'", correct: true, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'must' to express impossibility: 'He must be at work — his car is outside.'",                     correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'can't' to express impossibility: 'He can't be at work — his car is outside.'",                  correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'mustn't' to express impossibility: 'He mustn't be at work — his car is outside.'",              correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "May, might and could are all used to express possibility.",                                               correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "May, might and could are all used to express certainty.",                                                 correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'should' to say that something will probably happen in our opinion: 'England should beat Norway.'", correct: true, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "We use 'should' to say that something is certain to happen: 'England should beat Norway.'",               correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'It's bound to snow tonight' expresses certainty about a future event.",                                  correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'It's bound to snow tonight' expresses only a slight possibility.",                                       correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'Chances are it'll rain tomorrow' means it is very probable that it will rain.",                          correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "'Chances are it'll rain tomorrow' means it is impossible that it will rain.",                             correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
+    { text: "Past modal speculation is formed with: modal verb + have + past participle.",                             correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "Past modal speculation is formed with: modal verb + be + past participle.",                               correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They must have arrived' expresses near-certainty about a past event.",                                   correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They must have arrived' expresses only a slight possibility about a past event.",                        correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They can't have arrived' expresses impossibility — the speaker is sure they have not arrived.",          correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'They can't have arrived' expresses that they definitely have arrived.",                                  correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You shouldn't have told a lie' means: you did it, but it was wrong.",                                   correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You shouldn't have told a lie' means: you didn't do it, but it was possible.",                          correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You needn't have cooked' means: you did cook, but it wasn't necessary.",                                correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "'You needn't have cooked' means: you didn't cook, and that was the right decision.",                     correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
+    { text: "A fact is a thing that is known or proved to be true.",                                                   correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "A fact is a personal view or judgement not necessarily based on evidence.",                               correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "An opinion is a view or judgement formed about something, not necessarily based on fact.",                correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "An opinion is something that has been proven to be true.",                                                correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "'Nurses work in hospitals' is a fact because it can be verified.",                                        correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "'Nurses don't get paid enough' is a fact because it describes working conditions.",                       correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "Two people can hold opposing opinions and both can be correct at the same time.",                         correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "Two people can hold opposing facts and both can be correct at the same time.",                            correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
+    { text: "In persuasive writing, the strongest body paragraph should come first.",                                  correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "In persuasive writing, the weakest body paragraph should come first.",                                    correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "If you only have two strong points in a persuasive letter, you can use just two body paragraphs.",        correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "A persuasive letter must always have exactly three body paragraphs.",                                     correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "In a formal letter, you should think about what the reader wants, not just what you want.",               correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "In a formal letter, you only need to convince yourself that your idea is good.",                          correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "A formal letter to someone you don't know ends with 'Yours sincerely'.",                                  correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+    { text: "A formal letter to someone you don't know ends with 'Yours faithfully'.",                                 correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
+
+    // ── S5/U7 ──
+    { text: "Danny and his father lived in a caravan behind the filling station.", correct: true, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { text: "Danny and his father lived in a caravan behind filling station.", correct: false, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { text: "The pheasants were drugged with sleeping powder hidden inside raisins.", correct: true, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { text: "The pheasants was drugged with sleeping powder hidden inside raisins.", correct: false, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { text: "Mr Hazell, who owned the wood, was a rich and unpleasant man.", correct: true, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { text: "Mr Hazell, which owned the wood, was a rich and unpleasant man.", correct: false, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { text: "Danny drove the car through the village in order to save his father.", correct: true, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { text: "Danny drived the car through the village in order to save his father.", correct: false, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { text: "By the time the shoot began, the pheasants had already flown away.", correct: true, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { text: "By the time the shoot began, the pheasants already flied away.", correct: false, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { text: "The opening of a detective story should immediately create suspense.", correct: true, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { text: "The opening of a detective story should immediate create suspense.", correct: false, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { text: "A red herring is a clue that deliberately misleads the reader.", correct: true, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { text: "A red herring is a clue that deliberate misleads the reader.", correct: false, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { text: "The detective, having examined the evidence, announced his conclusion.", correct: true, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { text: "The detective, having examine the evidence, announced his conclusion.", correct: false, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { text: "In a well-crafted mystery, every clue must be presented fairly to the reader.", correct: true, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { text: "In a well-crafted mystery, every clue must be present fairly to the reader.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { text: "The villain was finally exposed after years of careful deception.", correct: true, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { text: "The villain was final exposed after years of careful deception.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { text: "Foreshadowing hints at future events without revealing them directly.", correct: true, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { text: "Foreshadowing hints at future events without reveal them directly.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+
+    // ── S5/U8 ──
+    { text: "A detective story is like a game; the author must play fair with the reader.",                                  correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "A detective story is like a game; the author can use any tricks to fool the reader.",                          correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "According to Van Dine, the culprit must be determined by logical deductions, not by coincidence.",              correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "According to Van Dine, a lucky coincidence is the best way for the detective to solve a case.",                correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine states that the detective himself must never turn out to be the culprit.",                             correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine states that it is acceptable for the detective to be revealed as the criminal at the end.",            correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine's rules say there must be only one culprit, no matter how many murders occur.",                       correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine's rules say that having several culprits makes a detective story more realistic.",                     correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "The culprit in a detective story must be someone the reader has already met in the story.",                    correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "The culprit in a detective story can be a stranger who is introduced only in the final chapter.",              correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine forbids using secret societies or the mafia as the cause of the crime.",                              correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine encourages writers to use secret societies and organised crime to add excitement.",                    correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine says the crime must never turn out to be an accident or a suicide.",                                  correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Van Dine says it is perfectly acceptable for the crime to turn out to be an accident.",                        correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
+    { text: "Good writers show character through actions and behaviour rather than telling the reader what to think.",       correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Good writers tell the reader exactly what to think about a character using phrases like 'he was clever'.",      correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Conan Doyle shows Holmes's intelligence by having him deduce facts about Watson without being told them.",      correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Conan Doyle tells us Holmes is intelligent by writing 'Sherlock Holmes was the cleverest man in England'.",     correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Agatha Christie tells us Miss Marple is charming and innocent, rather than showing it through her actions.",    correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "Agatha Christie avoids describing Miss Marple's appearance and focuses only on what she does.",                 correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "A detective who notices a scratch on a door handle and studies it with a magnifying glass appears methodical.", correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "A detective described as 'very methodical' in the text is a better example of show don't tell.",               correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
+    { text: "A red herring is a false clue that misleads the reader and creates suspense.",                                  correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "A red herring is a vital piece of evidence that leads the detective directly to the culprit.",                  correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "A detective story must be planned carefully so that clues and the solution are consistent throughout.",         correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "Unlike other genres, detective stories do not need to be planned because the writer can improvise.",            correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "The setting, suspects and clues must all be appropriate for the type of detective in the story.",               correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "The setting and suspects can be entirely random and unconnected to the detective's background.",                correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "In 'The Four Suspects', Miss Marple solved the mystery by noticing 'Honesty' was written with a capital H.",   correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "In 'The Four Suspects', Miss Marple solved the mystery by recognising a foreign stamp on a letter.",           correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
+    { text: "The past perfect tense describes events that happened before the main story events began.",                     correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "The past perfect tense describes events happening at the same time as the main story events.",                  correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "An effective detective story opening grabs the reader's attention and makes them want to read on.",             correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "An effective detective story opening should explain all the facts of the case so the reader is not confused.",  correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "Starting a story 'in medias res' means beginning in the middle of the action before explaining the background.",correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "Starting a story 'in medias res' means beginning with a detailed description of all the main characters.",     correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "In detective story writing, clues and red herrings should be revealed slowly to build suspense.",               correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+    { text: "In detective story writing, all the clues should be revealed at the start so the reader can solve it early.",   correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
+
+    // ── S6/U1 ──
     { text: "DB Cooper is the man who hijacked a plane in 1971.",                                         correct: true,  topic: "S6/U1/L1 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "DB Cooper is the man which hijacked a plane in 1971.",                                       correct: false, topic: "S6/U1/L1 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "The money that was found on the beach matched the ransom serial numbers.",                    correct: true,  topic: "S6/U1/L1 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
@@ -413,8 +677,6 @@ window.CUSTOM_CONTENT = {
     { text: "The suspect whose brother identified him was Kenneth Christiansen.",                         correct: true,  topic: "S6/U1/L1 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "The briefcase that Cooper carried allegedly contained a bomb.",                              correct: true,  topic: "S6/U1/L1 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "McCoy is the suspect who hijacking a similar plane the following year.",                     correct: false, topic: "S6/U1/L1 Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
-
-    // ── S6/U1/L3 — Unsolved Mysteries: Non-Defining Relative Clauses ──
     { text: "The Broaddus family, who had just bought a new home, received a threatening letter.",        correct: true,  topic: "S6/U1/L2 Non-Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "The Broaddus family who had just bought a new home received a threatening letter.",          correct: false, topic: "S6/U1/L2 Non-Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "Michael Langford, whose family had lived there since the 1960s, was questioned by police.", correct: true,  topic: "S6/U1/L2 Non-Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
@@ -427,8 +689,6 @@ window.CUSTOM_CONTENT = {
     { text: "Netflix, which produced a drama about the case, renewed interest in 2022.",                 correct: true,  topic: "S6/U1/L2 Non-Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "Netflix, who produced a drama about the case, renewed interest in 2022.",                   correct: false, topic: "S6/U1/L2 Non-Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
     { text: "The Watcher, whose identity remains unknown, has never been charged.",                      correct: true,  topic: "S6/U1/L2 Non-Defining Relative Clauses", stage: 6, unit: 1, lesson: 2 },
-
-    // ── S6/U1/L3 — Unsolved Mysteries: Who / Whose / Whom ─────
     { text: "The neighbour with whom police spoke denied everything.",                                   correct: true,  topic: "S6/U1/L2 Who Whose Whom", stage: 6, unit: 1, lesson: 2 },
     { text: "The neighbour with who police spoke denied everything.",                                    correct: false, topic: "S6/U1/L2 Who Whose Whom", stage: 6, unit: 1, lesson: 2 },
     { text: "We met a detective whose methods were unconventional.",                                     correct: true,  topic: "S6/U1/L2 Who Whose Whom", stage: 6, unit: 1, lesson: 2 },
@@ -441,8 +701,6 @@ window.CUSTOM_CONTENT = {
     { text: "I know a woman whom house was watched for years.",                                          correct: false, topic: "S6/U1/L2 Who Whose Whom", stage: 6, unit: 1, lesson: 2 },
     { text: "The author from whom the letter came was never identified.",                                correct: true,  topic: "S6/U1/L2 Who Whose Whom", stage: 6, unit: 1, lesson: 2 },
     { text: "The author from which the letter came was never identified.",                               correct: false, topic: "S6/U1/L2 Who Whose Whom", stage: 6, unit: 1, lesson: 2 },
-
-    // ── S6/U1/L4 — Unsolved Mysteries: Shortened Relative Clauses ──
     { text: "The ship carrying 1,700 barrels of alcohol was found completely abandoned.",                correct: true,  topic: "S6/U1/L4 Shortened Relative Clauses", stage: 6, unit: 1, lesson: 4 },
     { text: "The ship which carrying 1,700 barrels of alcohol was found completely abandoned.",          correct: false, topic: "S6/U1/L4 Shortened Relative Clauses", stage: 6, unit: 1, lesson: 4 },
     { text: "The barrels made from red oak were more likely to leak naturally.",                         correct: true,  topic: "S6/U1/L4 Shortened Relative Clauses", stage: 6, unit: 1, lesson: 4 },
@@ -458,7 +716,7 @@ window.CUSTOM_CONTENT = {
     { text: "Animals facing extinction need international protection.",                                 correct: true,  topic: "S6/U1/L4 Shortened Relative Clauses", stage: 6, unit: 1, lesson: 4 },
     { text: "Animals faced extinction need international protection.",                                  correct: false, topic: "S6/U1/L4 Shortened Relative Clauses", stage: 6, unit: 1, lesson: 4 },
 
-    // ── S6/U2/L1 — At the Movies: Ellipsis ──────────────────
+    // ── S6/U2 ──
     { text: "Laurie agreed to invent the camera although he didn't want to.",                              correct: true,  topic: "S6/U2/L1 Ellipsis", stage: 6, unit: 2, lesson: 1 },
     { text: "Laurie agreed to invent the camera although he didn't want to invent it.",                    correct: false, topic: "S6/U2/L1 Ellipsis", stage: 6, unit: 2, lesson: 1 },
     { text: "Maria is going to try to get the film I want but I'm sure she won't be able to.",             correct: true,  topic: "S6/U2/L1 Ellipsis", stage: 6, unit: 2, lesson: 1 },
@@ -479,8 +737,6 @@ window.CUSTOM_CONTENT = {
     { text: "He wants me to go to the cinema with him and I would like to go to the cinema with him.",     correct: false, topic: "S6/U2/L1 Ellipsis", stage: 6, unit: 2, lesson: 1 },
     { text: "You don't have to tell me if you don't want.",                                                correct: false, topic: "S6/U2/L1 Ellipsis", stage: 6, unit: 2, lesson: 1 },
     { text: "You don't have to tell me if you don't want to.",                                             correct: true,  topic: "S6/U2/L1 Ellipsis", stage: 6, unit: 2, lesson: 1 },
-
-    // ── S6/U2/L2 — At the Movies: Reported Speech 1 ──────────
     { text: "The Terminator said that he would be back.",                                                  correct: true,  topic: "S6/U2/L2 Reported Speech 1", stage: 6, unit: 2, lesson: 2 },
     { text: "The Terminator said that he will be back.",                                                   correct: false, topic: "S6/U2/L2 Reported Speech 1", stage: 6, unit: 2, lesson: 2 },
     { text: "The Godfather said he was going to make him an offer he couldn't refuse.",                    correct: true,  topic: "S6/U2/L2 Reported Speech 1", stage: 6, unit: 2, lesson: 2 },
@@ -499,8 +755,6 @@ window.CUSTOM_CONTENT = {
     { text: "William said that they may take their lives, but they will never take their freedom.",        correct: false, topic: "S6/U2/L2 Reported Speech 1", stage: 6, unit: 2, lesson: 2 },
     { text: "Forrest said that life was like a box of chocolates.",                                        correct: true,  topic: "S6/U2/L2 Reported Speech 1", stage: 6, unit: 2, lesson: 2 },
     { text: "Forrest told that life was like a box of chocolates.",                                        correct: false, topic: "S6/U2/L2 Reported Speech 1", stage: 6, unit: 2, lesson: 2 },
-
-    // ── S6/U2/L3 — At the Movies: Reported Speech 2 ──────────
     { text: "Mr Johnson threatened to call a member of staff if they didn't stop talking.",               correct: true,  topic: "S6/U2/L3 Reported Speech 2", stage: 6, unit: 2, lesson: 3 },
     { text: "Mr Johnson promised to call a member of staff if they didn't stop talking.",                 correct: false, topic: "S6/U2/L3 Reported Speech 2", stage: 6, unit: 2, lesson: 3 },
     { text: "Jo begged them not to drop all of the popcorn.",                                             correct: true,  topic: "S6/U2/L3 Reported Speech 2", stage: 6, unit: 2, lesson: 3 },
@@ -518,7 +772,7 @@ window.CUSTOM_CONTENT = {
     { text: "He claimed never to have watched that movie.",                                                correct: true,  topic: "S6/U2/L3 Reported Speech 2", stage: 6, unit: 2, lesson: 3 },
     { text: "He promised never to have watched that movie.",                                               correct: false, topic: "S6/U2/L3 Reported Speech 2", stage: 6, unit: 2, lesson: 3 },
 
-    // ── S6/U3/L1 — Rivalries: Phrasal Verbs (Ford vs Ferrari) ──
+    // ── S6/U3 ──
     { text: "My old school reports were in a box. I came across them in the attic yesterday.",          correct: true,  topic: "S6/U3/L1 Phrasal Verbs", stage: 6, unit: 3, lesson: 1 },
     { text: "My old school reports were in a box. I came across with them in the attic yesterday.",    correct: false, topic: "S6/U3/L1 Phrasal Verbs", stage: 6, unit: 3, lesson: 1 },
     { text: "Carl's children are very badly behaved. I don't know how he puts up with them.",          correct: true,  topic: "S6/U3/L1 Phrasal Verbs", stage: 6, unit: 3, lesson: 1 },
@@ -542,8 +796,6 @@ window.CUSTOM_CONTENT = {
     { text: "Do you still see your old neighbours? No, I fell out them.",                             correct: false, topic: "S6/U3/L1 Phrasal Verbs", stage: 6, unit: 3, lesson: 1 },
     { text: "Harry often lets the team down by missing football practice.",                           correct: true,  topic: "S6/U3/L1 Phrasal Verbs", stage: 6, unit: 3, lesson: 1 },
     { text: "Harry often lets down the team by missing football practice.",                           correct: false, topic: "S6/U3/L1 Phrasal Verbs", stage: 6, unit: 3, lesson: 1 },
-
-    // ── S6/U3/L2 — Rivalries: Phrasal Verbs Passive & Infinitive ──
     { text: "Tom was beaten up on his way home.",                                                     correct: true,  topic: "S6/U3/L2 Phrasal Verbs Passive", stage: 6, unit: 3, lesson: 2 },
     { text: "Tom was beat up on his way home.",                                                       correct: false, topic: "S6/U3/L2 Phrasal Verbs Passive", stage: 6, unit: 3, lesson: 2 },
     { text: "The match has been called off.",                                                         correct: true,  topic: "S6/U3/L2 Phrasal Verbs Passive", stage: 6, unit: 3, lesson: 2 },
@@ -567,8 +819,6 @@ window.CUSTOM_CONTENT = {
     { text: "Jane's phone is always engaged. It's impossible to get through her.",                    correct: false, topic: "S6/U3/L2 Phrasal Verbs Passive", stage: 6, unit: 3, lesson: 2 },
     { text: "It was so kind of you to put us up.",                                                    correct: true,  topic: "S6/U3/L2 Phrasal Verbs Passive", stage: 6, unit: 3, lesson: 2 },
     { text: "It was so kind of you to put up us.",                                                    correct: false, topic: "S6/U3/L2 Phrasal Verbs Passive", stage: 6, unit: 3, lesson: 2 },
-
-    // ── S6/U3/L3-L4 — Rivalries: Habits, Would & Used To ────────
     { text: "Before my brother had children, he used to have a motorbike.",                           correct: true,  topic: "S6/U3/L3 Habits & Would", stage: 6, unit: 3, lesson: 3 },
     { text: "Before my brother had children, he use to have a motorbike.",                            correct: false, topic: "S6/U3/L3 Habits & Would", stage: 6, unit: 3, lesson: 3 },
     { text: "My sister often gets annoyed with her husband. He is always winding the children up.",   correct: true,  topic: "S6/U3/L3 Habits & Would", stage: 6, unit: 3, lesson: 3 },
@@ -603,7 +853,7 @@ window.CUSTOM_CONTENT = {
     { text: "I would love to go to the football match!",                                              correct: true,  topic: "S6/U3/L3 Habits & Would", stage: 6, unit: 3, lesson: 3 },
     { text: "I would want to go to the football match!",                                              correct: false, topic: "S6/U3/L3 Habits & Would", stage: 6, unit: 3, lesson: 3 },
 
-    // ── S6/U6/L1 — Unbelievable Stories: 2nd Conditional ──────
+    // ── S6/U6 ──
     { text: "If Violet worked on a different ship, she would survive.",             correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
     { text: "If the Titanic had more lifeboats, fewer people would die.",           correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
     { text: "If I were the captain, I would slow down near the icebergs.",          correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
@@ -612,8 +862,6 @@ window.CUSTOM_CONTENT = {
     { text: "She would swim to safety if she knew how to swim.",                    correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
     { text: "If you ate rotten food, you would get sick.",                          correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
     { text: "She would go to jail if she steal that car.",                          correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
-
-    // ── S6/U6/L2 — Unbelievable Stories: 3rd Conditional ──────
     { text: "If the clergy hadn't been terrible, they wouldn't have made people angry.",           correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
     { text: "If the council hadn't constructed a stage, fewer people would have died.",            correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
     { text: "If the government had paid attention, mental health wouldn't have got worse.",        correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
@@ -622,8 +870,6 @@ window.CUSTOM_CONTENT = {
     { text: "If they had banned music earlier, people wouldn't have danced until they fainted.",   correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
     { text: "If I hadn't spent all my money, I would have had enough for the ticket.",             correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
     { text: "If the food wasn't disgusting, it wouldn't have made people sick.",                   correct: false, topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
-
-    // ── S6/U6/L3 — Unbelievable Stories: Mixed Conditionals ───
     { text: "If they weren't argumentative, they wouldn't have fallen out.",                      correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
     { text: "If he wasn't fit, he didn't finish the race.",                                        correct: false, topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
     { text: "If my grandfather hadn't won a gold medal, we wouldn't live in a big house.",         correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
@@ -633,7 +879,7 @@ window.CUSTOM_CONTENT = {
     { text: "If there had been a doctor on the plane, the man wouldn't have died.",                correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
     { text: "If she was taller, she might have become a model.",                                   correct: false, topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
 
-    // ── S6/U8/L3 — Advertising: Formal vs Informal ────────────
+    // ── S6/U8 ──
     { text: "I am writing to complain in the strongest terms about my recent experience.",         correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
     { text: "I'm writing cos I'm well annoyed about what happened on my holiday.",                 correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
     { text: "I would be grateful if you could look into this matter at your earliest convenience.", correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
@@ -651,7 +897,215 @@ window.CUSTOM_CONTENT = {
     { text: "Yours faithfully is used to close a formal letter when the recipient's name is unknown.", correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
     { text: "You'd write 'Yours faithfully' when you don't know who you're writing to.",            correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
 
-    // S9/U5/L6 — Parentheses; Adverbs of Degree and Manner
+    // ── S8/U1 ──
+    { text: "The scientist, who had studied climate change for decades, presented her findings to the committee.",   correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "The scientist, who had studied climate change for decades, presented her findings to the committee!",   correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "Although it is likely that humans have contributed to climate change, natural forces also play a role.", correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "Although it is likely that humans have contributed to climate change, but natural forces also play a role.", correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "Consequently, the ice caps melt, which results in rising sea levels.",                    correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "Consequently the ice caps melt which results in rising sea levels.",                      correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "The Earth's temperature has risen significantly; the past five years have been the hottest ever recorded.", correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "The Earth's temperature has risen significantly, but the past five years have been the hottest ever recorded.", correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
+    { text: "When the house started to shake, I was at home with my three children.",                  correct: true,  topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
+    { text: "When the house started to shake I was at home with my three children.",                   correct: false, topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
+    { text: "Since the 2010 earthquake, our family has had an emergency plan.",                        correct: true,  topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
+    { text: "Since the 2010 earthquake, our family have had an emergency plan.",                       correct: false, topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
+    { text: "There were sheer terror and anguish as people ran from the rising water.",                correct: true,  topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
+    { text: "There was sheer terror and anguish as people ran from the rising water.",                 correct: false, topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
+
+    // ── S8/U2 ──
+    { text: "'That's progress!' grandmother exclaimed as granddaughter told her tale.",                correct: true,  topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
+    { text: "'That's progress!' grandmother exclaimed as granddaughter told her tale",                 correct: false, topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
+    { text: "'This boy did not take anything,' she said. 'I have watched him.'",                      correct: true,  topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
+    { text: "'This boy did not take anything,' she said, 'I have watched him.'",                      correct: false, topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
+    { text: "'Ten pesos,' he muttered, and the girl reached into her pocket.",                        correct: true,  topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
+    { text: "'Ten pesos,' he muttered. And the girl reached into her pocket.",                        correct: false, topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
+    { text: "She held the hummingbird with the same tenderness as her grandmother had held her.",     correct: true,  topic: "S8/U2/L2 Plot and Character", stage: 8, unit: 2, lesson: 2 },
+    { text: "She held the hummingbird with the same tenderness as her grandmother had held she.",     correct: false, topic: "S8/U2/L2 Plot and Character", stage: 8, unit: 2, lesson: 2 },
+    { text: "Granddaughter grew up to be trusting and trustworthy, generous and kind.",               correct: true,  topic: "S8/U2/L3 Plot and Character", stage: 8, unit: 2, lesson: 3 },
+    { text: "Granddaughter grew up to be trusting and trustworthy, generous and kindly.",             correct: false, topic: "S8/U2/L3 Plot and Character", stage: 8, unit: 2, lesson: 3 },
+    { text: "In time, grandmother grew old and more frail, so granddaughter attended to her.",        correct: true,  topic: "S8/U2/L4 Climbing the mountains alone", stage: 8, unit: 2, lesson: 4 },
+    { text: "In time, grandmother grew old and more frail, so granddaughter attended for her.",       correct: false, topic: "S8/U2/L4 Climbing the mountains alone", stage: 8, unit: 2, lesson: 4 },
+
+    // ── S8/U3 ──
+    { text: "The phrase 'an open secret' is an example of an oxymoron because it combines two contradictory ideas.", correct: true, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { text: "The phrase 'an open secret' is an example of a simile because it compares two different things.", correct: false, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { text: "Non-standard English includes words and grammatical patterns that fall outside conventional forms of the language.", correct: true, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { text: "Non-standard English is simply English that contains spelling mistakes and should always be corrected.", correct: false, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
+    { text: "Dashes create a more conversational and informal effect than commas in a sentence.", correct: true, topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
+    { text: "Brackets and commas always create exactly the same effect in a sentence.", correct: false, topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
+    { text: "Ben Gunn's non-standard English and contractions help to create a distinctive and believable character voice.", correct: true, topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { text: "Ben Gunn speaks in formal, standard English throughout the novel to show that he is well-educated.", correct: false, topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
+    { text: "In a drama script, stage directions tell actors how to move and speak, and help the reader picture the scene.", correct: true, topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
+    { text: "Stage directions are optional in a script and are usually removed before the play is performed.", correct: false, topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
+    { text: "A compound-complex sentence contains two main clauses and at least one subordinate clause.", correct: true, topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+    { text: "A compound-complex sentence contains one main clause and two subordinate clauses.", correct: false, topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
+    { text: "Adverbs add detail and meaning to verbs and can show how a character is feeling or behaving.", correct: true, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+    { text: "Adverbs describe nouns and are usually placed directly before the noun they modify.", correct: false, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
+
+    // ── S8/U4 ──
+    { text: "A writer's narrative voice and their own personal views are not necessarily the same thing.", correct: true, topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+    { text: "The narrator of a text is always the same person as the writer who created the text.", correct: false, topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
+    { text: "A discussion text considers different opinions in a balanced way and usually concludes with the writer's overall view.", correct: true, topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+    { text: "A discussion text argues strongly for one point of view and uses persuasive techniques to change the reader's mind.", correct: false, topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
+    { text: "A writer can create humour by placing short simple sentences after longer ones to deliver an unexpected punchline.", correct: true, topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
+    { text: "Short simple sentences should always be avoided in entertaining writing because they make the text too easy to read.", correct: false, topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
+    { text: "Dystopian fiction is popular partly because it explores human fears about being controlled by those more powerful.", correct: true, topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+    { text: "Dystopian fiction is set in an ideal future world where technology has solved all of humanity's problems.", correct: false, topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
+    { text: "Writers choose synonyms carefully because different words with similar meanings can create very different effects.", correct: true, topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+    { text: "In creative writing, writers should always choose the most complex synonym available to impress the reader.", correct: false, topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
+    { text: "Withholding information in a narrative can create tension and mystery, encouraging the reader to keep reading.", correct: true, topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+    { text: "A writer should always reveal all information to the reader as quickly as possible to avoid confusion.", correct: false, topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
+
+    // ── S8/U5 ──
+    { text: "A coordinating conjunction such as 'but' or 'although' joins a main clause to a subordinate clause.", correct: false, topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+    { text: "A subordinating conjunction such as 'although' or 'while' joins a main clause to a subordinate clause.", correct: true, topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
+    { text: "Writers can combine techniques such as figurative language, sentence types and punctuation to create a powerful overall effect.", correct: true, topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
+    { text: "Using only one technique at a time is more effective than combining techniques, as too many features confuse the reader.", correct: false, topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
+    { text: "Phonetic spelling and elision in dialogue can make a character's voice sound realistic and reveal something about their background.", correct: true, topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+    { text: "All fictional dialogue should be written in standard English so that readers can understand what characters are saying.", correct: false, topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
+    { text: "In advice texts, modal verbs like 'must', 'should' and 'may' show different levels of obligation and possibility.", correct: true, topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+    { text: "Advice texts should avoid using imperative verbs as these sound too aggressive and may put readers off.", correct: false, topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
+    { text: "A superhero film typically features a secret identity, an origin story explaining the hero's powers, and a conflict with a supervillain.", correct: true, topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
+    { text: "Superhero films are unusual in that they rarely use exaggeration and instead aim to portray their characters as completely realistic.", correct: false, topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
+    { text: "A film script includes detailed descriptions of camera shots and settings because film is a visual medium that tells its story through images.", correct: true, topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
+    { text: "Film scripts are identical to stage play scripts because both are performed by actors speaking lines of dialogue.", correct: false, topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
+
+    // ── S8/U6 ──
+    { text: "Emotive language uses words chosen to produce a strong emotional response in the reader, such as shock, fear or sympathy.", correct: true, topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+    { text: "Emotive language is always neutral and factual, designed to give readers accurate information without influencing their feelings.", correct: false, topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
+    { text: "A healthy fear of the dark is deeply ingrained in humans because throughout evolutionary history, darkness placed us in genuine danger.", correct: true, topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+    { text: "Children's fear of the dark is caused entirely by horror films and monster stories, and does not have any natural or biological basis.", correct: false, topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
+    { text: "A fable is a short story designed to teach a moral lesson, often using symbolic characters and a simple style.", correct: true, topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { text: "A fable is a long realistic novel that explores the complex inner lives of its characters without any moral message.", correct: false, topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
+    { text: "In 'The Selfish Giant', the giant undergoes a character journey, transforming from a selfish antagonist into a kind and generous figure through the influence of the little boy.", correct: true, topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+    { text: "In 'The Selfish Giant', the giant remains selfish and cruel from the beginning to the end of the story, and never shows any change in character.", correct: false, topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
+    { text: "A comparative adjective compares two things and is usually formed by adding -er to the adjective or using the word 'more' before it.", correct: true, topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { text: "A comparative adjective describes the most extreme version of something and is formed using -est or 'most'.", correct: false, topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
+    { text: "An extended metaphor is a comparison that is developed and sustained throughout an entire piece of writing, building up a layered picture of its subject.", correct: true, topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+    { text: "An extended metaphor is a very long simile that uses the word 'like' or 'as' many times in a single sentence.", correct: false, topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
+
+    // ── S8/U7 ──
+    { text: "Imagery in fiction writing can include aural, visual and tactile details that help the reader experience the setting through their senses.", correct: true, topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+    { text: "Imagery in fiction writing refers only to visual descriptions — it is never used to describe sounds or physical sensations.", correct: false, topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
+    { text: "Explicit information in a text is stated directly and clearly, while implicit information is suggested through clues and must be inferred by the reader.", correct: true, topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+    { text: "Explicit and implicit information mean the same thing — both refer to details the reader must work out from clues in the text.", correct: false, topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
+    { text: "A monologue is a long speech given by a single character, used to reveal their thoughts, feelings and point of view.", correct: true, topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+    { text: "A monologue is a conversation between two characters that reveals their contrasting points of view on a shared problem.", correct: false, topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
+    { text: "When using multiple adjectives before a noun, the correct order is: opinion, then size, shape, age, colour, origin, material and qualifier.", correct: true, topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+    { text: "When using multiple adjectives before a noun, colour should always come first, followed by size, then opinion and finally age.", correct: false, topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
+    { text: "Contrast is a structural technique where two different things are placed side by side to highlight their differences and create a particular effect on the reader.", correct: true, topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+    { text: "Contrast in fiction always involves two characters who hold opposing views, and is only effective when one of them changes their mind by the end.", correct: false, topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
+    { text: "The active voice shows who is doing something by placing the subject before the verb; the passive voice places the person or thing acted upon before the verb.", correct: true, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+    { text: "The passive voice is more direct than the active voice and is therefore preferred in all formal report writing.", correct: false, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
+
+    // ── S8/U8 ──
+    { text: "Oliver looked back hesitantly before stepping off the diving board.",                correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "Oliver looked back hesitant before stepping off the diving board.",                  correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "The divers hurtled aggressively towards the water with eyes fixed ahead.",           correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "The divers hurtled aggressive towards the water with eyes fixed ahead.",             correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "She greedily ate the food without offering any to the others.",                      correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "She greedy ate the food without offering any to the others.",                        correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "He was completely unaware that the train had already left the platform.",            correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "He was complete unaware that the train had already left the platform.",              correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "I almost fell over when I heard the news about the shipwreck.",                      correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "I nearly almost fell over when I heard the news about the shipwreck.",               correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
+    { text: "First, I studied the map carefully. Next, I planned the route. Afterwards, we set off.",  correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "First, I studied the map careful. Next, I planned the route. Afterwards, we set off.",    correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "The experiment was difficult. Moreover, the results were inconclusive.",                  correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "The experiment was difficult. More over, the results were inconclusive.",                 correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "Recently, scientists have found new evidence to support this theory.",                    correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "Recent, scientists have found new evidence to support this theory.",                      correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "While it is true that choice brings freedom, it can also cause anxiety.",                 correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+    { text: "While it is true that choice brings freedom, but it can also cause anxiety.",             correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
+
+    // ── S8/U9 ──
+    { text: "Writers sometimes begin sentences with coordinating conjunctions like 'And' or 'But' for deliberate effect — creating a pause and making the writing feel more personal and emotional.", correct: true, topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+    { text: "Beginning a sentence with 'And' or 'But' is always a grammatical error and should never appear in published writing.", correct: false, topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
+    { text: "An extended metaphor is a single comparison that is developed and explored across several lines or an entire text, not just used once.", correct: true, topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
+    { text: "An extended metaphor is a metaphor that uses particularly long or complex sentences to make the comparison seem more impressive.", correct: false, topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
+    { text: "An autobiography is a text in which the writer gives an account of their own life and experiences, written in their own words.", correct: true, topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+    { text: "An autobiography is a text written by one person about the life of another, usually a famous or historically important individual.", correct: false, topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
+    { text: "A present participle verb form is made by adding '-ing' to the base verb; when placed at the start of a sentence it can make the action feel immediate and ongoing.", correct: true, topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+    { text: "A present participle verb form is used only in the past tense and is always formed by adding '-ed' to the base verb.", correct: false, topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
+    { text: "The moral message of a story is the lesson about right and wrong that the writer conveys through the events and outcomes of the narrative.", correct: true, topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
+    { text: "The moral message of a story is a direct speech given by one of the characters at the end, summarising what everyone in the story has learnt.", correct: false, topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
+    { text: "An epilogue is a section at the end of a story that shows what happens to the characters after the main events have concluded, providing a sense of resolution.", correct: true, topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
+    { text: "An epilogue is an introduction placed before the first chapter that gives the reader background information about the setting and characters.", correct: false, topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
+
+    // ── S9/U1 ──
+    { text: "The exclamation mark in 'Welcome to your new life!' conveys excitement and a sense of dramatic announcement.",                                           correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The exclamation mark in 'Welcome to your new life!' shows that the speaker is asking a question.",                                                      correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The ellipsis in 'There was a split second of inaction, and then . . .' creates suspense by pausing before a dramatic moment.",                          correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The ellipsis in 'There was a split second of inaction, and then . . .' shows that the writer forgot how to finish the sentence.",                       correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The question mark in 'You do know there is no going back, don't you, Louis?' makes The Doorkeeper sound threatening and in control.",                   correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The question mark in 'You do know there is no going back, don't you, Louis?' shows The Doorkeeper is genuinely unsure whether Louis understands.",      correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "'Which way now? Go on or go home?' are rhetorical questions — they express Louis's dilemma rather than expecting an answer.",                           correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "'Which way now? Go on or go home?' are direct questions addressed to Relic, waiting for her to give Louis directions.",                                  correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The antithesis in 'Paris is for the fearful, but Darkparis is for the fearless' creates contrast to show that the underground world is different from ordinary city life.", correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "The antithesis in 'Paris is for the fearful, but Darkparis is for the fearless' uses a simile to compare the two places.",                              correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A flashback in a story goes back in time to give the reader information that helps explain current events.",                                             correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A flashback in a story jumps forward in time to show what will happen to the characters in the future.",                                                 correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A cliffhanger ending leaves the reader in suspense, making them want to find out what happens next.",                                                    correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "A cliffhanger ending resolves all the main questions in a story so that the reader feels satisfied.",                                                    correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "An extended metaphor is a comparison that is developed and repeated throughout a piece of writing, not just used once.",                                 correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+    { text: "An extended metaphor is a very long simile that uses the words 'like' or 'as' several times in the same sentence.",                                     correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
+
+    // ── S9/U2 ──
+    { text: "A simple sentence contains one main clause and expresses a complete thought on its own.",                                                        correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A simple sentence must contain at least two main clauses joined by 'and', 'but' or 'or'.",                                                      correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A compound sentence joins two main clauses using a coordinating conjunction such as 'and', 'but' or 'or'.",                                     correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A compound sentence is one that contains a main clause and at least one subordinate clause.",                                                    correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A complex sentence contains one main clause and one or more subordinate clauses that depend on it.",                                             correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A complex sentence contains two main clauses of equal importance, joined by a conjunction.",                                                     correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A minor sentence does not contain a main verb — for example, 'Easy? Maybe!' in the blog post.",                                                 correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A minor sentence is simply any very short sentence — it must be fewer than five words long.",                                                    correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "Placing a simple sentence after a longer, complex sentence can reinforce the main point and create a clear, direct impact.",                     correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "Placing a simple sentence after a longer sentence always makes the writing sound less formal and less intelligent.",                             correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
+    { text: "A colon can be used to introduce an explanation, list or key word, creating a deliberate pause before the important information.",               correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "A colon can only be used to introduce a list — it is incorrect to use it before a single word or explanation.",                                  correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "A semi-colon can be used between two closely related main clauses to suggest a connection or explain a relationship between them.",              correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "A semi-colon works in exactly the same way as a full stop — it simply means the sentence has ended.",                                            correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon links two related ideas and draws them together.", correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+    { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon shows that the second idea contradicts the first.", correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
+
+    // ── S9/U3 ──
+    { text: "In detective fiction, the narrator is often a companion who is slightly less clever than the detective, allowing the reader to be surprised along with them.", correct: true, topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+    { text: "A red herring in detective fiction is a clue that deliberately misleads the reader away from the true solution.", correct: true, topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { text: "Watson narrates 'The Red-Headed League' because Conan Doyle wanted readers to feel superior to Holmes.", correct: false, topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
+    { text: "Deductive reasoning means reaching a conclusion by observing specific details and working backwards to a general explanation.", correct: true, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+    { text: "Holmes always keeps his reasoning secret from Watson until the very end of each story.", correct: false, topic: "S9/U3/L4 Investigating the Street", stage: 9, unit: 3, lesson: 4 },
+    { text: "Suspense in detective fiction is created partly by withholding information from the reader.", correct: true, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+    { text: "Short, punchy sentences can create a sense of urgency and tension in an action scene.", correct: true, topic: "S9/U3/L3 The End of the League", stage: 9, unit: 3, lesson: 3 },
+    { text: "Dialogue in detective fiction is always used only to give the reader factual information.", correct: false, topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
+    { text: "The word 'however' is a connective that introduces a contrasting idea.", correct: true, topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+    { text: "A complex sentence contains two main clauses joined by a coordinating conjunction like 'and' or 'but'.", correct: false, topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { text: "In formal analytical writing, the writer's personal opinion should always be stated in the first sentence.", correct: false, topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+    { text: "Using reported speech instead of direct speech creates distance and can make information seem less immediate.", correct: true, topic: "S9/U3/L3 The End of the League", stage: 9, unit: 3, lesson: 3 },
+    { text: "A compound-complex sentence contains at least two main clauses and one subordinate clause.", correct: true, topic: "S9/U3/L4 Investigating the Street", stage: 9, unit: 3, lesson: 4 },
+    { text: "Semicolons can be used to separate two closely related main clauses without a conjunction.", correct: true, topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
+    { text: "A colon in fiction is always used to introduce a list.", correct: false, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+    { text: "Setting can be used in detective fiction to create atmosphere and foreshadow danger.", correct: true, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+
+    // ── S9/U4 ──
+    { text: "The past perfect tense ('had done') is used to describe an event that happened before another event in the past.", correct: true, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+    { text: "The present perfect tense ('have done') always refers to an event that is completely finished with no connection to the present.", correct: false, topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { text: "Time adverbials such as 'meanwhile', 'subsequently' and 'at that moment' help to organise events in a narrative.", correct: true, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+    { text: "A first conditional sentence describes a realistic future possibility: 'If it rains, I will take an umbrella.'", correct: true, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { text: "A second conditional sentence describes a realistic present situation: 'If I have time, I finish my work.'", correct: false, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { text: "The future perfect tense ('will have done') describes an action that will be completed at some point before a future time.", correct: true, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { text: "Switching from past tense to present tense in the middle of a narrative always means the writer has made an error.", correct: false, topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { text: "Using the present tense in fiction can create a sense of immediacy, as if events are happening right now.", correct: true, topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
+    { text: "A third conditional sentence describes an imaginary past situation and its imagined consequences: 'If I had studied harder, I would have passed.'", correct: true, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { text: "Time adverbials always appear at the beginning of a sentence.", correct: false, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+    { text: "The continuous aspect ('was doing') suggests an action that was ongoing at a particular moment in the past.", correct: true, topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { text: "In English, there are three main tenses — past, present and future — and each has simple, continuous and perfect forms.", correct: true, topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { text: "The phrase 'used to' describes a habit or state in the past that no longer exists.", correct: true, topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { text: "Modal verbs like 'could', 'might' and 'would' are used to express certainty, not possibility.", correct: false, topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { text: "A subordinate clause beginning with 'when', 'before' or 'after' establishes a time relationship between two events.", correct: true, topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
+    { text: "The past simple tense and past perfect tense mean exactly the same thing and can be used interchangeably.", correct: false, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+
+    // ── S9/U5 ──
     { text: "Many species (but not all) can thrive in a good zoo.", correct: true, topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
     { text: "Many species (but not all) can thrives in a good zoo.", correct: false, topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
     { text: "The animals (who had lived there for years) seemed quite settled.", correct: true, topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
@@ -669,8 +1123,7 @@ window.CUSTOM_CONTENT = {
     { text: "The article was only partially balanced in its approach.", correct: true, topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
     { text: "The article was only partial balanced in its approach.", correct: false, topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
 
-
-    // S9/U6/L4-L5 — Sonnet conventions; iambic pentameter; enjambment; caesura
+    // ── S9/U6 ──
     { text: "A sonnet traditionally consists of 14 lines written in iambic pentameter.", correct: true, topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
     { text: "A sonnet traditionally consists of 12 lines written in iambic pentameter.", correct: false, topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
     { text: "A couplet is two successive lines of poetry that usually rhyme.", correct: true, topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
@@ -688,43 +1141,43 @@ window.CUSTOM_CONTENT = {
     { text: "Pathetic fallacy is a technique where nature is used to reflect a character's emotions.", correct: true, topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
     { text: "Pathetic fallacy is a technique where a character feels sorry for nature around them.", correct: false, topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
 
-    // ── S4/U8/L2 — Past Perfect Affirmative ──────────────────────
-    { text: "After the men had pulled the lifeboats across the ice, they arrived at the island.",           correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "After the men had pull the lifeboats across the ice, they arrived at the island.",             correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "By the time they reached Elephant Island, the water had frozen solid.",                        correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "By the time they reached Elephant Island, the water had freeze solid.",                        correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "They set off for home after they had rescued everyone.",                                       correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "They set off for home after they had rescue everyone.",                                        correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "After they had eaten all their food, they wanted to go home.",                                 correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "After they had ate all their food, they wanted to go home.",                                   correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "Josh turned his jacket inside out because the rescue team had not seen him.",                  correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "Josh turned his jacket inside out because the rescue team had not saw him.",                   correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "When they arrived at the other side of the island, they had walked for 36 hours.",             correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "When they arrived at the other side of the island, they had walk for 36 hours.",               correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "Shackleton was relieved because all of his men had survived.",                                 correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "Shackleton was relieved because all of his men had survive.",                                  correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "After they had rested for twenty minutes, they started walking again.",                        correct: true,  topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
-    { text: "After they had rested for twenty minutes, they start walking again.",                          correct: false, topic: "S4/U8/L2 Past Perfect", stage: 4, unit: 8, lesson: 2 },
+    // ── S9/U7 ──
+    { text: "A flashback is a narrative technique that interrupts the present action to show an earlier event.", correct: true, topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
+    { text: "A motif is a recurring image or symbol in a text that develops a theme.", correct: true, topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
+    { text: "Anti-climax always signals that the story has failed — the writer was unable to think of a dramatic ending.", correct: false, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
+    { text: "A Bildungsroman is a coming-of-age story in which a young character grows and discovers their identity.", correct: true, topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
+    { text: "In a quest narrative, the hero always returns changed after completing their journey.", correct: true, topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
+    { text: "In fantasy literature, a trickster character always helps the hero by giving them useful information.", correct: false, topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
+    { text: "Using time standing still in a narrative can create contrast with the urgency felt by other characters.", correct: true, topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
+    { text: "Symbols in fantasy literature must always be explained by the narrator to be effective.", correct: false, topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
+    { text: "A circular narrative returns to its starting point at the end, suggesting transformation through contrast.", correct: true, topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
+    { text: "The title of a story is always a straightforward description of the plot's main event.", correct: false, topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
+    { text: "Fortune and fate are both themes in quest narratives — fortune refers to chance events; fate refers to destiny.", correct: true, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
+    { text: "Fantasy stories only use unrealistic settings and therefore cannot explore real-world themes.", correct: false, topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
+    { text: "An anti-climax can be used deliberately by a writer to subvert the reader's expectations and create meaning.", correct: true, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
+    { text: "Secondary characters in quest stories often function as symbolic tests of the hero's qualities.", correct: true, topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
+    { text: "A backstory is information about events that happened before the main story begins, used to explain characters' motivations.", correct: true, topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
+    { text: "The climax of a story must always come in the final scene.", correct: false, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
 
-    // ── S4/U8/L4 — Past Perfect Negative & Questions ─────────────
-    { text: "I hadn't known anything about Alison Wright before I read the text.",                          correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "I hadn't knew anything about Alison Wright before I read the text.",                           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "She hadn't been to Mexico before she visited her friend Rosa there last summer.",               correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "She hadn't been to Mexico before she had visited her friend Rosa there last summer.",           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "He hadn't charged his phone battery before he set off on his journey.",                        correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "He didn't charged his phone battery before he set off on his journey.",                        correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Had she broken any bones in the accident?",                                                    correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Had she broke any bones in the accident?",                                                     correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Where had she been before she got to Thailand?",                                               correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Where had she went before she got to Thailand?",                                               correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "By the time the rescue team found Josh, he hadn't eaten anything for hours.",                  correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "By the time the rescue team found Josh, he hadn't eat anything for hours.",                    correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Had the men ever crossed mountains like that before?",                                         correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Had the men ever cross mountains like that before?",                                           correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Alison hadn't met the stranger before, but he drove her to hospital.",                         correct: true,  topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
-    { text: "Alison didn't met the stranger before, but he drove her to hospital.",                         correct: false, topic: "S4/U8/L4 Past Perfect Negatives", stage: 4, unit: 8, lesson: 4 },
+    // ── S9/U8 ──
+    { text: "When a speaker uses 'I' in a persuasive speech, it makes them sound direct and personally committed to the cause.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "Using 'we' in a speech always suggests the speaker is part of a powerful organisation and excludes the audience from the argument.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "Rhetorical questions in speeches are asked because the speaker genuinely wants the audience to provide an answer aloud.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "Using statistics in a persuasive speech can make an argument seem more credible and urgent.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "Addressing the audience as 'you' directly invites them to consider their own position and responsibilities.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "A first-person plural pronoun like 'we' can create a sense of shared identity between speaker and audience.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "In persuasive speeches, emotive language is always considered manipulative and should be avoided by serious speakers.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "A feature article differs from a news article in that it aims to entertain as well as inform.", correct: true, topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
+    { text: "A first-person autobiographical account is always less reliable than a third-person biography because it is subjective.", correct: false, topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
+    { text: "Science fiction uses imaginary technology and situations that could plausibly exist in the future, unlike fantasy which depicts impossible worlds.", correct: true, topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
+    { text: "Juxtaposition in a drama set means placing two contrasting settings side by side to highlight differences in theme or character.", correct: true, topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
+    { text: "Stage directions in a play script are spoken aloud by the actors to explain what is happening to the audience.", correct: false, topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
+    { text: "Physical symbols in drama, such as a model aeroplane, can represent a character's hopes and ambitions.", correct: true, topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
+    { text: "In a persuasive speech, acknowledging the opposing side's view always weakens the speaker's argument.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { text: "Using formal, standard English in dialogue suggests a character is educated, respectful, or in an authoritative position.", correct: true, topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
+    { text: "Contrasting characters in drama always represent good versus evil — one must be the hero and one the villain.", correct: false, topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
 
-    // ── S9/U9/L6 — Puns and Double Meanings ──────────────────────────
+    // ── S9/U9 ──
     { text: "The title 'How to Serve Man' works as a pun because 'serve' can mean both 'to help' and 'to prepare as food'.",                                           correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
     { text: "The title 'How to Serve Man' is a pun because 'serve' only means 'to help other people', which is what the Kanamit are doing.",                          correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
     { text: "In the sentence 'It suddenly struck him', the word 'struck' has two meanings: to physically hit someone, and to suddenly realise something.",             correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
@@ -746,353 +1199,11 @@ window.CUSTOM_CONTENT = {
     { text: "An ambiguous ending leaves the meaning open so that different readers can reach different conclusions.",                                                  correct: true,  topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
     { text: "An ambiguous ending always means the writer ran out of ideas and could not decide how to finish the story.",                                              correct: false, topic: "S9/U9/L6 Puns and Double Meanings", stage: 9, unit: 9, lesson: 6 },
 
-    // ── S9/U1/L2 — Punctuation for Rhetorical Effect ─────────────────
-    { text: "The exclamation mark in 'Welcome to your new life!' conveys excitement and a sense of dramatic announcement.",                                           correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "The exclamation mark in 'Welcome to your new life!' shows that the speaker is asking a question.",                                                      correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "The ellipsis in 'There was a split second of inaction, and then . . .' creates suspense by pausing before a dramatic moment.",                          correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "The ellipsis in 'There was a split second of inaction, and then . . .' shows that the writer forgot how to finish the sentence.",                       correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "The question mark in 'You do know there is no going back, don't you, Louis?' makes The Doorkeeper sound threatening and in control.",                   correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "The question mark in 'You do know there is no going back, don't you, Louis?' shows The Doorkeeper is genuinely unsure whether Louis understands.",      correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "'Which way now? Go on or go home?' are rhetorical questions — they express Louis's dilemma rather than expecting an answer.",                           correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "'Which way now? Go on or go home?' are direct questions addressed to Relic, waiting for her to give Louis directions.",                                  correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "The antithesis in 'Paris is for the fearful, but Darkparis is for the fearless' creates contrast to show that the underground world is different from ordinary city life.", correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "The antithesis in 'Paris is for the fearful, but Darkparis is for the fearless' uses a simile to compare the two places.",                              correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "A flashback in a story goes back in time to give the reader information that helps explain current events.",                                             correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "A flashback in a story jumps forward in time to show what will happen to the characters in the future.",                                                 correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "A cliffhanger ending leaves the reader in suspense, making them want to find out what happens next.",                                                    correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "A cliffhanger ending resolves all the main questions in a story so that the reader feels satisfied.",                                                    correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "An extended metaphor is a comparison that is developed and repeated throughout a piece of writing, not just used once.",                                 correct: true,  topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
-    { text: "An extended metaphor is a very long simile that uses the words 'like' or 'as' several times in the same sentence.",                                     correct: false, topic: "S9/U1/L2 Punctuation for Effect", stage: 9, unit: 1, lesson: 2 },
 
-    // ============================================================
-    // S9/U2 — Law and Order — Vocabulary
-    // ============================================================
-    { word: "conscience",       hint: "An inner sense telling you if your actions are right or wrong",                              topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
-    { word: "empathy",          hint: "The ability to understand and share the feelings of others",                                  topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
-    { word: "compassion",       hint: "Concern and pity for others",                                                                 topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
-    { word: "cooperate",        hint: "To work together towards a shared goal",                                                      topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
-    { word: "anticipation",     hint: "The feeling of expecting something to happen",                                                topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
-    { word: "decisive",         hint: "Able to make decisions quickly and confidently",                                              topic: "S9/U2/L2 Join the Police", stage: 9, unit: 2, lesson: 2 },
-    { word: "conviction",       hint: "A formal decision by a court that someone is guilty of a crime",                             topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
-    { word: "disposition",      hint: "A person's natural manner and personality",                                                   topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
-    { word: "deduction",        hint: "Working out a conclusion logically from the clues available",                                 topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
-    { word: "reconstruction",   hint: "Acting out a past event to help witnesses remember what happened",                            topic: "S9/U2/L4 Young Detectives", stage: 9, unit: 2, lesson: 4 },
-    { word: "conventions",      hint: "The accepted rules or typical features of a particular genre or type of writing",             topic: "S9/U2/L6 Detective Fiction", stage: 9, unit: 2, lesson: 6 },
-    { word: "bias",             hint: "An unfair preference for or against a person, idea or group",                                 topic: "S9/U2/L6 Detective Fiction", stage: 9, unit: 2, lesson: 6 },
-    { word: "possessor",        hint: "The owner or holder of something",                                                            topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
-    { word: "gangster",         hint: "A violent criminal who is a member of an organised gang",                                     topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
-    { word: "sheikh",           hint: "An Arab leader or chief",                                                                     topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
-
-    // ============================================================
-    // S9/U2 — Law and Order — Grammar Sentences
-    // L1 Sentence Types | L2 Colons and Semi-colons
-    // ============================================================
-
-    // Sentence Types (L1)
-    { text: "A simple sentence contains one main clause and expresses a complete thought on its own.",                                                        correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "A simple sentence must contain at least two main clauses joined by 'and', 'but' or 'or'.",                                                      correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "A compound sentence joins two main clauses using a coordinating conjunction such as 'and', 'but' or 'or'.",                                     correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "A compound sentence is one that contains a main clause and at least one subordinate clause.",                                                    correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "A complex sentence contains one main clause and one or more subordinate clauses that depend on it.",                                             correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "A complex sentence contains two main clauses of equal importance, joined by a conjunction.",                                                     correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "A minor sentence does not contain a main verb — for example, 'Easy? Maybe!' in the blog post.",                                                 correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "A minor sentence is simply any very short sentence — it must be fewer than five words long.",                                                    correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "Placing a simple sentence after a longer, complex sentence can reinforce the main point and create a clear, direct impact.",                     correct: true,  topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-    { text: "Placing a simple sentence after a longer sentence always makes the writing sound less formal and less intelligent.",                             correct: false, topic: "S9/U2/L1 Sentence Types", stage: 9, unit: 2, lesson: 1 },
-
-    // Colons and Semi-colons (L2)
-    { text: "A colon can be used to introduce an explanation, list or key word, creating a deliberate pause before the important information.",               correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
-    { text: "A colon can only be used to introduce a list — it is incorrect to use it before a single word or explanation.",                                  correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
-    { text: "A semi-colon can be used between two closely related main clauses to suggest a connection or explain a relationship between them.",              correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
-    { text: "A semi-colon works in exactly the same way as a full stop — it simply means the sentence has ended.",                                            correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
-    { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon links two related ideas and draws them together.", correct: true,  topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
-    { text: "In 'Joining the police will change your life; it will also change the lives of the community you serve', the semi-colon shows that the second idea contradicts the first.", correct: false, topic: "S9/U2/L2 Colons and Semi-colons", stage: 9, unit: 2, lesson: 2 },
-
-
-    // S9/U3 Vocabulary
-    { word: "deduce", hint: "To reach a conclusion through reasoning from evidence", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { word: "morphology", hint: "The study of how words are formed and their relationships with other words", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { word: "etymology", hint: "The study of the origins and historical development of words", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { word: "nominal", hint: "In name only; very small or token in value", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { word: "eligible", hint: "Satisfying the conditions required to qualify for something", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { word: "vacancy", hint: "An available job or unoccupied position", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { word: "sympathetic", hint: "Describing a character the reader identifies with and responds positively to", topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
-    { word: "improvise", hint: "To perform or speak without preparation", topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
-    { word: "sovereign", hint: "A British gold coin used as currency in Victorian times", topic: "S9/U3/L3 The End of the League", stage: 9, unit: 3, lesson: 3 },
-    { word: "evidently", hint: "Clearly; in a way that is obvious or plain to see", topic: "S9/U3/L4 Investigating the Street", stage: 9, unit: 3, lesson: 4 },
-    { word: "narrative", hint: "A series of connected events that are written or spoken", topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
-    { word: "tactile", hint: "Relating to the sense of touch", topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
-    { word: "ascertain", hint: "To find out or confirm something with certainty", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
-    { word: "denouement", hint: "The final part of a story where everything is explained and resolved", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
-    { word: "morality", hint: "Principles about right and wrong behaviour", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
-
-    // S9/U4 — TIME
-    { word: "optimistic", hint: "Having a hopeful, positive outlook about the future", topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
-    { word: "solemn", hint: "Serious and sincere in manner", topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
-    { word: "stanza", hint: "A group of lines in a poem that form a unit", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
-    { word: "personification", hint: "Describing an object or idea as if it has human qualities", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
-    { word: "carpe diem", hint: "Latin phrase meaning 'seize the day' — make the most of your time now", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
-    { word: "seclusion", hint: "The state of being kept away from other people", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
-    { word: "taboo", hint: "Something that is forbidden by social or religious custom", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
-    { word: "attire", hint: "Clothing or dress", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
-    { word: "confiscate", hint: "To officially take something away from someone", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
-    { word: "hyperbole", hint: "Exaggerated language used for dramatic or persuasive effect", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
-    { word: "phalanx", hint: "A group of people or soldiers moving closely together", topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
-    { word: "pharaoh", hint: "A ruler of ancient Egypt", topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
-    { word: "luminous", hint: "Bright or shining, often in the dark", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
-    { word: "punctual", hint: "Arriving or doing something at the agreed time", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
-    { word: "connotations", hint: "The feelings or ideas associated with a word beyond its literal meaning", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
-    { word: "transcript", hint: "A written record of spoken words or a conversation", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
-    { word: "implant", hint: "To insert something into the body, or to fix an idea firmly", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
-    { word: "chairperson", hint: "The person who leads and manages a meeting or discussion", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
-
-    // S9/U5 — That's Entertainment
-    { word: "prudence", hint: "Cautiousness; thinking carefully about future consequences", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
-    { word: "aside", hint: "A remark in a play heard by the audience but not by other characters on stage", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
-    { word: "dramatic irony", hint: "When the audience knows more about the situation than the characters on stage", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
-    { word: "comedic problem", hint: "The challenge that characters in a comedy face — a situation that stands in the way of happiness", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
-    { word: "pristine", hint: "Perfect, as new", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
-    { word: "stereotype", hint: "A familiar but simplified character type that audiences recognise", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
-    { word: "contrast", hint: "Placing two characters or things together to highlight their differences", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
-    { word: "empathise", hint: "To understand and be sympathetic to the way someone else is feeling", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
-    { word: "autobiography", hint: "A text in which the writer gives an account of their own life and experiences", topic: "S9/U5/L3 The Boy Who Harnessed the Wind", stage: 9, unit: 5, lesson: 3 },
-    { word: "flashforward", hint: "Part of a story that jumps ahead to describe a future event", topic: "S9/U5/L3 The Boy Who Harnessed the Wind", stage: 9, unit: 5, lesson: 3 },
-    { word: "taut", hint: "Stretched or pulled tight", topic: "S9/U5/L3 The Boy Who Harnessed the Wind", stage: 9, unit: 5, lesson: 3 },
-    { word: "choreography", hint: "Designing and practising a dance sequence", topic: "S9/U5/L4 K-pop", stage: 9, unit: 5, lesson: 4 },
-    { word: "diligent", hint: "Conscientious and hardworking", topic: "S9/U5/L4 K-pop", stage: 9, unit: 5, lesson: 4 },
-    { word: "perspective", hint: "The angle from which a story is told — whose eyes the reader sees it through", topic: "S9/U5/L4 K-pop", stage: 9, unit: 5, lesson: 4 },
-    { word: "assertion", hint: "A statement of opinion presented without factual evidence to support it", topic: "S9/U5/L5 Animals and Entertainment", stage: 9, unit: 5, lesson: 5 },
-    { word: "submissive", hint: "Accepting of being controlled", topic: "S9/U5/L5 Animals and Entertainment", stage: 9, unit: 5, lesson: 5 },
-    { word: "conservation", hint: "The protection of animals and their natural environments", topic: "S9/U5/L5 Animals and Entertainment", stage: 9, unit: 5, lesson: 5 },
-    { word: "discursive", hint: "A type of writing that explores different views on a topic objectively", topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
-    { word: "parentheses", hint: "Punctuation marks such as brackets that enclose extra information within a sentence", topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
-    { word: "objective", hint: "Not influenced by personal feelings; presenting information fairly", topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
-    // S9/U6 — A Sense of Place
-    { word: "onomatopoeia", hint: "A word that imitates the sound it describes, such as 'hiss' or 'clatter'", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
-    { word: "alliteration", hint: "The use of the same consonant sound at the beginning of several close-together words", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
-    { word: "lament", hint: "A sad piece of music or an expression of grief", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
-    { word: "imperative", hint: "A verb form used to give commands or direct instructions", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
-    { word: "cascading", hint: "Moving or hanging downwards like a waterfall", topic: "S9/U6/L2 A Love Letter to the Grand Canyon", stage: 9, unit: 6, lesson: 2 },
-    { word: "humbling", hint: "Being made to feel less important or significant than you thought", topic: "S9/U6/L2 A Love Letter to the Grand Canyon", stage: 9, unit: 6, lesson: 2 },
-    { word: "sublime", hint: "In Romantic literature: a mixture of wonder and fear caused by the scale and beauty of nature", topic: "S9/U6/L2 A Love Letter to the Grand Canyon", stage: 9, unit: 6, lesson: 2 },
-    { word: "spatial metaphor", hint: "A metaphor that uses a physical place or location as a comparison", topic: "S9/U6/L3 Chasm", stage: 9, unit: 6, lesson: 3 },
-    { word: "focal character", hint: "The character who draws the reader's attention in a third-person story", topic: "S9/U6/L3 Chasm", stage: 9, unit: 6, lesson: 3 },
-    { word: "dispute", hint: "A conflict or disagreement between people", topic: "S9/U6/L3 Chasm", stage: 9, unit: 6, lesson: 3 },
-    { word: "sonnet", hint: "A poetic form consisting of 14 lines, often in iambic pentameter", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
-    { word: "volta", hint: "A turning point or shift in a sonnet where a new idea is introduced", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
-    { word: "pedestal", hint: "The base or platform on which a statue stands", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
-    { word: "irony", hint: "An effect where the outcome is the opposite of what was intended", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
-    { word: "enjambment", hint: "Where one sentence of poetry continues onto the next line without a pause", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
-    { word: "caesura", hint: "A pause within a line of poetry, indicated by punctuation or rhythm", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
-    { word: "pastoral", hint: "A literary genre featuring idealised countryside settings", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
-    { word: "nostalgia", hint: "An affection or longing for the past, as if looking back to happier times", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
-    { word: "pathetic fallacy", hint: "A technique where nature is used to reflect a character's emotions", topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
-    { word: "rejuvenating", hint: "Making someone feel younger or more energetic", topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
-    { word: "harrowing", hint: "Very distressing or upsetting", topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
-
-
-    { text: "When a speaker uses 'I' in a persuasive speech, it makes them sound direct and personally committed to the cause.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "Using 'we' in a speech always suggests the speaker is part of a powerful organisation and excludes the audience from the argument.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "Rhetorical questions in speeches are asked because the speaker genuinely wants the audience to provide an answer aloud.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "Using statistics in a persuasive speech can make an argument seem more credible and urgent.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "Addressing the audience as 'you' directly invites them to consider their own position and responsibilities.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "A first-person plural pronoun like 'we' can create a sense of shared identity between speaker and audience.", correct: true, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "In persuasive speeches, emotive language is always considered manipulative and should be avoided by serious speakers.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "A feature article differs from a news article in that it aims to entertain as well as inform.", correct: true, topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
-    { text: "A first-person autobiographical account is always less reliable than a third-person biography because it is subjective.", correct: false, topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
-    { text: "Science fiction uses imaginary technology and situations that could plausibly exist in the future, unlike fantasy which depicts impossible worlds.", correct: true, topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
-    { text: "Juxtaposition in a drama set means placing two contrasting settings side by side to highlight differences in theme or character.", correct: true, topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
-    { text: "Stage directions in a play script are spoken aloud by the actors to explain what is happening to the audience.", correct: false, topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
-    { text: "Physical symbols in drama, such as a model aeroplane, can represent a character's hopes and ambitions.", correct: true, topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
-    { text: "In a persuasive speech, acknowledging the opposing side's view always weakens the speaker's argument.", correct: false, topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { text: "Using formal, standard English in dialogue suggests a character is educated, respectful, or in an authoritative position.", correct: true, topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
-    { text: "Contrasting characters in drama always represent good versus evil — one must be the hero and one the villain.", correct: false, topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
-    { text: "A flashback is a narrative technique that interrupts the present action to show an earlier event.", correct: true, topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
-    { text: "A motif is a recurring image or symbol in a text that develops a theme.", correct: true, topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
-    { text: "Anti-climax always signals that the story has failed — the writer was unable to think of a dramatic ending.", correct: false, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { text: "A Bildungsroman is a coming-of-age story in which a young character grows and discovers their identity.", correct: true, topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
-    { text: "In a quest narrative, the hero always returns changed after completing their journey.", correct: true, topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
-    { text: "In fantasy literature, a trickster character always helps the hero by giving them useful information.", correct: false, topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
-    { text: "Using time standing still in a narrative can create contrast with the urgency felt by other characters.", correct: true, topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
-    { text: "Symbols in fantasy literature must always be explained by the narrator to be effective.", correct: false, topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
-    { text: "A circular narrative returns to its starting point at the end, suggesting transformation through contrast.", correct: true, topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
-    { text: "The title of a story is always a straightforward description of the plot's main event.", correct: false, topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
-    { text: "Fortune and fate are both themes in quest narratives — fortune refers to chance events; fate refers to destiny.", correct: true, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { text: "Fantasy stories only use unrealistic settings and therefore cannot explore real-world themes.", correct: false, topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
-    { text: "An anti-climax can be used deliberately by a writer to subvert the reader's expectations and create meaning.", correct: true, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { text: "Secondary characters in quest stories often function as symbolic tests of the hero's qualities.", correct: true, topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
-    { text: "A backstory is information about events that happened before the main story begins, used to explain characters' motivations.", correct: true, topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
-    { text: "The climax of a story must always come in the final scene.", correct: false, topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { text: "In detective fiction, the narrator is often a companion who is slightly less clever than the detective, allowing the reader to be surprised along with them.", correct: true, topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
-    { text: "A red herring in detective fiction is a clue that deliberately misleads the reader away from the true solution.", correct: true, topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { text: "Watson narrates 'The Red-Headed League' because Conan Doyle wanted readers to feel superior to Holmes.", correct: false, topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
-    { text: "Deductive reasoning means reaching a conclusion by observing specific details and working backwards to a general explanation.", correct: true, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
-    { text: "Holmes always keeps his reasoning secret from Watson until the very end of each story.", correct: false, topic: "S9/U3/L4 Investigating the Street", stage: 9, unit: 3, lesson: 4 },
-    { text: "Suspense in detective fiction is created partly by withholding information from the reader.", correct: true, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
-    { text: "Short, punchy sentences can create a sense of urgency and tension in an action scene.", correct: true, topic: "S9/U3/L3 The End of the League", stage: 9, unit: 3, lesson: 3 },
-    { text: "Dialogue in detective fiction is always used only to give the reader factual information.", correct: false, topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
-    { text: "The word 'however' is a connective that introduces a contrasting idea.", correct: true, topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
-    { text: "A complex sentence contains two main clauses joined by a coordinating conjunction like 'and' or 'but'.", correct: false, topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
-    { text: "In formal analytical writing, the writer's personal opinion should always be stated in the first sentence.", correct: false, topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
-    { text: "Using reported speech instead of direct speech creates distance and can make information seem less immediate.", correct: true, topic: "S9/U3/L3 The End of the League", stage: 9, unit: 3, lesson: 3 },
-    { text: "A compound-complex sentence contains at least two main clauses and one subordinate clause.", correct: true, topic: "S9/U3/L4 Investigating the Street", stage: 9, unit: 3, lesson: 4 },
-    { text: "Semicolons can be used to separate two closely related main clauses without a conjunction.", correct: true, topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
-    { text: "A colon in fiction is always used to introduce a list.", correct: false, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
-    { text: "Setting can be used in detective fiction to create atmosphere and foreshadow danger.", correct: true, topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
-    { text: "The past perfect tense ('had done') is used to describe an event that happened before another event in the past.", correct: true, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
-    { text: "The present perfect tense ('have done') always refers to an event that is completely finished with no connection to the present.", correct: false, topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
-    { text: "Time adverbials such as 'meanwhile', 'subsequently' and 'at that moment' help to organise events in a narrative.", correct: true, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
-    { text: "A first conditional sentence describes a realistic future possibility: 'If it rains, I will take an umbrella.'", correct: true, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
-    { text: "A second conditional sentence describes a realistic present situation: 'If I have time, I finish my work.'", correct: false, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
-    { text: "The future perfect tense ('will have done') describes an action that will be completed at some point before a future time.", correct: true, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
-    { text: "Switching from past tense to present tense in the middle of a narrative always means the writer has made an error.", correct: false, topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
-    { text: "Using the present tense in fiction can create a sense of immediacy, as if events are happening right now.", correct: true, topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
-    { text: "A third conditional sentence describes an imaginary past situation and its imagined consequences: 'If I had studied harder, I would have passed.'", correct: true, topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
-    { text: "Time adverbials always appear at the beginning of a sentence.", correct: false, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
-    { text: "The continuous aspect ('was doing') suggests an action that was ongoing at a particular moment in the past.", correct: true, topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
-    { text: "In English, there are three main tenses — past, present and future — and each has simple, continuous and perfect forms.", correct: true, topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
-    { text: "The phrase 'used to' describes a habit or state in the past that no longer exists.", correct: true, topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
-    { text: "Modal verbs like 'could', 'might' and 'would' are used to express certainty, not possibility.", correct: false, topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
-    { text: "A subordinate clause beginning with 'when', 'before' or 'after' establishes a time relationship between two events.", correct: true, topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
-    { text: "The past simple tense and past perfect tense mean exactly the same thing and can be used interchangeably.", correct: false, topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
-
-    { text: "Danny and his father lived in a caravan behind the filling station.", correct: true, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { text: "Danny and his father lived in a caravan behind filling station.", correct: false, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { text: "The pheasants were drugged with sleeping powder hidden inside raisins.", correct: true, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { text: "The pheasants was drugged with sleeping powder hidden inside raisins.", correct: false, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { text: "Mr Hazell, who owned the wood, was a rich and unpleasant man.", correct: true, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { text: "Mr Hazell, which owned the wood, was a rich and unpleasant man.", correct: false, topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { text: "Danny drove the car through the village in order to save his father.", correct: true, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { text: "Danny drived the car through the village in order to save his father.", correct: false, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { text: "By the time the shoot began, the pheasants had already flown away.", correct: true, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { text: "By the time the shoot began, the pheasants already flied away.", correct: false, topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { text: "The opening of a detective story should immediately create suspense.", correct: true, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { text: "The opening of a detective story should immediate create suspense.", correct: false, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { text: "A red herring is a clue that deliberately misleads the reader.", correct: true, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { text: "A red herring is a clue that deliberate misleads the reader.", correct: false, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { text: "The detective, having examined the evidence, announced his conclusion.", correct: true, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { text: "The detective, having examine the evidence, announced his conclusion.", correct: false, topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { text: "In a well-crafted mystery, every clue must be presented fairly to the reader.", correct: true, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { text: "In a well-crafted mystery, every clue must be present fairly to the reader.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { text: "The villain was finally exposed after years of careful deception.", correct: true, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { text: "The villain was final exposed after years of careful deception.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { text: "Foreshadowing hints at future events without revealing them directly.", correct: true, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { text: "Foreshadowing hints at future events without reveal them directly.", correct: false, topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-
-    { text: "The phrase 'an open secret' is an example of an oxymoron because it combines two contradictory ideas.", correct: true, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
-    { text: "The phrase 'an open secret' is an example of a simile because it compares two different things.", correct: false, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
-    { text: "Non-standard English includes words and grammatical patterns that fall outside conventional forms of the language.", correct: true, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
-    { text: "Non-standard English is simply English that contains spelling mistakes and should always be corrected.", correct: false, topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
-
-    { text: "Dashes create a more conversational and informal effect than commas in a sentence.", correct: true, topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
-    { text: "Brackets and commas always create exactly the same effect in a sentence.", correct: false, topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
-
-    { text: "Ben Gunn's non-standard English and contractions help to create a distinctive and believable character voice.", correct: true, topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
-    { text: "Ben Gunn speaks in formal, standard English throughout the novel to show that he is well-educated.", correct: false, topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
-
-    { text: "In a drama script, stage directions tell actors how to move and speak, and help the reader picture the scene.", correct: true, topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
-    { text: "Stage directions are optional in a script and are usually removed before the play is performed.", correct: false, topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
-
-    { text: "A compound-complex sentence contains two main clauses and at least one subordinate clause.", correct: true, topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
-    { text: "A compound-complex sentence contains one main clause and two subordinate clauses.", correct: false, topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
-
-    { text: "Adverbs add detail and meaning to verbs and can show how a character is feeling or behaving.", correct: true, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
-    { text: "Adverbs describe nouns and are usually placed directly before the noun they modify.", correct: false, topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
-
-    { text: "A writer's narrative voice and their own personal views are not necessarily the same thing.", correct: true, topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
-    { text: "The narrator of a text is always the same person as the writer who created the text.", correct: false, topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
-
-    { text: "A discussion text considers different opinions in a balanced way and usually concludes with the writer's overall view.", correct: true, topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
-    { text: "A discussion text argues strongly for one point of view and uses persuasive techniques to change the reader's mind.", correct: false, topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
-
-    { text: "A writer can create humour by placing short simple sentences after longer ones to deliver an unexpected punchline.", correct: true, topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
-    { text: "Short simple sentences should always be avoided in entertaining writing because they make the text too easy to read.", correct: false, topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
-
-    { text: "Dystopian fiction is popular partly because it explores human fears about being controlled by those more powerful.", correct: true, topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
-    { text: "Dystopian fiction is set in an ideal future world where technology has solved all of humanity's problems.", correct: false, topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
-
-    { text: "Writers choose synonyms carefully because different words with similar meanings can create very different effects.", correct: true, topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
-    { text: "In creative writing, writers should always choose the most complex synonym available to impress the reader.", correct: false, topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
-
-    { text: "Withholding information in a narrative can create tension and mystery, encouraging the reader to keep reading.", correct: true, topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
-    { text: "A writer should always reveal all information to the reader as quickly as possible to avoid confusion.", correct: false, topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
-
-    { text: "A coordinating conjunction such as 'but' or 'although' joins a main clause to a subordinate clause.", correct: false, topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
-    { text: "A subordinating conjunction such as 'although' or 'while' joins a main clause to a subordinate clause.", correct: true, topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
-
-    { text: "Writers can combine techniques such as figurative language, sentence types and punctuation to create a powerful overall effect.", correct: true, topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
-    { text: "Using only one technique at a time is more effective than combining techniques, as too many features confuse the reader.", correct: false, topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
-
-    { text: "Phonetic spelling and elision in dialogue can make a character's voice sound realistic and reveal something about their background.", correct: true, topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
-    { text: "All fictional dialogue should be written in standard English so that readers can understand what characters are saying.", correct: false, topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
-
-    { text: "In advice texts, modal verbs like 'must', 'should' and 'may' show different levels of obligation and possibility.", correct: true, topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
-    { text: "Advice texts should avoid using imperative verbs as these sound too aggressive and may put readers off.", correct: false, topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
-
-    { text: "A superhero film typically features a secret identity, an origin story explaining the hero's powers, and a conflict with a supervillain.", correct: true, topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
-    { text: "Superhero films are unusual in that they rarely use exaggeration and instead aim to portray their characters as completely realistic.", correct: false, topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
-
-    { text: "A film script includes detailed descriptions of camera shots and settings because film is a visual medium that tells its story through images.", correct: true, topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
-    { text: "Film scripts are identical to stage play scripts because both are performed by actors speaking lines of dialogue.", correct: false, topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
-
-    { text: "Emotive language uses words chosen to produce a strong emotional response in the reader, such as shock, fear or sympathy.", correct: true, topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
-    { text: "Emotive language is always neutral and factual, designed to give readers accurate information without influencing their feelings.", correct: false, topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
-
-    { text: "A healthy fear of the dark is deeply ingrained in humans because throughout evolutionary history, darkness placed us in genuine danger.", correct: true, topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
-    { text: "Children's fear of the dark is caused entirely by horror films and monster stories, and does not have any natural or biological basis.", correct: false, topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
-
-    { text: "A fable is a short story designed to teach a moral lesson, often using symbolic characters and a simple style.", correct: true, topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
-    { text: "A fable is a long realistic novel that explores the complex inner lives of its characters without any moral message.", correct: false, topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
-
-    { text: "In 'The Selfish Giant', the giant undergoes a character journey, transforming from a selfish antagonist into a kind and generous figure through the influence of the little boy.", correct: true, topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
-    { text: "In 'The Selfish Giant', the giant remains selfish and cruel from the beginning to the end of the story, and never shows any change in character.", correct: false, topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
-
-    { text: "A comparative adjective compares two things and is usually formed by adding -er to the adjective or using the word 'more' before it.", correct: true, topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
-    { text: "A comparative adjective describes the most extreme version of something and is formed using -est or 'most'.", correct: false, topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
-
-    { text: "An extended metaphor is a comparison that is developed and sustained throughout an entire piece of writing, building up a layered picture of its subject.", correct: true, topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
-    { text: "An extended metaphor is a very long simile that uses the word 'like' or 'as' many times in a single sentence.", correct: false, topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
-
-    { text: "Imagery in fiction writing can include aural, visual and tactile details that help the reader experience the setting through their senses.", correct: true, topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
-    { text: "Imagery in fiction writing refers only to visual descriptions — it is never used to describe sounds or physical sensations.", correct: false, topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
-
-    { text: "Explicit information in a text is stated directly and clearly, while implicit information is suggested through clues and must be inferred by the reader.", correct: true, topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
-    { text: "Explicit and implicit information mean the same thing — both refer to details the reader must work out from clues in the text.", correct: false, topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
-
-    { text: "A monologue is a long speech given by a single character, used to reveal their thoughts, feelings and point of view.", correct: true, topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
-    { text: "A monologue is a conversation between two characters that reveals their contrasting points of view on a shared problem.", correct: false, topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
-
-    { text: "When using multiple adjectives before a noun, the correct order is: opinion, then size, shape, age, colour, origin, material and qualifier.", correct: true, topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
-    { text: "When using multiple adjectives before a noun, colour should always come first, followed by size, then opinion and finally age.", correct: false, topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
-
-    { text: "Contrast is a structural technique where two different things are placed side by side to highlight their differences and create a particular effect on the reader.", correct: true, topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
-    { text: "Contrast in fiction always involves two characters who hold opposing views, and is only effective when one of them changes their mind by the end.", correct: false, topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
-
-    { text: "The active voice shows who is doing something by placing the subject before the verb; the passive voice places the person or thing acted upon before the verb.", correct: true, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
-    { text: "The passive voice is more direct than the active voice and is therefore preferred in all formal report writing.", correct: false, topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
-
-    { text: "Writers sometimes begin sentences with coordinating conjunctions like 'And' or 'But' for deliberate effect — creating a pause and making the writing feel more personal and emotional.", correct: true, topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
-    { text: "Beginning a sentence with 'And' or 'But' is always a grammatical error and should never appear in published writing.", correct: false, topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
-
-    { text: "An extended metaphor is a single comparison that is developed and explored across several lines or an entire text, not just used once.", correct: true, topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
-    { text: "An extended metaphor is a metaphor that uses particularly long or complex sentences to make the comparison seem more impressive.", correct: false, topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
-
-    { text: "An autobiography is a text in which the writer gives an account of their own life and experiences, written in their own words.", correct: true, topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
-    { text: "An autobiography is a text written by one person about the life of another, usually a famous or historically important individual.", correct: false, topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
-
-    { text: "A present participle verb form is made by adding '-ing' to the base verb; when placed at the start of a sentence it can make the action feel immediate and ongoing.", correct: true, topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
-    { text: "A present participle verb form is used only in the past tense and is always formed by adding '-ed' to the base verb.", correct: false, topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
-
-    { text: "The moral message of a story is the lesson about right and wrong that the writer conveys through the events and outcomes of the narrative.", correct: true, topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
-    { text: "The moral message of a story is a direct speech given by one of the characters at the end, summarising what everyone in the story has learnt.", correct: false, topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
-
-    { text: "An epilogue is a section at the end of a story that shows what happens to the characters after the main events have concluded, providing a sense of resolution.", correct: true, topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
-    { text: "An epilogue is an introduction placed before the first chapter that gives the reader background information about the setting and characters.", correct: false, topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
   ],
 
   words: [
 
-    // ── Generic — Literary Devices ────────────────────────────
     { word: "METAPHOR",        topic: "Literary Devices" },
     { word: "SIMILE",          topic: "Literary Devices" },
     { word: "ALLITERATION",    topic: "Literary Devices" },
@@ -1103,8 +1214,6 @@ window.CUSTOM_CONTENT = {
     { word: "JUXTAPOSITION",   topic: "Literary Devices" },
     { word: "SYMBOLISM",       topic: "Literary Devices" },
     { word: "ANAPHORA",        topic: "Literary Devices" },
-
-    // ── Generic — Grammar Terms ───────────────────────────────
     { word: "CONJUNCTION",     topic: "Grammar Terms" },
     { word: "PREPOSITION",     topic: "Grammar Terms" },
     { word: "ADJECTIVE",       topic: "Grammar Terms" },
@@ -1113,8 +1222,6 @@ window.CUSTOM_CONTENT = {
     { word: "PARTICIPLE",      topic: "Grammar Terms" },
     { word: "INFINITIVE",      topic: "Grammar Terms" },
     { word: "PASSIVE VOICE",   topic: "Grammar Terms" },
-
-    // ── Generic — IGCSE English ───────────────────────────────
     { word: "CHARACTERISATION", topic: "IGCSE English" },
     { word: "PROTAGONIST",      topic: "IGCSE English" },
     { word: "ANTAGONIST",       topic: "IGCSE English" },
@@ -1123,8 +1230,6 @@ window.CUSTOM_CONTENT = {
     { word: "CONNOTATION",      topic: "IGCSE English" },
     { word: "NARRATIVE",        topic: "IGCSE English" },
     { word: "RHETORIC",         topic: "IGCSE English" },
-
-    // ── Generic — Beginner ────────────────────────────────────
     { word: "APPLE",   topic: "Beginner" },
     { word: "HOUSE",   topic: "Beginner" },
     { word: "TRAIN",   topic: "Beginner" },
@@ -1180,8 +1285,6 @@ window.CUSTOM_CONTENT = {
     { word: "BUTTON",  topic: "Beginner" },
     { word: "MARKET",  topic: "Beginner" },
     { word: "POCKET",  topic: "Beginner" },
-
-    // ── Generic — Intermediate ────────────────────────────────
     { word: "ELEPHANT",    topic: "Intermediate" },
     { word: "NOTEBOOK",    topic: "Intermediate" },
     { word: "HOSPITAL",    topic: "Intermediate" },
@@ -1251,8 +1354,6 @@ window.CUSTOM_CONTENT = {
     { word: "GEOMETRY",    topic: "Intermediate" },
     { word: "STATISTICS",  topic: "Intermediate" },
     { word: "ASTRONOMY",   topic: "Intermediate" },
-
-    // ── Generic — Advanced ────────────────────────────────────
     { word: "PHOTOSYNTHESIS",   topic: "Advanced" },
     { word: "THERMODYNAMICS",   topic: "Advanced" },
     { word: "HYPOTHESIS",       topic: "Advanced" },
@@ -1312,8 +1413,239 @@ window.CUSTOM_CONTENT = {
     { word: "CONSEQUENTIAL",    topic: "Advanced" },
     { word: "UNCONVENTIONAL",   topic: "Advanced" },
 
-    // ── S5/U2 — Infinitives and -ing: Verb Lists ─────────────────
-    // -ing verbs
+    // ── S4/U1 — A Good Start ──
+    { word: "arrive", definition: "to reach a place you have been travelling to", stage: 4, unit: 1 },
+    { word: "equipment", definition: "the tools or items needed for a particular activity", stage: 4, unit: 1 },
+    { word: "materials", definition: "the substances or items used to make or do something", stage: 4, unit: 1 },
+    { word: "discover", definition: "to find or learn something for the first time", stage: 4, unit: 1 },
+    { word: "exercise", definition: "physical activity done to keep the body healthy and strong", stage: 4, unit: 1 },
+    { word: "practice", definition: "doing something repeatedly in order to improve your skill", stage: 4, unit: 1 },
+    { word: "resolution", definition: "a decision to do or not do something, especially at the start of a new year", stage: 4, unit: 1 },
+    { word: "experiment", definition: "a scientific test done to find out what happens under certain conditions", stage: 4, unit: 1 },
+    { word: "special", definition: "different from what is ordinary or usual, often in a positive way", stage: 4, unit: 1 },
+    { word: "biography", definition: "the story of a person's life written by someone else", stage: 4, unit: 1 },
+    { word: "autobiography", definition: "the story of a person's life written by that person themselves", stage: 4, unit: 1 },
+    { word: "goal", definition: "something you hope to achieve in the future", stage: 4, unit: 1 },
+    { word: "support", definition: "to help or encourage someone", stage: 4, unit: 1 },
+    { word: "environment", definition: "the natural world around us, including the air, land, and water", stage: 4, unit: 1 },
+
+    // ── S4/U2 — Amazing Animals ──
+    { word: "creature", definition: "any living animal, especially when referred to in a general way", stage: 4, unit: 2 },
+    { word: "marine", definition: "relating to the sea or ocean", stage: 4, unit: 2 },
+    { word: "protect", definition: "to keep something or someone safe from harm or danger", stage: 4, unit: 2 },
+    { word: "damage", definition: "to cause harm or injury to something", stage: 4, unit: 2 },
+    { word: "disappear", definition: "to stop being visible or to stop existing", stage: 4, unit: 2 },
+    { word: "extinct", definition: "no longer existing as a living species", stage: 4, unit: 2 },
+    { word: "endangered", definition: "at risk of becoming extinct because of very small numbers remaining", stage: 4, unit: 2 },
+    { word: "balance", definition: "a state where different things are equal or in the right amounts", stage: 4, unit: 2 },
+    { word: "frighten", definition: "to make someone feel scared or afraid", stage: 4, unit: 2 },
+    { word: "behaviour", definition: "the way a person or animal acts in different situations", stage: 4, unit: 2 },
+    { word: "pollen", definition: "a fine powder produced by flowers that is carried to other plants to fertilise them", stage: 4, unit: 2 },
+    { word: "chemical", definition: "a substance produced by or used in a chemical process", stage: 4, unit: 2 },
+    { word: "facts", definition: "pieces of information that are known to be true", stage: 4, unit: 2 },
+    { word: "heading", definition: "a title at the top of a section of text", stage: 4, unit: 2 },
+    { word: "conclusion", definition: "the final section of a piece of writing that summarises the main points", stage: 4, unit: 2 },
+    { word: "suggestion", definition: "an idea put forward for someone to consider", stage: 4, unit: 2 },
+
+    // ── S4/U3 — Working Outdoors ──
+    { word: "gardener", definition: "a person whose job is to tend plants, flowers and gardens", stage: 4, unit: 3 },
+    { word: "lifeguard", definition: "a person whose job is to keep swimmers safe at a beach or pool", stage: 4, unit: 3 },
+    { word: "mechanic", definition: "a person who repairs cars and other machines", stage: 4, unit: 3 },
+    { word: "photojournalist", definition: "a journalist who tells news stories mainly through photographs", stage: 4, unit: 3 },
+    { word: "keeper", definition: "a person who looks after animals, especially in a wildlife reserve or zoo", stage: 4, unit: 3 },
+    { word: "mural", definition: "a large painting made directly on a wall", stage: 4, unit: 3 },
+    { word: "fashion", definition: "the style of clothes or behaviour that is popular at a particular time", stage: 4, unit: 3 },
+    { word: "wonder", definition: "to think about something with curiosity and interest", stage: 4, unit: 3 },
+    { word: "transportation", definition: "the movement of people or goods from one place to another", stage: 4, unit: 3 },
+    { word: "electricity", definition: "a form of energy used to power machines and appliances", stage: 4, unit: 3 },
+
+    // ── S4/U4 — Let's Get Technical ──
+    { word: "chat", definition: "to talk to someone informally, especially online", stage: 4, unit: 4 },
+    { word: "connect", definition: "to link one thing to another, such as a device to the internet", stage: 4, unit: 4 },
+    { word: "delete", definition: "to remove something stored on a computer", stage: 4, unit: 4 },
+    { word: "improve", definition: "to make something better than it was before", stage: 4, unit: 4 },
+    { word: "program", definition: "a set of instructions that tells a computer how to do something", stage: 4, unit: 4 },
+    { word: "repair", definition: "to fix something that is broken or not working", stage: 4, unit: 4 },
+    { word: "save", definition: "to store information on a computer so it is not lost", stage: 4, unit: 4 },
+    { word: "engineer", definition: "a person who designs and builds machines, structures or technology", stage: 4, unit: 4 },
+    { word: "attach", definition: "to fix or connect one thing to another", stage: 4, unit: 4 },
+    { word: "remote-controlled", definition: "operated from a distance using a device that sends signals", stage: 4, unit: 4 },
+    { word: "invent", definition: "to create or design something that has never existed before", stage: 4, unit: 4 },
+    { word: "invention", definition: "something that has been created or designed for the first time", stage: 4, unit: 4 },
+    { word: "technology", definition: "machines, equipment and systems developed using scientific knowledge", stage: 4, unit: 4 },
+    { word: "virtual reality", definition: "a computer-generated environment that feels real to the person experiencing it", stage: 4, unit: 4 },
+
+    // ── S4/U5 — Going Places ──
+    { word: "cross", definition: "to go from one side of something to the other", stage: 4, unit: 5 },
+    { word: "suitcase", definition: "a large bag with a hard or soft case used for carrying clothes when travelling", stage: 4, unit: 5 },
+    { word: "survive", definition: "to continue to live despite difficult or dangerous conditions", stage: 4, unit: 5 },
+    { word: "hurry", definition: "to move or do something more quickly than usual", stage: 4, unit: 5 },
+    { word: "set off", definition: "to begin a journey", stage: 4, unit: 5 },
+    { word: "reach", definition: "to arrive at a place after travelling", stage: 4, unit: 5 },
+    { word: "destination", definition: "the place you are travelling to", stage: 4, unit: 5 },
+    { word: "view", definition: "the scenery or landscape that can be seen from a particular place", stage: 4, unit: 5 },
+    { word: "tunnel", definition: "a long passage built underground or through a mountain", stage: 4, unit: 5 },
+    { word: "height", definition: "the measurement of how tall or high something is", stage: 4, unit: 5 },
+    { word: "load", definition: "a heavy amount of goods or materials being carried", stage: 4, unit: 5 },
+    { word: "suspension bridge", definition: "a bridge hung from strong cables attached to tall towers", stage: 4, unit: 5 },
+
+    // ── S4/U6 — Fantastic Festivals ──
+    { word: "second", definition: "a very short unit of time; there are sixty seconds in a minute", stage: 4, unit: 6 },
+    { word: "century", definition: "a period of one hundred years", stage: 4, unit: 6 },
+    { word: "midnight", definition: "twelve o'clock at night", stage: 4, unit: 6 },
+    { word: "noon", definition: "twelve o'clock in the middle of the day", stage: 4, unit: 6 },
+    { word: "mixture", definition: "a combination of different things together", stage: 4, unit: 6 },
+    { word: "tropical fruit", definition: "fruit that grows in hot countries near the equator, such as mango or papaya", stage: 4, unit: 6 },
+    { word: "seafood", definition: "fish and other sea creatures that can be eaten", stage: 4, unit: 6 },
+    { word: "skin", definition: "the outer layer that covers a person's or animal's body", stage: 4, unit: 6 },
+    { word: "pour", definition: "to cause a liquid to flow from a container in a steady stream", stage: 4, unit: 6 },
+    { word: "celebrate", definition: "to do something enjoyable on a special occasion", stage: 4, unit: 6 },
+    { word: "spring", definition: "the season after winter when plants begin to grow", stage: 4, unit: 6 },
+    { word: "blossom", definition: "the flowers that appear on a tree, especially in spring", stage: 4, unit: 6 },
+
+    // ── S4/U7 — Extreme Sports ──
+    { word: "challenging", definition: "difficult in a way that tests your ability or determination", stage: 4, unit: 7 },
+    { word: "route", definition: "the path or way taken to get from one place to another", stage: 4, unit: 7 },
+    { word: "experience", definition: "something that happens to you that affects how you feel or think", stage: 4, unit: 7 },
+    { word: "concentrate", definition: "to focus your attention fully on something you are doing", stage: 4, unit: 7 },
+    { word: "accident", definition: "an unexpected event that causes injury or damage", stage: 4, unit: 7 },
+    { word: "beginner", definition: "someone who is just starting to learn a skill or activity", stage: 4, unit: 7 },
+    { word: "expert", definition: "a person with great skill or knowledge in a particular area", stage: 4, unit: 7 },
+    { word: "flow", definition: "to move steadily and continuously in one direction, like water", stage: 4, unit: 7 },
+    { word: "steep", definition: "rising or falling sharply, at a large angle", stage: 4, unit: 7 },
+    { word: "specially", definition: "for a particular purpose or in a particular way", stage: 4, unit: 7 },
+    { word: "subject", definition: "the topic that a piece of writing or speech is about", stage: 4, unit: 7 },
+    { word: "paragraph", definition: "a group of sentences about the same topic, starting on a new line", stage: 4, unit: 7 },
+
+    // ── S4/U8 — Tales of Survival ──
+    { word: "FRIGHTENING",  hint: "Making you feel scared or afraid",                          topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "REALIZED",     hint: "Suddenly understood or became aware of something",          topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "BATTERY",      hint: "The part of a phone or device that stores power",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "HORRIBLE",     hint: "Very unpleasant or awful",                                  topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "EXPEDITION",   hint: "An organised journey made for a special purpose",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "SEARCH",       hint: "To look carefully for someone or something",                topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "CHARGE",       hint: "To put electricity back into a battery",                    topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "SURVIVE",      hint: "To stay alive through a dangerous situation",               topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "RESCUE",       hint: "To save someone from a dangerous situation",                topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "DARKNESS",     hint: "When there is no light; the state of being dark",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "TRAPPED",      hint: "Unable to escape from a dangerous place or situation",      topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "JOURNEY",      hint: "Travelling from one place to another",                      topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
+    { word: "STRANGER",     hint: "Someone you have never met before",                         topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "TREATMENT",    hint: "Medical care given to a sick or injured person",            topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "KINDNESS",     hint: "Being friendly, generous and caring to others",             topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "ALIVE",        hint: "Living; not dead",                                          topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "ACCIDENT",     hint: "Something bad that happens unexpectedly",                   topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "HOSPITAL",     hint: "A place where sick or injured people receive medical care", topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "BROKEN",       hint: "Damaged and no longer working or in one piece",             topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "RECOVER",      hint: "To get better after an illness or injury",                  topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
+    { word: "MEDICINE",     hint: "A substance used to treat illness or injury",               topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+    { word: "FROZEN",       hint: "Turned to ice because of very cold temperatures",           topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+    { word: "SURVIVED",     hint: "Stayed alive through a very dangerous experience",          topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+    { word: "FAMOUS",       hint: "Known by many people",                                      topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
+    { word: "PROTECT",      hint: "To keep someone or something safe from harm",               topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+    { word: "DANGER",       hint: "The possibility of being hurt or killed",                   topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+    { word: "EQUIPMENT",    hint: "The tools and items needed for an activity",                topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+    { word: "IMPERATIVE",   hint: "A type of sentence that gives an instruction or command",   topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
+    { word: "frightening", definition: "making you feel scared or afraid", stage: 4, unit: 8 },
+    { word: "realise", definition: "to become aware of or understand something", stage: 4, unit: 8 },
+    { word: "battery", definition: "a device that stores power for a phone or other machine", stage: 4, unit: 8 },
+    { word: "dead", definition: "with no power or charge left (used of a phone or battery)", stage: 4, unit: 8 },
+    { word: "expedition", definition: "a journey made for a particular purpose, especially exploration", stage: 4, unit: 8 },
+    { word: "search", definition: "to look carefully for someone or something", stage: 4, unit: 8 },
+    { word: "hard", definition: "difficult to do or understand", stage: 4, unit: 8 },
+    { word: "charge", definition: "to put electrical power into a battery or device", stage: 4, unit: 8 },
+    { word: "stranger", definition: "a person you have never met or do not know", stage: 4, unit: 8 },
+    { word: "treatment", definition: "medical care given to someone who is injured or ill", stage: 4, unit: 8 },
+    { word: "kindness", definition: "the quality of being friendly, generous and caring towards others", stage: 4, unit: 8 },
+    { word: "alive", definition: "living; not dead", stage: 4, unit: 8 },
+
+    // ── S4/U9 — Exploring the World ──
+    { word: "brave", definition: "willing to do dangerous or difficult things without showing fear", stage: 4, unit: 9 },
+    { word: "decide", definition: "to make a choice about what to do after thinking about it", stage: 4, unit: 9 },
+    { word: "prefer", definition: "to like one thing more than another", stage: 4, unit: 9 },
+    { word: "hear", definition: "to notice a sound using your ears", stage: 4, unit: 9 },
+    { word: "bite", definition: "to cut into something with your teeth, or (of an insect) to pierce the skin", stage: 4, unit: 9 },
+    { word: "sting", definition: "to cause a sharp pain by piercing the skin, as some insects do", stage: 4, unit: 9 },
+    { word: "meet", definition: "to come face to face with someone, often for the first time", stage: 4, unit: 9 },
+    { word: "backpack", definition: "a bag carried on your back, used when travelling or hiking", stage: 4, unit: 9 },
+    { word: "run out", definition: "to use all of something so that there is none left", stage: 4, unit: 9 },
+    { word: "observatory", definition: "a building with telescopes for studying stars and space", stage: 4, unit: 9 },
+    { word: "supernova", definition: "a very large star that explodes and shines very brightly before disappearing", stage: 4, unit: 9 },
+    { word: "worth", definition: "having a particular value in money", stage: 4, unit: 9 },
+
+    // ── S4/U10 — Great Museums ──
+    { word: "touch", definition: "to put your hand or fingers on something to feel it", stage: 4, unit: 10 },
+    { word: "admire", definition: "to look at something with great pleasure and respect", stage: 4, unit: 10 },
+    { word: "visitor", definition: "a person who goes to a place, such as a museum, to look around", stage: 4, unit: 10 },
+    { word: "exhibition", definition: "a display of objects or artwork for people to visit and look at", stage: 4, unit: 10 },
+    { word: "fascinating", definition: "extremely interesting and attention-grabbing", stage: 4, unit: 10 },
+    { word: "opening time", definition: "the time at which a building or place starts to let people in", stage: 4, unit: 10 },
+    { word: "closing time", definition: "the time at which a building or place stops letting people in", stage: 4, unit: 10 },
+    { word: "unusual", definition: "not common or ordinary; different from what is expected", stage: 4, unit: 10 },
+    { word: "fossil", definition: "the remains of a plant or animal from millions of years ago, preserved in rock", stage: 4, unit: 10 },
+    { word: "sign language", definition: "a way of communicating using hand movements and gestures instead of speech", stage: 4, unit: 10 },
+    { word: "lucky", definition: "having or bringing good fortune", stage: 4, unit: 10 },
+    { word: "enter competitions", definition: "to take part in organised contests where there is a prize to win", stage: 4, unit: 10 },
+
+    // ── S4/U11 — Very Mysterious! ──
+    { word: "migrate", definition: "to move from one place to another, especially at the same time each year", stage: 4, unit: 11 },
+    { word: "mystery", definition: "something that is difficult to explain or understand", stage: 4, unit: 11 },
+    { word: "position", definition: "the place where someone or something is located", stage: 4, unit: 11 },
+    { word: "recognise", definition: "to remember someone or something because you have seen or experienced them before", stage: 4, unit: 11 },
+    { word: "sight", definition: "something that you see, especially something surprising or impressive", stage: 4, unit: 11 },
+    { word: "smell", definition: "something that you sense through your nose", stage: 4, unit: 11 },
+    { word: "solve", definition: "to find the answer to a problem or mystery", stage: 4, unit: 11 },
+    { word: "imagine", definition: "to form a picture of something in your mind", stage: 4, unit: 11 },
+    { word: "appear", definition: "to become visible or come into sight", stage: 4, unit: 11 },
+    { word: "horror", definition: "a strong feeling of shock and fear", stage: 4, unit: 11 },
+    { word: "clue", definition: "a piece of information that helps you solve a mystery or problem", stage: 4, unit: 11 },
+    { word: "GPS", definition: "Global Positioning System — technology that tells you exactly where you are", stage: 4, unit: 11 },
+
+    // ── S4/U12 — Fascinating Places ──
+    { word: "opportunity", definition: "a chance to do something that you would like to do", stage: 4, unit: 12 },
+    { word: "sunrise", definition: "the time when the sun appears above the horizon in the morning", stage: 4, unit: 12 },
+    { word: "sunset", definition: "the time when the sun disappears below the horizon in the evening", stage: 4, unit: 12 },
+    { word: "ordinary", definition: "not special or different from usual", stage: 4, unit: 12 },
+    { word: "successful", definition: "achieving the thing you wanted to achieve", stage: 4, unit: 12 },
+    { word: "luxurious", definition: "very comfortable and expensive", stage: 4, unit: 12 },
+    { word: "relax", definition: "to rest and stop worrying or working", stage: 4, unit: 12 },
+    { word: "natural", definition: "existing in or made by nature, not by people", stage: 4, unit: 12 },
+    { word: "attraction", definition: "a place or thing that people visit because it is interesting or enjoyable", stage: 4, unit: 12 },
+    { word: "hang out", definition: "to spend time relaxing in a place or with people", stage: 4, unit: 12 },
+    { word: "watch out", definition: "to be careful about something dangerous", stage: 4, unit: 12 },
+    { word: "look forward to", definition: "to feel excited and happy about something that is going to happen", stage: 4, unit: 12 },
+
+    // ── S5/U1 ──
+    { word: "NOTORIOUS",           topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "PROHIBITION",         topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "BOOTLEGGING",         topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "FEDORA",              topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "BOUNCER",             topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "CONVICTED",           topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "PROFITABLE",          topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
+    { word: "FORMIDABLE",          topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "CONFEDERATION",       topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "PRIVATEER",           topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "ADMINISTRATIVE",      topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "VULNERABLE",          topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "AMNESTY",             topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "SABOTAGE",            topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
+    { word: "OUTLAW",              topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "OPPRESSED",           topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "PILLAGE",             topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "ARCHERY",             topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "FOLKLORE",            topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "CHRONICLER",          topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
+    { word: "MONOPOLISED",         topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "SMUGGLING",           topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "RANSOM",              topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "MANHUNT",             topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "ASSASSINATION",       topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "ACQUITTED",           topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "CHARISMATIC",         topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+    { word: "PROWESS",             topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
+
+    // ── S5/U2 ──
     { word: "ENJOY",       topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "SUGGEST",     topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "POSTPONE",    topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
@@ -1325,7 +1657,6 @@ window.CUSTOM_CONTENT = {
     { word: "DENY",        topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "RISK",        topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "FANCY",       topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
-    // to + infinitive verbs
     { word: "OFFER",       topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "DECIDE",      topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "HOPE",        topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
@@ -1338,13 +1669,10 @@ window.CUSTOM_CONTENT = {
     { word: "REFUSE",      topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "ARRANGE",     topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "PRETEND",     topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
-    { word: "MANAGE",      topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
-    // either / meaning change
     { word: "REMEMBER",    topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "FORGET",      topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "INFINITIVE",  topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
     { word: "PARTICIPLE",  topic: "S5/U2 Verb Patterns", stage: 5, unit: 2 },
-    // passive vocabulary
     { word: "PASSIVE",     topic: "S5/U2 Active and Passive", stage: 5, unit: 2, lesson: 4 },
     { word: "ACTIVE",      topic: "S5/U2 Active and Passive", stage: 5, unit: 2, lesson: 4 },
     { word: "INDIRECT",    topic: "S5/U2 Active and Passive", stage: 5, unit: 2, lesson: 4 },
@@ -1354,7 +1682,7 @@ window.CUSTOM_CONTENT = {
     { word: "INNOVATION",  topic: "S5/U2 Active and Passive", stage: 5, unit: 2, lesson: 4 },
     { word: "REPUTATION",  topic: "S5/U2 Active and Passive", stage: 5, unit: 2, lesson: 4 },
 
-    // ── S5/U3 — Conditionals: Vocabulary ─────────────────────────
+    // ── S5/U3 ──
     { word: "CONDITIONAL",   topic: "S5/U3 Conditionals", stage: 5, unit: 3 },
     { word: "CLAUSE",        topic: "S5/U3 Conditionals", stage: 5, unit: 3 },
     { word: "IMAGINARY",     topic: "S5/U3 Conditionals", stage: 5, unit: 3 },
@@ -1376,7 +1704,7 @@ window.CUSTOM_CONTENT = {
     { word: "COMPENSATION",  topic: "S5/U3 Fables", stage: 5, unit: 3 },
     { word: "BIOLOGICAL",    topic: "S5/U3 Fables", stage: 5, unit: 3 },
 
-    // ── S5/U4 — Hero's Journey: Vocabulary ───────────────────────
+    // ── S5/U4 ──
     { word: "MONOMYTH",       topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
     { word: "ARCHETYPE",      topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
     { word: "DEPARTURE",      topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
@@ -1398,7 +1726,7 @@ window.CUSTOM_CONTENT = {
     { word: "FANTASY",        topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
     { word: "PERIL",          topic: "S5/U4 Hero's Journey", stage: 5, unit: 4 },
 
-    // ── S5/U5 — Talking About the Past: Vocabulary ───────────────
+    // ── S5/U5 ──
     { word: "PASSIVE",        topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
     { word: "CONTINUOUS",     topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
     { word: "PARTICIPLE",     topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
@@ -1420,61 +1748,7 @@ window.CUSTOM_CONTENT = {
     { word: "PENNILESS",      topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
     { word: "QUALIFICATIONS", topic: "S5/U5 Talking About the Past", stage: 5, unit: 5 },
 
-    // ════════════════════════════════════════════════════════════════
-    // S5 / U6 — Expressing Opinions
-    // ════════════════════════════════════════════════════════════════
-
-    // ── S5/U6/L1 — Modal verbs: present probability ──────────────
-    { text: "We use 'will' to make predictions about the future.",                                                    correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use 'must' to make predictions about the future.",                                                    correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We can use the future continuous to make assumptions about the present: 'She'll be driving to work.'",   correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use the future continuous to make predictions, not assumptions about the present.",                    correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use 'must' to conclude that something is almost certainly true: 'Dad isn't home — he must be at work.'", correct: true, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use 'must' to express impossibility: 'He must be at work — his car is outside.'",                     correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use 'can't' to express impossibility: 'He can't be at work — his car is outside.'",                  correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use 'mustn't' to express impossibility: 'He mustn't be at work — his car is outside.'",              correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "May, might and could are all used to express possibility.",                                               correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "May, might and could are all used to express certainty.",                                                 correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use 'should' to say that something will probably happen in our opinion: 'England should beat Norway.'", correct: true, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "We use 'should' to say that something is certain to happen: 'England should beat Norway.'",               correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "'It's bound to snow tonight' expresses certainty about a future event.",                                  correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "'It's bound to snow tonight' expresses only a slight possibility.",                                       correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "'Chances are it'll rain tomorrow' means it is very probable that it will rain.",                          correct: true,  topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-    { text: "'Chances are it'll rain tomorrow' means it is impossible that it will rain.",                             correct: false, topic: "S5/U6/L1 Modal Verbs — Probability", stage: 5, unit: 6, lesson: 1 },
-
-    // ── S5/U6/L2 — Modal verbs: past speculation ─────────────────
-    { text: "Past modal speculation is formed with: modal verb + have + past participle.",                             correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "Past modal speculation is formed with: modal verb + be + past participle.",                               correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'They must have arrived' expresses near-certainty about a past event.",                                   correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'They must have arrived' expresses only a slight possibility about a past event.",                        correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'They can't have arrived' expresses impossibility — the speaker is sure they have not arrived.",          correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'They can't have arrived' expresses that they definitely have arrived.",                                  correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'You shouldn't have told a lie' means: you did it, but it was wrong.",                                   correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'You shouldn't have told a lie' means: you didn't do it, but it was possible.",                          correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'You needn't have cooked' means: you did cook, but it wasn't necessary.",                                correct: true,  topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-    { text: "'You needn't have cooked' means: you didn't cook, and that was the right decision.",                     correct: false, topic: "S5/U6/L2 Past Modal Speculation", stage: 5, unit: 6, lesson: 2 },
-
-    // ── S5/U6/L3 — Free speech & opinions ────────────────────────
-    { text: "A fact is a thing that is known or proved to be true.",                                                   correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-    { text: "A fact is a personal view or judgement not necessarily based on evidence.",                               correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-    { text: "An opinion is a view or judgement formed about something, not necessarily based on fact.",                correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-    { text: "An opinion is something that has been proven to be true.",                                                correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-    { text: "'Nurses work in hospitals' is a fact because it can be verified.",                                        correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-    { text: "'Nurses don't get paid enough' is a fact because it describes working conditions.",                       correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-    { text: "Two people can hold opposing opinions and both can be correct at the same time.",                         correct: true,  topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-    { text: "Two people can hold opposing facts and both can be correct at the same time.",                            correct: false, topic: "S5/U6/L3 Facts vs Opinions", stage: 5, unit: 6, lesson: 3 },
-
-    // ── S5/U6/L4 — Persuasive writing ────────────────────────────
-    { text: "In persuasive writing, the strongest body paragraph should come first.",                                  correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-    { text: "In persuasive writing, the weakest body paragraph should come first.",                                    correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-    { text: "If you only have two strong points in a persuasive letter, you can use just two body paragraphs.",        correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-    { text: "A persuasive letter must always have exactly three body paragraphs.",                                     correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-    { text: "In a formal letter, you should think about what the reader wants, not just what you want.",               correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-    { text: "In a formal letter, you only need to convince yourself that your idea is good.",                          correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-    { text: "A formal letter to someone you don't know ends with 'Yours sincerely'.",                                  correct: true,  topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-    { text: "A formal letter to someone you don't know ends with 'Yours faithfully'.",                                 correct: false, topic: "S5/U6/L4 Persuasive Writing", stage: 5, unit: 6, lesson: 4 },
-
-    // ── S5/U6 — Vocabulary ────────────────────────────────────────
+    // ── S5/U6 ──
     { word: "POLITICIAN",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
     { word: "DEMONSTRATION",   topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
     { word: "PETITION",        topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
@@ -1496,7 +1770,57 @@ window.CUSTOM_CONTENT = {
     { word: "PERSUASIVE",      topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
     { word: "LUMINOUS",        topic: "S5/U6 Expressing Opinions", stage: 5, unit: 6 },
 
-    // ── S6/U1/L1 — Unsolved Mysteries: Phoenix Lights ───────────
+    // ── S5/U7 ──
+    { word: "poaching", hint: "illegally catching animals on someone else's land", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { word: "pheasant", hint: "a large game bird with colourful feathers", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { word: "caravan", hint: "a small mobile home on wheels", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { word: "forecourt", hint: "the open area in front of a petrol station", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { word: "marvellous", hint: "extremely impressive or wonderful", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { word: "snobbish", hint: "behaving as if you are better than other people", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
+    { word: "sedated", hint: "made calm or unconscious by a drug", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { word: "gamekeeper", hint: "a person employed to protect game animals on an estate", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { word: "accomplice", hint: "a person who helps someone commit a crime", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { word: "cunning", hint: "clever at achieving things in a deceptive way", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { word: "trespassing", hint: "entering someone's land or property without permission", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { word: "treacherous", hint: "guilty of betrayal; or dangerously unpredictable", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
+    { word: "protagonist", hint: "the main character in a story", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { word: "antagonist", hint: "the character who opposes the hero", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { word: "clue", hint: "a piece of evidence that helps solve a mystery", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { word: "motive", hint: "the reason why someone commits a crime", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { word: "suspect", hint: "a person thought to be guilty of a crime", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { word: "alibi", hint: "evidence that proves you were somewhere else when a crime occurred", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
+    { word: "red herring", hint: "a misleading clue designed to distract from the truth", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { word: "foreshadowing", hint: "hints early in a story about what will happen later", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { word: "narrator", hint: "the voice that tells the story", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { word: "tension", hint: "a feeling of suspense and excitement in a story", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { word: "resolution", hint: "the part of a story where the conflict is solved", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { word: "villain", hint: "a wicked or evil character in a story", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { word: "deduction", hint: "reaching a conclusion through logical reasoning from evidence", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+    { word: "intrigue", hint: "mysterious or secretive activity that arouses curiosity", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
+
+    // ── S5/U8 ──
+    { word: "CULPRIT",        topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "DEDUCTION",      topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "SUSPECT",        topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "ALIBI",          topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "MOTIVE",         topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+    { word: "EVIDENCE",       topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "ECCENTRIC",      topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "OBSERVANT",      topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "METHODICAL",     topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "SHREWD",         topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
+    { word: "CONSPIRATOR",    topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "PERPETRATOR",    topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "ACCOMPLICE",     topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "INTRIGUE",       topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "PREMEDITATED",   topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "INGENIOUS",      topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "REVELATION",     topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "CORPSE",         topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
+    { word: "CLUE",           topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
+    { word: "INVESTIGATION",  topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
+
+    // ── S6/U1 ──
     { word: "CLUSTER",         topic: "S6/U1/L3 Phoenix Lights", stage: 6, unit: 1, lesson: 3 },
     { word: "ALLEGEDLY",       topic: "S6/U1/L3 Phoenix Lights", stage: 6, unit: 1, lesson: 3 },
     { word: "ORBS",            topic: "S6/U1/L3 Phoenix Lights", stage: 6, unit: 1, lesson: 3 },
@@ -1514,8 +1838,6 @@ window.CUSTOM_CONTENT = {
     { word: "ALTITUDE",        topic: "S6/U1/L3 Phoenix Lights", stage: 6, unit: 1, lesson: 3 },
     { word: "UNACKNOWLEDGED",  topic: "S6/U1/L3 Phoenix Lights", stage: 6, unit: 1, lesson: 3 },
     { word: "PRESS CONFERENCE",topic: "S6/U1/L3 Phoenix Lights", stage: 6, unit: 1, lesson: 3 },
-
-    // ── S6/U1/L1 — Unsolved Mysteries: Men in Black ───────────
     { word: "EVIDENCE",        topic: "S6/U1/L3 Men in Black", stage: 6, unit: 1, lesson: 3 },
     { word: "RADIOACTIVITY",   topic: "S6/U1/L3 Men in Black", stage: 6, unit: 1, lesson: 3 },
     { word: "SURVEILLING",     topic: "S6/U1/L3 Men in Black", stage: 6, unit: 1, lesson: 3 },
@@ -1523,8 +1845,6 @@ window.CUSTOM_CONTENT = {
     { word: "ELIMINATED",      topic: "S6/U1/L3 Men in Black", stage: 6, unit: 1, lesson: 3 },
     { word: "INVESTIGATOR",    topic: "S6/U1/L3 Men in Black", stage: 6, unit: 1, lesson: 3 },
     { word: "EXPEDITION",      topic: "S6/U1/L3 Men in Black", stage: 6, unit: 1, lesson: 3 },
-
-    // ── S6/U1/L2 — Unsolved Mysteries: DB Cooper ──────────────
     { word: "BOURBON",         topic: "S6/U1/L1 DB Cooper", stage: 6, unit: 1, lesson: 2 },
     { word: "STEWARDESS",      topic: "S6/U1/L1 DB Cooper", stage: 6, unit: 1, lesson: 2 },
     { word: "RANSOM",          topic: "S6/U1/L1 DB Cooper", stage: 6, unit: 1, lesson: 2 },
@@ -1533,8 +1853,6 @@ window.CUSTOM_CONTENT = {
     { word: "SERIAL NUMBERS",  topic: "S6/U1/L1 DB Cooper", stage: 6, unit: 1, lesson: 2 },
     { word: "EXCHANGED",       topic: "S6/U1/L1 DB Cooper", stage: 6, unit: 1, lesson: 2 },
     { word: "SCOURED",         topic: "S6/U1/L1 DB Cooper", stage: 6, unit: 1, lesson: 2 },
-
-    // ── S6/U1/L3 — Unsolved Mysteries: The Watcher ────────────
     { word: "SURVEILLING",     topic: "S6/U1/L2 The Watcher", stage: 6, unit: 1, lesson: 2 },
     { word: "EVIDENCE",        topic: "S6/U1/L2 The Watcher", stage: 6, unit: 1, lesson: 2 },
     { word: "PROSECUTORS",     topic: "S6/U1/L2 The Watcher", stage: 6, unit: 1, lesson: 2 },
@@ -1546,8 +1864,6 @@ window.CUSTOM_CONTENT = {
     { word: "TRAUMA",          topic: "S6/U1/L2 The Watcher", stage: 6, unit: 1, lesson: 2 },
     { word: "INCAPABLE",       topic: "S6/U1/L2 The Watcher", stage: 6, unit: 1, lesson: 2 },
     { word: "VOUCHED",         topic: "S6/U1/L2 The Watcher", stage: 6, unit: 1, lesson: 2 },
-
-    // ── S6/U1/L4 — Unsolved Mysteries: Mary Celeste ───────────
     { word: "INAUSPICIOUS",    topic: "S6/U1/L4 Mary Celeste", stage: 6, unit: 1, lesson: 4 },
     { word: "ARCHIPELAGO",     topic: "S6/U1/L4 Mary Celeste", stage: 6, unit: 1, lesson: 4 },
     { word: "FOUL PLAY",       topic: "S6/U1/L4 Mary Celeste", stage: 6, unit: 1, lesson: 4 },
@@ -1561,7 +1877,7 @@ window.CUSTOM_CONTENT = {
     { word: "SALVAGE",         topic: "S6/U1/L4 Mary Celeste", stage: 6, unit: 1, lesson: 4 },
     { word: "SEAWORTHY",       topic: "S6/U1/L4 Mary Celeste", stage: 6, unit: 1, lesson: 4 },
 
-    // ── S6/U2/L1 — At the Movies: Early Years Vocab ─────────
+    // ── S6/U2 ──
     { word: "ILLUSIONIST",     topic: "S6/U2/L1 Early Years", stage: 6, unit: 2, lesson: 1 },
     { word: "LINEAR",          topic: "S6/U2/L1 Early Years", stage: 6, unit: 2, lesson: 1 },
     { word: "INFLUENTIAL",     topic: "S6/U2/L1 Early Years", stage: 6, unit: 2, lesson: 1 },
@@ -1577,8 +1893,6 @@ window.CUSTOM_CONTENT = {
     { word: "TEMPERATE",       topic: "S6/U2/L1 Early Years", stage: 6, unit: 2, lesson: 1 },
     { word: "TOPOGRAPHY",      topic: "S6/U2/L1 Early Years", stage: 6, unit: 2, lesson: 1 },
     { word: "PLENTIFUL",       topic: "S6/U2/L1 Early Years", stage: 6, unit: 2, lesson: 1 },
-
-    // ── S6/U2/L2 — At the Movies: Colour & Sound Vocab ───────
     { word: "COMMISSIONED",    topic: "S6/U2/L2 Colour & Sound", stage: 6, unit: 2, lesson: 2 },
     { word: "SYNCHRONIZED",    topic: "S6/U2/L2 Colour & Sound", stage: 6, unit: 2, lesson: 2 },
     { word: "MAINSTREAM",      topic: "S6/U2/L2 Colour & Sound", stage: 6, unit: 2, lesson: 2 },
@@ -1592,8 +1906,6 @@ window.CUSTOM_CONTENT = {
     { word: "ACCOMPANIMENT",   topic: "S6/U2/L2 Colour & Sound", stage: 6, unit: 2, lesson: 2 },
     { word: "ENTHUSIASTIC",    topic: "S6/U2/L2 Colour & Sound", stage: 6, unit: 2, lesson: 2 },
     { word: "CONVERSION",      topic: "S6/U2/L2 Colour & Sound", stage: 6, unit: 2, lesson: 2 },
-
-    // ── S6/U2/L3-L4 — At the Movies: Modern Era Vocab ────────
     { word: "AUTOMATED",       topic: "S6/U2/L4 Modern Era", stage: 6, unit: 2, lesson: 4 },
     { word: "DEVOTED",         topic: "S6/U2/L4 Modern Era", stage: 6, unit: 2, lesson: 4 },
     { word: "VIDEOCASSETTE",   topic: "S6/U2/L4 Modern Era", stage: 6, unit: 2, lesson: 4 },
@@ -1606,7 +1918,7 @@ window.CUSTOM_CONTENT = {
     { word: "INTEGRAL",        topic: "S6/U2/L4 Modern Era", stage: 6, unit: 2, lesson: 4 },
     { word: "CULTURAL",        topic: "S6/U2/L4 Modern Era", stage: 6, unit: 2, lesson: 4 },
 
-    // ── S6/U3/L1 — Rivalries: Ford vs Ferrari Vocab ──────────
+    // ── S6/U3 ──
     { word: "CONTENTIOUS",    topic: "S6/U3/L1 Rivalries Ford", stage: 6, unit: 3, lesson: 1 },
     { word: "RELIABILITY",    topic: "S6/U3/L1 Rivalries Ford", stage: 6, unit: 3, lesson: 1 },
     { word: "EXPEDIENT",      topic: "S6/U3/L1 Rivalries Ford", stage: 6, unit: 3, lesson: 1 },
@@ -1617,8 +1929,6 @@ window.CUSTOM_CONTENT = {
     { word: "AERODYNAMICS",   topic: "S6/U3/L1 Rivalries Ford", stage: 6, unit: 3, lesson: 1 },
     { word: "MANOEUVRABLE",   topic: "S6/U3/L1 Rivalries Ford", stage: 6, unit: 3, lesson: 1 },
     { word: "COLLECTIBLE",    topic: "S6/U3/L1 Rivalries Ford", stage: 6, unit: 3, lesson: 1 },
-
-    // ── S6/U3/L2 — Rivalries: Steve Jobs & Bill Gates Vocab ──
     { word: "ECCENTRICITY",   topic: "S6/U3/L2 Rivalries Jobs", stage: 6, unit: 3, lesson: 2 },
     { word: "ENTREPRENEUR",   topic: "S6/U3/L2 Rivalries Jobs", stage: 6, unit: 3, lesson: 2 },
     { word: "SPREADSHEET",    topic: "S6/U3/L2 Rivalries Jobs", stage: 6, unit: 3, lesson: 2 },
@@ -1629,8 +1939,6 @@ window.CUSTOM_CONTENT = {
     { word: "COMPLIMENTARY",  topic: "S6/U3/L2 Rivalries Jobs", stage: 6, unit: 3, lesson: 2 },
     { word: "IRRELEVANT",     topic: "S6/U3/L2 Rivalries Jobs", stage: 6, unit: 3, lesson: 2 },
     { word: "UNSUCCESSFUL",   topic: "S6/U3/L2 Rivalries Jobs", stage: 6, unit: 3, lesson: 2 },
-
-    // ── S6/U3/L3 — Rivalries: Batman vs Superman Vocab ───────
     { word: "COMPETITIVENESS", topic: "S6/U3/L3 Rivalries Batman", stage: 6, unit: 3, lesson: 3 },
     { word: "CONTENTION",     topic: "S6/U3/L3 Rivalries Batman", stage: 6, unit: 3, lesson: 3 },
     { word: "OPPOSITION",     topic: "S6/U3/L3 Rivalries Batman", stage: 6, unit: 3, lesson: 3 },
@@ -1641,8 +1949,6 @@ window.CUSTOM_CONTENT = {
     { word: "UNPREDICTABLE",  topic: "S6/U3/L3 Rivalries Batman", stage: 6, unit: 3, lesson: 3 },
     { word: "PRODUCTIVE",     topic: "S6/U3/L3 Rivalries Batman", stage: 6, unit: 3, lesson: 3 },
     { word: "DEDICATION",     topic: "S6/U3/L3 Rivalries Batman", stage: 6, unit: 3, lesson: 3 },
-
-    // ── S6/U3/L4 — Rivalries: Man Utd vs Liverpool Vocab ─────
     { word: "POWERHOUSE",     topic: "S6/U3/L4 Rivalries ManUtd", stage: 6, unit: 3, lesson: 4 },
     { word: "RESENTMENT",     topic: "S6/U3/L4 Rivalries ManUtd", stage: 6, unit: 3, lesson: 4 },
     { word: "DETESTATION",    topic: "S6/U3/L4 Rivalries ManUtd", stage: 6, unit: 3, lesson: 4 },
@@ -1653,8 +1959,6 @@ window.CUSTOM_CONTENT = {
     { word: "TRANSCENDS",     topic: "S6/U3/L4 Rivalries ManUtd", stage: 6, unit: 3, lesson: 4 },
     { word: "VINDICATED",     topic: "S6/U3/L4 Rivalries ManUtd", stage: 6, unit: 3, lesson: 4 },
     { word: "SILVERWARE",     topic: "S6/U3/L4 Rivalries ManUtd", stage: 6, unit: 3, lesson: 4 },
-
-    // ── S6/U3 — Rivalries: Rivalry Synonyms (all lessons) ────
     { word: "STRUGGLE",       topic: "S6/U3 Rivalry Synonyms",  stage: 6, unit: 3 },
     { word: "STRIFE",         topic: "S6/U3 Rivalry Synonyms",  stage: 6, unit: 3 },
     { word: "FEUDING",        topic: "S6/U3 Rivalry Synonyms",  stage: 6, unit: 3 },
@@ -1663,7 +1967,75 @@ window.CUSTOM_CONTENT = {
     { word: "CONFLICT",       topic: "S6/U3 Rivalry Synonyms",  stage: 6, unit: 3 },
     { word: "VYING",          topic: "S6/U3 Rivalry Synonyms",  stage: 6, unit: 3 },
 
-    // ── S6/U6 — Unbelievable Stories: Vocabulary ─────────────
+    // ── S6/U4 ──
+    { word: "MONUMENT",            topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "ARCHAEOLOGICAL SITE", topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "STATELY HOME",        topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "HISTORICAL SITE",     topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "RELIGIOUS FESTIVAL",  topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "THEME PARK",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "PROMENADE",           topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "RESORT",              topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "PIER",                topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "ATTRACTION",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "PANORAMIC",           topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "WATERFRONT",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
+    { word: "UNDULATING",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "TURQUOISE",           topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "MYSTICAL",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "INCOMPARABLE",        topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "WILDERNESS",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "ATMOSPHERE",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "SIMILE",              topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "METAPHOR",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "LOCH",                topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "GLEN",                topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "MAJESTIC",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "HEATHER",             topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
+    { word: "GRUELLING",           topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "GOBSMACKED",          topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "BARREN",              topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "GLEAMING",            topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "ENCHANTING",          topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "EERIE",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "TEPID",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "GRISTLY",             topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "DESCENT",             topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "DISSATISFACTION",     topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "BLEAK",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "BEWILDERING",         topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
+    { word: "CAUSEWAY",            topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "HEXAGONAL",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SPECTACULAR",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "EXTRAVAGANZA",        topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "LANGOUSTINE",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SCALLOP",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "HOMOPHONE",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "INVERSION",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "TITANIC",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "HERITAGE",            topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SLIPWAY",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+    { word: "SUPERLATIVE",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
+
+    // ── S6/U5 ──
+    { word: "etymology", hint: "the study of the origin and history of words", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
+    { word: "Anglo-Saxon", hint: "relating to the Germanic peoples who settled in England before 1066", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
+    { word: "dialect", hint: "a regional variety of a language with its own vocabulary and pronunciation", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
+    { word: "conquest", hint: "the act of taking control of a place by military force", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
+    { word: "loanword", hint: "a word adopted from another language", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
+    { word: "bilingual", hint: "able to speak two languages fluently", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
+    { word: "cognate", hint: "a word that shares its origin with a word in another language", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
+    { word: "vernacular", hint: "the language spoken by ordinary people in a region", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
+    { word: "standardise", hint: "to make something conform to a fixed norm or rule", topic: "S6/U5/L3 Standardisation", stage: 6, unit: 5, lesson: 3 },
+    { word: "printing press", hint: "the machine invented by Gutenberg that revolutionised book production", topic: "S6/U5/L3 Standardisation", stage: 6, unit: 5, lesson: 3 },
+    { word: "manuscript", hint: "a handwritten text, especially from before the age of printing", topic: "S6/U5/L3 Standardisation", stage: 6, unit: 5, lesson: 3 },
+    { word: "neologism", hint: "a newly coined word or expression", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
+    { word: "portmanteau", hint: "a word blending the sounds and meanings of two others, e.g. brunch", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
+    { word: "obsolete", hint: "no longer in use; out of date", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
+    { word: "slang", hint: "informal words used by particular groups, often short-lived", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
+    { word: "linguistic", hint: "relating to language or the study of language", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
+
+    // ── S6/U6 ──
     { word: "HULL",            topic: "S6/U6 Vocab", stage: 6, unit: 6 },
     { word: "STERN",           topic: "S6/U6 Vocab", stage: 6, unit: 6 },
     { word: "BOW",             topic: "S6/U6 Vocab", stage: 6, unit: 6 },
@@ -1699,7 +2071,8 @@ window.CUSTOM_CONTENT = {
     { word: "OPTIMISTICALLY",  topic: "S6/U6 Vocab", stage: 6, unit: 6 },
     { word: "COMPREHENDING",   topic: "S6/U6 Vocab", stage: 6, unit: 6 },
     { word: "HAEMORRHAGING",   topic: "S6/U6 Vocab", stage: 6, unit: 6 },
-    // ── S6/U7/L1 — CLIL: Space ────────────────────────────────
+
+    // ── S6/U7 ──
     { word: "ORBIT",         topic: "S6/U7/L1 Space",     stage: 6, unit: 7, lesson: 1 },
     { word: "EXOPLANET",     topic: "S6/U7/L1 Space",     stage: 6, unit: 7, lesson: 1 },
     { word: "GRAVITY",       topic: "S6/U7/L1 Space",     stage: 6, unit: 7, lesson: 1 },
@@ -1709,8 +2082,6 @@ window.CUSTOM_CONTENT = {
     { word: "LIGHT-YEAR",    topic: "S6/U7/L1 Space",     stage: 6, unit: 7, lesson: 1 },
     { word: "BLACK HOLE",    topic: "S6/U7/L1 Space",     stage: 6, unit: 7, lesson: 1 },
     { word: "ASTEROID BELT", topic: "S6/U7/L1 Space",     stage: 6, unit: 7, lesson: 1 },
-
-    // ── S6/U7/L2 — CLIL: Geography ───────────────────────────
     { word: "ARCHIPELAGO",   topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
     { word: "PENINSULA",     topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
     { word: "PLATEAU",       topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
@@ -1723,8 +2094,6 @@ window.CUSTOM_CONTENT = {
     { word: "OASIS",         topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
     { word: "CANYON",        topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
     { word: "BASIN",         topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
-
-    // ── S6/U7/L3 — CLIL: History ──────────────────────────────
     { word: "PHILOSOPHER",          topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
     { word: "CIVIL WAR",            topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
     { word: "MEDIEVAL ERA",         topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
@@ -1736,8 +2105,6 @@ window.CUSTOM_CONTENT = {
     { word: "REVOLUTION",           topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
     { word: "INDUSTRIAL REVOLUTION",topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
     { word: "EMPIRE",               topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
-
-    // ── S6/U7/L4 — CLIL: Chemistry ───────────────────────────
     { word: "BEAKER",            topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
     { word: "TEST TUBE",         topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
     { word: "BUNSEN BURNER",     topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
@@ -1745,453 +2112,7 @@ window.CUSTOM_CONTENT = {
     { word: "PIPETTE",           topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
     { word: "FLASK",             topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
 
-    // ── S6/U4/L1 — England: Tourist Attractions ──────────────
-    { word: "MONUMENT",            topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "ARCHAEOLOGICAL SITE", topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "STATELY HOME",        topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "HISTORICAL SITE",     topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "RELIGIOUS FESTIVAL",  topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "THEME PARK",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "PROMENADE",           topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "RESORT",              topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "PIER",                topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "ATTRACTION",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "PANORAMIC",           topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-    { word: "WATERFRONT",          topic: "S6/U4/L1 England",   stage: 6, unit: 4, lesson: 1 },
-
-    // ── S6/U4/L2 — Scotland: Descriptive Language ────────────
-    { word: "UNDULATING",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "TURQUOISE",           topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "MYSTICAL",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "INCOMPARABLE",        topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "WILDERNESS",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "ATMOSPHERE",          topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "SIMILE",              topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "METAPHOR",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "LOCH",                topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "GLEN",                topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "MAJESTIC",            topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-    { word: "HEATHER",             topic: "S6/U4/L2 Scotland",  stage: 6, unit: 4, lesson: 2 },
-
-    // ── S6/U4/L3 — Wales: Viewpoints & Suffixes ──────────────
-    { word: "GRUELLING",           topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "GOBSMACKED",          topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "BARREN",              topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "GLEAMING",            topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "ENCHANTING",          topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "EERIE",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "TEPID",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "GRISTLY",             topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "DESCENT",             topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "DISSATISFACTION",     topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "BLEAK",               topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-    { word: "BEWILDERING",         topic: "S6/U4/L3 Wales",     stage: 6, unit: 4, lesson: 3 },
-
-    // ── S6/U4/L4 — Northern Ireland: Belfast ─────────────────
-    { word: "CAUSEWAY",            topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "HEXAGONAL",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "SPECTACULAR",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "EXTRAVAGANZA",        topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "LANGOUSTINE",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "SCALLOP",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "HOMOPHONE",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "INVERSION",           topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "TITANIC",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "HERITAGE",            topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "SLIPWAY",             topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-    { word: "SUPERLATIVE",         topic: "S6/U4/L4 N.Ireland", stage: 6, unit: 4, lesson: 4 },
-
-    // ── S5/U1/L1 — Al Capone ─────────────────────────────────
-    { word: "NOTORIOUS",           topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
-    { word: "PROHIBITION",         topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
-    { word: "BOOTLEGGING",         topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
-    { word: "FEDORA",              topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
-    { word: "BOUNCER",             topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
-    { word: "CONVICTED",           topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
-    { word: "PROFITABLE",          topic: "S5/U1/L1 Al Capone",      stage: 5, unit: 1, lesson: 1 },
-
-    // ── S5/U1/L2 — Madame Zheng ──────────────────────────────
-    { word: "FORMIDABLE",          topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
-    { word: "CONFEDERATION",       topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
-    { word: "PRIVATEER",           topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
-    { word: "ADMINISTRATIVE",      topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
-    { word: "VULNERABLE",          topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
-    { word: "AMNESTY",             topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
-    { word: "SABOTAGE",            topic: "S5/U1/L2 Madame Zheng",   stage: 5, unit: 1, lesson: 2 },
-
-    // ── S5/U1/L3 — Robin Hood ────────────────────────────────
-    { word: "OUTLAW",              topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
-    { word: "OPPRESSED",           topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
-    { word: "PILLAGE",             topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
-    { word: "ARCHERY",             topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
-    { word: "FOLKLORE",            topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
-    { word: "CHRONICLER",          topic: "S5/U1/L3 Robin Hood",     stage: 5, unit: 1, lesson: 3 },
-
-    // ── S5/U1/L4 — Escobar & Siegel ──────────────────────────
-    { word: "MONOPOLISED",         topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-    { word: "SMUGGLING",           topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-    { word: "RANSOM",              topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-    { word: "MANHUNT",             topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-    { word: "ASSASSINATION",       topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-    { word: "ACQUITTED",           topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-    { word: "CHARISMATIC",         topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-    { word: "PROWESS",             topic: "S5/U1/L4 Escobar/Siegel", stage: 5, unit: 1, lesson: 4 },
-
-    // ── S5/U8 ─────────────────────────────────────────────────────────────────
-    { word: "CULPRIT",        topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
-    { word: "DEDUCTION",      topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
-    { word: "SUSPECT",        topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
-    { word: "ALIBI",          topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
-    { word: "MOTIVE",         topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
-    { word: "EVIDENCE",       topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
-    { word: "ECCENTRIC",      topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
-    { word: "OBSERVANT",      topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
-    { word: "METHODICAL",     topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
-    { word: "SHREWD",         topic: "S5/U8/L2 Character",       stage: 5, unit: 8, lesson: 2 },
-    { word: "CONSPIRATOR",    topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
-    { word: "PERPETRATOR",    topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
-    { word: "ACCOMPLICE",     topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
-    { word: "INTRIGUE",       topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
-    { word: "PREMEDITATED",   topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
-    { word: "INGENIOUS",      topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
-    { word: "REVELATION",     topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
-    { word: "CORPSE",         topic: "S5/U8/L4 Writing",         stage: 5, unit: 8, lesson: 4 },
-    { word: "CLUE",           topic: "S5/U8/L3 Plot",            stage: 5, unit: 8, lesson: 3 },
-    { word: "INVESTIGATION",  topic: "S5/U8/L1 Detective Genre", stage: 5, unit: 8, lesson: 1 },
-
-    // ── S8/U8 — Choices and Decisions ────────────────────────────
-    { word: "HAZARD",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
-    { word: "COUNTERFEIT",      topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
-    { word: "CASKET",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
-    { word: "SUITOR",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
-    { word: "SCROLL",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
-    { word: "DIVERGED",         topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
-    { word: "UNDERGROWTH",      topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
-    { word: "STANZA",           topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
-    { word: "RELINQUISH",       topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
-    { word: "IMPLICATIONS",     topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
-    { word: "FIXATION",         topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
-    { word: "DISSATISFIED",     topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
-    { word: "HYPOTHERMIA",      topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
-    { word: "PREPOSITIONAL",    topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
-    { word: "STAIRWELL",        topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
-    { word: "OUTBACK",          topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
-    { word: "DECIMATED",        topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
-    { word: "UNSPEAKABLE",      topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
-    { word: "PERISHED",         topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
-    { word: "RHETORICAL",       topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
-    { word: "PRIORITISE",       topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
-    { word: "ARGUMENTATIVE",    topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
-    { word: "BIAS",             topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
-    { word: "PERSUASIVE",       topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
-
-
-
-    // ── S5/U8/L1 — Van Dine's Rules ──────────────────────────────────────────
-    { text: "A detective story is like a game; the author must play fair with the reader.",                                  correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-    { text: "A detective story is like a game; the author can use any tricks to fool the reader.",                          correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-
-    { text: "According to Van Dine, the culprit must be determined by logical deductions, not by coincidence.",              correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-    { text: "According to Van Dine, a lucky coincidence is the best way for the detective to solve a case.",                correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-
-    { text: "Van Dine states that the detective himself must never turn out to be the culprit.",                             correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-    { text: "Van Dine states that it is acceptable for the detective to be revealed as the criminal at the end.",            correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-
-    { text: "Van Dine's rules say there must be only one culprit, no matter how many murders occur.",                       correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-    { text: "Van Dine's rules say that having several culprits makes a detective story more realistic.",                     correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-
-    { text: "The culprit in a detective story must be someone the reader has already met in the story.",                    correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-    { text: "The culprit in a detective story can be a stranger who is introduced only in the final chapter.",              correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-
-    { text: "Van Dine forbids using secret societies or the mafia as the cause of the crime.",                              correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-    { text: "Van Dine encourages writers to use secret societies and organised crime to add excitement.",                    correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-
-    { text: "Van Dine says the crime must never turn out to be an accident or a suicide.",                                  correct: true,  topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-    { text: "Van Dine says it is perfectly acceptable for the crime to turn out to be an accident.",                        correct: false, topic: "S5/U8/L1 Van Dine Rules", stage: 5, unit: 8, lesson: 1 },
-
-    // ── S5/U8/L2 — Show Don't Tell ────────────────────────────────────────────
-    { text: "Good writers show character through actions and behaviour rather than telling the reader what to think.",       correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-    { text: "Good writers tell the reader exactly what to think about a character using phrases like 'he was clever'.",      correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-
-    { text: "Conan Doyle shows Holmes's intelligence by having him deduce facts about Watson without being told them.",      correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-    { text: "Conan Doyle tells us Holmes is intelligent by writing 'Sherlock Holmes was the cleverest man in England'.",     correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-
-    { text: "Agatha Christie tells us Miss Marple is charming and innocent, rather than showing it through her actions.",    correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-    { text: "Agatha Christie avoids describing Miss Marple's appearance and focuses only on what she does.",                 correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-
-    { text: "A detective who notices a scratch on a door handle and studies it with a magnifying glass appears methodical.", correct: true,  topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-    { text: "A detective described as 'very methodical' in the text is a better example of show don't tell.",               correct: false, topic: "S5/U8/L2 Show Don't Tell", stage: 5, unit: 8, lesson: 2 },
-
-    // ── S5/U8/L3 — Red Herrings & Story Planning ──────────────────────────────
-    { text: "A red herring is a false clue that misleads the reader and creates suspense.",                                  correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-    { text: "A red herring is a vital piece of evidence that leads the detective directly to the culprit.",                  correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-
-    { text: "A detective story must be planned carefully so that clues and the solution are consistent throughout.",         correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-    { text: "Unlike other genres, detective stories do not need to be planned because the writer can improvise.",            correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-
-    { text: "The setting, suspects and clues must all be appropriate for the type of detective in the story.",               correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-    { text: "The setting and suspects can be entirely random and unconnected to the detective's background.",                correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-
-    { text: "In 'The Four Suspects', Miss Marple solved the mystery by noticing 'Honesty' was written with a capital H.",   correct: true,  topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-    { text: "In 'The Four Suspects', Miss Marple solved the mystery by recognising a foreign stamp on a letter.",           correct: false, topic: "S5/U8/L3 Red Herrings and Plot", stage: 5, unit: 8, lesson: 3 },
-
-    // ── S5/U8/L4 — Story Openings & Tenses ───────────────────────────────────
-    { text: "The past perfect tense describes events that happened before the main story events began.",                     correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-    { text: "The past perfect tense describes events happening at the same time as the main story events.",                  correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-
-    { text: "An effective detective story opening grabs the reader's attention and makes them want to read on.",             correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-    { text: "An effective detective story opening should explain all the facts of the case so the reader is not confused.",  correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-
-    { text: "Starting a story 'in medias res' means beginning in the middle of the action before explaining the background.",correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-    { text: "Starting a story 'in medias res' means beginning with a detailed description of all the main characters.",     correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-
-    { text: "In detective story writing, clues and red herrings should be revealed slowly to build suspense.",               correct: true,  topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-    { text: "In detective story writing, all the clues should be revealed at the start so the reader can solve it early.",   correct: false, topic: "S5/U8/L4 Story Openings and Tenses", stage: 5, unit: 8, lesson: 4 },
-
-    // ── S8/U8/L2 — Adverbs of Manner and Degree ──────────────────
-    { text: "Oliver looked back hesitantly before stepping off the diving board.",                correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "Oliver looked back hesitant before stepping off the diving board.",                  correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "The divers hurtled aggressively towards the water with eyes fixed ahead.",           correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "The divers hurtled aggressive towards the water with eyes fixed ahead.",             correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "She greedily ate the food without offering any to the others.",                      correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "She greedy ate the food without offering any to the others.",                        correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "He was completely unaware that the train had already left the platform.",            correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "He was complete unaware that the train had already left the platform.",              correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "I almost fell over when I heard the news about the shipwreck.",                      correct: true,  topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-    { text: "I nearly almost fell over when I heard the news about the shipwreck.",               correct: false, topic: "S8/U8/L2 Adverbs", stage: 8, unit: 8, lesson: 2 },
-
-    // ── S8/U8/L3 — Linking and Time Adverbs ──────────────────────
-    { text: "First, I studied the map carefully. Next, I planned the route. Afterwards, we set off.",  correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-    { text: "First, I studied the map careful. Next, I planned the route. Afterwards, we set off.",    correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-    { text: "The experiment was difficult. Moreover, the results were inconclusive.",                  correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-    { text: "The experiment was difficult. More over, the results were inconclusive.",                 correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-    { text: "Recently, scientists have found new evidence to support this theory.",                    correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-    { text: "Recent, scientists have found new evidence to support this theory.",                      correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-    { text: "While it is true that choice brings freedom, it can also cause anxiety.",                 correct: true,  topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-    { text: "While it is true that choice brings freedom, but it can also cause anxiety.",             correct: false, topic: "S8/U8/L3 Linking and Time Adverbs", stage: 8, unit: 8, lesson: 3 },
-
-    // ── S8/U1 Nature and humans — Formal vs Informal / Sentence Types ─
-    { text: "The scientist, who had studied climate change for decades, presented her findings to the committee.",   correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "The scientist, who had studied climate change for decades, presented her findings to the committee!",   correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "Although it is likely that humans have contributed to climate change, natural forces also play a role.", correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "Although it is likely that humans have contributed to climate change, but natural forces also play a role.", correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "Consequently, the ice caps melt, which results in rising sea levels.",                    correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "Consequently the ice caps melt which results in rising sea levels.",                      correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "The Earth's temperature has risen significantly; the past five years have been the hottest ever recorded.", correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "The Earth's temperature has risen significantly, but the past five years have been the hottest ever recorded.", correct: false, topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
-    { text: "When the house started to shake, I was at home with my three children.",                  correct: true,  topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
-    { text: "When the house started to shake I was at home with my three children.",                   correct: false, topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
-    { text: "Since the 2010 earthquake, our family has had an emergency plan.",                        correct: true,  topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
-    { text: "Since the 2010 earthquake, our family have had an emergency plan.",                       correct: false, topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
-    { text: "There were sheer terror and anguish as people ran from the rising water.",                correct: true,  topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
-    { text: "There was sheer terror and anguish as people ran from the rising water.",                 correct: false, topic: "S8/U1/L6 Tsunami", stage: 8, unit: 1, lesson: 6 },
-
-    // ── S8/U2 Grandmother's Song — Reporting Verbs / Direct Speech ────
-    { text: "'That's progress!' grandmother exclaimed as granddaughter told her tale.",                correct: true,  topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
-    { text: "'That's progress!' grandmother exclaimed as granddaughter told her tale",                 correct: false, topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
-    { text: "'This boy did not take anything,' she said. 'I have watched him.'",                      correct: true,  topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
-    { text: "'This boy did not take anything,' she said, 'I have watched him.'",                      correct: false, topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
-    { text: "'Ten pesos,' he muttered, and the girl reached into her pocket.",                        correct: true,  topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
-    { text: "'Ten pesos,' he muttered. And the girl reached into her pocket.",                        correct: false, topic: "S8/U2/L3 Reporting Verbs", stage: 8, unit: 2, lesson: 3 },
-    { text: "She held the hummingbird with the same tenderness as her grandmother had held her.",     correct: true,  topic: "S8/U2/L2 Plot and Character", stage: 8, unit: 2, lesson: 2 },
-    { text: "She held the hummingbird with the same tenderness as her grandmother had held she.",     correct: false, topic: "S8/U2/L2 Plot and Character", stage: 8, unit: 2, lesson: 2 },
-    { text: "Granddaughter grew up to be trusting and trustworthy, generous and kind.",               correct: true,  topic: "S8/U2/L3 Plot and Character", stage: 8, unit: 2, lesson: 3 },
-    { text: "Granddaughter grew up to be trusting and trustworthy, generous and kindly.",             correct: false, topic: "S8/U2/L3 Plot and Character", stage: 8, unit: 2, lesson: 3 },
-    { text: "In time, grandmother grew old and more frail, so granddaughter attended to her.",        correct: true,  topic: "S8/U2/L4 Climbing the mountains alone", stage: 8, unit: 2, lesson: 4 },
-    { text: "In time, grandmother grew old and more frail, so granddaughter attended for her.",       correct: false, topic: "S8/U2/L4 Climbing the mountains alone", stage: 8, unit: 2, lesson: 4 },
-
-    // ══════════════════════════════════════════════════════════════
-    //  STAGE 4
-    // ══════════════════════════════════════════════════════════════
-
-    // ── S4/U8/L1 — Vocabulary (Josh Hopkins / Shackleton) ────────
-    { word: "FRIGHTENING",  hint: "Making you feel scared or afraid",                          topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "REALIZED",     hint: "Suddenly understood or became aware of something",          topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "BATTERY",      hint: "The part of a phone or device that stores power",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "HORRIBLE",     hint: "Very unpleasant or awful",                                  topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "EXPEDITION",   hint: "An organised journey made for a special purpose",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "SEARCH",       hint: "To look carefully for someone or something",                topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "CHARGE",       hint: "To put electricity back into a battery",                    topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "SURVIVE",      hint: "To stay alive through a dangerous situation",               topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "RESCUE",       hint: "To save someone from a dangerous situation",                topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "DARKNESS",     hint: "When there is no light; the state of being dark",           topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "TRAPPED",      hint: "Unable to escape from a dangerous place or situation",      topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-    { word: "JOURNEY",      hint: "Travelling from one place to another",                      topic: "S4/U8/L1 Tales of Survival", stage: 4, unit: 8, lesson: 1 },
-
-    // ── S4/U8/L3 — Reading (Alison Wright / Kindness of Strangers)
-    { word: "STRANGER",     hint: "Someone you have never met before",                         topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-    { word: "TREATMENT",    hint: "Medical care given to a sick or injured person",            topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-    { word: "KINDNESS",     hint: "Being friendly, generous and caring to others",             topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-    { word: "ALIVE",        hint: "Living; not dead",                                          topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-    { word: "ACCIDENT",     hint: "Something bad that happens unexpectedly",                   topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-    { word: "HOSPITAL",     hint: "A place where sick or injured people receive medical care", topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-    { word: "BROKEN",       hint: "Damaged and no longer working or in one piece",             topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-    { word: "RECOVER",      hint: "To get better after an illness or injury",                  topic: "S4/U8/L3 The Kindness of Strangers", stage: 4, unit: 8, lesson: 3 },
-
-    // ── S4/U8/L5 — Balto / additional survival vocab ─────────────
-    { word: "MEDICINE",     hint: "A substance used to treat illness or injury",               topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
-    { word: "FROZEN",       hint: "Turned to ice because of very cold temperatures",           topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
-    { word: "SURVIVED",     hint: "Stayed alive through a very dangerous experience",          topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
-    { word: "FAMOUS",       hint: "Known by many people",                                      topic: "S4/U8/L5 The Story of Balto", stage: 4, unit: 8, lesson: 5 },
-
-    // ── S4/U8/L6 — Survival tips / Writing ───────────────────────
-    { word: "PROTECT",      hint: "To keep someone or something safe from harm",               topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
-    { word: "DANGER",       hint: "The possibility of being hurt or killed",                   topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
-    { word: "EQUIPMENT",    hint: "The tools and items needed for an activity",                topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
-    { word: "IMPERATIVE",   hint: "A type of sentence that gives an instruction or command",   topic: "S4/U8/L6 Survival Tips", stage: 4, unit: 8, lesson: 6 },
-
-    // ── S9/U9/L1 — Stranger in a Strange Land ────────────────────────
-    { word: "EXHIBIT",        hint: "An object on display",                                                          topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
-    { word: "IMPUDENCE",      hint: "Overconfidence; disrespectfulness",                                             topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
-    { word: "POMEGRANATE",    hint: "A fruit with red flesh",                                                        topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
-    { word: "INTIMATE",       hint: "Familiar and relaxed",                                                          topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
-
-    // ── S9/U9/L2 — A Strange Meeting (Macbeth) ───────────────────────
-    { word: "SOLILOQUY",      hint: "A solo speech in which a character reveals their thoughts",                     topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
-    { word: "TRAGEDY",        hint: "A genre of drama in which the main character encounters problems and suffering", topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
-    { word: "HEREAFTER",      hint: "In the future",                                                                 topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
-
-    // ── S9/U9/L3 — Fun with Macbeth ──────────────────────────────────
-    { word: "DETRIMENT",      hint: "The state of being damaged or harmed",                                          topic: "S9/U9/L3 Fun with Macbeth", stage: 9, unit: 9, lesson: 3 },
-
-    // ── S9/U9/L4 — An Unusual Job ────────────────────────────────────
-    { word: "GRAVITATED",     hint: "Was attracted to",                                                              topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
-    { word: "GRIT",           hint: "Determination",                                                                 topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
-    { word: "LODGED",         hint: "Stuck",                                                                         topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
-    { word: "PARAPHRASING",   hint: "Rewording something in a different way, usually to make it shorter or clearer", topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
-
-    // ── S9/U9/L5 — Unusual Endings ───────────────────────────────────
-    { word: "CONVENTIONAL",   hint: "Following what is normally expected or traditionally done",                     topic: "S9/U9/L5 Unusual Endings", stage: 9, unit: 9, lesson: 5 },
-    { word: "UNCONVENTIONAL", hint: "Not following usual expectations; surprising or unexpected",                    topic: "S9/U9/L5 Unusual Endings", stage: 9, unit: 9, lesson: 5 },
-
-    // ── S9/U9/L6 — A Twist in the Tail ───────────────────────────────
-    { word: "INTERSTELLAR",   hint: "Between the stars; from space",                                                 topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
-    { word: "REPELLED",       hint: "Felt distaste or disgust",                                                      topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
-    { word: "HARNESSES",      hint: "A set of straps",                                                               topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
-    { word: "PUN",            hint: "A type of wordplay that relies on a word with two meanings",                    topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
-    { word: "SIGNIFYING",     hint: "Meaning or standing for something",                                             topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
-
-    // ── S9/U1/L1 — Relic (Darkparis) ─────────────────────────────────
-    { word: "FLICKERING",     hint: "Shining unsteadily",                                                            topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
-    { word: "NAIVE",          hint: "Lacking experience or wisdom",                                                  topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
-    { word: "CATACOMBS",      hint: "Underground tunnels originally used as mines, later as storage",                topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
-    { word: "FLASHBACK",      hint: "A part of a story that goes back in time to explain an event",                  topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
-    { word: "EXPLICIT",       hint: "Stated directly and clearly",                                                   topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
-
-    // ── S9/U1/L2 — The Doorkeeper ────────────────────────────────────
-    { word: "REBOUNDED",      hint: "Bounced back",                                                                  topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-    { word: "SCURRYING",      hint: "Moving quickly with short steps",                                               topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-    { word: "ANTITHESIS",     hint: "The use of opposites or contrasting ideas",                                     topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-    { word: "ELLIPSIS",       hint: "Three dots used to mark a pause or omission in speech",                         topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-    { word: "CLIFFHANGER",    hint: "A dramatic ending which leaves the reader in suspense",                         topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-    { word: "QUIVER",         hint: "A shake",                                                                       topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-    { word: "PIERCING",       hint: "Cutting through",                                                               topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-    { word: "LINGERS",        hint: "Hangs around",                                                                  topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
-
-    // ── S9/U1/L3 — Reviewing Darkparis ───────────────────────────────
-    { word: "CONTEXT",        hint: "The situation within which something exists or happens",                        topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
-    { word: "SUMMARISE",      hint: "To explain the main points of a text in a few words",                           topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
-    { word: "SKIMMING",       hint: "Reading a text quickly to get the overall idea",                                topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
-    { word: "SCANNING",       hint: "Looking through a text quickly to find particular details",                     topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
-
-    // ── S9/U1/L4 — The Second Test (Play) ───────────────────────────
-    { word: "GAGGED",         hint: "Having a covering over the mouth so someone cannot speak",                      topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
-    { word: "GESTURE",        hint: "Movements of the hands or arms to add emphasis or bring a story to life",       topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
-    { word: "PACE",           hint: "The speed at which someone speaks or events take place in a story",             topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
-    { word: "PROSE",          hint: "Written language in paragraphs, as opposed to verse or drama",                  topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
-
-    // ── S9/U1/L5 — Visiting Coober Pedy ─────────────────────────────
-    { word: "OTHERWORLDLY",   hint: "Relating to a strange, alternative world",                                      topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
-    { word: "UNNERVING",      hint: "Causing a loss of confidence",                                                  topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
-    { word: "OPAL",           hint: "A precious stone",                                                              topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
-    { word: "BLASTING",       hint: "Blowing up or breaking apart",                                                  topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
-
-    // ── S9/U1/L6 — Living under the Ground ──────────────────────────
-    { word: "INVENTIVE",      hint: "Creative",                                                                      topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
-    { word: "DRONE",          hint: "A low continuous sound",                                                        topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
-    { word: "PINGING",        hint: "Making a short high-pitched sound",                                             topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
-
-    { word: "juxtaposition", hint: "placing two contrasting things side by side for effect", topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
-    { word: "flamboyant", hint: "confident and stylish in an eye-catching way", topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
-    { word: "gadget", hint: "a small device or tool, often electronic", topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
-    { word: "bursary", hint: "a grant of money given to a student", topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
-    { word: "invigilating", hint: "supervising learners during an examination", topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
-    { word: "ecstatic", hint: "feeling or showing overwhelming happiness", topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
-    { word: "petrified", hint: "extremely scared, frozen with fear", topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
-    { word: "chronological", hint: "arranged in the order that events happened in time", topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
-    { word: "galvanise", hint: "to provoke or shock someone into taking action", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { word: "counterparts", hint: "people who have the same position or role as someone else", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { word: "advocates", hint: "people who publicly support a cause or group", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { word: "stereotype", hint: "a widely held but fixed and oversimplified image of a type of person", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
-    { word: "pariah", hint: "an outcast, someone rejected by their social group", topic: "S9/U8/L5 The Transporter", stage: 9, unit: 8, lesson: 5 },
-    { word: "threshold", hint: "the point at which one thing ends and another begins; a doorway", topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
-    { word: "astrolabe", hint: "a historical or futuristic navigation instrument", topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
-    { word: "scowled", hint: "frowned in an angry or disapproving way", topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
-    { word: "devious", hint: "cunning and indirect; sneaky in approach", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
-    { word: "anguished", hint: "experiencing severe mental or physical pain", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
-    { word: "fatigue", hint: "extreme tiredness, especially after effort", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
-    { word: "flagged", hint: "became tired and lost energy or momentum", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
-    { word: "nigh", hint: "old or poetic word meaning near or almost", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
-    { word: "crater", hint: "a large bowl-shaped hollow in the earth, often volcanic", topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
-    { word: "barrage", hint: "an overwhelming rush of something — words, questions, noise", topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
-    { word: "exquisite", hint: "extremely beautiful and finely made", topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
-    { word: "crystalline", hint: "clear and transparent like crystal", topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
-    { word: "evoked", hint: "brought a feeling or memory to mind", topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
-    { word: "rallied", hint: "gathered fresh strength after a period of weakness", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
-    { word: "resolute", hint: "firmly determined; refusing to give up", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
-    { word: "bewilderment", hint: "a state of complete confusion", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
-    { word: "lustrous", hint: "having a soft shining glow", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
-    { word: "incredulous", hint: "unwilling or unable to believe something", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { word: "precipice", hint: "a steep cliff or dangerous drop", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { word: "oblivious", hint: "completely unaware of what is happening around you", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { word: "algae", hint: "simple plant-like organisms that grow in or near water", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
-    { word: "dilapidated", hint: "in a state of disrepair; crumbling with age or neglect", topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
-    { word: "illuminating", hint: "making something clear and easier to understand; also, giving off light", topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
-    { word: "halo", hint: "a ring of light around someone or something, often suggesting holiness or glory", topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
-
-    { word: "poaching", hint: "illegally catching animals on someone else's land", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { word: "pheasant", hint: "a large game bird with colourful feathers", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { word: "caravan", hint: "a small mobile home on wheels", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { word: "forecourt", hint: "the open area in front of a petrol station", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { word: "marvellous", hint: "extremely impressive or wonderful", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { word: "snobbish", hint: "behaving as if you are better than other people", topic: "S5/U7/L1 Danny", stage: 5, unit: 7, lesson: 1 },
-    { word: "sedated", hint: "made calm or unconscious by a drug", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { word: "gamekeeper", hint: "a person employed to protect game animals on an estate", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { word: "accomplice", hint: "a person who helps someone commit a crime", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { word: "cunning", hint: "clever at achieving things in a deceptive way", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { word: "trespassing", hint: "entering someone's land or property without permission", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { word: "treacherous", hint: "guilty of betrayal; or dangerously unpredictable", topic: "S5/U7/L2 Danny", stage: 5, unit: 7, lesson: 2 },
-    { word: "protagonist", hint: "the main character in a story", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { word: "antagonist", hint: "the character who opposes the hero", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { word: "clue", hint: "a piece of evidence that helps solve a mystery", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { word: "motive", hint: "the reason why someone commits a crime", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { word: "suspect", hint: "a person thought to be guilty of a crime", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { word: "alibi", hint: "evidence that proves you were somewhere else when a crime occurred", topic: "S5/U7/L3 Detective", stage: 5, unit: 7, lesson: 3 },
-    { word: "red herring", hint: "a misleading clue designed to distract from the truth", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "foreshadowing", hint: "hints early in a story about what will happen later", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "narrator", hint: "the voice that tells the story", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "tension", hint: "a feeling of suspense and excitement in a story", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "resolution", hint: "the part of a story where the conflict is solved", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "villain", hint: "a wicked or evil character in a story", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "deduction", hint: "reaching a conclusion through logical reasoning from evidence", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "intrigue", hint: "mysterious or secretive activity that arouses curiosity", topic: "S5/U7/L4 Story Craft", stage: 5, unit: 7, lesson: 4 },
-    { word: "etymology", hint: "the study of the origin and history of words", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
-    { word: "Anglo-Saxon", hint: "relating to the Germanic peoples who settled in England before 1066", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
-    { word: "dialect", hint: "a regional variety of a language with its own vocabulary and pronunciation", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
-    { word: "conquest", hint: "the act of taking control of a place by military force", topic: "S6/U5/L1 Origins", stage: 6, unit: 5, lesson: 1 },
-    { word: "loanword", hint: "a word adopted from another language", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
-    { word: "bilingual", hint: "able to speak two languages fluently", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
-    { word: "cognate", hint: "a word that shares its origin with a word in another language", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
-    { word: "vernacular", hint: "the language spoken by ordinary people in a region", topic: "S6/U5/L2 Borrowing", stage: 6, unit: 5, lesson: 2 },
-    { word: "standardise", hint: "to make something conform to a fixed norm or rule", topic: "S6/U5/L3 Standardisation", stage: 6, unit: 5, lesson: 3 },
-    { word: "printing press", hint: "the machine invented by Gutenberg that revolutionised book production", topic: "S6/U5/L3 Standardisation", stage: 6, unit: 5, lesson: 3 },
-    { word: "manuscript", hint: "a handwritten text, especially from before the age of printing", topic: "S6/U5/L3 Standardisation", stage: 6, unit: 5, lesson: 3 },
-    { word: "neologism", hint: "a newly coined word or expression", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
-    { word: "portmanteau", hint: "a word blending the sounds and meanings of two others, e.g. brunch", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
-    { word: "obsolete", hint: "no longer in use; out of date", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
-    { word: "slang", hint: "informal words used by particular groups, often short-lived", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
-    { word: "linguistic", hint: "relating to language or the study of language", topic: "S6/U5/L4 Change", stage: 6, unit: 5, lesson: 4 },
-    // S8/U1 Nature and humans
+    // ── S8/U1 ──
     { word: "fiction", hint: "Stories about imaginary characters and events", topic: "S8/U1/L1 Nature and humans", stage: 8, unit: 1, lesson: 1 },
     { word: "tone", hint: "The way a piece of writing sounds, helping suggest mood and feelings", topic: "S8/U1/L1 Nature and humans", stage: 8, unit: 1, lesson: 1 },
     { word: "theme", hint: "The main subject or message of a text, book or film", topic: "S8/U1/L1 Nature and humans", stage: 8, unit: 1, lesson: 1 },
@@ -2222,7 +2143,7 @@ window.CUSTOM_CONTENT = {
     { word: "morphology", hint: "The study of how words are formed — looking at roots, prefixes and suffixes", topic: "S8/U1/L6 Nature and humans", stage: 8, unit: 1, lesson: 6 },
     { word: "etymology", hint: "The study of the origins of words", topic: "S8/U1/L6 Nature and humans", stage: 8, unit: 1, lesson: 6 },
 
-    // S8/U2 Grandmother's Song
+    // ── S8/U2 ──
     { word: "setting", hint: "The location and time where a story takes place", topic: "S8/U2/L1 Grandmother's Song", stage: 8, unit: 2, lesson: 1 },
     { word: "preposition", hint: "A word used before a noun to show place, direction or time — e.g. 'above', 'through'", topic: "S8/U2/L1 Grandmother's Song", stage: 8, unit: 2, lesson: 1 },
     { word: "metaphor", hint: "A comparison that describes one thing as if it is something else", topic: "S8/U2/L1 Grandmother's Song", stage: 8, unit: 2, lesson: 1 },
@@ -2244,33 +2165,29 @@ window.CUSTOM_CONTENT = {
     { word: "conventions", hint: "The 'rules' of how a story is told or a piece of writing is set out", topic: "S8/U2/L6 Grandmother's Song", stage: 8, unit: 2, lesson: 6 },
     { word: "blurb", hint: "The information on the back cover of a book that tells the reader about the story", topic: "S8/U2/L6 Grandmother's Song", stage: 8, unit: 2, lesson: 6 },
 
+    // ── S8/U3 ──
     { word: "hoard", hint: "A collection of valuable things, often kept hidden", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
     { word: "oxymoron", hint: "A figure of speech that combines two contradictory ideas, e.g. 'an open secret'", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
     { word: "hyperbole", hint: "An exaggerated statement used for effect, not meant to be taken literally", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
     { word: "stereotype", hint: "A familiar but oversimplified idea of a type of person or character", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
     { word: "intrigued", hint: "Fascinated and curious, wanting to find out more", topic: "S8/U3/L1 The mystery of Oak Island", stage: 8, unit: 3, lesson: 1 },
-
     { word: "uninhabited", hint: "Not lived in by people; empty of human residents", topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
     { word: "formality", hint: "The level of seriousness or officialness in language or behaviour", topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
     { word: "subsidiary", hint: "Less important or secondary; supporting the main idea", topic: "S8/U3/L2 Strange islands", stage: 8, unit: 3, lesson: 2 },
-
     { word: "hoarse", hint: "Having a rough, croaky-sounding voice", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
     { word: "marooned", hint: "Left behind alone on a deserted island as a punishment", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
     { word: "desolate", hint: "Empty, bleak and uninhabited", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
     { word: "buccaneers", hint: "Pirates; lawless sailors who attacked ships", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
     { word: "monologue", hint: "A long speech or story told by a single character", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
     { word: "musket", hint: "An old type of long-barrelled gun", topic: "S8/U3/L3 Treasure Island: Meeting Ben Gunn", stage: 8, unit: 3, lesson: 3 },
-
     { word: "script", hint: "The written text of a play, including dialogue and stage directions", topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
     { word: "dialogue", hint: "A conversation between two or more characters in a story or play", topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
     { word: "confidential", hint: "Meant to be kept secret; private", topic: "S8/U3/L4 Treasure Island: The play", stage: 8, unit: 3, lesson: 4 },
-
     { word: "transfixed", hint: "So fascinated or shocked that you cannot move", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
     { word: "recede", hint: "To go back or get smaller; to move away", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
     { word: "shallows", hint: "Areas of water that are not very deep", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
     { word: "fantasy", hint: "An imaginative story set in a strange or magical world with unusual characters", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
     { word: "particles", hint: "Tiny pieces or fragments of a substance", topic: "S8/U3/L5 Singing sand", stage: 8, unit: 3, lesson: 5 },
-
     { word: "adverb", hint: "A word that adds detail or information to a verb, often ending in -ly", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
     { word: "abruptly", hint: "Suddenly and unexpectedly", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
     { word: "backstory", hint: "The fictional history or background created for a character in a story", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
@@ -2278,97 +2195,84 @@ window.CUSTOM_CONTENT = {
     { word: "mistrust", hint: "A feeling of doubt or suspicion about someone", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
     { word: "constellations", hint: "Groups of stars that form a pattern in the sky and are given names", topic: "S8/U3/L6 Helix", stage: 8, unit: 3, lesson: 6 },
 
+    // ── S8/U4 ──
     { word: "ARPAnet", hint: "The early US military computer network that eventually led to the internet", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
     { word: "hypertext", hint: "A system of text that links to other documents or pages online", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
     { word: "infophile", hint: "Someone who enjoys finding and collecting information", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
     { word: "formality", hint: "The level of seriousness and officialness in language or behaviour", topic: "S8/U4/L1 The birth of the internet", stage: 8, unit: 4, lesson: 1 },
-
     { word: "bias", hint: "Being unfairly prejudiced for or against a particular person, group or idea", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
     { word: "rhetorical", hint: "Describing a question asked to make a point rather than to get an answer", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
     { word: "emotive", hint: "Language designed to appeal to feelings and emotions", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
     { word: "imperative", hint: "A word or phrase that gives an order or command", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
     { word: "blog", hint: "A web page where someone regularly writes and posts articles, like an online journal", topic: "S8/U4/L2 Phone problems", stage: 8, unit: 4, lesson: 2 },
-
     { word: "prediction", hint: "A statement about what you think will happen in the future", topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
     { word: "artificial intelligence", hint: "Machines such as computers and robots that can perform tasks requiring human-like thinking", topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
     { word: "humour", hint: "When things are funny or comical; the quality that makes people laugh", topic: "S8/U4/L3 Predicting the future", stage: 8, unit: 4, lesson: 3 },
-
     { word: "dystopian", hint: "Describing an imaginary future society where things have gone badly wrong", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
     { word: "permit", hint: "An official licence that grants permission to do something", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
     { word: "sector", hint: "A defined area or part of a city or region", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
     { word: "context", hint: "The circumstances and background surrounding an event or text that help explain it", topic: "S8/U4/L4 A dystopian future", stage: 8, unit: 4, lesson: 4 },
-
     { word: "synonym", hint: "A word or phrase that has the same or similar meaning to another word", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
     { word: "syllable", hint: "A unit of pronunciation forming a word or part of a word, containing one vowel sound", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
     { word: "menacing", hint: "Threatening or suggesting danger", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
     { word: "dread", hint: "Great fear or anxiety about something that might happen", topic: "S8/U4/L5 The Glade", stage: 8, unit: 4, lesson: 5 },
-
     { word: "narrative", hint: "A series of connected events told as a story", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
     { word: "climax", hint: "The most exciting or important moment in a story", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
     { word: "claustrophobia", hint: "A fear of being trapped in small or enclosed spaces", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
     { word: "weary", hint: "Very tired, especially after a lot of effort or hardship", topic: "S8/U4/L6 Closing doors", stage: 8, unit: 4, lesson: 6 },
 
+    // ── S8/U5 ──
     { word: "perspective", hint: "The angle or point of view a story or account is told from — whose eyes you see events through", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
     { word: "discrimination", hint: "When people are treated unfairly, often because of their race, sex or age", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
     { word: "selflessness", hint: "Caring more about others than yourself; putting other people's needs first", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
     { word: "counter-argument", hint: "An argument that presents the opposing side of a debate", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
     { word: "modal verb", hint: "One of nine verbs — can, may, must, shall, will, could, might, should, would — used to show possibility or obligation", topic: "S8/U5/L1 Defining heroes", stage: 8, unit: 5, lesson: 1 },
-
     { word: "disorientated", hint: "Confused about which direction to go in; unsure of your surroundings", topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
     { word: "excessive", hint: "More than is necessary or reasonable; too much of something", topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
     { word: "dithering", hint: "Wasting time by not making a decision; being slow and hesitant", topic: "S8/U5/L2 Looking for Charlie", stage: 8, unit: 5, lesson: 2 },
-
     { word: "phonetic spelling", hint: "Writing words as they sound rather than using standard spelling", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
     { word: "elision", hint: "Missing out letters from words, as often happens in spoken or informal language", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
     { word: "silhouetted", hint: "Shown as a dark shape against a bright background", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
     { word: "subsided", hint: "Gradually faded away or became less intense", topic: "S8/U5/L3 Danger?", stage: 8, unit: 5, lesson: 3 },
-
     { word: "empathy", hint: "The ability to understand and share other people's feelings", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
     { word: "assertiveness", hint: "Confident, sometimes forceful behaviour when expressing your needs or opinions", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
     { word: "buoyancy", hint: "An optimistic, cheerful attitude even in difficult situations", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
     { word: "frankness", hint: "Being honest and direct, even when it is difficult", topic: "S8/U5/L4 Young heroes", stage: 8, unit: 5, lesson: 4 },
-
     { word: "exaggeration", hint: "Making something seem much worse, better or more extreme than it really is", topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
     { word: "inadvertently", hint: "Accidentally, without meaning to", topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
     { word: "lair", hint: "A secret hideout, especially one used by a villain or hero", topic: "S8/U5/L5 Superheroes", stage: 8, unit: 5, lesson: 5 },
-
     { word: "establishing shot", hint: "The first image in a film sequence, showing the viewer where the scene takes place", topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
     { word: "storyboard", hint: "A series of drawings or images showing the planned order of key events in a film story", topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
     { word: "exterior shot", hint: "A camera image showing the outside of a building or location", topic: "S8/U5/L6 Scripting stories", stage: 8, unit: 5, lesson: 6 },
 
-    // S8 U6 Monsters
+    // ── S8/U6 ──
     { word: "devouring", hint: "Eating something quickly and greedily", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
     { word: "gruesome", hint: "Causing horror; unpleasantly shocking to see", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
     { word: "eyewitness", hint: "A person who saw an event happen with their own eyes", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
     { word: "emotive language", hint: "Words and phrases chosen to produce a strong emotional response in the reader", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
     { word: "exaggerated", hint: "Made to seem much more extreme or dramatic than it really is", topic: "S8/U6/L1 A modern monster", stage: 8, unit: 6, lesson: 1 },
-
     { word: "psyche", hint: "The mind — especially the part that shapes feelings, thoughts and behaviour", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
     { word: "instinctively", hint: "Without conscious thought; as a natural, automatic response", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
     { word: "evolutionary", hint: "Related to the slow process by which living things change over many generations", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
     { word: "teraphobia", hint: "The technical term for an intense fear of monsters", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
     { word: "ingrained", hint: "So deeply fixed in someone's mind or habits that it is very hard to change", topic: "S8/U6/L2 Fear of monsters", stage: 8, unit: 6, lesson: 2 },
-
     { word: "fable", hint: "A short story written to teach a moral lesson, often using symbolic characters", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
     { word: "antagonist", hint: "The character who creates problems in a story; the villain who opposes the hero", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
     { word: "eponymous character", hint: "The character whose name appears in the title of the story or work", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
     { word: "prosecuted", hint: "Taken to court for committing a crime or breaking the law", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
     { word: "personification", hint: "A literary technique that gives human qualities or actions to non-human things", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
     { word: "time connective", hint: "A word or phrase that shows how events are linked in time — such as then, next or after", topic: "S8/U6/L3 The giant", stage: 8, unit: 6, lesson: 3 },
-
     { word: "secondary character", hint: "A supporting character who is not the main character but who affects the story", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
     { word: "crept", hint: "Moved quietly and carefully so as not to be noticed", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
     { word: "hastened", hint: "Moved quickly; hurried towards something", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
     { word: "blossom", hint: "The flowers that appear on a tree, especially in spring", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
     { word: "feeble", hint: "Weak and lacking strength or energy", topic: "S8/U6/L4 The little boy", stage: 8, unit: 6, lesson: 4 },
-
     { word: "rhythm", hint: "A regular, repeating pattern of sound or beat in music or poetry", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
     { word: "rhyme", hint: "When the end sounds of words match, as in feet and meat", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
     { word: "comparative adjective", hint: "An adjective comparing two things, usually formed with -er or more", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
     { word: "chronological order", hint: "The order in which events occurred in time — earliest to most recent", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
     { word: "paralysed", hint: "Unable to move; frozen in place, often by fear", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
     { word: "seared", hint: "Burned deeply; fixed vividly and permanently in the memory", topic: "S8/U6/L5 A smaller monster", stage: 8, unit: 6, lesson: 5 },
-
     { word: "fatberg", hint: "A giant mass of solidified fat and waste that blocks underground sewers", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
     { word: "sewer", hint: "An underground pipe or tunnel that carries waste water away", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
     { word: "colossal", hint: "Extremely large; enormous", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
@@ -2376,68 +2280,277 @@ window.CUSTOM_CONTENT = {
     { word: "sensationalised", hint: "Described in an exaggerated or dramatic way to attract the reader's attention", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
     { word: "spew", hint: "To force something out in large quantities", topic: "S8/U6/L6 Monster below ground", stage: 8, unit: 6, lesson: 6 },
 
-    // S8 U7 The Plantation
+    // ── S8/U7 ──
     { word: "harmattan", hint: "A dry wind that blows over west Africa from the desert", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
     { word: "abstractedly", hint: "Lost in thought; not fully paying attention to your surroundings", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
     { word: "brooding", hint: "Deep in thought, possibly sad or angry", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
     { word: "thicket", hint: "A dense group of bushes or trees growing closely together", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
     { word: "imagery", hint: "Descriptive language that appeals to the senses — sight, sound, touch, taste or smell", topic: "S8/U7/L1 The broken pipe", stage: 8, unit: 7, lesson: 1 },
-
     { word: "rallied", hint: "Acted together in support of each other; joined forces", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
     { word: "appraised", hint: "Judged or considered the value or character of someone", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
     { word: "treachery", hint: "Betrayal; the act of being disloyal to people who trust you", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
     { word: "explicit", hint: "Stated clearly and directly in the text — nothing needs to be worked out", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
     { word: "implicit", hint: "Suggested or hinted at but not directly stated — the reader must infer it", topic: "S8/U7/L2 Namidi's family", stage: 8, unit: 7, lesson: 2 },
-
     { word: "cowering", hint: "Crouching or shrinking away, usually in fear", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
     { word: "admonishing", hint: "Firmly warning or reprimanding someone", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
     { word: "rigidness", hint: "Inability to change one's mind or accept other ideas; stubbornness", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
     { word: "monologue", hint: "A long speech given by one character, revealing their thoughts and feelings", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
     { word: "strode", hint: "Walked quickly and purposefully with long paces", topic: "S8/U7/L3 Namidi and Mama Efe", stage: 8, unit: 7, lesson: 3 },
-
     { word: "accosted", hint: "Approached aggressively and confronted by someone", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
     { word: "wayward", hint: "Difficult to control; unpredictable and hard to manage", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
     { word: "countered", hint: "Responded in a slightly hostile or defensive way", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
     { word: "sweltering", hint: "Extremely hot and humid", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
     { word: "swarmed", hint: "Moved quickly in a large group all at once", topic: "S8/U7/L4 Jackson and Ochuko", stage: 8, unit: 7, lesson: 4 },
-
     { word: "adversary", hint: "An opponent or enemy", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
     { word: "engulfed", hint: "Surrounded or swallowed up completely", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
     { word: "frenziedly", hint: "In an out-of-control, frantic and wild way", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
     { word: "petered out", hint: "Gradually got weaker and weaker before stopping completely", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
     { word: "contrast", hint: "Placing two different things side by side to highlight their differences", topic: "S8/U7/L5 The explosion", stage: 8, unit: 7, lesson: 5 },
-
     { word: "active voice", hint: "A sentence where the subject performs the action — the doer comes before the verb", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
     { word: "passive voice", hint: "A sentence where the verb acts upon the subject — the doer comes after the verb, or is omitted", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
     { word: "formal report", hint: "A structured factual document using headings, neutral tone, and clear precise language", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
     { word: "discourse marker", hint: "A word or phrase used to organise speech or writing into sections, such as right, so or firstly", topic: "S8/U7/L6 Disaster reports", stage: 8, unit: 7, lesson: 6 },
 
-    // S8 U9 Endings
+    // ── S8/U8 ──
+    { word: "HAZARD",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "COUNTERFEIT",      topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "CASKET",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "SUITOR",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "SCROLL",           topic: "S8/U8/L1 The Merchant of Venice",  stage: 8, unit: 8, lesson: 1 },
+    { word: "DIVERGED",         topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
+    { word: "UNDERGROWTH",      topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
+    { word: "STANZA",           topic: "S8/U8/L2 Life Choices",            stage: 8, unit: 8, lesson: 2 },
+    { word: "RELINQUISH",       topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "IMPLICATIONS",     topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "FIXATION",         topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "DISSATISFIED",     topic: "S8/U8/L3 Making Decisions",        stage: 8, unit: 8, lesson: 3 },
+    { word: "HYPOTHERMIA",      topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "PREPOSITIONAL",    topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "STAIRWELL",        topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "OUTBACK",          topic: "S8/U8/L4 A Dangerous Decision",    stage: 8, unit: 8, lesson: 4 },
+    { word: "DECIMATED",        topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "UNSPEAKABLE",      topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "PERISHED",         topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "RHETORICAL",       topic: "S8/U8/L5 Impossible Choices",      stage: 8, unit: 8, lesson: 5 },
+    { word: "PRIORITISE",       topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+    { word: "ARGUMENTATIVE",    topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+    { word: "BIAS",             topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+    { word: "PERSUASIVE",       topic: "S8/U8/L6 Different Views",         stage: 8, unit: 8, lesson: 6 },
+
+    // ── S8/U9 ──
     { word: "intervals", hint: "Short periods of time — brief visits rather than permanent stays", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
     { word: "pithy", hint: "Short and meaningful; concise but full of substance", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
     { word: "implied meaning", hint: "A meaning that is suggested rather than directly stated — the reader must read between the lines", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
     { word: "coordinating conjunction", hint: "A word such as 'and', 'but', 'or' or 'so' that links two clauses of equal importance", topic: "S8/U9/L1 Saying goodbye", stage: 8, unit: 9, lesson: 1 },
-
     { word: "loping", hint: "Moving unevenly with large strides", topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
     { word: "silhouettes", hint: "The dark outlines of people seen against a lighter background", topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
     { word: "extended metaphor", hint: "A metaphor developed across several lines or an entire text, exploring one comparison in detail", topic: "S8/U9/L2 The end of childhood", stage: 8, unit: 9, lesson: 2 },
-
     { word: "autobiography", hint: "A text in which the writer gives an account of their own life and experiences", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
     { word: "voiceover", hint: "Words spoken by a narrator over the top of film visuals, without the narrator being seen on screen", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
     { word: "unscripted", hint: "Performed without having the words written down in advance; improvised", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
     { word: "spindly", hint: "Very thin; long and thin in an awkward way", topic: "S8/U9/L3 The stranger", stage: 8, unit: 9, lesson: 3 },
-
     { word: "tedious", hint: "Dull and uninteresting; boring", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
     { word: "revered", hint: "Highly respected and admired by everyone", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
     { word: "disciple", hint: "A follower or pupil who learns from a master", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
     { word: "present participle", hint: "The base verb with '-ing' added, used to show a continuous or ongoing action", topic: "S8/U9/L4 A new beginning", stage: 8, unit: 9, lesson: 4 },
-
     { word: "moral message", hint: "A lesson about right and wrong conveyed through the events and outcomes of a story", topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
     { word: "poaching", hint: "Hunting or catching animals illegally", topic: "S8/U9/L5 How stories end", stage: 8, unit: 9, lesson: 5 },
-
     { word: "epilogue", hint: "A section at the end of a story showing what happens after the main events conclude", topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
     { word: "listlessly", hint: "Without any energy or enthusiasm; in a tired, uninterested way", topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
     { word: "theme", hint: "A central idea or message explored throughout a story, such as family, courage or justice", topic: "S8/U9/L6 Learning things", stage: 8, unit: 9, lesson: 6 },
+
+    // ── S9/U1 ──
+    { word: "FLICKERING",     hint: "Shining unsteadily",                                                            topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "NAIVE",          hint: "Lacking experience or wisdom",                                                  topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "CATACOMBS",      hint: "Underground tunnels originally used as mines, later as storage",                topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "FLASHBACK",      hint: "A part of a story that goes back in time to explain an event",                  topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "EXPLICIT",       hint: "Stated directly and clearly",                                                   topic: "S9/U1/L1 Relic", stage: 9, unit: 1, lesson: 1 },
+    { word: "REBOUNDED",      hint: "Bounced back",                                                                  topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "SCURRYING",      hint: "Moving quickly with short steps",                                               topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "ANTITHESIS",     hint: "The use of opposites or contrasting ideas",                                     topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "ELLIPSIS",       hint: "Three dots used to mark a pause or omission in speech",                         topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "CLIFFHANGER",    hint: "A dramatic ending which leaves the reader in suspense",                         topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "QUIVER",         hint: "A shake",                                                                       topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "PIERCING",       hint: "Cutting through",                                                               topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "LINGERS",        hint: "Hangs around",                                                                  topic: "S9/U1/L2 The Doorkeeper", stage: 9, unit: 1, lesson: 2 },
+    { word: "CONTEXT",        hint: "The situation within which something exists or happens",                        topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+    { word: "SUMMARISE",      hint: "To explain the main points of a text in a few words",                           topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+    { word: "SKIMMING",       hint: "Reading a text quickly to get the overall idea",                                topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+    { word: "SCANNING",       hint: "Looking through a text quickly to find particular details",                     topic: "S9/U1/L3 Reviewing Darkparis", stage: 9, unit: 1, lesson: 3 },
+    { word: "GAGGED",         hint: "Having a covering over the mouth so someone cannot speak",                      topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+    { word: "GESTURE",        hint: "Movements of the hands or arms to add emphasis or bring a story to life",       topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+    { word: "PACE",           hint: "The speed at which someone speaks or events take place in a story",             topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+    { word: "PROSE",          hint: "Written language in paragraphs, as opposed to verse or drama",                  topic: "S9/U1/L4 The Second Test", stage: 9, unit: 1, lesson: 4 },
+    { word: "OTHERWORLDLY",   hint: "Relating to a strange, alternative world",                                      topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+    { word: "UNNERVING",      hint: "Causing a loss of confidence",                                                  topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+    { word: "OPAL",           hint: "A precious stone",                                                              topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+    { word: "BLASTING",       hint: "Blowing up or breaking apart",                                                  topic: "S9/U1/L5 Visiting Coober Pedy", stage: 9, unit: 1, lesson: 5 },
+    { word: "INVENTIVE",      hint: "Creative",                                                                      topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
+    { word: "DRONE",          hint: "A low continuous sound",                                                        topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
+    { word: "PINGING",        hint: "Making a short high-pitched sound",                                             topic: "S9/U1/L6 Living under the Ground", stage: 9, unit: 1, lesson: 6 },
+
+    // ── S9/U2 ──
+    { word: "conscience",       hint: "An inner sense telling you if your actions are right or wrong",                              topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "empathy",          hint: "The ability to understand and share the feelings of others",                                  topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "compassion",       hint: "Concern and pity for others",                                                                 topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "cooperate",        hint: "To work together towards a shared goal",                                                      topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "anticipation",     hint: "The feeling of expecting something to happen",                                                topic: "S9/U2/L1 The Importance of Conscience", stage: 9, unit: 2, lesson: 1 },
+    { word: "decisive",         hint: "Able to make decisions quickly and confidently",                                              topic: "S9/U2/L2 Join the Police", stage: 9, unit: 2, lesson: 2 },
+    { word: "conviction",       hint: "A formal decision by a court that someone is guilty of a crime",                             topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
+    { word: "disposition",      hint: "A person's natural manner and personality",                                                   topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
+    { word: "deduction",        hint: "Working out a conclusion logically from the clues available",                                 topic: "S9/U2/L5 Making Deductions", stage: 9, unit: 2, lesson: 5 },
+    { word: "reconstruction",   hint: "Acting out a past event to help witnesses remember what happened",                            topic: "S9/U2/L4 Young Detectives", stage: 9, unit: 2, lesson: 4 },
+    { word: "conventions",      hint: "The accepted rules or typical features of a particular genre or type of writing",             topic: "S9/U2/L6 Detective Fiction", stage: 9, unit: 2, lesson: 6 },
+    { word: "bias",             hint: "An unfair preference for or against a person, idea or group",                                 topic: "S9/U2/L6 Detective Fiction", stage: 9, unit: 2, lesson: 6 },
+    { word: "possessor",        hint: "The owner or holder of something",                                                            topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
+    { word: "gangster",         hint: "A violent criminal who is a member of an organised gang",                                     topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
+    { word: "sheikh",           hint: "An Arab leader or chief",                                                                     topic: "S9/U2/L3 The Art Detective", stage: 9, unit: 2, lesson: 3 },
+
+    // ── S9/U3 ──
+    { word: "deduce", hint: "To reach a conclusion through reasoning from evidence", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "morphology", hint: "The study of how words are formed and their relationships with other words", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "etymology", hint: "The study of the origins and historical development of words", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "nominal", hint: "In name only; very small or token in value", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "eligible", hint: "Satisfying the conditions required to qualify for something", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "vacancy", hint: "An available job or unoccupied position", topic: "S9/U3/L1 The Red-Headed Visitor", stage: 9, unit: 3, lesson: 1 },
+    { word: "sympathetic", hint: "Describing a character the reader identifies with and responds positively to", topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
+    { word: "improvise", hint: "To perform or speak without preparation", topic: "S9/U3/L2 The Assistant", stage: 9, unit: 3, lesson: 2 },
+    { word: "sovereign", hint: "A British gold coin used as currency in Victorian times", topic: "S9/U3/L3 The End of the League", stage: 9, unit: 3, lesson: 3 },
+    { word: "evidently", hint: "Clearly; in a way that is obvious or plain to see", topic: "S9/U3/L4 Investigating the Street", stage: 9, unit: 3, lesson: 4 },
+    { word: "narrative", hint: "A series of connected events that are written or spoken", topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+    { word: "tactile", hint: "Relating to the sense of touch", topic: "S9/U3/L5 The Dark Cellar", stage: 9, unit: 3, lesson: 5 },
+    { word: "ascertain", hint: "To find out or confirm something with certainty", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+    { word: "denouement", hint: "The final part of a story where everything is explained and resolved", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+    { word: "morality", hint: "Principles about right and wrong behaviour", topic: "S9/U3/L6 The Solution", stage: 9, unit: 3, lesson: 6 },
+
+    // ── S9/U4 ──
+    { word: "optimistic", hint: "Having a hopeful, positive outlook about the future", topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+    { word: "solemn", hint: "Serious and sincere in manner", topic: "S9/U4/L1 Moments in Time", stage: 9, unit: 4, lesson: 1 },
+    { word: "stanza", hint: "A group of lines in a poem that form a unit", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { word: "personification", hint: "Describing an object or idea as if it has human qualities", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { word: "carpe diem", hint: "Latin phrase meaning 'seize the day' — make the most of your time now", topic: "S9/U4/L2 Making the Most of Time", stage: 9, unit: 4, lesson: 2 },
+    { word: "seclusion", hint: "The state of being kept away from other people", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "taboo", hint: "Something that is forbidden by social or religious custom", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "attire", hint: "Clothing or dress", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "confiscate", hint: "To officially take something away from someone", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "hyperbole", hint: "Exaggerated language used for dramatic or persuasive effect", topic: "S9/U4/L3 The Tribe That Time Forgot", stage: 9, unit: 4, lesson: 3 },
+    { word: "phalanx", hint: "A group of people or soldiers moving closely together", topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
+    { word: "pharaoh", hint: "A ruler of ancient Egypt", topic: "S9/U4/L4 The Time Tornado", stage: 9, unit: 4, lesson: 4 },
+    { word: "luminous", hint: "Bright or shining, often in the dark", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { word: "punctual", hint: "Arriving or doing something at the agreed time", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { word: "connotations", hint: "The feelings or ideas associated with a word beyond its literal meaning", topic: "S9/U4/L5 The Visitor", stage: 9, unit: 4, lesson: 5 },
+    { word: "transcript", hint: "A written record of spoken words or a conversation", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { word: "implant", hint: "To insert something into the body, or to fix an idea firmly", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+    { word: "chairperson", hint: "The person who leads and manages a meeting or discussion", topic: "S9/U4/L6 Into the Future", stage: 9, unit: 4, lesson: 6 },
+
+    // ── S9/U5 ──
+    { word: "prudence", hint: "Cautiousness; thinking carefully about future consequences", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
+    { word: "aside", hint: "A remark in a play heard by the audience but not by other characters on stage", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
+    { word: "dramatic irony", hint: "When the audience knows more about the situation than the characters on stage", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
+    { word: "comedic problem", hint: "The challenge that characters in a comedy face — a situation that stands in the way of happiness", topic: "S9/U5/L1 Leaving Jamaica", stage: 9, unit: 5, lesson: 1 },
+    { word: "pristine", hint: "Perfect, as new", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
+    { word: "stereotype", hint: "A familiar but simplified character type that audiences recognise", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
+    { word: "contrast", hint: "Placing two characters or things together to highlight their differences", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
+    { word: "empathise", hint: "To understand and be sympathetic to the way someone else is feeling", topic: "S9/U5/L2 Arriving in England", stage: 9, unit: 5, lesson: 2 },
+    { word: "autobiography", hint: "A text in which the writer gives an account of their own life and experiences", topic: "S9/U5/L3 The Boy Who Harnessed the Wind", stage: 9, unit: 5, lesson: 3 },
+    { word: "flashforward", hint: "Part of a story that jumps ahead to describe a future event", topic: "S9/U5/L3 The Boy Who Harnessed the Wind", stage: 9, unit: 5, lesson: 3 },
+    { word: "taut", hint: "Stretched or pulled tight", topic: "S9/U5/L3 The Boy Who Harnessed the Wind", stage: 9, unit: 5, lesson: 3 },
+    { word: "choreography", hint: "Designing and practising a dance sequence", topic: "S9/U5/L4 K-pop", stage: 9, unit: 5, lesson: 4 },
+    { word: "diligent", hint: "Conscientious and hardworking", topic: "S9/U5/L4 K-pop", stage: 9, unit: 5, lesson: 4 },
+    { word: "perspective", hint: "The angle from which a story is told — whose eyes the reader sees it through", topic: "S9/U5/L4 K-pop", stage: 9, unit: 5, lesson: 4 },
+    { word: "assertion", hint: "A statement of opinion presented without factual evidence to support it", topic: "S9/U5/L5 Animals and Entertainment", stage: 9, unit: 5, lesson: 5 },
+    { word: "submissive", hint: "Accepting of being controlled", topic: "S9/U5/L5 Animals and Entertainment", stage: 9, unit: 5, lesson: 5 },
+    { word: "conservation", hint: "The protection of animals and their natural environments", topic: "S9/U5/L5 Animals and Entertainment", stage: 9, unit: 5, lesson: 5 },
+    { word: "discursive", hint: "A type of writing that explores different views on a topic objectively", topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
+    { word: "parentheses", hint: "Punctuation marks such as brackets that enclose extra information within a sentence", topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
+    { word: "objective", hint: "Not influenced by personal feelings; presenting information fairly", topic: "S9/U5/L6 The Benefits of Zoos", stage: 9, unit: 5, lesson: 6 },
+
+    // ── S9/U6 ──
+    { word: "onomatopoeia", hint: "A word that imitates the sound it describes, such as 'hiss' or 'clatter'", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
+    { word: "alliteration", hint: "The use of the same consonant sound at the beginning of several close-together words", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
+    { word: "lament", hint: "A sad piece of music or an expression of grief", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
+    { word: "imperative", hint: "A verb form used to give commands or direct instructions", topic: "S9/U6/L1 The City Sings", stage: 9, unit: 6, lesson: 1 },
+    { word: "cascading", hint: "Moving or hanging downwards like a waterfall", topic: "S9/U6/L2 A Love Letter to the Grand Canyon", stage: 9, unit: 6, lesson: 2 },
+    { word: "humbling", hint: "Being made to feel less important or significant than you thought", topic: "S9/U6/L2 A Love Letter to the Grand Canyon", stage: 9, unit: 6, lesson: 2 },
+    { word: "sublime", hint: "In Romantic literature: a mixture of wonder and fear caused by the scale and beauty of nature", topic: "S9/U6/L2 A Love Letter to the Grand Canyon", stage: 9, unit: 6, lesson: 2 },
+    { word: "spatial metaphor", hint: "A metaphor that uses a physical place or location as a comparison", topic: "S9/U6/L3 Chasm", stage: 9, unit: 6, lesson: 3 },
+    { word: "focal character", hint: "The character who draws the reader's attention in a third-person story", topic: "S9/U6/L3 Chasm", stage: 9, unit: 6, lesson: 3 },
+    { word: "dispute", hint: "A conflict or disagreement between people", topic: "S9/U6/L3 Chasm", stage: 9, unit: 6, lesson: 3 },
+    { word: "sonnet", hint: "A poetic form consisting of 14 lines, often in iambic pentameter", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
+    { word: "volta", hint: "A turning point or shift in a sonnet where a new idea is introduced", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
+    { word: "pedestal", hint: "The base or platform on which a statue stands", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
+    { word: "irony", hint: "An effect where the outcome is the opposite of what was intended", topic: "S9/U6/L4 In the Desert", stage: 9, unit: 6, lesson: 4 },
+    { word: "enjambment", hint: "Where one sentence of poetry continues onto the next line without a pause", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
+    { word: "caesura", hint: "A pause within a line of poetry, indicated by punctuation or rhythm", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
+    { word: "pastoral", hint: "A literary genre featuring idealised countryside settings", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
+    { word: "nostalgia", hint: "An affection or longing for the past, as if looking back to happier times", topic: "S9/U6/L5 Pastoral Poetry", stage: 9, unit: 6, lesson: 5 },
+    { word: "pathetic fallacy", hint: "A technique where nature is used to reflect a character's emotions", topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
+    { word: "rejuvenating", hint: "Making someone feel younger or more energetic", topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
+    { word: "harrowing", hint: "Very distressing or upsetting", topic: "S9/U6/L6 Returning Home", stage: 9, unit: 6, lesson: 6 },
+
+    // ── S9/U7 ──
+    { word: "devious", hint: "cunning and indirect; sneaky in approach", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
+    { word: "anguished", hint: "experiencing severe mental or physical pain", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
+    { word: "fatigue", hint: "extreme tiredness, especially after effort", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
+    { word: "flagged", hint: "became tired and lost energy or momentum", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
+    { word: "nigh", hint: "old or poetic word meaning near or almost", topic: "S9/U7/L1 The Tree", stage: 9, unit: 7, lesson: 1 },
+    { word: "crater", hint: "a large bowl-shaped hollow in the earth, often volcanic", topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
+    { word: "barrage", hint: "an overwhelming rush of something — words, questions, noise", topic: "S9/U7/L2 The Farmers", stage: 9, unit: 7, lesson: 2 },
+    { word: "exquisite", hint: "extremely beautiful and finely made", topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
+    { word: "crystalline", hint: "clear and transparent like crystal", topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
+    { word: "evoked", hint: "brought a feeling or memory to mind", topic: "S9/U7/L3 The Bronze Door", stage: 9, unit: 7, lesson: 3 },
+    { word: "rallied", hint: "gathered fresh strength after a period of weakness", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
+    { word: "resolute", hint: "firmly determined; refusing to give up", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
+    { word: "bewilderment", hint: "a state of complete confusion", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
+    { word: "lustrous", hint: "having a soft shining glow", topic: "S9/U7/L4 The Crow", stage: 9, unit: 7, lesson: 4 },
+    { word: "incredulous", hint: "unwilling or unable to believe something", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
+    { word: "precipice", hint: "a steep cliff or dangerous drop", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
+    { word: "oblivious", hint: "completely unaware of what is happening around you", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
+    { word: "algae", hint: "simple plant-like organisms that grow in or near water", topic: "S9/U7/L5 Nothing", stage: 9, unit: 7, lesson: 5 },
+    { word: "dilapidated", hint: "in a state of disrepair; crumbling with age or neglect", topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
+    { word: "illuminating", hint: "making something clear and easier to understand; also, giving off light", topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
+    { word: "halo", hint: "a ring of light around someone or something, often suggesting holiness or glory", topic: "S9/U7/L6 Chosen One", stage: 9, unit: 7, lesson: 6 },
+
+    // ── S9/U8 ──
+    { word: "juxtaposition", hint: "placing two contrasting things side by side for effect", topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
+    { word: "flamboyant", hint: "confident and stylish in an eye-catching way", topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
+    { word: "gadget", hint: "a small device or tool, often electronic", topic: "S9/U8/L1 The Aeroplane", stage: 9, unit: 8, lesson: 1 },
+    { word: "bursary", hint: "a grant of money given to a student", topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
+    { word: "invigilating", hint: "supervising learners during an examination", topic: "S9/U8/L2 Mrs Manzi", stage: 9, unit: 8, lesson: 2 },
+    { word: "ecstatic", hint: "feeling or showing overwhelming happiness", topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
+    { word: "petrified", hint: "extremely scared, frozen with fear", topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
+    { word: "chronological", hint: "arranged in the order that events happened in time", topic: "S9/U8/L3 A Different Voice", stage: 9, unit: 8, lesson: 3 },
+    { word: "galvanise", hint: "to provoke or shock someone into taking action", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { word: "counterparts", hint: "people who have the same position or role as someone else", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { word: "advocates", hint: "people who publicly support a cause or group", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { word: "stereotype", hint: "a widely held but fixed and oversimplified image of a type of person", topic: "S9/U8/L4 He for She", stage: 9, unit: 8, lesson: 4 },
+    { word: "pariah", hint: "an outcast, someone rejected by their social group", topic: "S9/U8/L5 The Transporter", stage: 9, unit: 8, lesson: 5 },
+    { word: "threshold", hint: "the point at which one thing ends and another begins; a doorway", topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
+    { word: "astrolabe", hint: "a historical or futuristic navigation instrument", topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
+    { word: "scowled", hint: "frowned in an angry or disapproving way", topic: "S9/U8/L6 A Strange Ship", stage: 9, unit: 8, lesson: 6 },
+
+    // ── S9/U9 ──
+    { word: "EXHIBIT",        hint: "An object on display",                                                          topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+    { word: "IMPUDENCE",      hint: "Overconfidence; disrespectfulness",                                             topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+    { word: "POMEGRANATE",    hint: "A fruit with red flesh",                                                        topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+    { word: "INTIMATE",       hint: "Familiar and relaxed",                                                          topic: "S9/U9/L1 Stranger in a Strange Land", stage: 9, unit: 9, lesson: 1 },
+    { word: "SOLILOQUY",      hint: "A solo speech in which a character reveals their thoughts",                     topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
+    { word: "TRAGEDY",        hint: "A genre of drama in which the main character encounters problems and suffering", topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
+    { word: "HEREAFTER",      hint: "In the future",                                                                 topic: "S9/U9/L2 A Strange Meeting", stage: 9, unit: 9, lesson: 2 },
+    { word: "DETRIMENT",      hint: "The state of being damaged or harmed",                                          topic: "S9/U9/L3 Fun with Macbeth", stage: 9, unit: 9, lesson: 3 },
+    { word: "GRAVITATED",     hint: "Was attracted to",                                                              topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+    { word: "GRIT",           hint: "Determination",                                                                 topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+    { word: "LODGED",         hint: "Stuck",                                                                         topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+    { word: "PARAPHRASING",   hint: "Rewording something in a different way, usually to make it shorter or clearer", topic: "S9/U9/L4 An Unusual Job", stage: 9, unit: 9, lesson: 4 },
+    { word: "CONVENTIONAL",   hint: "Following what is normally expected or traditionally done",                     topic: "S9/U9/L5 Unusual Endings", stage: 9, unit: 9, lesson: 5 },
+    { word: "UNCONVENTIONAL", hint: "Not following usual expectations; surprising or unexpected",                    topic: "S9/U9/L5 Unusual Endings", stage: 9, unit: 9, lesson: 5 },
+    { word: "INTERSTELLAR",   hint: "Between the stars; from space",                                                 topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "REPELLED",       hint: "Felt distaste or disgust",                                                      topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "HARNESSES",      hint: "A set of straps",                                                               topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "PUN",            hint: "A type of wordplay that relies on a word with two meanings",                    topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+    { word: "SIGNIFYING",     hint: "Meaning or standing for something",                                             topic: "S9/U9/L6 A Twist in the Tail", stage: 9, unit: 9, lesson: 6 },
+
+
   ],
 
 };
