@@ -647,6 +647,7 @@ function buildModalBtns(state) {
     add('✗ Wrong',      'mbtn-wrong',   () => judgeAnswer(false));
     add('✕ Skip',       'mbtn-close',   closeModal);
   } else if (state === 'steal') {
+    add('Reveal Answer',     'mbtn-reveal',  revealAnswer);
     add('✓ Correct (steal)', 'mbtn-correct', () => judgeSteal(true));
     add('✗ Wrong (steal)',   'mbtn-wrong',   () => judgeSteal(false));
     add('✕ No steal',        'mbtn-close',   () => { closeModal(); advanceTurn(); });
