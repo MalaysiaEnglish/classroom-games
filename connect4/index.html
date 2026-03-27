@@ -347,7 +347,7 @@
       const qs = questionsForUnit();
       const topicsEl = document.getElementById('qf-topics');
       const lessonsEl = document.getElementById('qf-lessons');
-      const topics = [...new Set(qs.map(q => q.topic))].sort();
+      const topics = [...new Set(qs.map(q => q.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
       topicsEl.innerHTML = '';
       if (!topics.length) {
         topicsEl.innerHTML = '<span class="qf-empty">No topics found</span>';
