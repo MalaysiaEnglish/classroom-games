@@ -264,7 +264,7 @@ function loadContentSentences() {
 }
 
 function populateFilters() {
-  const topics = [...new Set(allSentences.map(s => s.topic).filter(Boolean))].sort();
+  const topics = [...new Set(allSentences.map(s => s.topic).filter(Boolean))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
 
   // Build unit quick-select buttons (e.g. "S6/U6" groups all S6/U6/Lx topics)
   const unitGroups = {};
