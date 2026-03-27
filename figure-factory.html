@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Figure Factory – Gamepack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink2: #3d3d5c;
+    --muted: #8888aa;
+    --surface: #ffffff;
+    --surface2: #f5f4fb;
+    --surface3: #eceaf8;
+    --border: rgba(100,90,180,0.15);
+    --border2: rgba(100,90,180,0.3);
+    --accent: #5b3ff8;
+    --accent2: #8b6ff8;
+    --accent-glow: rgba(91,63,248,0.12);
+    --green: #1d9e75;   --green-bg: #e1f5ee;
+    --blue: #185fa5;    --blue-bg: #e6f1fb;
+    --purple: #534ab7;  --purple-bg: #eeedfe;
+    --amber: #ba7517;   --amber-bg: #faeeda;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-pill: 99px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface2); color: var(--ink); min-height: 100vh; }
+
+  /* ── Header ── */
+  .site-header { background: var(--ink); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .site-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: #fff; letter-spacing: -0.5px; text-decoration: none; }
+  .site-logo span { color: var(--accent2); }
+  .header-tag { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── Hero ── */
+  .hero { background: var(--ink); padding: 36px 24px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(91,63,248,0.18) 0%, transparent 70%); top: -200px; left: 50%; transform: translateX(-50%); pointer-events: none; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--accent2); margin-bottom: 12px; }
+  .hero-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 52px); color: #fff; letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px; }
+  .hero-title em { color: var(--accent2); font-style: normal; }
+  .hero-desc { font-size: 15px; color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto 24px; line-height: 1.6; }
+  .hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .hero-tag { font-size: 12px; padding: 4px 12px; border-radius: var(--radius-pill); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.55); }
+
+  /* ── Main ── */
+  .main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  /* ── API Panel ── */
+  .api-panel { background: var(--amber-bg); border: 1px solid rgba(186,117,23,0.25); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .api-panel.hidden { display: none; }
+  .api-icon { font-size: 22px; flex-shrink: 0; }
+  .api-text { flex: 1; min-width: 200px; }
+  .api-text p { font-size: 13px; color: var(--amber); font-weight: 500; margin-bottom: 2px; }
+  .api-text small { font-size: 12px; color: var(--ink2); }
+  .api-input-row { display: flex; gap: 8px; flex: 2; min-width: 240px; }
+  .api-input { flex: 1; padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(186,117,23,0.35); background: #fff; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--ink); }
+  .api-input:focus { outline: none; border-color: var(--amber); }
+  .api-save-btn { padding: 8px 16px; border-radius: var(--radius-sm); border: none; background: var(--amber); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+  .api-save-btn:hover { opacity: 0.88; }
+  .api-clear { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ── Section label ── */
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; }
+
+  /* ── Technique tiles ── */
+  .technique-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 28px; }
+  .technique-tile { background: var(--surface); border: 1.5px solid var(--border2); border-radius: var(--radius); padding: 14px 12px; cursor: pointer; text-align: center; transition: all 0.15s; position: relative; }
+  .technique-tile:hover { border-color: var(--accent2); background: var(--surface3); }
+  .technique-tile.active { border-color: var(--accent); background: var(--accent-glow); }
+  .technique-tile.active .tt-icon { filter: none; }
+  .tt-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+  .tt-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--ink); display: block; line-height: 1.3; }
+  .tt-hint { font-size: 10px; color: var(--muted); display: block; margin-top: 3px; line-height: 1.4; }
+  .technique-tile.active .tt-name { color: var(--accent); }
+
+  /* ── Definition banner ── */
+  .definition-banner { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; margin-bottom: 24px; display: none; }
+  .definition-banner.visible { display: block; }
+  .def-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--accent); margin-bottom: 4px; }
+  .def-text { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+  .def-example { font-size: 13px; color: var(--ink); font-style: italic; margin-top: 4px; }
+
+  /* ── Example chips ── */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .chip { font-size: 13px; padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border2); background: var(--surface); color: var(--ink2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .chip:hover { background: var(--surface3); border-color: var(--accent); color: var(--accent); }
+
+  /* ── Input ── */
+  .input-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; }
+  .input-row { display: flex; gap: 12px; align-items: flex-start; }
+  .situation-input { flex: 1; min-height: 80px; resize: vertical; padding: 12px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--border2); background: var(--surface2); font-size: 15px; color: var(--ink); font-family: 'DM Sans', sans-serif; line-height: 1.5; transition: border-color 0.15s; }
+  .situation-input:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .situation-input::placeholder { color: var(--muted); }
+  .gen-btn { padding: 12px 22px; border-radius: var(--radius-sm); border: none; background: var(--accent); color: #fff; font-size: 14px; font-weight: 600; font-family: 'Syne', sans-serif; cursor: pointer; white-space: nowrap; letter-spacing: 0.3px; transition: opacity 0.15s, transform 0.1s; align-self: flex-end; }
+  .gen-btn:hover { opacity: 0.9; }
+  .gen-btn:active { transform: scale(0.97); }
+  .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .no-technique-msg { font-size: 13px; color: var(--amber); display: none; margin-top: 8px; }
+
+  /* ── Status ── */
+  .status-bar { text-align: center; padding: 20px; color: var(--muted); font-size: 14px; display: none; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Cards ── */
+  .cards-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+  .m-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; animation: fadeUp 0.3s ease both; }
+  .m-card:nth-child(2) { animation-delay: 0.07s; }
+  .m-card:nth-child(3) { animation-delay: 0.14s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .level-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--radius-pill); text-transform: uppercase; letter-spacing: 0.8px; }
+  .badge-simple   { background: var(--green-bg);  color: var(--green);  }
+  .badge-standard { background: var(--blue-bg);   color: var(--blue);   }
+  .badge-ambitious{ background: var(--purple-bg); color: var(--purple); }
+  .card-number { font-size: 28px; font-weight: 800; color: var(--surface3); font-family: 'Syne', sans-serif; }
+  .technique-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent2); }
+  .m-example { font-size: 17px; line-height: 1.6; color: var(--ink); font-style: italic; margin-bottom: 10px; }
+  .m-explain { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+  .vote-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .vote-btn { font-size: 12px; padding: 5px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border2); background: transparent; color: var(--ink2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .vote-btn:hover { background: var(--surface2); }
+  .voted-best { background: var(--accent-glow) !important; border-color: var(--accent) !important; color: var(--accent) !important; font-weight: 600; border-width: 2px !important; }
+  .voted-orig { background: var(--green-bg) !important; border-color: var(--green) !important; color: var(--green) !important; font-weight: 600; border-width: 2px !important; }
+
+  /* ── Vote result ── */
+  .vote-result { background: var(--surface3); border-radius: var(--radius); padding: 14px 18px; font-size: 14px; color: var(--ink2); text-align: center; margin-bottom: 28px; display: none; }
+  .vote-result strong { color: var(--ink); }
+
+  /* ── Divider ── */
+  .divider { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .divider-label { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── Try your own ── */
+  .try-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 24px; }
+  .try-card h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .try-card p { font-size: 13px; color: var(--ink2); margin-bottom: 14px; }
+  .try-row { display: flex; gap: 10px; align-items: center; }
+  .try-input { flex: 1; padding: 11px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--border2); background: var(--surface2); font-size: 15px; color: var(--ink); font-family: 'DM Sans', sans-serif; transition: border-color 0.15s; }
+  .try-input:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .try-input::placeholder { color: var(--muted); }
+  .judge-btn { padding: 11px 20px; border-radius: var(--radius-sm); border: none; background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; font-family: 'Syne', sans-serif; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
+  .judge-btn:hover { opacity: 0.85; }
+  .judge-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* ── Verdict ── */
+  .verdict-box { margin-top: 16px; padding: 16px 18px; background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 14px; color: var(--ink); line-height: 1.7; display: none; }
+  .verdict-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--accent); margin-bottom: 6px; }
+
+  /* ── Reset ── */
+  .reset-row { text-align: center; margin-top: 8px; }
+  .reset-btn { font-size: 13px; color: var(--muted); background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: underline; text-underline-offset: 2px; }
+  .reset-btn:hover { color: var(--ink2); }
+
+  .results-section { display: none; }
+
+  /* ── Footer ── */
+  .site-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); background: var(--surface); margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="../index.html"><span>game</span>pack</a>
+  <span class="header-tag">English · Figurative Language</span>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">AI-Powered Classroom Tool</p>
+  <h1 class="hero-title">The <em>Figure</em> Factory</h1>
+  <p class="hero-desc">Pick a technique, describe a feeling or situation, and the machine generates three examples — then challenge students to beat it.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">Figurative language</span>
+    <span class="hero-tag">Creative writing</span>
+    <span class="hero-tag">IGCSE English</span>
+    <span class="hero-tag">Stage 7–9</span>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- API Key -->
+  <div class="api-panel" id="apiPanel">
+    <div class="api-icon">🔑</div>
+    <div class="api-text">
+      <p>Anthropic API key required</p>
+      <small>Enter your key once — saved in this browser only.</small>
+    </div>
+    <div class="api-input-row">
+      <input class="api-input" type="password" id="apiKeyInput" placeholder="sk-ant-...">
+      <button class="api-save-btn" onclick="saveKey()">Save key</button>
+    </div>
+  </div>
+  <div style="text-align:right; margin-top:-16px; margin-bottom:20px; display:none;" id="clearRow">
+    <span class="api-clear" onclick="clearKey()">Clear saved key</span>
+  </div>
+
+  <!-- Step 1: technique -->
+  <p class="section-label">Step 1 — Choose a technique</p>
+  <div class="technique-grid" id="techniqueGrid"></div>
+
+  <!-- Definition -->
+  <div class="definition-banner" id="defBanner">
+    <div class="def-label" id="defLabel"></div>
+    <div class="def-text" id="defText"></div>
+    <div class="def-example" id="defExample"></div>
+  </div>
+
+  <!-- Step 2: examples -->
+  <div id="exampleSection" style="display:none;">
+    <p class="section-label">Step 2 — Try an example, or type your own</p>
+    <div class="chips" id="chipsRow"></div>
+  </div>
+
+  <!-- Step 3: input -->
+  <div id="inputSection" style="display:none;">
+    <p class="section-label">Step 3 — Describe a feeling or situation</p>
+    <div class="input-card">
+      <div class="input-row">
+        <textarea class="situation-input" id="situation" placeholder="Describe it in plain, literal terms…"></textarea>
+        <button class="gen-btn" id="genBtn" onclick="generate()">Generate ↗</button>
+      </div>
+      <p class="no-technique-msg" id="noTechMsg">← Pick a technique first</p>
+    </div>
+  </div>
+
+  <div class="status-bar" id="statusBar"><span class="spinner"></span> <span id="statusText">Generating examples…</span></div>
+
+  <!-- Results -->
+  <div class="results-section" id="results">
+    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="vote-result" id="voteResult"></div>
+    <div class="divider"><span class="divider-label">Now beat the machine</span></div>
+    <div class="try-card">
+      <h3 id="tryTitle">Write your own example</h3>
+      <p id="tryDesc">Can you write a more original or effective example than the machine's best?</p>
+      <div class="try-row">
+        <input class="try-input" id="myExample" placeholder="Write your example here…">
+        <button class="judge-btn" id="judgeBtn" onclick="judgeMe()">Judge it ↗</button>
+      </div>
+      <div class="verdict-box" id="verdictBox">
+        <div class="verdict-label">Teacher feedback</div>
+        <div id="verdictText"></div>
+      </div>
+    </div>
+    <div class="reset-row">
+      <button class="reset-btn" onclick="resetAll()">← Try a different technique or situation</button>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  gamepack.win · The Figure Factory · Powered by Claude AI
+</footer>
+
+<script>
+/* ══ Technique data ══════════════════════════════════════════════ */
+const TECHNIQUES = [
+  {
+    key: 'metaphor',
+    name: 'Metaphor',
+    icon: '☀️',
+    hint: 'X is Y',
+    definition: 'A metaphor directly states that one thing IS another — without using \'like\' or \'as\'.',
+    example: '"I was the sun and they were the planets." — Beverly Beckham',
+    prompt_instruction: 'Write a metaphor that directly states one thing IS another. Do NOT use the words "like" or "as". The comparison must be implied, not explained.',
+    judge_note: 'a true metaphor — no "like" or "as". It should directly state that one thing IS another.',
+    examples: ['feeling nervous before an exam', 'missing someone who has gone away', 'the end of school', 'growing up and leaving childhood', 'a parent watching their child leave home', 'feeling stuck and unable to move forward']
+  },
+  {
+    key: 'simile',
+    name: 'Simile',
+    icon: '🔗',
+    hint: 'X is like Y',
+    definition: 'A simile compares two things using the words "like" or "as".',
+    example: '"Like a frightened rabbit, I scanned the scene." — Tony Anthony',
+    prompt_instruction: 'Write a simile that compares two things using the word "like" or "as". The comparison should be vivid and specific.',
+    judge_note: 'a simile using "like" or "as". The comparison should be specific and visual.',
+    examples: ['feeling nervous before an exam', 'the first day at a new school', 'missing someone far away', 'the end of something you love', 'a city at night', 'silence after an argument']
+  },
+  {
+    key: 'personification',
+    name: 'Personification',
+    icon: '🌊',
+    hint: 'Gives human qualities to things',
+    definition: 'Personification gives human feelings, actions or qualities to non-human things — objects, nature, or abstract ideas.',
+    example: '"The sea whispered its secrets to the shore."',
+    prompt_instruction: 'Write a personification that gives human qualities, actions or feelings to a non-human thing related to the situation. The non-human thing should feel alive and intentional.',
+    judge_note: 'a personification — a non-human thing should be given human qualities or actions.',
+    examples: ['a storm approaching', 'loneliness', 'the end of summer', 'a city at night', 'time passing', 'grief or loss']
+  },
+  {
+    key: 'hyperbole',
+    name: 'Hyperbole',
+    icon: '🚀',
+    hint: 'Dramatic exaggeration',
+    definition: 'Hyperbole is extreme exaggeration used for emphasis or effect — the writer does not mean it literally.',
+    example: '"I\'ve told you a million times." / "I was so embarrassed I could have died."',
+    prompt_instruction: 'Write a hyperbole that dramatically exaggerates the situation for emotional effect. It should be clearly impossible literally, but feel emotionally true.',
+    judge_note: 'a hyperbole — an impossible or extreme exaggeration that captures the emotional truth of the situation.',
+    examples: ['extreme boredom', 'being incredibly hungry', 'a terrifying test or exam', 'excitement about something', 'waiting for something for a very long time', 'the weight of homework']
+  },
+  {
+    key: 'onomatopoeia',
+    name: 'Onomatopoeia',
+    icon: '🔔',
+    hint: 'Words that sound like what they mean',
+    definition: 'Onomatopoeia uses words that imitate the sound they describe — the word itself sounds like the noise.',
+    example: '"The bees buzzed and the fire crackled and spat."',
+    prompt_instruction: 'Write a sentence that uses onomatopoeia — words that sound like the things they describe — to bring the situation to life through sound.',
+    judge_note: 'onomatopoeia — words that actually sound like the noises they describe.',
+    examples: ['a busy kitchen', 'a thunderstorm', 'a crowded market', 'an empty house', 'a school playground at lunch', 'the seaside']
+  },
+  {
+    key: 'alliteration',
+    name: 'Alliteration',
+    icon: '🔤',
+    hint: 'Repeated starting sounds',
+    definition: 'Alliteration is the repetition of the same consonant sound at the start of words close together.',
+    example: '"She sells seashells." / "The cold, crisp, cruel wind cut through the crowd."',
+    prompt_instruction: 'Write a sentence that uses alliteration — repeated consonant sounds at the start of nearby words — to create rhythm or atmosphere suited to the situation.',
+    judge_note: 'alliteration — repeated starting sounds in nearby words. The repetition should feel purposeful, not forced.',
+    examples: ['a winter storm', 'a silent forest', 'a dangerous journey', 'the feeling of fear', 'a busy market', 'morning sunlight']
+  },
+  {
+    key: 'oxymoron',
+    name: 'Oxymoron',
+    icon: '⚡',
+    hint: 'Two contradictory words together',
+    definition: 'An oxymoron places two contradictory words next to each other to create a surprising or thought-provoking effect.',
+    example: '"A deafening silence." / "Bittersweet memories." / "Living death."',
+    prompt_instruction: 'Write a phrase or sentence containing an oxymoron — two contradictory words placed together — that captures the complexity or contradiction in the situation.',
+    judge_note: 'an oxymoron — two genuinely contradictory words placed together. The tension between the two words should feel meaningful.',
+    examples: ['saying goodbye to someone you love', 'ending of something happy', 'a happy memory that makes you sad', 'a brave but frightening moment', 'being alone in a crowd', 'the silence after music stops']
+  },
+  {
+    key: 'pathetic_fallacy',
+    name: 'Pathetic fallacy',
+    icon: '⛈️',
+    hint: 'Weather reflects emotion',
+    definition: 'Pathetic fallacy is when the weather or natural world reflects the mood or emotions of a character or narrator.',
+    example: '"The grey sky pressed down on her as she walked home alone."',
+    prompt_instruction: 'Write a sentence using pathetic fallacy — where the weather or natural world reflects the emotional state described in the situation. The environment should mirror the feeling.',
+    judge_note: 'pathetic fallacy — the weather or natural environment should clearly mirror the emotional state.',
+    examples: ['feeling hopeful about the future', 'deep sadness or grief', 'anger and frustration', 'the end of something important', 'loneliness', 'falling in love']
+  },
+  {
+    key: 'symbolism',
+    name: 'Symbolism',
+    icon: '🕊️',
+    hint: 'An object stands for something deeper',
+    definition: 'Symbolism uses a concrete object, image or action to represent a deeper idea, emotion or theme.',
+    example: '"She clutched her mother\'s necklace." — (the necklace symbolises memory and love)',
+    prompt_instruction: 'Write a sentence that uses symbolism — a specific concrete object or image that stands for a deeper idea or emotion connected to the situation. Briefly indicate what it represents.',
+    judge_note: 'symbolism — a specific object that clearly stands for a deeper idea. The symbol should feel natural and earned, not forced.',
+    examples: ['the end of childhood', 'hope after a difficult time', 'a broken friendship', 'a new beginning', 'grief and loss', 'the passing of time']
+  }
+];
+
+const LEVELS = [
+  { key: 'simple',    label: 'Simple',    badgeClass: 'badge-simple',    num: '01' },
+  { key: 'standard',  label: 'Standard',  badgeClass: 'badge-standard',  num: '02' },
+  { key: 'ambitious', label: 'Ambitious', badgeClass: 'badge-ambitious', num: '03' }
+];
+
+let currentTechnique = null;
+let currentSituation = '';
+let generated = {};
+let bestVote = null;
+let origVote = null;
+
+/* ══ Init ════════════════════════════════════════════════════════ */
+function init() {
+  buildTiles();
+  checkKeyState();
+}
+
+function buildTiles() {
+  const grid = document.getElementById('techniqueGrid');
+  TECHNIQUES.forEach(t => {
+    const tile = document.createElement('button');
+    tile.className = 'technique-tile';
+    tile.id = 'tile-' + t.key;
+    tile.innerHTML = `<span class="tt-icon">${t.icon}</span><span class="tt-name">${t.name}</span><span class="tt-hint">${t.hint}</span>`;
+    tile.onclick = () => selectTechnique(t.key);
+    grid.appendChild(tile);
+  });
+}
+
+/* ══ Technique selection ═════════════════════════════════════════ */
+function selectTechnique(key) {
+  currentTechnique = TECHNIQUES.find(t => t.key === key);
+  document.querySelectorAll('.technique-tile').forEach(t => t.classList.remove('active'));
+  document.getElementById('tile-' + key).classList.add('active');
+
+  // Show definition
+  const banner = document.getElementById('defBanner');
+  document.getElementById('defLabel').textContent = currentTechnique.name;
+  document.getElementById('defText').textContent = currentTechnique.definition;
+  document.getElementById('defExample').textContent = 'e.g. ' + currentTechnique.example;
+  banner.classList.add('visible');
+
+  // Show example chips
+  const chipRow = document.getElementById('chipsRow');
+  chipRow.innerHTML = '';
+  currentTechnique.examples.forEach(ex => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.textContent = ex;
+    chip.onclick = () => {
+      document.getElementById('situation').value = ex;
+      document.getElementById('situation').focus();
+    };
+    chipRow.appendChild(chip);
+  });
+  document.getElementById('exampleSection').style.display = 'block';
+  document.getElementById('inputSection').style.display = 'block';
+
+  // Update try section copy
+  document.getElementById('tryTitle').textContent = 'Write your own ' + currentTechnique.name.toLowerCase();
+  document.getElementById('tryDesc').textContent = 'Can you write a more original or effective example than the machine\'s best ' + currentTechnique.name.toLowerCase() + '?';
+
+  // Reset results if showing
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('verdictBox').style.display = 'none';
+  document.getElementById('myExample').value = '';
+  bestVote = null; origVote = null;
+}
+
+/* ══ API key ═════════════════════════════════════════════════════ */
+function getKey() { return localStorage.getItem('gp_anthropic_key') || ''; }
+function saveKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val.startsWith('sk-')) { alert('That doesn\'t look like a valid Anthropic API key.'); return; }
+  localStorage.setItem('gp_anthropic_key', val);
+  document.getElementById('apiKeyInput').value = '';
+  checkKeyState();
+}
+function clearKey() { localStorage.removeItem('gp_anthropic_key'); checkKeyState(); }
+function checkKeyState() {
+  const has = !!getKey();
+  document.getElementById('apiPanel').classList.toggle('hidden', has);
+  document.getElementById('clearRow').style.display = has ? 'block' : 'none';
+}
+
+/* ══ Claude API ══════════════════════════════════════════════════ */
+async function callClaude(prompt) {
+  const key = getKey();
+  if (!key) { alert('Please enter your Anthropic API key first.'); throw new Error('No key'); }
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'API error ' + res.status);
+  }
+  const data = await res.json();
+  return data.content.map(b => b.text || '').join('');
+}
+
+/* ══ Generate ════════════════════════════════════════════════════ */
+async function generate() {
+  if (!currentTechnique) {
+    document.getElementById('noTechMsg').style.display = 'block';
+    return;
+  }
+  const situation = document.getElementById('situation').value.trim();
+  if (!situation) { document.getElementById('situation').focus(); return; }
+
+  currentSituation = situation;
+  bestVote = null; origVote = null; generated = {};
+
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('statusBar').style.display = 'block';
+  document.getElementById('statusText').textContent = 'Generating three ' + currentTechnique.name.toLowerCase() + ' examples…';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('verdictBox').style.display = 'none';
+  document.getElementById('myExample').value = '';
+
+  const t = currentTechnique;
+  const prompt = `You are a creative writing teacher helping secondary school students (aged 13-15) understand and write figurative language.
+
+The technique being practised: ${t.name}
+Definition: ${t.definition}
+
+The student's situation or feeling (described literally): "${situation}"
+
+Your task: ${t.prompt_instruction}
+
+Generate three examples at three levels of sophistication. Return ONLY valid JSON with no other text, no markdown:
+
+{
+  "simple": {
+    "example": "A short, clear ${t.name.toLowerCase()} in one sentence. Appropriate for age 13. Avoid clichés.",
+    "explanation": "One sentence explaining what makes this a ${t.name.toLowerCase()} and what effect it creates."
+  },
+  "standard": {
+    "example": "A more developed ${t.name.toLowerCase()}, slightly more literary.",
+    "explanation": "One sentence explaining the technique and its effect."
+  },
+  "ambitious": {
+    "example": "A sophisticated, original ${t.name.toLowerCase()} a published writer might use. Fresh and unexpected.",
+    "explanation": "One sentence explaining why this is particularly effective."
+  }
+}
+
+Rules: All three must clearly demonstrate ${t.name.toLowerCase()}. Make them genuinely different from each other. The ambitious one must be original, not a well-known expression.`;
+
+  try {
+    const raw = await callClaude(prompt);
+    const clean = raw.replace(/```json|```/g, '').trim();
+    generated = JSON.parse(clean);
+    renderCards(generated);
+    document.getElementById('statusBar').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('voteResult').style.display = 'none';
+  } catch(e) {
+    document.getElementById('statusBar').style.display = 'none';
+    alert('Something went wrong: ' + e.message);
+  }
+  document.getElementById('genBtn').disabled = false;
+}
+
+/* ══ Render cards ════════════════════════════════════════════════ */
+function renderCards(data) {
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  LEVELS.forEach(({ key, label, badgeClass, num }) => {
+    const d = data[key];
+    if (!d) return;
+    const card = document.createElement('div');
+    card.className = 'm-card';
+    card.innerHTML = `
+      <div class="card-top">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="level-badge ${badgeClass}">${label}</span>
+          <span class="technique-tag">${currentTechnique.name}</span>
+        </div>
+        <span class="card-number">${num}</span>
+      </div>
+      <p class="m-example">${escHtml(d.example)}</p>
+      <p class="m-explain">${escHtml(d.explanation)}</p>
+      <div class="vote-row">
+        <button class="vote-btn" id="vbest-${key}" onclick="castVote('best','${key}')">⭐ Best example</button>
+        <button class="vote-btn" id="vorig-${key}" onclick="castVote('orig','${key}')">✨ Most original</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ══ Voting ══════════════════════════════════════════════════════ */
+function castVote(type, key) {
+  if (type === 'best') {
+    if (bestVote) document.getElementById('vbest-' + bestVote)?.classList.remove('voted-best');
+    bestVote = key;
+    document.getElementById('vbest-' + key).classList.add('voted-best');
+  } else {
+    if (origVote) document.getElementById('vorig-' + origVote)?.classList.remove('voted-orig');
+    origVote = key;
+    document.getElementById('vorig-' + key).classList.add('voted-orig');
+  }
+  const vr = document.getElementById('voteResult');
+  vr.style.display = 'block';
+  const ln = k => LEVELS.find(l => l.key === k)?.label || k;
+  if (bestVote && origVote) {
+    vr.innerHTML = bestVote === origVote
+      ? `<strong>${ln(bestVote)}</strong> wins both votes — the class favourite.`
+      : `Best: <strong>${ln(bestVote)}</strong> &nbsp;·&nbsp; Most original: <strong>${ln(origVote)}</strong>`;
+  } else if (bestVote) {
+    vr.innerHTML = `Best so far: <strong>${ln(bestVote)}</strong>`;
+  } else {
+    vr.innerHTML = `Most original so far: <strong>${ln(origVote)}</strong>`;
+  }
+}
+
+/* ══ Judge ═══════════════════════════════════════════════════════ */
+async function judgeMe() {
+  const mine = document.getElementById('myExample').value.trim();
+  if (!mine || !currentSituation || !currentTechnique) return;
+
+  const judgeBtn = document.getElementById('judgeBtn');
+  judgeBtn.disabled = true;
+  const vb = document.getElementById('verdictBox');
+  vb.style.display = 'block';
+  document.getElementById('verdictText').textContent = 'Judging your ' + currentTechnique.name.toLowerCase() + '…';
+
+  const machineExamples = LEVELS.map(({ key, label }) =>
+    generated[key] ? `${label}: "${generated[key].example}"` : ''
+  ).filter(Boolean).join('\n');
+
+  const prompt = `You are an English teacher giving brief encouraging feedback to a student (aged 13-15) on their attempt at a figurative language technique.
+
+Technique being practised: ${currentTechnique.name}
+What makes a good ${currentTechnique.name.toLowerCase()}: ${currentTechnique.judge_note}
+
+The situation being described: "${currentSituation}"
+
+The machine generated these three examples:
+${machineExamples}
+
+The student wrote: "${mine}"
+
+Give a short response (3-4 sentences):
+1. State whether the student's attempt correctly uses ${currentTechnique.name.toLowerCase()} — if not, explain why gently
+2. Point out one specific strength
+3. Give one constructive suggestion to improve it
+4. Give a verdict: does it beat the machine's ambitious example, match it, or fall short — and briefly why?
+
+Be encouraging, direct, and specific. Address the student as "you".`;
+
+  try {
+    const response = await callClaude(prompt);
+    document.getElementById('verdictText').textContent = response;
+  } catch(e) {
+    document.getElementById('verdictText').textContent = 'Could not get feedback right now — try again.';
+  }
+  judgeBtn.disabled = false;
+}
+
+/* ══ Reset ═══════════════════════════════════════════════════════ */
+function resetAll() {
+  document.getElementById('situation').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('statusBar').style.display = 'none';
+  document.getElementById('genBtn').disabled = false;
+  document.getElementById('verdictBox').style.display = 'none';
+  document.getElementById('myExample').value = '';
+  currentSituation = ''; generated = {}; bestVote = null; origVote = null;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══ Utility ═════════════════════════════════════════════════════ */
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+init();
+</script>
+</body>
+</html>
