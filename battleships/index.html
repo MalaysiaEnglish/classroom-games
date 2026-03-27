@@ -422,7 +422,7 @@
       const topicsEl = document.getElementById('qfTopics');
       const lessonsEl = document.getElementById('qfLessons');
       topicsEl.innerHTML = '';
-      const topics = [...new Set(qs.map(q => q.topic))].sort();
+      const topics = [...new Set(qs.map(q => q.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
       if (!topics.length) { topicsEl.innerHTML = '<span class="qf-empty">No topics</span>'; }
       else {
         topics.forEach(t => {
