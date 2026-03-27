@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Metaphor Machine – Gamepack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink2: #3d3d5c;
+    --muted: #8888aa;
+    --surface: #ffffff;
+    --surface2: #f5f4fb;
+    --surface3: #eceaf8;
+    --border: rgba(100,90,180,0.15);
+    --border2: rgba(100,90,180,0.3);
+    --accent: #5b3ff8;
+    --accent2: #8b6ff8;
+    --accent-glow: rgba(91,63,248,0.12);
+    --green: #1d9e75;
+    --green-bg: #e1f5ee;
+    --blue: #185fa5;
+    --blue-bg: #e6f1fb;
+    --purple: #534ab7;
+    --purple-bg: #eeedfe;
+    --amber: #ba7517;
+    --amber-bg: #faeeda;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-pill: 99px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface2);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--ink);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .site-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+  .site-logo span { color: var(--accent2); }
+  .header-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--ink);
+    padding: 36px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,63,248,0.18) 0%, transparent 70%);
+    top: -200px; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 6vw, 52px);
+    color: #fff;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .hero-title em { color: var(--accent2); font-style: normal; }
+  .hero-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    max-width: 480px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+  }
+  .hero-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .hero-tag {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* ── Main layout ── */
+  .main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+  }
+
+  /* ── API key setup ── */
+  .api-panel {
+    background: var(--amber-bg);
+    border: 1px solid rgba(186,117,23,0.25);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .api-panel.hidden { display: none; }
+  .api-icon { font-size: 22px; flex-shrink: 0; }
+  .api-text { flex: 1; min-width: 200px; }
+  .api-text p { font-size: 13px; color: var(--amber); font-weight: 500; margin-bottom: 2px; }
+  .api-text small { font-size: 12px; color: var(--ink2); }
+  .api-input-row { display: flex; gap: 8px; flex: 2; min-width: 240px; }
+  .api-input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(186,117,23,0.35);
+    background: #fff;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+  }
+  .api-input:focus { outline: none; border-color: var(--amber); }
+  .api-save-btn {
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--amber);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+  .api-save-btn:hover { opacity: 0.88; }
+  .api-clear { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* ── Example chips ── */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .chip {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--ink2);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .chip:hover { background: var(--surface3); border-color: var(--accent); color: var(--accent); }
+
+  /* ── Input area ── */
+  .input-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .input-row { display: flex; gap: 12px; align-items: flex-start; }
+  .situation-input {
+    flex: 1;
+    min-height: 80px;
+    resize: vertical;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border2);
+    background: var(--surface2);
+    font-size: 15px;
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.5;
+    transition: border-color 0.15s;
+  }
+  .situation-input:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .situation-input::placeholder { color: var(--muted); }
+  .gen-btn {
+    padding: 12px 22px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    transition: opacity 0.15s, transform 0.1s;
+    align-self: flex-end;
+  }
+  .gen-btn:hover { opacity: 0.9; }
+  .gen-btn:active { transform: scale(0.97); }
+  .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ── Status ── */
+  .status-bar {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 14px;
+    display: none;
+  }
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Metaphor cards ── */
+  .cards-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+  .m-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    animation: fadeUp 0.3s ease both;
+  }
+  .m-card:nth-child(2) { animation-delay: 0.07s; }
+  .m-card:nth-child(3) { animation-delay: 0.14s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .level-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .badge-simple { background: var(--green-bg); color: var(--green); }
+  .badge-standard { background: var(--blue-bg); color: var(--blue); }
+  .badge-ambitious { background: var(--purple-bg); color: var(--purple); }
+  .card-number { font-size: 28px; font-weight: 800; color: var(--surface3); font-family: 'Syne', sans-serif; }
+  .m-metaphor {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    font-style: italic;
+    margin-bottom: 10px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .m-explain { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+  .vote-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .vote-btn {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--ink2);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .vote-btn:hover { background: var(--surface2); }
+  .vote-btn.voted { font-weight: 600; border-width: 2px; }
+  .voted-best { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+  .voted-orig { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+
+  /* ── Vote result ── */
+  .vote-result {
+    background: var(--surface3);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--ink2);
+    text-align: center;
+    margin-bottom: 28px;
+    display: none;
+  }
+  .vote-result strong { color: var(--ink); }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── Try your own ── */
+  .try-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 24px;
+  }
+  .try-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .try-card p { font-size: 13px; color: var(--ink2); margin-bottom: 14px; }
+  .try-row { display: flex; gap: 10px; align-items: center; }
+  .try-input {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border2);
+    background: var(--surface2);
+    font-size: 15px;
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.15s;
+  }
+  .try-input:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .try-input::placeholder { color: var(--muted); }
+  .judge-btn {
+    padding: 11px 20px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--ink);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .judge-btn:hover { opacity: 0.85; }
+  .judge-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* ── Verdict ── */
+  .verdict-box {
+    margin-top: 16px;
+    padding: 16px 18px;
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.7;
+    display: none;
+  }
+  .verdict-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  /* ── Reset ── */
+  .reset-row { text-align: center; margin-top: 8px; }
+  .reset-btn {
+    font-size: 13px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .reset-btn:hover { color: var(--ink2); }
+
+  /* ── Results hidden initially ── */
+  .results-section { display: none; }
+
+  /* ── Footer ── */
+  .site-footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="#"><span>game</span>pack</a>
+  <span class="header-tag">English · Figurative Language</span>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">AI-Powered Classroom Tool</p>
+  <h1 class="hero-title">The <em>Metaphor</em> Machine</h1>
+  <p class="hero-desc">Describe a feeling or situation in plain words. The machine generates three metaphors — then challenge students to beat it.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">Figurative language</span>
+    <span class="hero-tag">Creative writing</span>
+    <span class="hero-tag">IGCSE English</span>
+    <span class="hero-tag">Stage 8–9</span>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- API Key Panel -->
+  <div class="api-panel" id="apiPanel">
+    <div class="api-icon">🔑</div>
+    <div class="api-text">
+      <p>Anthropic API key required</p>
+      <small>Enter your key once — it's saved in this browser only. Not shared.</small>
+    </div>
+    <div class="api-input-row">
+      <input class="api-input" type="password" id="apiKeyInput" placeholder="sk-ant-...">
+      <button class="api-save-btn" onclick="saveKey()">Save key</button>
+    </div>
+  </div>
+  <div style="text-align:right; margin-top:-16px; margin-bottom:20px; display:none;" id="clearRow">
+    <span class="api-clear" onclick="clearKey()">Clear saved key</span>
+  </div>
+
+  <!-- Example chips -->
+  <p class="section-label">Try an example</p>
+  <div class="chips">
+    <button class="chip" onclick="setExample(this)">feeling nervous before an exam</button>
+    <button class="chip" onclick="setExample(this)">missing someone who has gone away</button>
+    <button class="chip" onclick="setExample(this)">the end of school</button>
+    <button class="chip" onclick="setExample(this)">learning something very difficult</button>
+    <button class="chip" onclick="setExample(this)">feeling stuck and unable to move forward</button>
+    <button class="chip" onclick="setExample(this)">being the new person in a group</button>
+    <button class="chip" onclick="setExample(this)">growing up and leaving childhood behind</button>
+    <button class="chip" onclick="setExample(this)">a parent watching their child leave home</button>
+  </div>
+
+  <!-- Input -->
+  <div class="input-card">
+    <p class="section-label" style="margin-bottom:12px;">Describe a feeling or situation</p>
+    <div class="input-row">
+      <textarea class="situation-input" id="situation" placeholder="Describe it in plain, literal terms — e.g. 'feeling very lonely in a crowd of people'"></textarea>
+      <button class="gen-btn" id="genBtn" onclick="generate()">Generate ↗</button>
+    </div>
+  </div>
+
+  <div class="status-bar" id="statusBar">
+    <span class="spinner"></span> Generating three metaphors...
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="results">
+
+    <div class="cards-grid" id="cardsGrid"></div>
+
+    <div class="vote-result" id="voteResult"></div>
+
+    <div class="divider">
+      <span class="divider-label">Now beat the machine</span>
+    </div>
+
+    <div class="try-card">
+      <h3>Write your own metaphor</h3>
+      <p>Can you come up with a metaphor for the same situation that's more original or more effective than the machine's best?</p>
+      <div class="try-row">
+        <input class="try-input" id="myMetaphor" placeholder="Write your metaphor here…">
+        <button class="judge-btn" id="judgeBtn" onclick="judgeMe()">Judge it ↗</button>
+      </div>
+      <div class="verdict-box" id="verdictBox">
+        <div class="verdict-label">Teacher feedback</div>
+        <div id="verdictText"></div>
+      </div>
+    </div>
+
+    <div class="reset-row">
+      <button class="reset-btn" onclick="resetAll()">← Start again with a new situation</button>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  gamepack.win · The Metaphor Machine · Powered by Claude AI
+</footer>
+
+<script>
+const LEVELS = [
+  { key: 'simple',    label: 'Simple',    badgeClass: 'badge-simple',    num: '01' },
+  { key: 'standard',  label: 'Standard',  badgeClass: 'badge-standard',  num: '02' },
+  { key: 'ambitious', label: 'Ambitious', badgeClass: 'badge-ambitious', num: '03' }
+];
+
+let currentSituation = '';
+let generated = {};
+let bestVote = null;
+let origVote = null;
+
+/* ── API Key ── */
+function getKey() { return localStorage.getItem('gp_anthropic_key') || ''; }
+
+function saveKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val.startsWith('sk-')) { alert('That doesn\'t look like a valid Anthropic API key (should start with sk-ant-...).'); return; }
+  localStorage.setItem('gp_anthropic_key', val);
+  document.getElementById('apiKeyInput').value = '';
+  checkKeyState();
+}
+
+function clearKey() {
+  localStorage.removeItem('gp_anthropic_key');
+  checkKeyState();
+}
+
+function checkKeyState() {
+  const has = !!getKey();
+  document.getElementById('apiPanel').classList.toggle('hidden', has);
+  document.getElementById('clearRow').style.display = has ? 'block' : 'none';
+}
+
+/* ── Chips ── */
+function setExample(btn) {
+  document.getElementById('situation').value = btn.textContent;
+  document.getElementById('situation').focus();
+}
+
+/* ── Claude API call ── */
+async function callClaude(prompt) {
+  const key = getKey();
+  if (!key) { alert('Please enter your Anthropic API key first.'); throw new Error('No key'); }
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'API error ' + res.status);
+  }
+  const data = await res.json();
+  return data.content.map(b => b.text || '').join('');
+}
+
+/* ── Generate ── */
+async function generate() {
+  const situation = document.getElementById('situation').value.trim();
+  if (!situation) { document.getElementById('situation').focus(); return; }
+  currentSituation = situation;
+  bestVote = null; origVote = null;
+  generated = {};
+
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('statusBar').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('verdictBox').style.display = 'none';
+  document.getElementById('myMetaphor').value = '';
+
+  const prompt = `You are a creative writing teacher helping secondary school students (aged 13-15) understand and write metaphors.
+
+A student has described this situation or feeling in literal terms: "${situation}"
+
+Generate exactly three metaphors for this situation at three levels of sophistication. Return ONLY valid JSON with no other text, no markdown fences:
+
+{
+  "simple": {
+    "metaphor": "A short, clear metaphor in one sentence. Appropriate for age 13. Avoid clichés.",
+    "explanation": "One sentence explaining what the comparison shows."
+  },
+  "standard": {
+    "metaphor": "A more developed metaphor with one or two sentences. Slightly more literary.",
+    "explanation": "One sentence explaining the effect and what it reveals."
+  },
+  "ambitious": {
+    "metaphor": "A sophisticated, original metaphor a published writer might use. One to two sentences. Fresh and unexpected.",
+    "explanation": "One sentence explaining why this is effective and what layers of meaning it creates."
+  }
+}
+
+Rules: Each must be a true metaphor — no 'like' or 'as'. Make them genuinely different from each other. The ambitious one must be original and unexpected, not a well-known expression.`;
+
+  try {
+    const raw = await callClaude(prompt);
+    const clean = raw.replace(/```json|```/g, '').trim();
+    generated = JSON.parse(clean);
+    renderCards(generated);
+    document.getElementById('statusBar').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('voteResult').style.display = 'none';
+  } catch(e) {
+    document.getElementById('statusBar').style.display = 'none';
+    alert('Something went wrong: ' + e.message + '\n\nCheck your API key and try again.');
+  }
+  document.getElementById('genBtn').disabled = false;
+}
+
+/* ── Render cards ── */
+function renderCards(data) {
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  LEVELS.forEach(({ key, label, badgeClass, num }) => {
+    const d = data[key];
+    if (!d) return;
+    const card = document.createElement('div');
+    card.className = 'm-card';
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="level-badge ${badgeClass}">${label}</span>
+        <span class="card-number">${num}</span>
+      </div>
+      <p class="m-metaphor">${escHtml(d.metaphor)}</p>
+      <p class="m-explain">${escHtml(d.explanation)}</p>
+      <div class="vote-row">
+        <button class="vote-btn" id="vbest-${key}" onclick="castVote('best','${key}')">⭐ Best metaphor</button>
+        <button class="vote-btn" id="vorig-${key}" onclick="castVote('orig','${key}')">✨ Most original</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ── Voting ── */
+function castVote(type, key) {
+  if (type === 'best') {
+    if (bestVote) document.getElementById('vbest-' + bestVote)?.classList.remove('voted', 'voted-best');
+    bestVote = key;
+    document.getElementById('vbest-' + key).classList.add('voted', 'voted-best');
+  } else {
+    if (origVote) document.getElementById('vorig-' + origVote)?.classList.remove('voted', 'voted-orig');
+    origVote = key;
+    document.getElementById('vorig-' + key).classList.add('voted', 'voted-orig');
+  }
+  updateVoteResult();
+}
+
+function updateVoteResult() {
+  if (!bestVote && !origVote) return;
+  const vr = document.getElementById('voteResult');
+  vr.style.display = 'block';
+  const levelName = k => LEVELS.find(l => l.key === k)?.label || k;
+  if (bestVote && origVote) {
+    if (bestVote === origVote) {
+      vr.innerHTML = `<strong>${levelName(bestVote)}</strong> wins both votes — the class favourite.`;
+    } else {
+      vr.innerHTML = `Best: <strong>${levelName(bestVote)}</strong> &nbsp;·&nbsp; Most original: <strong>${levelName(origVote)}</strong>`;
+    }
+  } else if (bestVote) {
+    vr.innerHTML = `Best so far: <strong>${levelName(bestVote)}</strong>`;
+  } else {
+    vr.innerHTML = `Most original so far: <strong>${levelName(origVote)}</strong>`;
+  }
+}
+
+/* ── Judge student metaphor ── */
+async function judgeMe() {
+  const mine = document.getElementById('myMetaphor').value.trim();
+  if (!mine) { document.getElementById('myMetaphor').focus(); return; }
+  if (!currentSituation) return;
+
+  const judgeBtn = document.getElementById('judgeBtn');
+  judgeBtn.disabled = true;
+  const vb = document.getElementById('verdictBox');
+  vb.style.display = 'block';
+  document.getElementById('verdictText').textContent = 'Judging your metaphor…';
+
+  const machineMetaphors = LEVELS.map(({ key, label }) =>
+    generated[key] ? `${label}: "${generated[key].metaphor}"` : ''
+  ).filter(Boolean).join('\n');
+
+  const prompt = `You are an English teacher giving brief encouraging feedback on a student's metaphor to a class of 13-15 year olds.
+
+The situation being described: "${currentSituation}"
+
+The machine generated these three metaphors:
+${machineMetaphors}
+
+The student wrote: "${mine}"
+
+Give a short response (3-4 sentences). Include:
+1. One specific strength in the student's metaphor
+2. One constructive suggestion to improve it
+3. A verdict: does it beat the machine's most ambitious metaphor, match it, or fall short — and briefly why?
+
+Be encouraging, direct, and specific. Address the student as "you".`;
+
+  try {
+    const response = await callClaude(prompt);
+    document.getElementById('verdictText').textContent = response;
+  } catch(e) {
+    document.getElementById('verdictText').textContent = 'Could not get feedback right now — check your API key and try again.';
+  }
+  judgeBtn.disabled = false;
+}
+
+/* ── Reset ── */
+function resetAll() {
+  document.getElementById('situation').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('statusBar').style.display = 'none';
+  document.getElementById('genBtn').disabled = false;
+  document.getElementById('situation').focus();
+  currentSituation = '';
+  generated = {};
+  bestVote = null;
+  origVote = null;
+}
+
+/* ── Utility ── */
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Init ── */
+checkKeyState();
+</script>
+</body>
+</html>
