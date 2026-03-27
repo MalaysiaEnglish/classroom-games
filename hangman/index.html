@@ -255,7 +255,7 @@
         selectedCurriculumUnit = null;
         topicsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
         // Remove any curriculum sources from this unit
-        const prefix = 'S'+stage+'/U'+unit;
+        const prefix = 'S'+stage+'/U'+unit+'/';
         [...selectedSources].forEach(k => { if (k.startsWith(prefix)) selectedSources.delete(k); });
         updateWordFilterSummary(); return;
       }
@@ -265,8 +265,8 @@
 
       // Build topic checkboxes for this unit
       topicsEl.innerHTML = '';
-      const unitPrefix = 'S'+stage+'/U'+unit;
-      const unitTopics = Object.keys(curriculumWordMap).filter(t => t.startsWith(unitPrefix)).sort();
+      const unitPrefix = 'S'+stage+'/U'+unit+'/';
+      const unitTopics = Object.keys(curriculumWordMap).filter(t => t.startsWith(unitPrefix)).sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
       if (!unitTopics.length) { topicsEl.innerHTML = '<span class="qf-empty">No words for this unit</span>'; return; }
       unitTopics.forEach(topic => {
         const words = curriculumWordMap[topic];
