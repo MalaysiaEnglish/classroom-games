@@ -397,7 +397,7 @@
       unitsEl.innerHTML = '';
       if (!unitMap.size) {
         // Topics don't follow S/U pattern — show flat topic list
-        const topics = [...new Set(allWords.map(w => w.topic).filter(Boolean))].sort();
+        const topics = [...new Set(allWords.map(w => w.topic).filter(Boolean))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
         topics.forEach(t => {
           const count = allWords.filter(w => w.topic===t).length;
           const label = document.createElement('label'); label.className = 'qf-check-label';
@@ -428,7 +428,7 @@
         btnEl.classList.remove('active'); wofSelectedUnit = null;
         topicsEl.innerHTML = ''; topicLabel.style.display = 'none';
         // Remove this unit's topics from selection
-        const prefix = 'S'+stage+'/U'+unit;
+        const prefix = 'S'+stage+'/U'+unit+'/';
         const allWords = window.CUSTOM_CONTENT?.words || [];
         allWords.filter(w => w.topic && w.topic.startsWith(prefix)).forEach(w => selectedWofTopics.delete(w.topic));
         updateWofSummary(); return;
@@ -436,9 +436,9 @@
       document.querySelectorAll('#wofUnits .qf-unit-btn').forEach(b => b.classList.remove('active'));
       btnEl.classList.add('active'); wofSelectedUnit = {stage, unit};
 
-      const prefix = 'S'+stage+'/U'+unit;
+      const prefix = 'S'+stage+'/U'+unit+'/';
       const allWords = window.CUSTOM_CONTENT?.words || [];
-      const topics = [...new Set(allWords.filter(w => w.topic && w.topic.startsWith(prefix)).map(w => w.topic))].sort();
+      const topics = [...new Set(allWords.filter(w => w.topic && w.topic.startsWith(prefix)).map(w => w.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
 
       topicsEl.innerHTML = ''; topicLabel.style.display = 'block';
       topics.forEach(t => {
