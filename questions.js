@@ -1325,6 +1325,57 @@ window.QUESTIONS = [
   { question: "What is the atomic number of carbon?", answer: "6", distractors: ["1", "8", "12"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
   { question: "What happens during a chemical reaction?", answer: "New substances are formed from existing ones", distractors: ["The same substances change shape", "Atoms are destroyed", "Temperature always drops"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
 
+  // ── S6/U7/L1 Space (extra) ────────────────────────────────────────────────
+  { question: "How many planets are in our solar system?", answer: "8", distractors: ["7", "9", "10"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "Which is the largest planet in our solar system?", answer: "Jupiter", distractors: ["Saturn", "Neptune", "Uranus"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "What is the name of the galaxy we live in?", answer: "The Milky Way", distractors: ["Andromeda", "The Triangulum", "Centaurus A"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "What is the closest star to Earth?", answer: "The Sun", distractors: ["Proxima Centauri", "Sirius", "Alpha Centauri"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "Which planet has the most moons?", answer: "Saturn", distractors: ["Jupiter", "Uranus", "Neptune"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "What is an asteroid?", answer: "A rocky object orbiting the Sun, smaller than a planet", distractors: ["A large ball of ice from the outer solar system", "A small moon orbiting a gas giant", "A rock that burns up entering Earth's atmosphere"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "What is a comet?", answer: "A ball of ice and rock that forms a tail as it nears the Sun", distractors: ["A rocky object orbiting between Mars and Jupiter", "A planet with no atmosphere", "A fragment of a destroyed moon"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "Which planet is famous for its large ring system?", answer: "Saturn", distractors: ["Jupiter", "Uranus", "Neptune"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "What causes day and night on Earth?", answer: "Earth rotating on its axis", distractors: ["The Moon blocking the Sun", "Earth orbiting the Sun", "The Sun moving around Earth"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "Approximately how long does it take Earth to orbit the Sun?", answer: "365 days", distractors: ["24 hours", "28 days", "100 days"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+  { question: "What is the difference between a meteor and a meteorite?", answer: "A meteorite has landed on Earth; a meteor burns in the atmosphere", distractors: ["A meteor is larger than a meteorite", "A meteorite is still in space; a meteor has landed", "They are the same thing"], topic: "S6/U7/L1 Space", stage: 6, unit: 7, lesson: 1 },
+
+  // ── S6/U7/L2 Geography (extra) ────────────────────────────────────────────
+  { question: "What is a volcano?", answer: "An opening in the Earth's surface through which lava, gas and ash erupt", distractors: ["A deep crack in the ocean floor", "A mountain formed by wind erosion", "A large underground cave system"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "What is the name for the point on Earth's surface directly above an earthquake's origin?", answer: "The epicentre", distractors: ["The fault line", "The focus", "The seismic zone"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "Which is the longest river in the world?", answer: "The Nile", distractors: ["The Amazon", "The Yangtze", "The Mississippi"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "What is erosion?", answer: "The wearing away of rock and soil by wind, water or ice", distractors: ["The build-up of rock layers over time", "The movement of tectonic plates", "The process of soil absorbing water"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "What is a tsunami?", answer: "A large ocean wave caused by an underwater earthquake or volcanic eruption", distractors: ["A type of tropical storm", "A tidal wave caused by the Moon's gravity", "A wave formed by strong winds"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "What are tectonic plates?", answer: "Large sections of Earth's crust that move slowly over time", distractors: ["Layers of rock beneath the ocean", "Large sheets of ice covering the poles", "Underground rivers of hot magma"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "Which is the largest ocean on Earth?", answer: "The Pacific Ocean", distractors: ["The Atlantic Ocean", "The Indian Ocean", "The Arctic Ocean"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "What is the term for water falling from clouds, including rain and snow?", answer: "Precipitation", distractors: ["Condensation", "Evaporation", "Transpiration"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "What is a glacier?", answer: "A large, slow-moving mass of ice formed from compacted snow", distractors: ["A frozen lake in a mountain region", "A fast-moving river of meltwater", "A layer of ice over the ocean"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+  { question: "What is the difference between climate and weather?", answer: "Climate is long-term patterns; weather is day-to-day conditions", distractors: ["They mean the same thing", "Weather is long-term; climate is short-term", "Climate only refers to temperature"], topic: "S6/U7/L2 Geography", stage: 6, unit: 7, lesson: 2 },
+
+  // ── S6/U7/L3 History (extra) ──────────────────────────────────────────────
+  { question: "Who was the first person to walk on the Moon?", answer: "Neil Armstrong", distractors: ["Buzz Aldrin", "Yuri Gagarin", "John Glenn"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "In which year did the Second World War end?", answer: "1945", distractors: ["1939", "1942", "1950"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "The French Revolution began in:", answer: "1789", distractors: ["1776", "1804", "1815"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "Who invented the telephone?", answer: "Alexander Graham Bell", distractors: ["Thomas Edison", "Nikola Tesla", "Guglielmo Marconi"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "What was the Cold War?", answer: "A period of political tension between the USA and USSR without direct military conflict", distractors: ["A war fought in Arctic conditions", "A trade war between Europe and America", "A series of battles in Northern Europe"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "The Titanic sank in which year?", answer: "1912", distractors: ["1905", "1920", "1898"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "Which ancient wonder of the world still survives today?", answer: "The Great Pyramid of Giza", distractors: ["The Hanging Gardens of Babylon", "The Colossus of Rhodes", "The Lighthouse of Alexandria"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "The Industrial Revolution began in which country?", answer: "Britain", distractors: ["France", "Germany", "The United States"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "What was the Silk Road?", answer: "A network of trade routes connecting China to Europe and the Middle East", distractors: ["A road built by the Romans across Asia", "A route for trading spices between Asia and America", "A sea route used by Chinese explorers"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+  { question: "Who was the first human to travel to space?", answer: "Yuri Gagarin", distractors: ["Neil Armstrong", "Buzz Aldrin", "Alan Shepard"], topic: "S6/U7/L3 History", stage: 6, unit: 7, lesson: 3 },
+
+  // ── S6/U7/L4 Chemistry (extra) ────────────────────────────────────────────
+  { question: "What are the three states of matter?", answer: "Solid, liquid, and gas", distractors: ["Hot, cold, and warm", "Metal, non-metal, and compound", "Element, molecule, and atom"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What is an atom?", answer: "The smallest unit of a chemical element", distractors: ["A type of molecule", "A compound made of two elements", "A particle found only in liquids"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What is the chemical symbol for oxygen?", answer: "O", distractors: ["Ox", "On", "Or"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What is the chemical symbol for gold?", answer: "Au", distractors: ["Go", "Gd", "Ag"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What is a molecule?", answer: "Two or more atoms bonded together", distractors: ["The centre of an atom", "A type of chemical reaction", "A single particle with no charge"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What does pH measure?", answer: "How acidic or alkaline a substance is", distractors: ["The temperature of a substance", "The density of a liquid", "The speed of a chemical reaction"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "Which gas makes up most of Earth's atmosphere?", answer: "Nitrogen", distractors: ["Oxygen", "Carbon dioxide", "Hydrogen"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What is the process of a liquid turning into a gas called?", answer: "Evaporation", distractors: ["Condensation", "Freezing", "Sublimation"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What is the chemical formula for carbon dioxide?", answer: "CO₂", distractors: ["C₂O", "CO", "CO₃"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "A substance with a pH of 7 is:", answer: "Neutral", distractors: ["Acidic", "Alkaline", "Corrosive"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+  { question: "What is photosynthesis?", answer: "The process by which plants use sunlight to make food from CO₂ and water", distractors: ["The process by which animals digest food", "The way plants absorb water through their roots", "The release of energy from food in living cells"], topic: "S6/U7/L4 Chemistry", stage: 6, unit: 7, lesson: 4 },
+
+
   // ════════════════════════════════════════════════════════════════
   // S6/U8
   // ════════════════════════════════════════════════════════════════
