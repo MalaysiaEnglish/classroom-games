@@ -1060,7 +1060,7 @@ window.CUSTOM_CONTENT = {
 
     // ── S6/U6 ──
     { text: "If Violet worked on a different ship, she would survive.",             correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
-    { text: "If the Titanic had more lifeboats, fewer people would die.",           correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If the Titanic had more lifeboats, fewer people would die.",           correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
     { text: "If I were the captain, I would slow down near the icebergs.",          correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
     { text: "If you would study, you would pass the exam.",                         correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
     { text: "If the Britannic wasn't a hospital ship, more people would have died.", correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
