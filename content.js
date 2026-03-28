@@ -1084,6 +1084,46 @@ window.CUSTOM_CONTENT = {
     { text: "If there had been a doctor on the plane, the man wouldn't have died.",                correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
     { text: "If she was taller, she might have become a model.",                                   correct: false, topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
 
+    // ── S6/U6 — 2nd Conditional (extra) ─────────────────────────
+    { text: "If I were you, I would apologise immediately.",                                       correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If he had more time, he would learn another language.",                               correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If animals could talk, what would they say?",                                         correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If I would have money, I would buy a bigger house.",                                  correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If she didn't work so hard, she would have more free time.",                          correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If they knew the answer, they would told us.",                                        correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "What would you do if you could fly?",                                                 correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If he trained harder, he would win the race.",                                        correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If I was the teacher, I would give everyone an A.",                                   correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "She would feel better if she slept more.",                                            correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If we lived closer to the sea, we would go swimming every day.",                      correct: true,  topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+    { text: "If he would study, he will pass the exam.",                                           correct: false, topic: "S6/U6/L1 2nd Conditional", stage: 6, unit: 6, lesson: 1 },
+
+    // ── S6/U6 — 3rd Conditional (extra) ─────────────────────────
+    { text: "If they had listened to the warnings, the disaster wouldn't have happened.",          correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If she had applied earlier, she would have got the scholarship.",                     correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If I have studied more, I would have passed the exam.",                               correct: false, topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "He wouldn't have been late if he had set his alarm.",                                 correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If the doctors had acted faster, more lives would been saved.",                       correct: false, topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If we had taken a map, we wouldn't have got lost.",                                   correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If the music hadn't played so fast, fewer people would have collapsed.",              correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If he had saved his money, he could have bought the car.",                            correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "She wouldn't have missed the bus if she had left earlier.",                           correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If they had warned us, we would have escaped in time.",                               correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If he hadn't cheated, the other team would have won.",                                correct: true,  topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+    { text: "If she studied harder, she would have passed.",                                       correct: false, topic: "S6/U6/L2 3rd Conditional", stage: 6, unit: 6, lesson: 2 },
+
+    // ── S6/U6 — Mixed Conditionals (extra) ──────────────────────
+    { text: "If I had moved abroad earlier, I would speak three languages now.",                   correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If she had taken better care of herself, she would be healthier now.",                correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If he hadn't missed the flight, he would be in Paris now.",                           correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If they had invested wisely, they would be millionaires now.",                        correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If she hadn't dropped out of school, she would have a better job now.",               correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If you hadn't eaten that food, you wouldn't be feeling sick now.",                    correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If I had studied law, I would have been a lawyer now.",                               correct: false, topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If she weren't so stubborn, she would have listened to advice last year.",            correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If he hadn't won the lottery, he wouldn't live in that house now.",                   correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+    { text: "If she didn't speak French, she wouldn't have got the job in Paris.",                 correct: true,  topic: "S6/U6/L3 Mixed Conditionals", stage: 6, unit: 6, lesson: 3 },
+
     // ── S6/U8 ──
     { text: "I am writing to complain in the strongest terms about my recent experience.",         correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
     { text: "I'm writing cos I'm well annoyed about what happened on my holiday.",                 correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
@@ -1101,6 +1141,30 @@ window.CUSTOM_CONTENT = {
     { text: "When we got there your rep told us all the trips were off. She didn't even say sorry.", correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
     { text: "Yours faithfully is used to close a formal letter when the recipient's name is unknown.", correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
     { text: "You'd write 'Yours faithfully' when you don't know who you're writing to.",            correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+
+    // ── S6/U8 — Formal vs Informal (extra) ──────────────────────
+    { text: "I wish to express my sincere dissatisfaction with the service I received.",           correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "Honestly, the service was rubbish and I want my money back ASAP.",                    correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "I would be grateful if you could respond to this matter within fourteen days.",       correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "Can you sort this out? I've been waiting for ages and I'm not happy.",                correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "Consequently, I am requesting a full refund at your earliest convenience.",           correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "So basically I want my money back and I think that's totally fair.",                  correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "I wish to draw your attention to the inadequate standard of the facilities provided.", correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "The place was well dirty — nothing like the pictures on the website at all.",         correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "Upon arrival, we were informed that the advertised facilities were unavailable.",     correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "When we got there, they told us the pool was shut. Proper annoying.",                 correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "I trust you will take the necessary steps to resolve this issue promptly.",           correct: true,  topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+    { text: "I hope you fix this soon cos it really wasn't good enough.",                          correct: false, topic: "S6/U8/L3 Formal vs Informal", stage: 6, unit: 8, lesson: 3 },
+
+    // ── S6/U8 — Advertising Language ────────────────────────────
+    { text: "Experience the difference. Taste the future. Live better.",                          correct: true,  topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
+    { text: "Don't miss out — stocks are limited and this offer won't last!",                     correct: true,  topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
+    { text: "Isn't it time you deserved the best?",                                               correct: true,  topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
+    { text: "Millions of satisfied customers can't be wrong — join them today.",                  correct: true,  topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
+    { text: "Our product is good and you should buy it because it is very nice.",                 correct: false, topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
+    { text: "Clinically proven to reduce signs of ageing by up to 40%.",                          correct: true,  topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
+    { text: "Trusted by professionals worldwide for over thirty years.",                          correct: true,  topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
+    { text: "You need this. Everyone wants this. This is the one.",                               correct: true,  topic: "S6/U8/L1 Advertising Techniques", stage: 6, unit: 8, lesson: 1 },
 
     // ── S8/U1 ──
     { text: "The scientist, who had studied climate change for decades, presented her findings to the committee.",   correct: true,  topic: "S8/U1/L5 Formal Language", stage: 8, unit: 1, lesson: 5 },
