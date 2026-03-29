@@ -333,7 +333,7 @@
       if (mode !== 'consonant') return;
       document.querySelectorAll('#letters button').forEach(btn => {
         if (!'AEIOU'.includes(btn.textContent) || guessedLetters.has(btn.textContent)) return;
-        const locked = totalScores[currentTeam] < 1;
+        const locked = currentWordPoints[currentTeam] < 1;
         btn.disabled = locked;
         btn.classList.toggle('hm-vowel-locked', locked);
       });
@@ -418,8 +418,8 @@
       guessedLetters.add(letter);
       const isVowel = 'AEIOU'.includes(letter);
       if (mode==='consonant' && isVowel) {
-        if (totalScores[currentTeam] < 1) {
-          document.getElementById('currentTurn').textContent = 'Team '+(currentTeam+1)+' needs 1 point to buy a vowel!';
+        if (currentWordPoints[currentTeam] < 1) {
+          document.getElementById('currentTurn').textContent = 'Team '+(currentTeam+1)+' needs 1 point this word to buy a vowel!';
           guessedLetters.delete(letter); return;
         }
         totalScores[currentTeam]--;
