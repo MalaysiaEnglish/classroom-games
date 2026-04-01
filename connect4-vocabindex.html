@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect 4 – Vocab Grid</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red:       #DC2626;
+  --red-light: #FEF2F2;
+  --red-mid:   #FCA5A5;
+  --red-dark:  #991B1B;
+  --yel:       #D97706;
+  --yel-light: #FFFBEB;
+  --yel-mid:   #FDE68A;
+  --yel-dark:  #78350F;
+  --navy:      #1E3A5F;
+  --navy2:     #16304F;
+  --bg:        #F0F2F5;
+  --surface:   #FFFFFF;
+  --border:    #D1D5DB;
+  --muted:     #6B7280;
+  --text:      #111827;
+  --green:     #16A34A;
+  --radius:    8px;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ══ HEADER ══ */
+#header {
+  background: var(--navy);
+  color: white;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#header h1 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hdr-dots { display: flex; gap: 4px; }
+.dot { width: 14px; height: 14px; border-radius: 3px; }
+
+.hdr-btns { display: flex; gap: 6px; }
+.hdr-btn {
+  background: rgba(255,255,255,0.12);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.1s;
+}
+.hdr-btn:hover { background: rgba(255,255,255,0.22); }
+
+/* ══ SCREENS ══ */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ══ SETUP ══ */
+#setup {
+  max-width: 640px;
+  margin: 28px auto;
+  padding: 0 16px;
+}
+.setup-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+.setup-card h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--navy);
+}
+.field-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.field-label span { font-weight: 400; text-transform: none; letter-spacing: 0; color: #9CA3AF; font-size: 12px; }
+
+textarea {
+  width: 100%;
+  height: 240px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 11px 13px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  resize: vertical;
+  background: #FAFAFA;
+  color: var(--text);
+  outline: none;
+}
+textarea:focus { border-color: #93C5FD; background: white; }
+
+.mode-row {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+.mode-opt {
+  flex: 1;
+  min-width: 180px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+.mode-opt:hover { border-color: #93C5FD; }
+.mode-opt.chosen { border-color: var(--navy); background: #EFF6FF; }
+.mode-opt input { display: none; }
+.mode-opt strong { font-size: 14px; display: block; margin-bottom: 3px; }
+.mode-opt p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+.setup-footer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.btn-start {
+  background: var(--navy);
+  color: white;
+  border: none;
+  padding: 11px 28px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.12s;
+}
+.btn-start:hover { background: var(--navy2); }
+.btn-ghost {
+  background: white;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 11px 18px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.12s;
+}
+.btn-ghost:hover { border-color: #9CA3AF; color: var(--text); }
+#setup-err { font-size: 13px; color: var(--red); margin-top: 8px; display: none; }
+
+/* ══ GAME ══ */
+#game { padding: 10px 12px 16px; max-width: 980px; margin: 0 auto; }
+
+/* Scoreboard */
+.scoreboard {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.team-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 13px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s, background 0.15s;
+}
+.team-card.t2 { flex-direction: row-reverse; }
+.team-card.on-red  { border-color: var(--red);  background: var(--red-light); }
+.team-card.on-yel  { border-color: var(--yel);  background: var(--yel-light); }
+.t-swatch { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; }
+.t-name { font-size: 11px; color: var(--muted); }
+.t-score { font-size: 22px; font-weight: 700; line-height: 1; }
+.t-lines { font-size: 11px; color: var(--muted); margin-top: 1px; display: none; } /* shown in play-to-end */
+.turn-info { text-align: center; font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+/* Focus panel */
+#focus {
+  display: none;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px 14px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+#focus-who { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 6px; }
+#focus-txt { font-size: 22px; font-weight: 700; line-height: 1.4; color: var(--text); margin-bottom: 14px; }
+.focus-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.btn-correct {
+  background: var(--green);
+  color: white; border: none;
+  padding: 10px 26px; border-radius: var(--radius);
+  font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+.btn-wrong {
+  background: #6B7280;
+  color: white; border: none;
+  padding: 10px 26px; border-radius: var(--radius);
+  font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+.btn-cancel {
+  background: white; color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 10px 18px; border-radius: var(--radius);
+  font-size: 14px; cursor: pointer; font-family: inherit;
+}
+
+/* Grid */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-height: 78px;
+  padding: 5px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.35;
+  cursor: pointer;
+  color: var(--text);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  user-select: none;
+  transition: border-color 0.1s, transform 0.1s;
+}
+.cell:hover:not(.taken) { border-color: #93C5FD; transform: scale(1.025); }
+.cell.selected { border: 2px solid #3B82F6 !important; background: #EFF6FF; transform: scale(1.03); }
+.cell.c-red  { background: #FECACA; border-color: var(--red);  color: var(--red-dark);  cursor: default; font-weight: 700; }
+.cell.c-yel  { background: var(--yel-mid); border-color: var(--yel); color: var(--yel-dark); cursor: default; font-weight: 700; }
+.cell.taken  { cursor: default; transform: none !important; }
+.cell.win-hi { animation: wink .5s ease 5 alternate; }
+@keyframes wink { to { opacity: .15; } }
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.toolbar-left { font-size: 12px; color: var(--muted); }
+.toolbar-right { display: flex; gap: 6px; flex-wrap: wrap; }
+.t-btn {
+  background: white; color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 6px;
+  font-size: 12px; cursor: pointer; font-family: inherit;
+  transition: border-color 0.1s;
+}
+.t-btn:hover { border-color: #9CA3AF; color: var(--text); }
+
+/* Result overlay */
+#result-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+#result-overlay.show { display: flex; }
+.result-card {
+  background: white;
+  border-radius: 14px;
+  padding: 28px 36px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.result-swatch {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  margin: 0 auto 12px;
+}
+#result-title { font-size: 26px; font-weight: 800; margin-bottom: 5px; }
+#result-sub   { font-size: 14px; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
+.result-btns  { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn-replay {
+  background: var(--navy); color: white; border: none;
+  padding: 10px 22px; border-radius: var(--radius);
+  font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+.btn-edit {
+  background: white; color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 10px 18px; border-radius: var(--radius);
+  font-size: 14px; cursor: pointer; font-family: inherit;
+}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>
+    <div class="hdr-dots">
+      <div class="dot" style="background:#DC2626;"></div>
+      <div class="dot" style="background:#F59E0B;"></div>
+    </div>
+    Connect 4 — Vocab Grid
+  </h1>
+  <div class="hdr-btns">
+    <button class="hdr-btn" id="btn-fs" onclick="toggleFS()">&#x26F6; Fullscreen</button>
+    <a class="hdr-btn" href="https://gamepack.win">&#8592; Home</a>
+  </div>
+</div>
+
+<!-- ══ SETUP SCREEN ══ -->
+<div id="setup" class="screen active">
+  <div class="setup-card">
+    <h2>Set up your Vocab Grid</h2>
+
+    <div class="field-label">
+      Word / phrase list
+      <span>one item per line · min 10 · grid = 42 cells (items repeat if fewer)</span>
+    </div>
+    <textarea id="word-input" placeholder="Paste your vocabulary or sentences here — one per line..."></textarea>
+
+    <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--muted);">
+      <span id="item-count">0 items</span>
+      <button class="btn-ghost" style="padding:3px 12px;font-size:12px;" onclick="loadDefault()">Load politics example</button>
+    </div>
+
+    <div style="margin-top:18px;">
+      <div class="field-label">Game mode</div>
+      <div class="mode-row">
+        <label class="mode-opt chosen" id="mode-first">
+          <input type="radio" name="mode" value="first" checked>
+          <strong>First to Connect 4</strong>
+          <p>As soon as a team makes a line of 4, they win the round.</p>
+        </label>
+        <label class="mode-opt" id="mode-end">
+          <input type="radio" name="mode" value="end">
+          <strong>Play to End</strong>
+          <p>Fill the whole board. Team with the most lines of 4 wins.</p>
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-top:4px;">
+      <div class="field-label">Team names <span>click to edit</span></div>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <div style="width:14px;height:14px;background:#DC2626;border-radius:3px;flex-shrink:0;"></div>
+          <input id="name1" type="text" value="Team 1 (Red)" style="flex:1;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:13px;font-family:inherit;outline:none;color:var(--text);background:#FAFAFA;">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <div style="width:14px;height:14px;background:#F59E0B;border-radius:3px;flex-shrink:0;"></div>
+          <input id="name2" type="text" value="Team 2 (Yellow)" style="flex:1;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:13px;font-family:inherit;outline:none;color:var(--text);background:#FAFAFA;">
+        </div>
+      </div>
+    </div>
+
+    <div class="setup-footer">
+      <button class="btn-start" onclick="startGame()">&#9654; Start Game</button>
+      <button class="btn-ghost" onclick="clearInput()">Clear list</button>
+    </div>
+    <div id="setup-err"></div>
+  </div>
+</div>
+
+<!-- ══ GAME SCREEN ══ -->
+<div id="game" class="screen">
+
+  <div class="scoreboard">
+    <div class="team-card t1 on-red" id="card1">
+      <div class="t-swatch" style="background:#DC2626;"></div>
+      <div>
+        <div class="t-name" id="tname1">Team 1</div>
+        <div class="t-score" id="sc1">0</div>
+        <div class="t-lines" id="lines1">0 lines</div>
+      </div>
+    </div>
+    <div class="turn-info" id="turn-txt"></div>
+    <div class="team-card t2" id="card2">
+      <div>
+        <div class="t-name" id="tname2" style="text-align:right;">Team 2</div>
+        <div class="t-score" id="sc2" style="text-align:right;">0</div>
+        <div class="t-lines" id="lines2" style="text-align:right;">0 lines</div>
+      </div>
+      <div class="t-swatch" style="background:#F59E0B;"></div>
+    </div>
+  </div>
+
+  <div id="focus">
+    <div id="focus-who"></div>
+    <div id="focus-txt"></div>
+    <div class="focus-btns">
+      <button class="btn-correct" onclick="judge(true)">&#10003; Correct — Claim cell</button>
+      <button class="btn-wrong"   onclick="judge(false)">&#10007; Wrong — Pass</button>
+      <button class="btn-cancel"  onclick="cancelSel()">Cancel</button>
+    </div>
+  </div>
+
+  <div id="grid"></div>
+
+  <div class="toolbar">
+    <div class="toolbar-left" id="mode-label"></div>
+    <div class="toolbar-right">
+      <button class="t-btn" onclick="replayGame()">New board</button>
+      <button class="t-btn" onclick="goSetup()">&#9998; Edit word list</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ RESULT OVERLAY ══ -->
+<div id="result-overlay">
+  <div class="result-card">
+    <div class="result-swatch" id="res-swatch"></div>
+    <div id="result-title"></div>
+    <div id="result-sub"></div>
+    <div class="result-btns">
+      <button class="btn-replay" onclick="replayGame()">New board</button>
+      <button class="btn-edit"   onclick="goSetup()">Edit word list</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ──────────────────────── state ──────────────────────── */
+const ROWS = 6, COLS = 7, TOTAL = ROWS * COLS;
+let gridData = [];
+let board    = [];        // 0 = empty, 1 = red, 2 = yellow
+let cur      = 1;
+let sel      = null;
+let over     = false;
+let gameMode = 'first';   // 'first' | 'end'
+let scores   = [0, 0];   // wins per team (across replays)
+let savedItems = [];
+let teamNames  = ['Team 1 (Red)', 'Team 2 (Yellow)'];
+
+/* live item count */
+document.getElementById('word-input').addEventListener('input', updateCount);
+function updateCount() {
+  const n = getItems(document.getElementById('word-input').value).length;
+  document.getElementById('item-count').textContent = n + ' item' + (n !== 1 ? 's' : '');
+}
+
+/* mode selector */
+document.querySelectorAll('.mode-opt input').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('mode-first').classList.toggle('chosen', r.value === 'first');
+    document.getElementById('mode-end').classList.toggle('chosen',   r.value === 'end');
+  });
+});
+
+function getItems(raw) {
+  return raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+}
+
+function loadDefault() {
+  const items = [
+    'Influence government policy','Sign the petition','Call for a referendum',
+    'Tackle problems','Take part in a demonstration','Gauge public opinion',
+    'Change the law','Launch a campaign','Write a letter of protest','Join a political party',
+    'The shop … of stealing by installing CCTV cameras and hiring a security guard.',
+    'Max … to get longer lunch breaks at school.',
+    'Emma … to help protect the environment.',
+    'People … to decide if a new park should be built.',
+    'Zoe … that supports helping the planet.',
+    'The school … of bullying by starting a kindness club.',
+    'The class … to stop food waste at school.',
+    'Liam … because his school was removing recess time.',
+    'The school sent a survey to … about school uniforms.',
+    'Some students wanted to … to let 16-year-olds vote.',
+    'Teens spoke at a meeting and helped change what the government thought.',
+    'Jay wrote on a piece of paper to stop the park from closing.',
+    'Sarah made posters to ask for more books in the library.',
+    'A group asked for a big vote on changing a rule.',
+    'Omar joined a group that cares about animals and the environment.',
+    'A group asked for a new law to stop animal testing.',
+    'The school helped fix bullying by starting fun clubs.',
+    'Noah sent a note to the principal to ask for better lunches.',
+    'A survey asked people if they wanted more parks.',
+    'Mia joined a protest to help save the trees.'
+  ];
+  document.getElementById('word-input').value = items.join('\n');
+  updateCount();
+}
+
+function clearInput() {
+  document.getElementById('word-input').value = '';
+  updateCount();
+}
+
+function showErr(msg) {
+  const e = document.getElementById('setup-err');
+  e.textContent = msg; e.style.display = 'block';
+}
+function clearErr() { document.getElementById('setup-err').style.display = 'none'; }
+
+/* ──────────────────────── start ──────────────────────── */
+function startGame() {
+  clearErr();
+  const items = getItems(document.getElementById('word-input').value);
+  if (items.length < 10) { showErr('Please enter at least 10 items.'); return; }
+  savedItems = items;
+  gameMode = document.querySelector('input[name="mode"]:checked').value;
+  teamNames[0] = document.getElementById('name1').value.trim() || 'Team 1 (Red)';
+  teamNames[1] = document.getElementById('name2').value.trim() || 'Team 2 (Yellow)';
+  launchGame();
+}
+
+function launchGame() {
+  /* shuffle pool */
+  let pool = [];
+  while (pool.length < TOTAL) pool = pool.concat(savedItems);
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  gridData = pool.slice(0, TOTAL);
+  board = Array(TOTAL).fill(0);
+  cur = 1; sel = null; over = false;
+
+  /* names */
+  document.getElementById('tname1').textContent = teamNames[0];
+  document.getElementById('tname2').textContent = teamNames[1];
+
+  /* mode label */
+  const ml = document.getElementById('mode-label');
+  ml.textContent = gameMode === 'first'
+    ? 'First to 4 in a row wins the round'
+    : 'Play to End — most lines of 4 wins';
+
+  /* show/hide lines counter */
+  const showLines = gameMode === 'end';
+  document.getElementById('lines1').style.display = showLines ? 'block' : 'none';
+  document.getElementById('lines2').style.display = showLines ? 'block' : 'none';
+
+  switchScreen('game');
+  closeResult();
+  document.getElementById('focus').style.display = 'none';
+  buildGrid();
+  updateHeader();
+  updateScores();
+}
+
+function goSetup() {
+  switchScreen('setup');
+  closeResult();
+  updateCount();
+}
+
+function replayGame() { launchGame(); }
+
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ──────────────────────── grid ──────────────────────── */
+function buildGrid() {
+  const g = document.getElementById('grid');
+  g.innerHTML = '';
+  for (let i = 0; i < TOTAL; i++) {
+    const el = document.createElement('div');
+    el.className = 'cell';
+    el.dataset.i = i;
+    el.textContent = gridData[i];
+    el.onclick = () => pickCell(i);
+    g.appendChild(el);
+  }
+}
+
+function cellEl(i) { return document.querySelector('.cell[data-i="' + i + '"]'); }
+
+/* ──────────────────────── header ──────────────────────── */
+function updateHeader() {
+  document.getElementById('turn-txt').innerHTML =
+    over ? '' : '<strong>' + teamNames[cur - 1] + '</strong><br>pick a cell';
+  const c1 = document.getElementById('card1');
+  const c2 = document.getElementById('card2');
+  c1.className = 'team-card t1' + (cur === 1 && !over ? ' on-red' : '');
+  c2.className = 'team-card t2' + (cur === 2 && !over ? ' on-yel' : '');
+}
+
+function updateScores() {
+  document.getElementById('sc1').textContent = scores[0];
+  document.getElementById('sc2').textContent = scores[1];
+  if (gameMode === 'end') {
+    const [l1, l2] = countAllLines();
+    document.getElementById('lines1').textContent = l1 + ' line' + (l1 !== 1 ? 's' : '');
+    document.getElementById('lines2').textContent = l2 + ' line' + (l2 !== 1 ? 's' : '');
+  }
+}
+
+/* ──────────────────────── interaction ──────────────────────── */
+function pickCell(i) {
+  if (over || board[i] !== 0) return;
+  if (sel !== null) { const p = cellEl(sel); if (p) p.classList.remove('selected'); }
+  sel = i;
+  cellEl(i).classList.add('selected');
+  document.getElementById('focus-who').textContent = teamNames[cur - 1] + "'s turn";
+  document.getElementById('focus-txt').textContent = gridData[i];
+  const fp = document.getElementById('focus');
+  fp.style.borderColor = cur === 1 ? '#DC2626' : '#D97706';
+  fp.style.display = 'block';
+}
+
+function cancelSel() {
+  if (sel !== null) { const e = cellEl(sel); if (e) e.classList.remove('selected'); sel = null; }
+  document.getElementById('focus').style.display = 'none';
+}
+
+function judge(correct) {
+  if (sel === null) return;
+  if (correct) {
+    board[sel] = cur;
+    const el = cellEl(sel);
+    el.classList.remove('selected');
+    el.classList.add(cur === 1 ? 'c-red' : 'c-yel', 'taken');
+    el.onclick = null;
+    sel = null;
+    document.getElementById('focus').style.display = 'none';
+
+    if (gameMode === 'first') {
+      if (checkWin(cur)) { doWinFirst(cur); return; }
+    } else {
+      highlightNewLines();
+      updateScores();
+      if (board.every(v => v !== 0)) { doWinEnd(); return; }
+    }
+  } else {
+    if (sel !== null) { const e = cellEl(sel); if (e) e.classList.remove('selected'); sel = null; }
+    document.getElementById('focus').style.display = 'none';
+  }
+  cur = cur === 1 ? 2 : 1;
+  updateHeader();
+}
+
+/* ──────────────────────── win detection ──────────────────────── */
+function ix(r, c) { return r * COLS + c; }
+const DIRS = [[0,1],[1,0],[1,1],[1,-1]];
+
+/* Returns array of winning cell-index arrays for player p */
+function getWinLines(p) {
+  const lines = [];
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      for (const [dr, dc] of DIRS) {
+        const cells = [];
+        for (let k = 0; k < 4; k++) {
+          const nr = r + dr*k, nc = c + dc*k;
+          if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS || board[ix(nr,nc)] !== p) { cells.length = 0; break; }
+          cells.push(ix(nr, nc));
+        }
+        if (cells.length === 4) lines.push(cells);
+      }
+    }
+  }
+  return lines;
+}
+
+function checkWin(p) { return getWinLines(p).length > 0; }
+
+function countAllLines() {
+  return [getWinLines(1).length, getWinLines(2).length];
+}
+
+let highlightedLines = new Set();
+
+function highlightNewLines() {
+  for (const p of [1, 2]) {
+    for (const line of getWinLines(p)) {
+      const key = line.sort((a,b) => a-b).join(',');
+      if (!highlightedLines.has(key)) {
+        highlightedLines.add(key);
+        line.forEach(ci => { const e = cellEl(ci); if (e) e.classList.add('win-hi'); });
+      }
+    }
+  }
+}
+
+/* ──────────────────────── end conditions ──────────────────────── */
+function doWinFirst(p) {
+  over = true;
+  scores[p - 1]++;
+  updateScores();
+  getWinLines(p).forEach(line => line.forEach(ci => { const e = cellEl(ci); if (e) e.classList.add('win-hi'); }));
+  document.getElementById('focus').style.display = 'none';
+  updateHeader();
+  showResult(
+    p === 1 ? '#DC2626' : '#D97706',
+    teamNames[p - 1] + ' wins!',
+    'Connect 4 — well played! Round wins: ' + teamNames[0] + ' ' + scores[0] + ' – ' + scores[1] + ' ' + teamNames[1]
+  );
+}
+
+function doWinEnd() {
+  over = true;
+  document.getElementById('focus').style.display = 'none';
+  const [l1, l2] = countAllLines();
+  updateHeader();
+  let colour, title, sub;
+  if (l1 > l2) {
+    scores[0]++;
+    colour = '#DC2626';
+    title  = teamNames[0] + ' wins!';
+    sub    = teamNames[0] + ': ' + l1 + ' line' + (l1!==1?'s':'') + ' · ' +
+             teamNames[1] + ': ' + l2 + ' line' + (l2!==1?'s':'');
+  } else if (l2 > l1) {
+    scores[1]++;
+    colour = '#D97706';
+    title  = teamNames[1] + ' wins!';
+    sub    = teamNames[0] + ': ' + l1 + ' line' + (l1!==1?'s':'') + ' · ' +
+             teamNames[1] + ': ' + l2 + ' line' + (l2!==1?'s':'');
+  } else {
+    colour = '#6B7280';
+    title  = "It's a draw!";
+    sub    = 'Both teams: ' + l1 + ' line' + (l1!==1?'s':'') + ' each';
+  }
+  updateScores();
+  showResult(colour, title, sub);
+}
+
+function showResult(colour, title, sub) {
+  document.getElementById('res-swatch').style.background = colour;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-sub').textContent   = sub;
+  document.getElementById('result-overlay').classList.add('show');
+}
+function closeResult() { document.getElementById('result-overlay').classList.remove('show'); }
+
+/* ──────────────────────── fullscreen ──────────────────────── */
+function toggleFS() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+  else document.exitFullscreen();
+}
+document.addEventListener('fullscreenchange', () => {
+  document.getElementById('btn-fs').textContent =
+    document.fullscreenElement ? '✕ Exit Fullscreen' : '⛶ Fullscreen';
+});
+
+/* ──────────────────────── init ──────────────────────── */
+updateCount();
+</script>
+</body>
+</html>
