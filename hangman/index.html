@@ -103,6 +103,12 @@
         </div>
       </div>
 
+      <div class="hm-setup-section">
+        <label>Custom Words <span style="font-weight:400;opacity:.6;font-size:.8em;">(optional — paste a list for this session)</span></label>
+        <textarea id="customWordInput" placeholder="One word or phrase per line, e.g.&#10;PHOTOSYNTHESIS&#10;ROTI CANAI&#10;SOLAR SYSTEM&#10;&#10;These are added to (or replace) the topic selection above." style="width:100%;min-height:110px;background:rgba(10,18,30,0.85);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#e8e0cc;font-family:'DM Mono',monospace;font-size:.82rem;padding:12px 14px;resize:vertical;outline:none;line-height:1.6;box-sizing:border-box;"></textarea>
+        <div id="customWordCount" style="font-size:.72rem;color:var(--slate,#8a9ab5);margin-top:5px;min-height:1em;font-family:'DM Mono',monospace;letter-spacing:.04em;"></div>
+      </div>
+
       <button class="hm-start-btn" id="startBtn">▶ Start Game</button>
     </div>
 
@@ -167,7 +173,19 @@
     let curriculumWordMap = {}; // topic → [words]
     let selectedCurriculumUnit = null; // {level, unit} or null
 
+    function parseCustomWords() {
+      const raw = (document.getElementById('customWordInput') || {}).value || '';
+      return raw.split('\n')
+        .map(l => l.split('|')[0].trim().toUpperCase())
+        .filter(l => l && !l.startsWith('#'));
+    }
+
     function buildWordPool() {
+      const custom = parseCustomWords();
+      if (custom.length) {
+        // Custom words only — ignore topic picker
+        return custom;
+      }
       if (selectedSources.size === 0) {
         // All built-ins
         return Object.values(BUILT_IN).flatMap(c => c.words);
@@ -474,7 +492,17 @@
 
     drawHangman(0);
     window.addEventListener('resize', () => { if (currentWord) renderBoard(); });
-    window.addEventListener('load', buildWordPicker);
+    window.addEventListener('load', () => {
+      buildWordPicker();
+      const ta = document.getElementById('customWordInput');
+      const countEl = document.getElementById('customWordCount');
+      ta.addEventListener('input', () => {
+        const words = parseCustomWords();
+        countEl.textContent = words.length
+          ? words.length + ' word' + (words.length > 1 ? 's' : '') + ' ready — topic selection will be ignored'
+          : '';
+      });
+    });
   </script>
 </body>
 </html>
