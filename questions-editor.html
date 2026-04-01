@@ -103,12 +103,12 @@
       <div class="field-row">
         <div class="field-group" style="flex:3; min-width:200px;">
           <label>Topic string</label>
-          <input type="text" id="qTopic" placeholder="e.g. S6/U4/L1 The United Kingdom" list="topicSuggestions" autocomplete="off">
+          <input type="text" id="qTopic" placeholder="e.g. L6/U4/L1 The United Kingdom" list="topicSuggestions" autocomplete="off">
           <datalist id="topicSuggestions"></datalist>
         </div>
         <div class="field-group" style="min-width:80px; max-width:100px;">
-          <label>Stage</label>
-          <input type="number" id="qStage" min="1" max="12" placeholder="6">
+          <label>Level</label>
+          <input type="number" id="qLevel" min="1" max="12" placeholder="6">
         </div>
         <div class="field-group" style="min-width:80px; max-width:100px;">
           <label>Unit</label>
@@ -134,8 +134,8 @@
         <select id="filterTopic" onchange="renderQuestions()">
           <option value="">All topics</option>
         </select>
-        <label>Stage:</label>
-        <select id="filterStage" onchange="filterByStage()">
+        <label>Level:</label>
+        <select id="filterLevel" onchange="filterByLevel()">
           <option value="">All</option>
         </select>
         <span class="count-badge" id="qCount"></span>
@@ -157,8 +157,8 @@ A: Endurance
 W: Discovery
 W: Endeavour
 W: Resolution
-T: S4/U8/L1 Tales of Survival
-S: 4
+T: L4/U8/L1 Tales of Survival
+Lv: 4
 U: 8
 L: 1
 
@@ -167,19 +167,19 @@ A: His jacket was orange on the inside so he turned it inside out
 W: He climbed a tree to see further
 W: He started a fire using his phone screen
 W: He found a map in his backpack
-T: S4/U8/L1 Tales of Survival
-S: 4
+T: L4/U8/L1 Tales of Survival
+Lv: 4
 U: 8
 L: 1</div>
 
       <div class="warn-box">
-        ⚠ <strong>Q:</strong> Question &nbsp;|&nbsp; <strong>A:</strong> Correct answer &nbsp;|&nbsp; <strong>W:</strong> Wrong answer (3 required) &nbsp;|&nbsp; <strong>T:</strong> Topic string &nbsp;|&nbsp; <strong>S/U/L:</strong> Stage / Unit / Lesson
+        ⚠ <strong>Q:</strong> Question &nbsp;|&nbsp; <strong>A:</strong> Correct answer &nbsp;|&nbsp; <strong>W:</strong> Wrong answer (3 required) &nbsp;|&nbsp; <strong>T:</strong> Topic string &nbsp;|&nbsp; <strong>Lv/U/L:</strong> Level / Unit / Lesson
       </div>
 
       <div class="field-row">
         <div class="field-group" style="flex:1;">
           <label>Paste questions here</label>
-          <textarea id="bulkInput" rows="16" placeholder="Q: Your question here&#10;A: Correct answer&#10;W: Wrong answer 1&#10;W: Wrong answer 2&#10;W: Wrong answer 3&#10;T: S6/U4/L1 Topic Name&#10;S: 6&#10;U: 4&#10;L: 1"></textarea>
+          <textarea id="bulkInput" rows="16" placeholder="Q: Your question here&#10;A: Correct answer&#10;W: Wrong answer 1&#10;W: Wrong answer 2&#10;W: Wrong answer 3&#10;T: L6/U4/L1 Topic Name&#10;Lv: 6&#10;U: 4&#10;L: 1"></textarea>
         </div>
       </div>
 
@@ -265,7 +265,7 @@ window.QUESTIONS_DATA = [];
       const d2         = document.getElementById('qD2').value.trim();
       const d3         = document.getElementById('qD3').value.trim();
       const topic      = document.getElementById('qTopic').value.trim() || 'General';
-      const stage      = parseInt(document.getElementById('qStage').value) || 0;
+      const level = parseInt(document.getElementById('qLevel').value) || 0;
       const unit       = parseInt(document.getElementById('qUnit').value) || 0;
       const lesson     = parseInt(document.getElementById('qLesson').value) || 0;
 
@@ -279,7 +279,7 @@ window.QUESTIONS_DATA = [];
         return;
       }
 
-      questions.push({ question, answer, distractors, topic, stage, unit, lesson, _id: Date.now() });
+      questions.push({ question, answer, distractors, topic, level, unit, lesson, _id: Date.now() });
       clearAddForm();
 
       const fb = document.getElementById('addFeedback');
@@ -305,12 +305,12 @@ window.QUESTIONS_DATA = [];
     // ══ Render questions ═══════════════════════════════════════════
     function renderQuestions() {
       const ft   = document.getElementById('filterTopic').value;
-      const fs   = document.getElementById('filterStage').value;
+      const fl = document.getElementById("filterLevel").value;
       const list = document.getElementById('questionList');
 
       let filtered = questions;
       if (ft) filtered = filtered.filter(q => q.topic === ft);
-      if (fs) filtered = filtered.filter(q => String(q.stage) === fs);
+      if (fl) filtered = filtered.filter(q => String(q.level) === fl);
 
       document.getElementById('qCount').textContent =
         `${filtered.length} of ${questions.length} question${questions.length !== 1 ? 's' : ''}`;
@@ -330,7 +330,7 @@ window.QUESTIONS_DATA = [];
             <div class="item-q">${escHtml(q.question)}</div>
             <div class="item-answer">✓ ${escHtml(q.answer)}</div>
             <div class="item-distractors">${escHtml(dText)}</div>
-            <div class="item-meta">${escHtml(q.topic)} · Stage ${q.stage} · Unit ${q.unit} · Lesson ${q.lesson}</div>
+            <div class="item-meta">${escHtml(q.topic)} · Level ${q.level} · Unit ${q.unit} · Lesson ${q.lesson}</div>
           </div>
           <button class="btn-del" onclick="deleteQuestion(${q._id})" title="Delete">×</button>`;
         list.appendChild(div);
@@ -344,15 +344,15 @@ window.QUESTIONS_DATA = [];
     // ══ Filters ════════════════════════════════════════════════════
     function updateFilters() {
       const topics = [...new Set(questions.map(q => q.topic))].sort();
-      const stages = [...new Set(questions.map(q => q.stage))].sort((a,b) => a-b);
+      const levels = [...new Set(questions.map(q => q.level))].sort((a,b) => a-b);
       fillSelect('filterTopic', topics);
-      fillSelect('filterStage', stages);
+      fillSelect('filterLevel', levels);
     }
 
-    function filterByStage() {
-      const fs = document.getElementById('filterStage').value;
-      const topics = fs
-        ? [...new Set(questions.filter(q => String(q.stage) === fs).map(q => q.topic))].sort()
+    function filterByLevel() {
+      const fl = document.getElementById("filterLevel").value;
+      const topics = fl
+        ? [...new Set(questions.filter(q => String(q.level) === fl).map(q => q.topic))].sort()
         : [...new Set(questions.map(q => q.topic))].sort();
       fillSelect('filterTopic', topics);
       document.getElementById('filterTopic').value = '';
@@ -404,7 +404,7 @@ window.QUESTIONS_DATA = [];
         const aArr = get('A');
         const wArr = get('W');
         const tArr = get('T');
-        const sArr = get('S');
+        const lvArr = get('LV');
         const uArr = get('U');
         const lArr = get('L');
 
@@ -418,7 +418,7 @@ window.QUESTIONS_DATA = [];
           answer:      aArr[0],
           distractors: wArr.slice(0, 3),
           topic:       tArr[0] || 'General',
-          stage:       parseInt(sArr[0]) || 0,
+          level:       parseInt(lvArr[0]) || 0,
           unit:        parseInt(uArr[0]) || 0,
           lesson:      parseInt(lArr[0]) || 0,
         });
@@ -454,7 +454,7 @@ window.QUESTIONS_DATA = [];
             '<div class="item-q">' + escHtml(item.question) + '</div>' +
             '<div class="item-answer">✓ ' + escHtml(item.answer) + '</div>' +
             '<div class="item-distractors">' + escHtml(dText) + '</div>' +
-            '<div class="item-meta">' + escHtml(item.topic) + ' · S' + item.stage + ' U' + item.unit + ' L' + item.lesson + '</div>' +
+            '<div class="item-meta">' + escHtml(item.topic) + ' · S' + item.level + ' U' + item.unit + ' L' + item.lesson + '</div>' +
           '</div>' +
           '<button class="btn-del" onclick="removeBulkItem(' + item._pid + ')" title="Remove">×</button>';
         list.appendChild(div);
@@ -499,7 +499,7 @@ window.QUESTIONS_DATA = [];
         lines += `\n  // ── ${topic} ${'─'.repeat(Math.max(0,50-topic.length))}\n`;
         questions.filter(q => q.topic === topic).forEach(q => {
           const dists = q.distractors.map(d => `"${esc(d)}"`).join(', ');
-          lines += `  { question: "${esc(q.question)}", answer: "${esc(q.answer)}", distractors: [${dists}], topic: "${esc(q.topic)}", stage: ${q.stage}, unit: ${q.unit}, lesson: ${q.lesson} },\n`;
+          lines += `  { question: "${esc(q.question)}", answer: "${esc(q.answer)}", distractors: [${dists}], topic: "${esc(q.topic)}", level: ${q.level}, unit: ${q.unit}, lesson: ${q.lesson} },\n`;
         });
       });
 

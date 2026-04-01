@@ -101,16 +101,16 @@
   <!-- Full filter panel -->
   <div class="qf-panel" id="qf-panel">
     <div class="qf-col">
-      <div class="qf-heading">&#127891; Stage / Unit</div>
+      <div class="qf-heading">&#127891; Level / Unit</div>
       <div class="qf-units" id="qf-units"><span class="qf-empty">Loading&hellip;</span></div>
     </div>
     <div class="qf-col qf-col-wide">
       <div class="qf-heading">&#128214; Topic</div>
-      <div class="qf-checklist" id="qf-topics"><span class="qf-empty">Select a Stage / Unit first</span></div>
+      <div class="qf-checklist" id="qf-topics"><span class="qf-empty">Select a Level / Unit first</span></div>
     </div>
     <div class="qf-col">
       <div class="qf-heading">&#128203; Lesson</div>
-      <div class="qf-checklist" id="qf-lessons"><span class="qf-empty">Select a Stage / Unit first</span></div>
+      <div class="qf-checklist" id="qf-lessons"><span class="qf-empty">Select a Level / Unit first</span></div>
     </div>
     <div class="qf-status-bar">
       <span class="qf-status" id="qf-status">No questions selected &mdash; free play</span>
@@ -280,7 +280,7 @@
       const el = document.getElementById('qf-summary-text');
       if (!qPool.length) { el.innerHTML = 'No questions \u2014 free play'; return; }
       const unitStr = selectedUnit && selectedUnit !== 'unlinked'
-        ? 'S' + selectedUnit.stage + '/U' + selectedUnit.unit + ' \u00b7 ' : '';
+        ? 'L' + selectedUnit.level + '/U' + selectedUnit.unit + ' \u00b7 ' : '';
       const topics = [...new Set(qPool.map(q => q.topic))];
       const topicStr = topics.length === 1 ? topics[0] : topics.length + ' topics';
       el.innerHTML = unitStr + '<strong>' + qPool.length + ' questions</strong> \u00b7 ' + topicStr +
@@ -301,20 +301,20 @@
       }
       const unitMap = new Map();
       window.QUESTIONS.forEach(q => {
-        if (q.stage != null && q.unit != null) {
-          const key = 'S' + q.stage + '/U' + q.unit;
-          if (!unitMap.has(key)) unitMap.set(key, { stage: q.stage, unit: q.unit });
+        if (q.level != null && q.unit != null) {
+          const key = 'L' + q.level + '/U' + q.unit;
+          if (!unitMap.has(key)) unitMap.set(key, { level: q.level, unit: q.unit });
         }
       });
-      const hasUnlinked = window.QUESTIONS.some(q => q.stage == null);
+      const hasUnlinked = window.QUESTIONS.some(q => q.level == null);
       container.innerHTML = '';
       [...unitMap.values()]
-        .sort((a, b) => a.stage !== b.stage ? a.stage - b.stage : a.unit - b.unit)
-        .forEach(({ stage, unit }) => {
+        .sort((a, b) => a.level !== b.level ? a.level - b.level : a.unit - b.unit)
+        .forEach(({ level, unit }) => {
           const btn = document.createElement('button');
           btn.className = 'qf-unit-btn';
-          btn.textContent = 'S' + stage + '/U' + unit;
-          btn.onclick = () => selectUnit(stage, unit, btn);
+          btn.textContent = 'L' + level + '/U' + unit;
+          btn.onclick = () => selectUnit(level, unit, btn);
           container.appendChild(btn);
         });
       if (hasUnlinked) {
@@ -325,23 +325,23 @@
         container.appendChild(btn);
       }
     }
-    function selectUnit(stage, unit, btnEl) {
+    function selectUnit(level, unit, btnEl) {
       if (btnEl.classList.contains('active')) {
         btnEl.classList.remove('active');
         selectedUnit = null;
-        document.getElementById('qf-topics').innerHTML = '<span class="qf-empty">Select a Stage / Unit first</span>';
-        document.getElementById('qf-lessons').innerHTML = '<span class="qf-empty">Select a Stage / Unit first</span>';
+        document.getElementById('qf-topics').innerHTML = '<span class="qf-empty">Select a Level / Unit first</span>';
+        document.getElementById('qf-lessons').innerHTML = '<span class="qf-empty">Select a Level / Unit first</span>';
         rebuildPool(); return;
       }
       document.querySelectorAll('.qf-unit-btn').forEach(b => b.classList.remove('active'));
       btnEl.classList.add('active');
-      selectedUnit = stage === 'unlinked' ? 'unlinked' : { stage: parseInt(stage), unit: parseInt(unit) };
+      selectedUnit = level === 'unlinked' ? 'unlinked' : { level: parseInt(level), unit: parseInt(unit) };
       buildTopicsAndLessons();
     }
     function questionsForUnit() {
       if (!selectedUnit) return [];
-      if (selectedUnit === 'unlinked') return window.QUESTIONS.filter(q => q.stage == null);
-      return window.QUESTIONS.filter(q => q.stage === selectedUnit.stage && q.unit === selectedUnit.unit);
+      if (selectedUnit === 'unlinked') return window.QUESTIONS.filter(q => q.level == null);
+      return window.QUESTIONS.filter(q => q.level === selectedUnit.level && q.unit === selectedUnit.unit);
     }
     function buildTopicsAndLessons() {
       const qs = questionsForUnit();

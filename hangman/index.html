@@ -165,7 +165,7 @@
     // selectedSources: Set of keys — each key is either a builtin key or a curriculum topic string
     const selectedSources = new Set(); // empty = all built-ins
     let curriculumWordMap = {}; // topic → [words]
-    let selectedCurriculumUnit = null; // {stage, unit} or null
+    let selectedCurriculumUnit = null; // {level, unit} or null
 
     function buildWordPool() {
       if (selectedSources.size === 0) {
@@ -203,11 +203,11 @@
         // Build unit map
         const unitMap = new Map();
         window.CUSTOM_CONTENT.words.forEach(w => {
-          // topic format: "S5/U8/L3 Something" — extract stage/unit
-          const m = w.topic && w.topic.match(/^S(\d+)\/U(\d+)/);
+          // topic format: "L5/U8/L3 Something" — extract level/unit
+          const m = w.topic && w.topic.match(/^L(\d+)\/U(\d+)/);
           if (m) {
-            const key = 'S'+m[1]+'/U'+m[2];
-            if (!unitMap.has(key)) unitMap.set(key, {stage:parseInt(m[1]), unit:parseInt(m[2])});
+            const key = 'L'+m[1]+'/U'+m[2];
+            if (!unitMap.has(key)) unitMap.set(key, {level:parseInt(m[1]), unit:parseInt(m[2])});
           }
           // Also build word map by topic
           const t = w.topic || 'Custom';
@@ -217,12 +217,12 @@
 
         const unitsEl = document.getElementById('curriculumUnits');
         unitsEl.innerHTML = '';
-        [...unitMap.values()].sort((a,b) => a.stage!==b.stage ? a.stage-b.stage : a.unit-b.unit)
-          .forEach(({stage, unit}) => {
+        [...unitMap.values()].sort((a,b) => a.level!==b.level ? a.level-b.level : a.unit-b.unit)
+          .forEach(({level, unit}) => {
             const btn = document.createElement('button');
             btn.className = 'qf-unit-btn';
-            btn.textContent = 'S'+stage+'/U'+unit;
-            btn.onclick = () => selectCurriculumUnit(stage, unit, btn);
+            btn.textContent = 'L'+level+'/U'+unit;
+            btn.onclick = () => selectCurriculumUnit(level, unit, btn);
             unitsEl.appendChild(btn);
           });
       }
@@ -247,7 +247,7 @@
       updateWordFilterSummary();
     }
 
-    function selectCurriculumUnit(stage, unit, btnEl) {
+    function selectCurriculumUnit(level, unit, btnEl) {
       const topicsEl = document.getElementById('curriculumTopics');
       if (btnEl.classList.contains('active')) {
         // Deselect unit — remove all its topics from sources
@@ -255,17 +255,17 @@
         selectedCurriculumUnit = null;
         topicsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
         // Remove any curriculum sources from this unit
-        const prefix = 'S'+stage+'/U'+unit+'/';
+        const prefix = 'L'+level+'/U'+unit+'/';
         [...selectedSources].forEach(k => { if (k.startsWith(prefix)) selectedSources.delete(k); });
         updateWordFilterSummary(); return;
       }
       document.querySelectorAll('#curriculumUnits .qf-unit-btn').forEach(b => b.classList.remove('active'));
       btnEl.classList.add('active');
-      selectedCurriculumUnit = {stage, unit};
+      selectedCurriculumUnit = {level, unit};
 
       // Build topic checkboxes for this unit
       topicsEl.innerHTML = '';
-      const unitPrefix = 'S'+stage+'/U'+unit+'/';
+      const unitPrefix = 'L'+level+'/U'+unit+'/';
       const unitTopics = Object.keys(curriculumWordMap).filter(t => t.startsWith(unitPrefix)).sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
       if (!unitTopics.length) { topicsEl.innerHTML = '<span class="qf-empty">No words for this unit</span>'; return; }
       unitTopics.forEach(topic => {

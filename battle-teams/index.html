@@ -159,15 +159,15 @@
         container.innerHTML='<span class="qf-empty">questions.js not loaded</span>'; return;
       }
       const unitMap=new Map();
-      window.QUESTIONS.forEach(q=>{ if(q.stage!=null&&q.unit!=null) { const key='S'+q.stage+'/U'+q.unit; if(!unitMap.has(key)) unitMap.set(key,{stage:q.stage,unit:q.unit}); } });
+      window.QUESTIONS.forEach(q=>{ if(q.level!=null&&q.unit!=null) { const key='L'+q.level+'/U'+q.unit; if(!unitMap.has(key)) unitMap.set(key,{level:q.level,unit:q.unit}); } });
       container.innerHTML='';
-      [...unitMap.values()].sort((a,b)=>a.stage!==b.stage?a.stage-b.stage:a.unit-b.unit).forEach(({stage,unit})=>{
-        const btn=document.createElement('button'); btn.className='qf-unit-btn'; btn.textContent='S'+stage+'/U'+unit;
-        btn.onclick=()=>selectUnit(stage,unit,btn); container.appendChild(btn);
+      [...unitMap.values()].sort((a,b)=>a.level!==b.level?a.level-b.level:a.unit-b.unit).forEach(({level, unit})=>{
+        const btn=document.createElement('button'); btn.className='qf-unit-btn'; btn.textContent='L'+level+'/U'+unit;
+        btn.onclick=()=>selectUnit(level,unit,btn); container.appendChild(btn);
       });
     }
 
-    function selectUnit(stage,unit,btnEl) {
+    function selectUnit(level,unit,btnEl) {
       if (btnEl.classList.contains('active')) {
         btnEl.classList.remove('active'); selectedUnit=null;
         document.getElementById('qfTopics').innerHTML='<span class="qf-empty">Select a unit first</span>';
@@ -175,13 +175,13 @@
         rebuildPool(); return;
       }
       document.querySelectorAll('.qf-unit-btn').forEach(b=>b.classList.remove('active'));
-      btnEl.classList.add('active'); selectedUnit={stage:parseInt(stage),unit:parseInt(unit)};
+      btnEl.classList.add('active'); selectedUnit={level:parseInt(level),unit:parseInt(unit)};
       buildTopicsAndLessons();
     }
 
     function questionsForUnit() {
       if (!selectedUnit) return [];
-      return window.QUESTIONS.filter(q=>q.stage===selectedUnit.stage&&q.unit===selectedUnit.unit);
+      return window.QUESTIONS.filter(q=>q.level===selectedUnit.level&&q.unit===selectedUnit.unit);
     }
 
     function buildTopicsAndLessons() {
@@ -237,7 +237,7 @@
       if (!qPool.length) { el.textContent='No questions — free play'; st.textContent='No questions selected — free play'; }
       else {
         const topics=[...new Set(qPool.map(q=>q.topic))];
-        const unitStr=selectedUnit?'S'+selectedUnit.stage+'/U'+selectedUnit.unit+' · ':'';
+        const unitStr=selectedUnit?'L'+selectedUnit.level+'/U'+selectedUnit.unit+' · ':'';
         const topicStr=topics.length===1?topics[0]:topics.length+' topics';
         el.innerHTML=unitStr+'<strong>'+qPool.length+' questions</strong> · '+topicStr+' · '+(qMode==='teacher'?'Teacher reads':'On screen');
         st.innerHTML='<strong>'+qPool.length+' questions</strong> ready — '+topicStr;

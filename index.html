@@ -102,7 +102,7 @@
     }
     .toolkit-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-    .stage-nav {
+    .level-nav {
       position: relative;
       z-index: 1;
       display: flex;
@@ -112,7 +112,7 @@
       padding: 20px 16px 0;
     }
 
-    .stage-tab {
+    .level-tab {
       padding: 7px 18px;
       background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
@@ -126,9 +126,9 @@
       letter-spacing: 0.04em;
       position: relative;
     }
-    .stage-tab:hover { background: rgba(255,255,255,0.08); color: var(--text); }
-    .stage-tab.active { background: var(--accent); color: #0a0d14; border-color: var(--accent); }
-    .stage-tab.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .level-tab:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+    .level-tab.active { background: var(--accent); color: #0a0d14; border-color: var(--accent); }
+    .level-tab.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
     .coming {
       position: absolute;
@@ -151,10 +151,10 @@
       margin: 0 auto;
     }
 
-    .stage-panel { display: none; }
-    .stage-panel.active { display: block; }
+    .level-panel { display: none; }
+    .level-panel.active { display: block; }
 
-    .stage-label {
+    .level-label {
       font-family: 'Unbounded', sans-serif;
       font-size: 0.7rem;
       font-weight: 700;
@@ -405,22 +405,22 @@
     <p class="tagline">IGCSE English · TEFL Malaysia · No login · Works offline</p>
   </header>
 
-  <nav class="stage-nav">
-    <button class="stage-tab" onclick="showStage('s3')">Stage 3</button>
-    <button class="stage-tab" onclick="showStage('s4')">Stage 4</button>
-    <button class="stage-tab active" onclick="showStage('s5')">Stage 5</button>
-    <button class="stage-tab" onclick="showStage('s6')">Stage 6</button>
-    <button class="stage-tab disabled" title="Coming soon">Stage 7<span class="coming">soon</span></button>
-    <button class="stage-tab" onclick="showStage('s8')">Stage 8</button>
-    <button class="stage-tab" onclick="showStage('s9')">Stage 9</button>
-    <button class="stage-tab disabled" title="Coming soon">Stage 10<span class="coming">soon</span></button>
+  <nav class="level-nav">
+    <button class="level-tab" onclick="showLevel('l3')">Level 3</button>
+    <button class="level-tab" onclick="showLevel('l4')">Level 4</button>
+    <button class="level-tab active" onclick="showLevel('l5')">Level 5</button>
+    <button class="level-tab" onclick="showLevel('l6')">Level 6</button>
+    <button class="level-tab disabled" title="Coming soon">Level 7<span class="coming">soon</span></button>
+    <button class="level-tab" onclick="showLevel('l8')">Level 8</button>
+    <button class="level-tab" onclick="showLevel('l9')">Level 9</button>
+    <button class="level-tab disabled" title="Coming soon">Level 10<span class="coming">soon</span></button>
   </nav>
 
   <main>
 
-    <!-- ── STAGE 3 ── -->
-    <div class="stage-panel" id="panel-s3">
-      <div class="stage-label">Stage 3</div>
+    <!-- ── LEVEL 3 ── -->
+    <div class="level-panel" id="panel-l3">
+      <div class="level-label">Level 3</div>
       <div class="units-grid">
 
         <!-- S3 U1 -->
@@ -433,9 +433,9 @@
               <div class="unit-grammar">Present Perfect ever/never · for/since</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="1"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -451,9 +451,9 @@
               <div class="unit-grammar">Present Perfect vs Past Simple · already/yet/just</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="2"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -469,9 +469,9 @@
               <div class="unit-grammar">Past Continuous · Past Simple + Past Continuous</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="3"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -487,9 +487,9 @@
               <div class="unit-grammar">Articles a/an/the · Relative Pronouns who/which/where</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="4"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -505,9 +505,9 @@
               <div class="unit-grammar">Comparatives · (not) as…as · too and enough</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="5"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -523,9 +523,9 @@
               <div class="unit-grammar">used to · didn't use to · Did … use to?</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="6"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -541,9 +541,9 @@
               <div class="unit-grammar">will for predictions · Present Continuous for future</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="7"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -559,9 +559,9 @@
               <div class="unit-grammar">be going to: plans · be going to: predictions</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="8"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -577,9 +577,9 @@
               <div class="unit-grammar">First Conditional · First Conditional questions</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="9"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -595,9 +595,9 @@
               <div class="unit-grammar">may/might/could · have to / don't have to</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="10"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="10"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="10"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="10"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -613,9 +613,9 @@
               <div class="unit-grammar">Present Simple Passive · Passive questions &amp; negatives</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="11"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="11"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="11"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="11"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -631,9 +631,9 @@
               <div class="unit-grammar">Past Simple Passive · Past Passive questions</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="3" data-words-unit="12"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="3" data-sentences-unit="12"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="3" data-questions-unit="12"></div>
+          <div class="content-loaded" data-words-level="3" data-words-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="12"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -643,9 +643,9 @@
     </div>
 
 
-    <!-- ── STAGE 4 ── -->
-    <div class="stage-panel" id="panel-s4">
-      <div class="stage-label">Stage 4</div>
+    <!-- ── LEVEL 4 ── -->
+    <div class="level-panel" id="panel-l4">
+      <div class="level-label">Level 4</div>
       <div class="units-grid">
         <!-- S4 U1 -->
         <div class="unit-card">
@@ -657,9 +657,9 @@
               <div class="unit-grammar">be going to vs will · Present Continuous for Future</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="1"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -675,9 +675,9 @@
               <div class="unit-grammar">First Conditional · Second Conditional</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="2"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -693,9 +693,9 @@
               <div class="unit-grammar">Indefinite Pronouns · Question Tags</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="3"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -711,9 +711,9 @@
               <div class="unit-grammar">Passive Simple Present &amp; Past · Passive Present Continuous</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="4"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -729,9 +729,9 @@
               <div class="unit-grammar">Passive Present Perfect · Passive Questions</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="5"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -747,9 +747,9 @@
               <div class="unit-grammar">Present Perfect Continuous · for and since</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="6"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -765,9 +765,9 @@
               <div class="unit-grammar">Modals of Obligation · Reflexive Pronouns</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="7"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -783,9 +783,9 @@
               <div class="unit-grammar">Past Perfect · Survival Vocabulary · Imperatives</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="8"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -801,9 +801,9 @@
               <div class="unit-grammar">Third Conditional</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="9"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -819,9 +819,9 @@
               <div class="unit-grammar">Reported Speech: said &amp; told</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="10"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="10"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="10"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="10"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -837,9 +837,9 @@
               <div class="unit-grammar">Reported Speech: Questions · asked &amp; told</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="11"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="11"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="11"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="11"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -855,9 +855,9 @@
               <div class="unit-grammar">Wish · Phrasal Verbs</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="4" data-words-unit="12"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="4" data-sentences-unit="12"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="4" data-questions-unit="12"></div>
+          <div class="content-loaded" data-words-level="4" data-words-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="12"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -866,9 +866,9 @@
       </div>
     </div>
 
-    <!-- ── STAGE 5 ── -->
-    <div class="stage-panel active" id="panel-s5">
-      <div class="stage-label">Stage 5</div>
+    <!-- ── LEVEL 5 ── -->
+    <div class="level-panel active" id="panel-l5">
+      <div class="level-label">Level 5</div>
       <div class="units-grid">
 
         <!-- S5 U1 -->
@@ -898,8 +898,8 @@
               <span class="gl-type">Matching</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="5" data-words-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="1"></div>
+          <div class="content-loaded" data-words-level="5" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="1"></div>
           <div class="toolkit-row">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -915,9 +915,9 @@
               <div class="unit-grammar">Verb Patterns · Active &amp; Passive</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="5" data-words-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="5" data-sentences-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="2"></div>
+          <div class="content-loaded" data-words-level="5" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -936,9 +936,9 @@
           <div class="unit-games">
             <a href="conditional-builder/index.html" class="game-link">🔀 Conditional Builder</a>
           </div>
-          <div class="content-loaded" data-words-stage="5" data-words-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="5" data-sentences-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="3"></div>
+          <div class="content-loaded" data-words-level="5" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -954,9 +954,9 @@
               <div class="unit-grammar">Monomyth · Character · Villain · Genre</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="5" data-words-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="5" data-sentences-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="4"></div>
+          <div class="content-loaded" data-words-level="5" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -972,9 +972,9 @@
               <div class="unit-grammar">Past Simple · Past Continuous · Past Perfect · Passive · Sequencing</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="5" data-words-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="5" data-sentences-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="5"></div>
+          <div class="content-loaded" data-words-level="5" data-words-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -990,9 +990,9 @@
               <div class="unit-grammar">Modal Verbs · Past Speculation · Persuasive Writing</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="5" data-words-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="5" data-sentences-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="6"></div>
+          <div class="content-loaded" data-words-level="5" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1014,7 +1014,7 @@
               <span class="gl-type">Adventure</span>
             </a>
           </div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="5" data-questions-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1030,9 +1030,9 @@
               <div class="unit-grammar">Van Dine's Rules · Character · Red Herrings · Story Openings</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="5" data-words-unit="8"></div>
-          <div class="content-loaded" data-sentences-stage="5" data-sentences-unit="8"></div>
-          <div class="content-loaded" data-questions-stage="5" data-questions-unit="8"></div>
+          <div class="content-loaded" data-words-level="5" data-words-unit="8"></div>
+          <div class="content-loaded" data-sentences-level="5" data-sentences-unit="8"></div>
+          <div class="content-loaded" data-questions-level="5" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1041,9 +1041,9 @@
       </div>
     </div>
 
-    <!-- ── STAGE 6 ── -->
-    <div class="stage-panel" id="panel-s6">
-      <div class="stage-label">Stage 6</div>
+    <!-- ── LEVEL 6 ── -->
+    <div class="level-panel" id="panel-l6">
+      <div class="level-label">Level 6</div>
       <div class="units-grid">
 
         <!-- S6 U1 -->
@@ -1068,9 +1068,9 @@
               <span class="gl-type">L2–L3 · Drag &amp; drop evidence</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="6" data-words-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="1"></div>
+          <div class="content-loaded" data-words-level="6" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1098,9 +1098,9 @@
               <span class="gl-type">L2–L3 · Reported Speech</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="6" data-words-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="2"></div>
+          <div class="content-loaded" data-words-level="6" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1128,9 +1128,9 @@
               <span class="gl-type">L1–L2 · Error correction</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="6" data-words-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="3"></div>
+          <div class="content-loaded" data-words-level="6" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1163,8 +1163,8 @@
               <span class="gl-type">L4 · N. Ireland · Cleft &amp; Inversion</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="6" data-words-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="4"></div>
+          <div class="content-loaded" data-words-level="6" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1213,9 +1213,9 @@
               <span class="gl-type">L2 · 3rd Conditional</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="6" data-words-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="6" data-sentences-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="6"></div>
+          <div class="content-loaded" data-words-level="6" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1231,8 +1231,8 @@
               <div class="unit-grammar">Space · Geography · History · Chemistry</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="6" data-words-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="7"></div>
+          <div class="content-loaded" data-words-level="6" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1260,8 +1260,8 @@
               <span class="gl-type">L3 · Persuasive Techniques</span>
             </a>
           </div>
-          <div class="content-loaded" data-sentences-stage="6" data-sentences-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="6" data-questions-unit="8"></div>
+          <div class="content-loaded" data-sentences-level="6" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1270,9 +1270,9 @@
       </div>
     </div>
 
-    <!-- ── STAGE 8 ── -->
-    <div class="stage-panel" id="panel-s8">
-      <div class="stage-label">Stage 8</div>
+    <!-- ── LEVEL 8 ── -->
+    <div class="level-panel" id="panel-l8">
+      <div class="level-label">Level 8</div>
       <div class="units-grid">
 
         <!-- S8 U1 -->
@@ -1285,9 +1285,9 @@
               <div class="unit-grammar">Imagery · Descriptive Writing · Nature Texts</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="1"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1303,9 +1303,9 @@
               <div class="unit-grammar">Poetry · Cultural Identity · Figurative Language</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="2"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1328,9 +1328,9 @@
               <span class="gl-type">L1 · Formal vs Informal</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="3"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1353,9 +1353,9 @@
               <span class="gl-type">L2 · Identify persuasive techniques</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="4"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1371,9 +1371,9 @@
               <div class="unit-grammar">Biography · Character Analysis · Heroic Qualities</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="5"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1389,9 +1389,9 @@
               <div class="unit-grammar">Extended Metaphor · Fable · Analysing Poetry</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="6"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1407,9 +1407,9 @@
               <div class="unit-grammar">Short Story · Character · Active &amp; Passive Voice</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="7"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1442,9 +1442,9 @@
               <span class="gl-type">L5 · Drag &amp; identify</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="8"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1460,9 +1460,9 @@
               <div class="unit-grammar">Metaphor · Autobiography · Present Participles</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="8" data-words-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="8" data-sentences-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="8" data-questions-unit="9"></div>
+          <div class="content-loaded" data-words-level="8" data-words-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1471,9 +1471,9 @@
       </div>
     </div>
 
-    <!-- ── STAGE 9 ── -->
-    <div class="stage-panel" id="panel-s9">
-      <div class="stage-label">Stage 9</div>
+    <!-- ── LEVEL 9 ── -->
+    <div class="level-panel" id="panel-l9">
+      <div class="level-label">Level 9</div>
       <div class="units-grid">
 
         <!-- S9 U1 -->
@@ -1486,9 +1486,9 @@
               <div class="unit-grammar">Punctuation for Effect · Review Writing · Descriptive Texts</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="1"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="1"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1504,9 +1504,9 @@
               <div class="unit-grammar">Sentence Types · Colons &amp; Semicolons · Detective Fiction</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="2"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="2"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1522,9 +1522,9 @@
               <div class="unit-grammar">Deduction · Sentence Variety · Suspense Writing</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="3"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="3"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1540,9 +1540,9 @@
               <div class="unit-grammar">Tense · Conditionals · Time Adverbials · Perfect Aspect</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="4"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="4"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1558,9 +1558,9 @@
               <div class="unit-grammar">Adverbs of Degree · Parentheses · Small Island · K-pop</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="5"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="5"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1576,9 +1576,9 @@
               <div class="unit-grammar">Sonnets · Iambic Pentameter · Pastoral · Pathetic Fallacy</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="6"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="6"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1594,9 +1594,9 @@
               <div class="unit-grammar">Bildungsroman · Quest Narrative · Motif · Flashback · Anti-climax</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="7"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="7"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1619,9 +1619,9 @@
               <span class="gl-type">L1–L6 · Flip &amp; sort</span>
             </a>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="8"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="8"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1637,9 +1637,9 @@
               <div class="unit-grammar">Puns · Double Meanings · Sci-Fi Conventions · Unusual Endings</div>
             </div>
           </div>
-          <div class="content-loaded" data-words-stage="9" data-words-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-sentences-stage="9" data-sentences-unit="9"></div>
-          <div class="content-loaded" style="padding-top:4px;" data-questions-stage="9" data-questions-unit="9"></div>
+          <div class="content-loaded" data-words-level="9" data-words-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
             <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
           </div>
@@ -1729,9 +1729,9 @@
   <footer>Made with ❤️ for classrooms · Works offline · Free forever</footer>
 
   <script>
-    function showStage(id) {
-      document.querySelectorAll('.stage-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.stage-tab').forEach(t => t.classList.remove('active'));
+    function showLevel(id) {
+      document.querySelectorAll('.level-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
       document.getElementById('panel-' + id).classList.add('active');
       event.currentTarget.classList.add('active');
     }
@@ -1759,10 +1759,10 @@
       const words     = window.CUSTOM_CONTENT.words     || [];
       const sentences = window.CUSTOM_CONTENT.sentences || [];
 
-      document.querySelectorAll('[data-words-stage]').forEach(el => {
-        const stage = parseInt(el.dataset.wordsStage);
+      document.querySelectorAll('[data-words-level]').forEach(el => {
+        const level = parseInt(el.dataset.wordsLevel);
         const unit  = parseInt(el.dataset.wordsUnit);
-        const matching = words.filter(w => w.stage === stage && w.unit === unit);
+        const matching = words.filter(w => w.level === level && w.unit === unit);
         const count = matching.length;
         if (count === 0) { el.style.display = 'none'; return; }
         const lessons = new Set(matching.map(w => w.lesson).filter(Boolean)).size;
@@ -1770,10 +1770,10 @@
         el.innerHTML = `<span class="content-tag"><span class="ct-dot"></span>Hangman · Wheel · ${count} vocab words loaded${lessonTxt}</span>`;
       });
 
-      document.querySelectorAll('[data-sentences-stage]').forEach(el => {
-        const stage = parseInt(el.dataset.sentencesStage);
+      document.querySelectorAll('[data-sentences-level]').forEach(el => {
+        const level = parseInt(el.dataset.sentencesLevel);
         const unit  = parseInt(el.dataset.sentencesUnit);
-        const count = sentences.filter(s => s.stage === stage && s.unit === unit).length;
+        const count = sentences.filter(s => s.level === level && s.unit === unit).length;
         if (count === 0) { el.style.display = 'none'; return; }
         el.innerHTML = `<span class="content-tag"><span class="ct-dot"></span>Sentence Auction · ${count} sentences loaded</span>`;
       });
@@ -1781,10 +1781,10 @@
 
     function updateQuestionBadges() {
       if (typeof window.QUESTIONS === 'undefined') return;
-      document.querySelectorAll('[data-questions-stage]').forEach(el => {
-        const stage = parseInt(el.dataset.questionsStage);
+      document.querySelectorAll('[data-questions-level]').forEach(el => {
+        const level = parseInt(el.dataset.questionsLevel);
         const unit  = parseInt(el.dataset.questionsUnit);
-        const matching = window.QUESTIONS.filter(q => q.stage === stage && q.unit === unit);
+        const matching = window.QUESTIONS.filter(q => q.level === level && q.unit === unit);
         if (matching.length === 0) { el.style.display = 'none'; return; }
         const topics = [...new Set(matching.map(q => q.topic))].length;
         const topicTxt = topics > 1 ? ' across ' + topics + ' topics' : '';

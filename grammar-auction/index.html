@@ -269,7 +269,7 @@ function populateFilters() {
   // Build unit quick-select buttons (e.g. "S6/U6" groups all S6/U6/Lx topics)
   const unitGroups = {};
   topics.forEach(t => {
-    const m = t.match(/^(S\d+\/U\d+)/);
+    const m = t.match(/^(L\d+\/U\d+)/);
     if (m) {
       const key = m[1];
       if (!unitGroups[key]) unitGroups[key] = [];

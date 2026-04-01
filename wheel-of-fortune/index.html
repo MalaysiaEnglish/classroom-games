@@ -387,10 +387,10 @@
       // Build unit map
       const unitMap = new Map();
       allWords.forEach(w => {
-        const m = w.topic && w.topic.match(/^S(\d+)\/U(\d+)/);
+        const m = w.topic && w.topic.match(/^L(\d+)\/U(\d+)/);
         if (m) {
-          const key = 'S'+m[1]+'/U'+m[2];
-          if (!unitMap.has(key)) unitMap.set(key, {stage:parseInt(m[1]), unit:parseInt(m[2])});
+          const key = 'L'+m[1]+'/U'+m[2];
+          if (!unitMap.has(key)) unitMap.set(key, {level:parseInt(m[1]), unit:parseInt(m[2])});
         }
       });
 
@@ -409,11 +409,11 @@
           unitsEl.appendChild(label);
         });
       } else {
-        [...unitMap.values()].sort((a,b) => a.stage!==b.stage ? a.stage-b.stage : a.unit-b.unit)
-          .forEach(({stage, unit}) => {
+        [...unitMap.values()].sort((a,b) => a.level!==b.level ? a.level-b.level : a.unit-b.unit)
+          .forEach(({level, unit}) => {
             const btn = document.createElement('button'); btn.className = 'qf-unit-btn';
-            btn.textContent = 'S'+stage+'/U'+unit;
-            btn.onclick = () => selectWofUnit(stage, unit, btn);
+            btn.textContent = 'L'+level+'/U'+unit;
+            btn.onclick = () => selectWofUnit(level, unit, btn);
             unitsEl.appendChild(btn);
           });
       }
@@ -421,22 +421,22 @@
       updateWofSummary();
     }
 
-    function selectWofUnit(stage, unit, btnEl) {
+    function selectWofUnit(level, unit, btnEl) {
       const topicsEl   = document.getElementById('wofTopics');
       const topicLabel = document.getElementById('wofTopicLabel');
       if (btnEl.classList.contains('active')) {
         btnEl.classList.remove('active'); wofSelectedUnit = null;
         topicsEl.innerHTML = ''; topicLabel.style.display = 'none';
         // Remove this unit's topics from selection
-        const prefix = 'S'+stage+'/U'+unit+'/';
+        const prefix = 'L'+level+'/U'+unit+'/';
         const allWords = window.CUSTOM_CONTENT?.words || [];
         allWords.filter(w => w.topic && w.topic.startsWith(prefix)).forEach(w => selectedWofTopics.delete(w.topic));
         updateWofSummary(); return;
       }
       document.querySelectorAll('#wofUnits .qf-unit-btn').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active'); wofSelectedUnit = {stage, unit};
+      btnEl.classList.add('active'); wofSelectedUnit = {level, unit};
 
-      const prefix = 'S'+stage+'/U'+unit+'/';
+      const prefix = 'L'+level+'/U'+unit+'/';
       const allWords = window.CUSTOM_CONTENT?.words || [];
       const topics = [...new Set(allWords.filter(w => w.topic && w.topic.startsWith(prefix)).map(w => w.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
 

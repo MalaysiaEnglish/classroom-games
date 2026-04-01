@@ -159,22 +159,22 @@
       }
       const unitMap = new Map();
       window.QUESTIONS.forEach(q => {
-        if (q.stage!=null && q.unit!=null) {
-          const key='S'+q.stage+'/U'+q.unit;
-          if (!unitMap.has(key)) unitMap.set(key,{stage:q.stage,unit:q.unit});
+        if (q.level!=null && q.unit!=null) {
+          const key='L'+q.level+'/U'+q.unit;
+          if (!unitMap.has(key)) unitMap.set(key,{level:q.level,unit:q.unit});
         }
       });
       container.innerHTML='';
-      [...unitMap.values()].sort((a,b)=>a.stage!==b.stage?a.stage-b.stage:a.unit-b.unit)
-        .forEach(({stage,unit})=>{
+      [...unitMap.values()].sort((a,b)=>a.level!==b.level?a.level-b.level:a.unit-b.unit)
+        .forEach(({level, unit})=>{
           const btn=document.createElement('button'); btn.className='qf-unit-btn';
-          btn.textContent='S'+stage+'/U'+unit;
-          btn.onclick=()=>selectUnit(stage,unit,btn);
+          btn.textContent='L'+level+'/U'+unit;
+          btn.onclick=()=>selectUnit(level,unit,btn);
           container.appendChild(btn);
         });
     }
 
-    function selectUnit(stage,unit,btnEl) {
+    function selectUnit(level,unit,btnEl) {
       if (btnEl.classList.contains('active')) {
         btnEl.classList.remove('active'); selectedUnit=null;
         document.getElementById('qfTopics').innerHTML='<span class="qf-empty">Select a unit first</span>';
@@ -183,13 +183,13 @@
       }
       document.querySelectorAll('.qf-unit-btn').forEach(b=>b.classList.remove('active'));
       btnEl.classList.add('active');
-      selectedUnit={stage:parseInt(stage),unit:parseInt(unit)};
+      selectedUnit={level:parseInt(level),unit:parseInt(unit)};
       buildTopicsAndLessons();
     }
 
     function questionsForUnit() {
       if (!selectedUnit) return [];
-      return window.QUESTIONS.filter(q=>q.stage===selectedUnit.stage&&q.unit===selectedUnit.unit);
+      return window.QUESTIONS.filter(q=>q.level===selectedUnit.level&&q.unit===selectedUnit.unit);
     }
 
     function buildTopicsAndLessons() {
@@ -250,7 +250,7 @@
         st.textContent='No questions selected — teacher asks verbally';
       } else {
         const topics=[...new Set(qPool.map(q=>q.topic))];
-        const unitStr=selectedUnit?'S'+selectedUnit.stage+'/U'+selectedUnit.unit+' · ':'';
+        const unitStr=selectedUnit?'L'+selectedUnit.level+'/U'+selectedUnit.unit+' · ':'';
         const topicStr=topics.length===1?topics[0]:topics.length+' topics';
         el.innerHTML=unitStr+'<strong>'+qPool.length+' questions</strong> · '+topicStr+' · '+(qMode==='teacher'?'Teacher reads':'On screen');
         st.innerHTML='<strong>'+qPool.length+' questions</strong> ready — '+topicStr;
