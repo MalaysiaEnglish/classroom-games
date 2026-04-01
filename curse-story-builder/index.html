@@ -446,14 +446,214 @@
     .progress-pip.active { background: var(--gold); }
 
     @media print {
-      body { background: white; color: black; }
-      .container { max-width: 100%; }
-      .stage, header, .btn-summon, .btn-reset, .print-btn, .progress-bar, .embers { display: none !important; }
-      #scroll-section { display: block !important; }
-      .scroll-wrap { background: none; padding: 0; box-shadow: none; }
-      .scroll-inner { background: none; padding: 10px; }
-      #story-output, .writing-section { color: black; }
-      .scroll-title, .sentence-frame .frame-label { color: darkred; }
+      /* ── Page setup ── */
+      @page {
+        size: A4;
+        margin: 18mm 18mm 20mm 18mm;
+      }
+
+      /* ── Hide everything except the scroll ── */
+      body {
+        background: #fff !important;
+        color: #1a0f00 !important;
+        font-family: 'IM Fell English', serif;
+        font-size: 11pt;
+        line-height: 1.7;
+      }
+
+      body::before,
+      .embers,
+      header,
+      .stage,
+      .btn-summon,
+      .btn-reset,
+      .print-btn,
+      .progress-bar {
+        display: none !important;
+      }
+
+      .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #scroll-section {
+        display: block !important;
+        margin: 0;
+      }
+
+      /* ── Scroll wrapper — simple parchment border ── */
+      .scroll-wrap {
+        background: none !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      .scroll-inner {
+        background: #fff !important;
+        padding: 0 !important;
+        border: 2px solid #8b1a1a;
+        border-radius: 4px;
+        padding: 24pt 28pt !important;
+        position: relative;
+      }
+
+      .scroll-inner::before { display: none; }
+
+      /* ── Scroll title & author ── */
+      .scroll-title {
+        font-family: 'UnifrakturMaguntia', cursive;
+        font-size: 22pt;
+        color: #8b1a1a !important;
+        text-align: center;
+        margin-bottom: 4pt;
+        text-shadow: none;
+      }
+
+      .scroll-subtitle {
+        font-size: 10pt;
+        color: #3d2b1f !important;
+        text-align: center;
+        font-style: italic;
+        margin-bottom: 16pt;
+        letter-spacing: 1px;
+      }
+
+      /* ── Divider ── */
+      .divider {
+        margin: 8pt 0 14pt !important;
+      }
+
+      .divider::before, .divider::after {
+        background: linear-gradient(to right, transparent, #8b1a1a, transparent) !important;
+      }
+
+      /* ── Story text ── */
+      #story-output {
+        color: #1a0f00 !important;
+        font-size: 11pt;
+      }
+
+      #story-output p {
+        margin-bottom: 9pt;
+        orphans: 3;
+        widows: 3;
+      }
+
+      #story-output .highlight {
+        color: #8b1a1a !important;
+        font-weight: 700;
+      }
+
+      /* ── Grammar / conditional note boxes ── */
+      #story-output .grammar-note {
+        background: #fff8f5 !important;
+        border-left: 3px solid #8b1a1a !important;
+        padding: 8pt 12pt !important;
+        margin: 10pt 0 !important;
+        color: #1a0f00 !important;
+        font-style: italic;
+        font-size: 10pt;
+        page-break-inside: avoid;
+        border-radius: 0 3px 3px 0;
+      }
+
+      #story-output .grammar-note strong {
+        color: #8b1a1a !important;
+        font-style: normal;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 3pt;
+      }
+
+      #story-output .grammar-note em {
+        font-style: italic;
+        text-decoration: underline;
+        text-decoration-color: #8b1a1a;
+      }
+
+      /* ── Writing task section ── */
+      .writing-section {
+        margin-top: 20pt !important;
+        padding-top: 14pt !important;
+        border-top: 1.5pt dashed #8b1a1a !important;
+        page-break-before: auto;
+      }
+
+      .writing-section h3 {
+        font-family: 'IM Fell English', serif;
+        font-size: 13pt;
+        color: #1a0f00 !important;
+        margin-bottom: 10pt;
+      }
+
+      .writing-section p {
+        color: #3d2b1f !important;
+        font-size: 10pt;
+        margin-bottom: 10pt;
+      }
+
+      /* ── Sentence frames ── */
+      .sentence-frame {
+        background: #fff8f5 !important;
+        border: 1px solid #c9a96e !important;
+        border-radius: 3px;
+        padding: 10pt 14pt !important;
+        margin-bottom: 9pt !important;
+        page-break-inside: avoid;
+      }
+
+      .sentence-frame .frame-label {
+        font-size: 8pt !important;
+        color: #8b1a1a !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        margin-bottom: 5pt !important;
+        font-style: normal;
+      }
+
+      .sentence-frame .frame-text {
+        color: #1a0f00 !important;
+        font-style: italic;
+        font-size: 11pt;
+        line-height: 1.8;
+      }
+
+      /* ── Blanks — show as clear underlined writing lines ── */
+      .sentence-frame .blank {
+        display: inline-block;
+        min-width: 140px;
+        border-bottom: 1.2pt solid #8b1a1a !important;
+        color: #8b1a1a !important;
+        font-style: normal;
+        font-weight: 600;
+      }
+
+      /* Sentence 5 "your own" blank — give extra writing space */
+      .sentence-frame .blank[style*="min-width:90%"],
+      .sentence-frame .blank[style*="min-width: 90%"] {
+        display: block !important;
+        min-width: 100% !important;
+        min-height: 26pt;
+        border-bottom: 1.2pt solid #8b1a1a !important;
+        margin-top: 6pt;
+      }
+
+      /* ── Print-only footer note ── */
+      #scroll-section::after {
+        content: 'gamepack.win  ·  Curse Story Builder  ·  Stage 6 · Unit 6 · Lesson 2';
+        display: block;
+        margin-top: 18pt;
+        text-align: center;
+        font-size: 8pt;
+        color: #9e8060 !important;
+        letter-spacing: 1pt;
+        font-family: 'Crimson Text', serif;
+        font-style: italic;
+      }
     }
   </style>
 </head>
@@ -651,7 +851,7 @@
       </div>
     </div>
     <button class="btn-reset" onclick="resetAll()">↩ Start Again</button>
-    <button class="print-btn" onclick="window.print()">🖨 Print Scroll</button>
+    <button class="print-btn" onclick="window.print()" title="Prints the scroll story and all Third Conditional writing tasks">🖨 Print Scroll &amp; Writing Tasks</button>
   </div>
 </div>
 
