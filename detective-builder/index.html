@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Detective</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --amber-50: #FAEEDA;
+    --amber-100: #FAC775;
+    --amber-200: #EF9F27;
+    --amber-300: #BA7517;
+    --amber-400: #854F0B;
+    --amber-500: #633806;
+    --amber-600: #412402;
+    --ink: #1a1209;
+    --ink-mid: #3d2e14;
+    --ink-light: #7a6040;
+    --ink-faint: #b89e78;
+    --paper: #fdf8f0;
+    --paper-dark: #f5eddc;
+    --paper-darker: #ecddc4;
+    --border: #d4b88a;
+    --border-light: #e8d4b0;
+  }
+
+  html, body {
+    min-height: 100%;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Sans 3', Georgia, sans-serif;
+  }
+
+  body {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(186,117,23,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(186,117,23,0.04) 0%, transparent 60%);
+  }
+
+  #app {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  /* ── Masthead ── */
+  .masthead {
+    text-align: center;
+    padding: 2rem 0 1.5rem;
+    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .masthead::before {
+    content: '✦  RONAN O\'CARROLL ENGLISH ACADEMY  ✦';
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+  }
+  .masthead .sub {
+    font-size: 13px;
+    color: var(--ink-light);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* ── Screens ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── Intro ── */
+  .intro-body {
+    text-align: center;
+    padding: 1.5rem 1rem 2rem;
+  }
+  .intro-body p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--ink-mid);
+    max-width: 480px;
+    margin: 0 auto 0.5rem;
+  }
+  .intro-body .rule {
+    font-size: 13px;
+    color: var(--ink-light);
+    font-style: italic;
+    margin-top: 0.75rem;
+  }
+  .rulebox {
+    background: var(--paper-dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem auto;
+    max-width: 460px;
+    text-align: left;
+  }
+  .rulebox .rb-title {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  .rulebox ul {
+    list-style: none;
+    padding: 0;
+  }
+  .rulebox ul li {
+    font-size: 14px;
+    color: var(--ink-mid);
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .rulebox ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--amber-200);
+  }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    margin-bottom: 1.75rem;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  .progress-track {
+    height: 2px;
+    background: var(--paper-darker);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 2px;
+    background: var(--amber-200);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── Scene card ── */
+  .scene-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem 1.5rem 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 0 rgba(186,117,23,0.08);
+  }
+  .scene-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber-300);
+    margin-bottom: 8px;
+  }
+  .scene-setup {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-light);
+    line-height: 1.6;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--border-light);
+  }
+  .scene-question {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  /* ── Choices ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .choice-btn {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 15px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Source Sans 3', Georgia, sans-serif;
+    font-size: 14px;
+    color: var(--ink-mid);
+    line-height: 1.55;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .choice-btn:hover {
+    border-color: var(--amber-200);
+    background: var(--amber-50);
+    box-shadow: 0 1px 4px rgba(186,117,23,0.1);
+  }
+  .choice-btn.selected {
+    border: 1.5px solid var(--amber-300);
+    background: var(--amber-50);
+    color: var(--amber-600);
+  }
+  .choice-btn.selected .choice-letter {
+    background: var(--amber-200);
+    color: var(--amber-600);
+    border-color: var(--amber-200);
+  }
+  .choice-letter {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--paper-darker);
+    border: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-light);
+    margin-top: 1px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    background: var(--amber-300);
+    color: var(--amber-50);
+    border: none;
+    border-radius: 6px;
+    padding: 11px 32px;
+    font-family: 'Source Sans 3', Georgia, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--amber-500); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 20px;
+    font-family: 'Source Sans 3', Georgia, sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-secondary:hover { background: var(--paper-dark); }
+  .btn-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Result ── */
+  .result-header {
+    text-align: center;
+    padding: 1.5rem 0 1.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .result-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber-300);
+    margin-bottom: 8px;
+  }
+  .result-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .result-archetype {
+    font-size: 15px;
+    color: var(--amber-400);
+    font-style: italic;
+    margin-top: 4px;
+  }
+  .traits-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 1rem 0 1.5rem;
+  }
+  .trait-chip {
+    background: var(--amber-50);
+    color: var(--amber-500);
+    border: 1px solid var(--amber-100);
+    border-radius: 20px;
+    font-size: 12px;
+    padding: 4px 13px;
+    letter-spacing: 0.02em;
+  }
+  .intro-section {
+    background: var(--paper-dark);
+    border-left: 3px solid var(--amber-200);
+    border-radius: 0 8px 8px 0;
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .intro-section .label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  .intro-section p {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.8;
+  }
+  .tip-box {
+    background: var(--paper);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .tip-box .tip-title {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber-300);
+    margin-bottom: 6px;
+  }
+  .tip-box p {
+    font-size: 13px;
+    color: var(--ink-light);
+    line-height: 1.65;
+  }
+
+  /* ── Tell vs Show comparison ── */
+  .compare-wrap { margin-bottom: 1.5rem; }
+  .compare-heading {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+  .compare-heading span {
+    background: var(--paper-dark);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 3px 14px;
+  }
+  .compare-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .panel-tell {
+    background: #f4f0ea;
+    padding: 1rem 1.1rem 1rem;
+    border-right: 1px solid var(--border);
+  }
+  .panel-show {
+    background: var(--amber-50);
+    padding: 1rem 1.1rem 1rem;
+  }
+  .panel-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .panel-tell .panel-label { color: #9e9085; }
+  .panel-show .panel-label { color: var(--amber-300); }
+  .panel-label-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .panel-tell .panel-label-dot { background: #c4b8a8; }
+  .panel-show .panel-label-dot { background: var(--amber-200); }
+  .panel-tell p {
+    font-size: 13px;
+    color: #7a7060;
+    line-height: 1.75;
+    font-style: italic;
+  }
+  .panel-show p {
+    font-size: 13px;
+    color: var(--amber-600);
+    line-height: 1.75;
+    font-style: italic;
+  }
+  .compare-verdict {
+    background: var(--ink);
+    color: var(--amber-50);
+    border-radius: 0 0 9px 9px;
+    padding: 10px 1.1rem;
+    font-size: 12px;
+    line-height: 1.5;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    border-top: none;
+  }
+  .verdict-item {
+    font-size: 11px;
+    color: var(--amber-100);
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .verdict-item::before {
+    content: '→';
+    color: var(--amber-200);
+    flex-shrink: 0;
+    font-size: 10px;
+    margin-top: 1px;
+  }
+
+  /* ── Divider ── */
+  .ornament {
+    text-align: center;
+    font-size: 13px;
+    color: var(--border);
+    letter-spacing: 0.2em;
+    margin: 1.5rem 0;
+  }
+
+  /* ── Fade ── */
+  .fade-in {
+    animation: fadein 0.35s ease both;
+  }
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="masthead">
+    <h1>Build Your Detective</h1>
+    <div class="sub">A writing activity &nbsp;·&nbsp; Show, don't tell</div>
+  </div>
+
+  <!-- INTRO -->
+  <div id="screen-intro" class="screen active fade-in">
+    <div class="intro-body">
+      <p>Six scenes. Six choices. No descriptions allowed.</p>
+      <p class="rule">Your detective will reveal themselves entirely through what they do.</p>
+    </div>
+    <div class="rulebox">
+      <div class="rb-title">How to play</div>
+      <ul>
+        <li>Read each scene carefully</li>
+        <li>Choose the option that fits your detective best</li>
+        <li>At the end, you'll get a character profile and a show-don't-tell starter paragraph</li>
+        <li>Use it as inspiration for your 250-word introduction</li>
+      </ul>
+    </div>
+    <div style="text-align:center; margin-top:1.5rem;">
+      <button class="btn-primary" onclick="startGame()">Begin the investigation &rarr;</button>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="screen-game" class="screen"></div>
+
+  <!-- RESULT -->
+  <div id="screen-result" class="screen"></div>
+
+  <div class="footer">
+    &copy; Ronan O&rsquo;Carroll English Academy Sdn Bhd &nbsp;&middot;&nbsp; Writing a Detective Story &mdash; Lesson 2
+  </div>
+</div>
+
+<script>
+const scenes = [
+  {
+    setup: "The call comes in. A body at Harbour Street. Everyone is racing to get there.",
+    question: "How do you arrive at the crime scene?",
+    choices: [
+      { text: "You were already there. You had been watching the building for two days.", traits: ["obsessive","perceptive"] },
+      { text: "By bicycle, slightly breathless, with a grease smear on your coat you hadn't noticed.", traits: ["eccentric","determined"] },
+      { text: "In a taxi you barely had coins to pay — you'd spent them following another lead.", traits: ["reckless","passionate"] },
+      { text: "On foot, having mapped three routes in advance and chosen the quietest one.", traits: ["methodical","cautious"] }
+    ]
+  },
+  {
+    setup: "The scene is crowded. Officers, witnesses, reporters at the door.",
+    question: "What is the very first thing you do?",
+    choices: [
+      { text: "Pull out a notebook and write three lines down before speaking to anyone.", traits: ["meticulous","observant"] },
+      { text: "Reach into your coat pocket and offer someone a biscuit. (You always carry biscuits.)", traits: ["charming","disarming"] },
+      { text: "Find the most nervous-looking person in the room and stare at them. Calmly.", traits: ["intimidating","sharp"] },
+      { text: "Ask everyone the same question — then stand very still and watch who answers differently.", traits: ["analytical","patient"] }
+    ]
+  },
+  {
+    setup: "The lead police detective tells you to leave. 'This is official business.'",
+    question: "What do you do?",
+    choices: [
+      { text: "Smile, agree, walk to the door — then come back in through the kitchen window.", traits: ["rebellious","resourceful"] },
+      { text: "Tell him, calmly, the three things he has already missed. In detail.", traits: ["arrogant","brilliant"] },
+      { text: "Agree immediately. You have already photographed everything you needed.", traits: ["strategic","secretive"] },
+      { text: "Pretend not to hear. Continue examining the floorboards.", traits: ["single-minded","stubborn"] }
+    ]
+  },
+  {
+    setup: "Everyone else has walked past it. But you stop.",
+    question: "What clue do you find that no one else noticed?",
+    choices: [
+      { text: "A very faint smell of lavender — completely wrong for this neighbourhood.", traits: ["sensory","poetic"] },
+      { text: "A clock on the mantelpiece set to the wrong time zone.", traits: ["detail-obsessed","logical"] },
+      { text: "A child's drawing tucked under a chair, belonging to no one in the house.", traits: ["empathetic","intuitive"] },
+      { text: "A receipt with a smudged number — but you can still read it.", traits: ["practical","tenacious"] }
+    ]
+  },
+  {
+    setup: "You have all the pieces. But they won't fit yet. You need to think.",
+    question: "How do you think best?",
+    choices: [
+      { text: "Pace the room for forty minutes, muttering very quietly to yourself.", traits: ["eccentric","intense"] },
+      { text: "Make a cup of tea. Then another. Then another. The fourth goes cold.", traits: ["calm","habitual"] },
+      { text: "Cover the wall with sticky notes and string, connecting everything you know.", traits: ["visual","systematic"] },
+      { text: "Go for a very long walk alone and say nothing to anyone until you return.", traits: ["solitary","brooding"] }
+    ]
+  },
+  {
+    setup: "You know exactly who did it. You are completely certain.",
+    question: "How do you reveal the truth?",
+    choices: [
+      { text: "Gather everyone in the same room. Wait for absolute silence. Then begin.", traits: ["theatrical","confident"] },
+      { text: "Tell only your one trusted contact — and let them take the credit with the police.", traits: ["humble","loyal"] },
+      { text: "Leave an anonymous note where the right person will find it. You don't need the glory.", traits: ["mysterious","private"] },
+      { text: "You already told someone twenty minutes ago. You were quite sure by then.", traits: ["impatient","decisive"] }
+    ]
+  }
+];
+
+let current = 0;
+let selections = [];
+
+function startGame() {
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-game').classList.add('active');
+  renderScene();
+}
+
+function renderScene() {
+  const s = scenes[current];
+  const pct = Math.round((current / scenes.length) * 100);
+  const letters = ['A','B','C','D'];
+  const el = document.getElementById('screen-game');
+  el.innerHTML = `
+    <div class="fade-in">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span>Scene ${current+1} of ${scenes.length}</span>
+          <span>${pct}% complete</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${pct}%"></div>
+        </div>
+      </div>
+      <div class="scene-card">
+        <div class="scene-eyebrow">The scene</div>
+        <div class="scene-setup">${s.setup}</div>
+        <div class="scene-question">${s.question}</div>
+      </div>
+      <div class="choices">
+        ${s.choices.map((c,i) => `
+          <button class="choice-btn" onclick="selectChoice(${i})" id="ch${i}">
+            <span class="choice-letter" id="cl${i}">${letters[i]}</span>
+            <span>${c.text}</span>
+          </button>`).join('')}
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="nextBtn" onclick="nextScene()" disabled>
+          ${current < scenes.length-1 ? 'Next scene &rarr;' : 'Reveal my detective &rarr;'}
+        </button>
+        ${current > 0 ? '<button class="btn-secondary" onclick="prevScene()">&larr; Back</button>' : ''}
+      </div>
+    </div>`;
+
+  if (selections[current] !== undefined) {
+    document.getElementById('ch'+selections[current]).classList.add('selected');
+    document.getElementById('nextBtn').disabled = false;
+  }
+}
+
+function selectChoice(idx) {
+  document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('ch'+idx).classList.add('selected');
+  selections[current] = idx;
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextScene() {
+  if (selections[current] === undefined) return;
+  current++;
+  if (current >= scenes.length) { showResult(); return; }
+  renderScene();
+}
+
+function prevScene() {
+  if (current > 0) { current--; renderScene(); }
+}
+
+function showResult() {
+  document.getElementById('screen-game').classList.remove('active');
+  const el = document.getElementById('screen-result');
+  el.classList.add('active');
+
+  const allTraits = selections.flatMap((sel,i) => scenes[i].choices[sel].traits);
+  const unique = [...new Set(allTraits)];
+  const archetype = getArchetype(allTraits);
+  const name = getDetectiveName(allTraits);
+  const showPara = buildShowIntro(selections);
+  const tellPara = buildTellIntro(selections, name, allTraits);
+  const verdicts = buildVerdicts(selections);
+
+  el.innerHTML = `
+    <div class="fade-in">
+      <div class="result-header">
+        <div class="result-eyebrow">Case file complete &mdash; detective profile</div>
+        <div class="result-name">${name}</div>
+        <div class="result-archetype">${archetype}</div>
+      </div>
+      <div style="margin-bottom:0.5rem; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#b89e78;">Personality revealed through action</div>
+      <div class="traits-row">
+        ${unique.slice(0,7).map(t => `<span class="trait-chip">${t}</span>`).join('')}
+      </div>
+
+      <div class="compare-wrap">
+        <div class="compare-heading"><span>The same detective. Two ways of writing them.</span></div>
+        <div class="compare-panels">
+          <div class="panel-tell">
+            <div class="panel-label"><span class="panel-label-dot"></span>Telling</div>
+            <p>${tellPara}</p>
+          </div>
+          <div class="panel-show">
+            <div class="panel-label"><span class="panel-label-dot"></span>Showing</div>
+            <p>${showPara}</p>
+          </div>
+          <div class="compare-verdict" style="grid-column:1/-1;">
+            ${verdicts.map(v => `<div class="verdict-item">${v}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="ornament">* * *</div>
+      <div style="font-size:13px; color:var(--ink-light); line-height:1.65; margin-bottom:1.5rem;">
+        Use the <em>showing</em> paragraph as your starter. Change the name, add detail, and write your own 250-word introduction.
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="restartGame()">Try a different detective &nbsp;&#x21BA;</button>
+      </div>
+    </div>`;
+}
+
+function getArchetype(traits) {
+  const t = traits.join(' ');
+  if (t.includes('theatrical') || t.includes('confident')) return 'The Dramatic Genius';
+  if (t.includes('methodical') || t.includes('systematic') || t.includes('meticulous')) return 'The Cold Logician';
+  if (t.includes('eccentric') || t.includes('habitual') || t.includes('brooding')) return 'The Brilliant Oddity';
+  if (t.includes('charming') || t.includes('disarming') || t.includes('loyal')) return 'The Unexpected Insider';
+  if (t.includes('rebellious') || t.includes('reckless')) return 'The Rule-Breaking Maverick';
+  if (t.includes('mysterious') || t.includes('private')) return 'The Shadow Investigator';
+  if (t.includes('obsessive') || t.includes('perceptive')) return 'The Relentless Observer';
+  return 'The Uncommon Detective';
+}
+
+function getDetectiveName(traits) {
+  const t = traits.join(' ');
+  if (t.includes('methodical') || t.includes('logical')) return 'Detective V. Crane';
+  if (t.includes('charming') || t.includes('disarming')) return 'Inspector E. Mallory';
+  if (t.includes('eccentric') || t.includes('habitual')) return 'D. Finch';
+  if (t.includes('rebellious') || t.includes('reckless')) return 'Agent M. Thorne';
+  if (t.includes('mysterious') || t.includes('private')) return 'The Unnamed One';
+  if (t.includes('theatrical') || t.includes('brilliant')) return 'Detective A. Voss';
+  if (t.includes('obsessive')) return 'I. Graves';
+  return 'Inspector J. Grey';
+}
+
+function buildShowIntro(sels) {
+  const arrival = [
+    "Nobody had noticed them standing outside for the past two days. They had been watching.",
+    "They arrived at a half-run, slightly breathless, a smear of bicycle grease on their left cuff that they hadn't noticed.",
+    "The taxi had barely stopped before they were out, pressing the last of their coins into the driver's hand without counting.",
+    "They had walked, taken the quieter route, and arrived exactly on time."
+  ][sels[0]];
+  const first = [
+    "Without speaking to anyone, they opened a small notebook and wrote three lines before looking up.",
+    "They reached into their coat pocket and produced a biscuit, which they offered to the nearest officer with a perfectly pleasant smile.",
+    "They found the most nervous person in the room and looked at them. Said nothing. Just looked.",
+    "They asked everyone the same question — then stood very still, watching who answered differently."
+  ][sels[1]];
+  const think = [
+    "When they needed to think, they paced. The others had long since learned not to interrupt the pacing.",
+    "The kettle had been on four times. The fifth cup sat untouched on the windowsill, going cold.",
+    "The wall was covered. Sticky notes, string, photographs — a diagram no one else could read, but they could.",
+    "They had gone for a walk alone and returned forty minutes later without explanation."
+  ][sels[4]];
+  const reveal = [
+    "They waited until the room was completely silent before they spoke. They always waited for silence.",
+    "They told only one person. Quietly, in a corridor. That was enough.",
+    "The note was left anonymously. The right person would find it. They always did.",
+    "They had already known for twenty minutes. They were simply waiting for everyone else to catch up."
+  ][sels[5]];
+  return `${arrival} ${first} ${think} ${reveal}`;
+}
+
+function buildTellIntro(sels, name) {
+  const arrival = [
+    `${name} was obsessive and highly perceptive — always one step ahead of everyone else, arriving before anyone had thought to call them.`,
+    `${name} was eccentric but determined, thinking nothing of arriving by bicycle regardless of the urgency of the situation.`,
+    `${name} was reckless and passionate, always spending their last coin on a lead without a moment's hesitation.`,
+    `${name} was methodical and cautious by nature, never going anywhere without careful preparation beforehand.`
+  ][sels[0]];
+  const first = [
+    "They were meticulous and highly observant, always recording their thoughts immediately and thoroughly.",
+    "They were naturally charming and disarming, with an effortless ability to put complete strangers at ease.",
+    "They were sharp and deeply intimidating, capable of making anyone feel uncomfortable simply by looking at them.",
+    "They were patient and analytical, never rushing to a conclusion without first gathering all available information."
+  ][sels[1]];
+  const think = [
+    "When they needed to think, they became intensely eccentric and impossible to interrupt.",
+    "They were calm and deeply habitual, always relying on familiar routines to work through a problem.",
+    "They were a highly visual and systematic thinker, unable to work unless everything was laid out in front of them.",
+    "They were solitary and brooding by nature, needing complete isolation in order to think clearly."
+  ][sels[4]];
+  const reveal = [
+    "They were theatrical and supremely confident, always choosing to make their final revelations as dramatic as possible.",
+    "They were humble and loyal, perfectly content to let others receive the public credit for their work.",
+    "They were mysterious and deeply private, preferring always to remain anonymous.",
+    "They were impatient and decisive — once certain of an answer, they simply could not bring themselves to wait."
+  ][sels[5]];
+  return `${arrival} ${first} ${think} ${reveal}`;
+}
+
+function buildVerdicts(sels) {
+  const byScene = [
+    ["The 'tell' names the trait. The 'show' lets you discover it yourself.", "Being told someone is perceptive is forgettable. Watching them observe is not."],
+    ["The biscuit does more work than the word 'charming' ever could.", "Small, specific details stick in the memory. Adjectives slip away."],
+    ["'Sharp and intimidating' is an instruction to the reader. The stare is an experience.", "Showing forces the reader to draw the conclusion themselves — and believe it."],
+    ["A clock in the wrong time zone raises a question. 'Detail-obsessed' closes one down.", "The 'show' already feels like a story. The 'tell' reads like a character description form."],
+    ["A cold cup of tea is a character. 'Calm and habitual' is a label.", "'The kettle had been on four times' is something you can picture. 'Habitual' is not."],
+    ["'Theatrical' tells us what to think. The gathering silence makes us feel the performance.", "When readers reach the conclusion themselves, they believe it far more strongly."]
+  ];
+  return [byScene[sels[0]][0], byScene[sels[4]][1]];
+}
+
+
+function restartGame() {
+  current = 0;
+  selections = [];
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('screen-intro').classList.add('active');
+}
+</script>
+</body>
+</html>
