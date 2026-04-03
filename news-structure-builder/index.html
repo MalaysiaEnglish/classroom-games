@@ -88,11 +88,16 @@
     }
     .para-card.locked .drag-handle { display: none; }
 
-    /* ── Phase 2: label dropdowns ── */
-    .label-select {
-      margin-top: 8px;
+    /* ── Phase 2: custom label dropdowns (renders in browser — safe for screen share) ── */
+    .custom-label-select {
+      position: relative;
       width: 100%;
-      padding: 6px 10px;
+      margin-top: 8px;
+      user-select: none;
+    }
+    .custom-label-trigger {
+      width: 100%;
+      padding: 6px 32px 6px 10px;
       border-radius: 8px;
       border: 1px solid var(--glass-border);
       background: rgba(255,255,255,0.08);
@@ -100,10 +105,42 @@
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.2s, background 0.2s;
+      min-height: 34px;
     }
-    .label-select:disabled { opacity: 0.6; cursor: default; }
-    .label-select.correct-label { border-color: var(--safe); background: rgba(34,197,94,0.15); color: #7dffb3; }
-    .label-select.wrong-label   { border-color: var(--danger); background: rgba(239,68,68,0.12); color: #ff9b9b; }
+    .custom-label-trigger:hover { border-color: var(--accent); background: rgba(255,255,255,0.12); }
+    .custom-label-select.open .custom-label-trigger { border-color: var(--accent); }
+    .custom-label-trigger .cls-placeholder { color: rgba(255,255,255,0.35); font-weight: 400; }
+    .custom-label-arrow { flex-shrink: 0; font-size: 0.65rem; color: var(--accent); transition: transform 0.2s; }
+    .custom-label-select.open .custom-label-arrow { transform: rotate(180deg); }
+    .custom-label-options {
+      display: none;
+      position: absolute;
+      top: calc(100% + 2px);
+      left: 0; right: 0;
+      background: #0d1f24;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      z-index: 200;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+    .custom-label-select.open .custom-label-options { display: block; }
+    .custom-label-option {
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.85);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .custom-label-option:hover { background: rgba(0,201,167,0.15); }
+    .custom-label-option.selected { background: rgba(0,201,167,0.2); color: var(--accent); font-weight: 700; }
+    .custom-label-select.correct-label .custom-label-trigger { border-color: var(--safe); background: rgba(34,197,94,0.15); color: #7dffb3; }
+    .custom-label-select.wrong-label   .custom-label-trigger { border-color: var(--danger); background: rgba(239,68,68,0.12); color: #ff9b9b; }
+    .custom-label-select.disabled .custom-label-trigger { opacity: 0.6; cursor: default; pointer-events: none; }
 
     /* ── Score / feedback strip ── */
     .score-strip {
@@ -346,16 +383,62 @@
 
         list.appendChild(card);
       });
+      if (phase === 2) bindLabelOptions();
     }
 
     function buildSelect(paraId, displayIdx) {
       const para = PARAGRAPHS[paraId];
-      let opts = `<option value="">— select the paragraph's job —</option>`;
-      LABEL_OPTIONS.forEach(l => {
-        opts += `<option value="${l}">${l}</option>`;
-      });
-      return `<select class="label-select" data-para="${paraId}" onchange="onLabelChange(this)">${opts}</select>
+      let opts = LABEL_OPTIONS.map(l =>
+        `<div class="custom-label-option" data-value="${l}">${l}</div>`
+      ).join('');
+      return `<div class="custom-label-select" id="cls-${paraId}" data-para="${paraId}">
+                <div class="custom-label-trigger" onclick="toggleLabelSelect(${paraId}, event)">
+                  <span class="cls-placeholder" id="cls-label-${paraId}">— select the paragraph's job —</span>
+                  <span class="custom-label-arrow">▼</span>
+                </div>
+                <div class="custom-label-options">${opts}</div>
+              </div>
               <div class="label-hint" id="hint-${paraId}" style="display:none;font-size:0.72rem;margin-top:4px;color:var(--text-dim);font-style:italic;">${para.labelHint}</div>`;
+    }
+
+    function toggleLabelSelect(paraId, e) {
+      e.stopPropagation();
+      const sel = document.getElementById('cls-' + paraId);
+      if (sel.classList.contains('disabled')) return;
+      const isOpen = sel.classList.contains('open');
+      document.querySelectorAll('.custom-label-select.open').forEach(s => s.classList.remove('open'));
+      if (!isOpen) sel.classList.add('open');
+    }
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.custom-label-select')) {
+        document.querySelectorAll('.custom-label-select.open').forEach(s => s.classList.remove('open'));
+      }
+    });
+
+    function bindLabelOptions() {
+      document.querySelectorAll('.custom-label-option').forEach(opt => {
+        opt.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const sel = this.closest('.custom-label-select');
+          if (sel.classList.contains('disabled')) return;
+          const paraId = parseInt(sel.dataset.para);
+          // Update display
+          const lbl = document.getElementById('cls-label-' + paraId);
+          lbl.textContent = this.dataset.value;
+          lbl.classList.remove('cls-placeholder');
+          // Mark selected
+          sel.querySelectorAll('.custom-label-option').forEach(o => o.classList.remove('selected'));
+          this.classList.add('selected');
+          sel.dataset.value = this.dataset.value;
+          sel.classList.remove('open');
+        });
+      });
+    }
+
+    function getLabelValue(paraId) {
+      const sel = document.getElementById('cls-' + paraId);
+      return sel ? (sel.dataset.value || '') : '';
     }
 
     // ── Drag & Drop ───────────────────────────────────────────────────
@@ -434,28 +517,27 @@
     function checkPhase2() {
       let correct = 0;
       let attempted = 0;
-      document.querySelectorAll('.label-select').forEach(sel => {
+      document.querySelectorAll('.custom-label-select').forEach(sel => {
         const paraId = parseInt(sel.dataset.para);
         const para = PARAGRAPHS[paraId];
-        if (!sel.value) return;
+        const value = sel.dataset.value || '';
+        if (!value) return;
         attempted++;
-        sel.disabled = true;
-        if (sel.value === para.label) {
+        sel.classList.add('disabled');
+        if (value === para.label) {
           sel.classList.add('correct-label');
           correct++;
-          // Show hint as confirmation
           const hint = document.getElementById('hint-' + paraId);
           if (hint) { hint.style.display = 'block'; hint.style.color = 'rgba(34,197,94,0.8)'; }
         } else {
           sel.classList.add('wrong-label');
-          // Show correct answer in hint
           const hint = document.getElementById('hint-' + paraId);
           if (hint) {
             hint.style.display = 'block';
             hint.textContent = `✗ The correct label is: "${para.label}" — ${para.labelHint}`;
             hint.style.color = 'rgba(239,68,68,0.85)';
           }
-          sel.disabled = false; // allow retry
+          sel.classList.remove('disabled'); // allow retry
           sel.classList.remove('wrong-label');
           setTimeout(() => sel.classList.add('wrong-label'), 10);
         }
@@ -477,7 +559,7 @@
       } else {
         document.getElementById('phaseStatus').textContent = `${correct}/${total} correct — fix the highlighted ones and check again!`;
         // Re-enable wrong ones
-        document.querySelectorAll('.label-select.wrong-label').forEach(s => { s.disabled = false; });
+        document.querySelectorAll('.custom-label-select.wrong-label').forEach(s => { s.classList.remove('disabled'); });
       }
     }
 

@@ -216,14 +216,63 @@
     .curse-input:focus { border-color: var(--gold); }
     .curse-input::placeholder { color: rgba(232,213,163,0.3); font-style: italic; }
 
-    select.curse-input {
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b8860b' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
+    /* Custom dropdown — renders fully in browser (safe for screen share) */
+    .custom-select {
+      position: relative;
+      width: 100%;
+      user-select: none;
     }
+    .custom-select-trigger {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(184,134,11,0.25);
+      border-radius: 2px;
+      color: var(--parchment);
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
+      padding: 10px 36px 10px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.2s;
+      min-height: 44px;
+    }
+    .custom-select-trigger:hover,
+    .custom-select.open .custom-select-trigger { border-color: var(--gold); }
+    .custom-select-trigger .placeholder { color: rgba(232,213,163,0.3); font-style: italic; }
+    .custom-select-arrow {
+      flex-shrink: 0;
+      margin-left: 8px;
+      transition: transform 0.2s;
+      color: var(--gold);
+      font-size: 0.75rem;
+    }
+    .custom-select.open .custom-select-arrow { transform: rotate(180deg); }
+    .custom-select-options {
+      display: none;
+      position: absolute;
+      top: calc(100% + 2px);
+      left: 0; right: 0;
+      background: #1a0d02;
+      border: 1px solid rgba(184,134,11,0.4);
+      border-radius: 2px;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .custom-select.open .custom-select-options { display: block; }
+    .custom-select-option {
+      padding: 9px 14px;
+      font-family: 'Crimson Text', serif;
+      font-size: 0.98rem;
+      color: var(--parchment);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .custom-select-option:hover { background: rgba(184,134,11,0.15); }
+    .custom-select-option.selected { color: #fff; background: rgba(139,26,26,0.5); }
 
     .input-row {
       display: grid;
@@ -690,31 +739,41 @@
     <div class="input-row">
       <div class="field-group">
         <label class="field-label">Year</label>
-        <select class="curse-input" id="year">
-          <option value="">— Choose a year —</option>
-          <option value="793 AD">793 AD</option>
-          <option value="1066">1066</option>
-          <option value="1215">1215</option>
-          <option value="1348">1348 (Black Death era)</option>
-          <option value="1492">1492</option>
-          <option value="1518">1518 (The Dancing Plague)</option>
-          <option value="1666">1666</option>
-          <option value="1789">1789</option>
-          <option value="1832">1832</option>
-        </select>
+        <div class="custom-select" id="year-select">
+          <div class="custom-select-trigger" onclick="toggleSelect('year-select')">
+            <span class="placeholder" id="year-label">— Choose a year —</span>
+            <span class="custom-select-arrow">▼</span>
+          </div>
+          <div class="custom-select-options">
+            <div class="custom-select-option" data-value="793 AD">793 AD</div>
+            <div class="custom-select-option" data-value="1066">1066</div>
+            <div class="custom-select-option" data-value="1215">1215</div>
+            <div class="custom-select-option" data-value="1348">1348 (Black Death era)</div>
+            <div class="custom-select-option" data-value="1492">1492</div>
+            <div class="custom-select-option" data-value="1518">1518 (The Dancing Plague)</div>
+            <div class="custom-select-option" data-value="1666">1666</div>
+            <div class="custom-select-option" data-value="1789">1789</div>
+            <div class="custom-select-option" data-value="1832">1832</div>
+          </div>
+        </div>
       </div>
       <div class="field-group">
         <label class="field-label">Setting</label>
-        <select class="curse-input" id="setting">
-          <option value="">— Choose a place —</option>
-          <option value="a crumbling monastery">A crumbling monastery</option>
-          <option value="a fog-soaked harbour town">A fog-soaked harbour town</option>
-          <option value="a village on the edge of a cursed forest">A village at the forest's edge</option>
-          <option value="a royal palace rotting from within">A royal palace, rotting from within</option>
-          <option value="a crossroads where three roads met">A crossroads where three roads met</option>
-          <option value="a town square with a broken fountain">A town square with a broken fountain</option>
-          <option value="a walled city under siege">A walled city under siege</option>
-        </select>
+        <div class="custom-select" id="setting-select">
+          <div class="custom-select-trigger" onclick="toggleSelect('setting-select')">
+            <span class="placeholder" id="setting-label">— Choose a place —</span>
+            <span class="custom-select-arrow">▼</span>
+          </div>
+          <div class="custom-select-options">
+            <div class="custom-select-option" data-value="a crumbling monastery">A crumbling monastery</div>
+            <div class="custom-select-option" data-value="a fog-soaked harbour town">A fog-soaked harbour town</div>
+            <div class="custom-select-option" data-value="a village on the edge of a cursed forest">A village at the forest's edge</div>
+            <div class="custom-select-option" data-value="a royal palace rotting from within">A royal palace, rotting from within</div>
+            <div class="custom-select-option" data-value="a crossroads where three roads met">A crossroads where three roads met</div>
+            <div class="custom-select-option" data-value="a town square with a broken fountain">A town square with a broken fountain</div>
+            <div class="custom-select-option" data-value="a walled city under siege">A walled city under siege</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -891,10 +950,7 @@
   const STAGES = ['year','setting','caster','reason','power','spread','attempt1','fail','end'];
   function updateProgress() {
     const filled = STAGES.filter(s => {
-      if (s === 'year' || s === 'setting') {
-        const el = document.getElementById(s);
-        return el && el.value;
-      }
+      if (s === 'year' || s === 'setting') return getSelectValue(s) !== '';
       return getChoice(s);
     }).length;
     const pips = document.querySelectorAll('.progress-pip');
@@ -906,13 +962,51 @@
     });
   }
 
-  document.querySelectorAll('select.curse-input').forEach(s => {
-    s.addEventListener('change', updateProgress);
+  // Custom dropdown logic
+  function toggleSelect(id) {
+    const sel = document.getElementById(id);
+    const isOpen = sel.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.custom-select.open').forEach(s => s.classList.remove('open'));
+    if (!isOpen) sel.classList.add('open');
+  }
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.custom-select')) {
+      document.querySelectorAll('.custom-select.open').forEach(s => s.classList.remove('open'));
+    }
   });
 
+  // Option click handler
+  document.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const select = this.closest('.custom-select');
+      const id = select.id; // e.g. "year-select"
+      const fieldId = id.replace('-select', ''); // "year" or "setting"
+      const label = document.getElementById(fieldId + '-label');
+      // Update display
+      label.textContent = this.textContent;
+      label.classList.remove('placeholder');
+      // Mark selected
+      select.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+      // Store value
+      select.dataset.value = this.dataset.value;
+      // Close
+      select.classList.remove('open');
+      updateProgress();
+    });
+  });
+
+  function getSelectValue(fieldId) {
+    const sel = document.getElementById(fieldId + '-select');
+    return sel ? (sel.dataset.value || '') : '';
+  }
+
   function generateScroll() {
-    const year     = document.getElementById('year').value;
-    const setting  = document.getElementById('setting').value;
+    const year     = getSelectValue('year');
+    const setting  = getSelectValue('setting');
     const caster   = getChoice('caster');
     const reason   = getChoice('reason');
     const power    = getChoice('power');
@@ -1028,7 +1122,17 @@
 
   function resetAll() {
     document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
-    document.querySelectorAll('select.curse-input').forEach(s => s.value = '');
+    // Reset custom dropdowns
+    ['year', 'setting'].forEach(id => {
+      const sel = document.getElementById(id + '-select');
+      if (sel) {
+        sel.dataset.value = '';
+        sel.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+        const lbl = document.getElementById(id + '-label');
+        lbl.textContent = id === 'year' ? '— Choose a year —' : '— Choose a place —';
+        lbl.classList.add('placeholder');
+      }
+    });
     document.getElementById('curse-title').value = '';
     document.getElementById('author-name').value = '';
     document.getElementById('scroll-section').style.display = 'none';
