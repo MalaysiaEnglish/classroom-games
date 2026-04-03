@@ -672,8 +672,9 @@ function showResult() {
   const unique = [...new Set(allTraits)];
   const archetype = getArchetype(allTraits);
   const name = getDetectiveName(allTraits);
-  const showPara = buildShowIntro(selections);
-  const tellPara = buildTellIntro(selections, name, allTraits);
+  const showResult = buildShowIntro(selections);
+  const showPara = showResult.text;
+  const tellPara = buildTellIntro(selections, name, allTraits, showResult.isFemale);
   const verdicts = buildVerdicts(selections);
 
   el.innerHTML = `
@@ -739,7 +740,19 @@ function getDetectiveName(traits) {
   return 'Inspector J. Grey';
 }
 
+function applyGender(text, isFemale) {
+  return text
+    .replace(/\bThey\b/g, isFemale ? 'She' : 'He')
+    .replace(/\bthey\b/g, isFemale ? 'she' : 'he')
+    .replace(/\bTheir\b/g, isFemale ? 'Her' : 'His')
+    .replace(/\btheir\b/g, isFemale ? 'her' : 'his')
+    .replace(/\bThem\b/g, isFemale ? 'Her' : 'Him')
+    .replace(/\bthem\b/g, isFemale ? 'her' : 'him')
+    .replace(/\bthemselves\b/g, isFemale ? 'herself' : 'himself');
+}
+
 function buildShowIntro(sels) {
+  const isFemale = Math.random() < 0.5;
   const arrival = [
     "Nobody had noticed them standing outside for the past two days. They had been watching.",
     "They arrived at a half-run, slightly breathless, a smear of bicycle grease on their left cuff that they hadn't noticed.",
@@ -764,33 +777,35 @@ function buildShowIntro(sels) {
     "The note was left anonymously. The right person would find it. They always did.",
     "They had already known for twenty minutes. They were simply waiting for everyone else to catch up."
   ][sels[5]];
-  return `${arrival} ${first} ${think} ${reveal}`;
+  return { text: applyGender(`${arrival} ${first} ${think} ${reveal}`, isFemale), isFemale };
 }
 
-function buildTellIntro(sels, name) {
+function buildTellIntro(sels, name, traits, isFemale) {
+  const they = isFemale ? 'She' : 'He';
+  const their = isFemale ? 'her' : 'his';
   const arrival = [
-    `${name} was obsessive and highly perceptive — always one step ahead of everyone else, arriving before anyone had thought to call them.`,
+    `${name} was obsessive and highly perceptive — always one step ahead of everyone else, arriving before anyone had thought to call ${isFemale ? 'her' : 'him'}.`,
     `${name} was eccentric but determined, thinking nothing of arriving by bicycle regardless of the urgency of the situation.`,
-    `${name} was reckless and passionate, always spending their last coin on a lead without a moment's hesitation.`,
+    `${name} was reckless and passionate, always spending ${their} last coin on a lead without a moment's hesitation.`,
     `${name} was methodical and cautious by nature, never going anywhere without careful preparation beforehand.`
   ][sels[0]];
   const first = [
-    "They were meticulous and highly observant, always recording their thoughts immediately and thoroughly.",
-    "They were naturally charming and disarming, with an effortless ability to put complete strangers at ease.",
-    "They were sharp and deeply intimidating, capable of making anyone feel uncomfortable simply by looking at them.",
-    "They were patient and analytical, never rushing to a conclusion without first gathering all available information."
+    `${they} was meticulous and highly observant, always recording ${their} thoughts immediately and thoroughly.`,
+    `${they} was naturally charming and disarming, with an effortless ability to put complete strangers at ease.`,
+    `${they} was sharp and deeply intimidating, capable of making anyone feel uncomfortable simply by looking at them.`,
+    `${they} was patient and analytical, never rushing to a conclusion without first gathering all available information.`
   ][sels[1]];
   const think = [
-    "When they needed to think, they became intensely eccentric and impossible to interrupt.",
-    "They were calm and deeply habitual, always relying on familiar routines to work through a problem.",
-    "They were a highly visual and systematic thinker, unable to work unless everything was laid out in front of them.",
-    "They were solitary and brooding by nature, needing complete isolation in order to think clearly."
+    `When ${they.toLowerCase()} needed to think, ${they.toLowerCase()} became intensely eccentric and impossible to interrupt.`,
+    `${they} was calm and deeply habitual, always relying on familiar routines to work through a problem.`,
+    `${they} was a highly visual and systematic thinker, unable to work unless everything was laid out in front of ${isFemale ? 'her' : 'him'}.`,
+    `${they} was solitary and brooding by nature, needing complete isolation in order to think clearly.`
   ][sels[4]];
   const reveal = [
-    "They were theatrical and supremely confident, always choosing to make their final revelations as dramatic as possible.",
-    "They were humble and loyal, perfectly content to let others receive the public credit for their work.",
-    "They were mysterious and deeply private, preferring always to remain anonymous.",
-    "They were impatient and decisive — once certain of an answer, they simply could not bring themselves to wait."
+    `${they} was theatrical and supremely confident, always choosing to make ${their} final revelations as dramatic as possible.`,
+    `${they} was humble and loyal, perfectly content to let others receive the public credit for ${their} work.`,
+    `${they} was mysterious and deeply private, preferring always to remain anonymous.`,
+    `${they} was impatient and decisive — once certain of an answer, ${they.toLowerCase()} simply could not bring ${isFemale ? 'herself' : 'himself'} to wait.`
   ][sels[5]];
   return `${arrival} ${first} ${think} ${reveal}`;
 }
