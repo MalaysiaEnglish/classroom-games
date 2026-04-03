@@ -742,6 +742,8 @@ function getDetectiveName(traits) {
 
 function applyGender(text, isFemale) {
   return text
+    .replace(/\bThey were\b/g, isFemale ? 'She was' : 'He was')
+    .replace(/\bthey were\b/g, isFemale ? 'she was' : 'he was')
     .replace(/\bThey\b/g, isFemale ? 'She' : 'He')
     .replace(/\bthey\b/g, isFemale ? 'she' : 'he')
     .replace(/\bTheir\b/g, isFemale ? 'Her' : 'His')
