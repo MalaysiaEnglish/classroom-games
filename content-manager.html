@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gamepack Content Manager</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   /* ── tokens ── */
   :root {
@@ -380,21 +381,11 @@ let currentTab = 'vocab';
 let editTarget = null; // { tab, rowIndex (1-based in sheet, 0 for header) }
 
 // ── GOOGLE IDENTITY ──────────────────────────────────────────────────
-function loadGsi() {
-  return new Promise(resolve => {
-    const s = document.createElement('script');
-    s.src = 'https://accounts.google.com/gsi/client';
-    s.onload = resolve;
-    document.head.appendChild(s);
-  });
-}
-
 async function handleSignIn() {
-  if (CLIENT_ID === '977994909893-1q4l0ka094pv1po2326pv5qj3at9eluq.apps.googleusercontent.com') {
-    document.getElementById('config-warn').style.display = '';
+  if (typeof google === 'undefined') {
+    alert('Google Sign-In script failed to load. Please disable any ad blocker or VPN for this page and refresh.');
     return;
   }
-  await loadGsi();
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
