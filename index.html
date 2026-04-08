@@ -412,6 +412,8 @@
   </header>
 
   <nav class="level-nav">
+    <button class="level-tab" onclick="showLevel('l1')">Level 1</button>
+    <button class="level-tab" onclick="showLevel('l2')">Level 2</button>
     <button class="level-tab" onclick="showLevel('l3')">Level 3</button>
     <button class="level-tab" onclick="showLevel('l4')">Level 4</button>
     <button class="level-tab active" onclick="showLevel('l5')">Level 5</button>
@@ -423,6 +425,456 @@
   </nav>
 
   <main>
+
+    <!-- ── LEVEL 1 ── -->
+    <div class="level-panel" id="panel-l1">
+      <div class="level-label">Level 1</div>
+      <div class="units-grid">
+
+        <!-- S1 U1 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🌍</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 1</div>
+              <div class="unit-title">Around the World</div>
+              <div class="unit-grammar">Where are you from? · Possessive pronouns</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="1"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U2 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🚌</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 2</div>
+              <div class="unit-title">On My Way!</div>
+              <div class="unit-grammar">Do/Does live in…? · Prepositions of movement</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="2"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U3 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏠</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 3</div>
+              <div class="unit-title">Helping Out</div>
+              <div class="unit-grammar">Adverbs of frequency · How often?</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="3"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U4 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎮</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 4</div>
+              <div class="unit-title">Playtime!</div>
+              <div class="unit-grammar">like + -ing · doesn't like + -ing</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="4"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U5 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🍜</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 5</div>
+              <div class="unit-title">Eating Out</div>
+              <div class="unit-grammar">There is/are · some/any · count &amp; noncount nouns</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="5"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U6 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🐧</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 6</div>
+              <div class="unit-title">Animal Behavior</div>
+              <div class="unit-grammar">Present Continuous: is/are + -ing</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="6"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U7 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">😊</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 7</div>
+              <div class="unit-title">Happy Faces</div>
+              <div class="unit-grammar">Comparatives · Superlatives</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="7"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U8 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">💊</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 8</div>
+              <div class="unit-title">Healthy Body, Healthy Mind</div>
+              <div class="unit-grammar">must · must not</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="8"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U9 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏙️</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 9</div>
+              <div class="unit-title">I Love My Town</div>
+              <div class="unit-grammar">There was/were · Was/Were there?</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="9"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U10 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏛️</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 10</div>
+              <div class="unit-title">Yesterday and Long Ago</div>
+              <div class="unit-grammar">Past Simple · Did … ? / didn't</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="10"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U11 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏕️</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 11</div>
+              <div class="unit-title">Outdoor Adventure</div>
+              <div class="unit-grammar">Irregular Past Simple · Past Simple Wh-questions</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="11"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S1 U12 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎡</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 12</div>
+              <div class="unit-title">Let's Have Fun!</div>
+              <div class="unit-grammar">be going to: plans &amp; intentions</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="1" data-words-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="12"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ── LEVEL 2 ── -->
+    <div class="level-panel" id="panel-l2">
+      <div class="level-label">Level 2</div>
+      <div class="units-grid">
+
+        <!-- S2 U1 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">💼</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 1</div>
+              <div class="unit-title">All Kinds of Jobs</div>
+              <div class="unit-grammar">Simple Present vs Present Progressive · Adverbs of Frequency</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="1"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="1"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U2 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎵</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 2</div>
+              <div class="unit-title">Move to the Music!</div>
+              <div class="unit-grammar">Past Simple: was/were · Regular &amp; irregular verbs</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="2"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="2"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U3 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎉</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 3</div>
+              <div class="unit-title">Let's Celebrate!</div>
+              <div class="unit-grammar">Past Simple irregular verbs · Past Simple questions</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="3"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="3"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U4 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏅</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 4</div>
+              <div class="unit-title">Sports</div>
+              <div class="unit-grammar">can / can't · could / couldn't</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="4"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="4"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U5 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🌏</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 5</div>
+              <div class="unit-title">Incredible Places</div>
+              <div class="unit-grammar">Comparatives · Superlatives</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="5"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="5"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U6 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">👟</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 6</div>
+              <div class="unit-title">Cool Clothes</div>
+              <div class="unit-grammar">Whose…? · Possessive pronouns: mine/yours/his…</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="6"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="6"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U7 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🕰️</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 7</div>
+              <div class="unit-title">Life in the Past</div>
+              <div class="unit-grammar">Past Simple irregular · had to / didn't have to</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="7"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="7"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U8 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🥦</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 8</div>
+              <div class="unit-title">Fresh Food</div>
+              <div class="unit-grammar">How many/much? · a few / a little / a lot of</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="8"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="8"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U9 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">💻</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 9</div>
+              <div class="unit-title">The World of the Future</div>
+              <div class="unit-grammar">will / won't for predictions · Will there be…?</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="9"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="9"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U10 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">💪</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 10</div>
+              <div class="unit-title">Feeling Good!</div>
+              <div class="unit-grammar">should / shouldn't · Why…? / Because…</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="10"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="10"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U11 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏙️</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 11</div>
+              <div class="unit-title">City Life</div>
+              <div class="unit-grammar">Present Perfect: have/has been · Have you…?</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="11"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="11"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+        <!-- S2 U12 -->
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏄</div>
+            <div class="unit-meta">
+              <div class="unit-number">Unit 12</div>
+              <div class="unit-title">You Can Do This!</div>
+              <div class="unit-grammar">Present Perfect ever/never · Present Perfect vs Past Simple</div>
+            </div>
+          </div>
+          <div class="content-loaded" data-words-level="2" data-words-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="12"></div>
+          <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="12"></div>
+          <div class="toolkit-row" style="margin-top:8px;">
+            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
 
     <!-- ── LEVEL 3 ── -->
     <div class="level-panel" id="panel-l3">
