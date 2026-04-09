@@ -349,38 +349,35 @@
 </div>
 
 <!-- ── BULK IMPORT PANEL ── -->
-<div class="tab-panel" id="panel-bulk" style="padding:24px;max-width:800px;">
+<div class="tab-panel" id="panel-bulk" style="padding:16px;max-width:800px;">
 
-  <div style="margin-bottom:20px;">
-    <h2 style="font-size:1.1rem;font-weight:800;margin-bottom:6px;">Bulk Import</h2>
-    <p style="font-size:0.85rem;color:var(--text-dim);line-height:1.6;">Paste multiple entries at once. Each line is one item. Use the format below for each type.</p>
-  </div>
-
-  <!-- Type selector -->
-  <div style="display:flex;gap:8px;margin-bottom:20px;">
+  <!-- Type selector + compact header in one row -->
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+    <span style="font-size:0.8rem;font-weight:700;color:var(--text-dim);white-space:nowrap;">Import as:</span>
     <button class="btn btn-secondary" id="bulk-type-vocab"     onclick="setBulkType('vocab')"     style="font-weight:700;">📚 Vocabulary</button>
     <button class="btn btn-secondary" id="bulk-type-sentences" onclick="setBulkType('sentences')" style="font-weight:700;">✍️ Sentences</button>
     <button class="btn btn-secondary" id="bulk-type-questions" onclick="setBulkType('questions')" style="font-weight:700;">❓ Questions</button>
+    <button onclick="toggleBulkFormat()" style="background:none;border:none;color:var(--text-dim);font-size:0.75rem;cursor:pointer;margin-left:auto;">📋 format guide ▾</button>
   </div>
 
-  <!-- Format guide -->
-  <div id="bulk-format" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:16px;font-size:0.8rem;font-family:'DM Mono',monospace;color:var(--text-dim);line-height:1.8;"></div>
+  <!-- Collapsible format guide -->
+  <div id="bulk-format" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:12px;font-size:0.78rem;font-family:'DM Mono',monospace;color:var(--text-dim);line-height:1.8;white-space:pre-wrap;"></div>
 
-  <!-- Common fields -->
-  <div class="field-row" style="margin-bottom:16px;">
+  <!-- Common fields - compact -->
+  <div class="field-row" style="margin-bottom:10px;">
     <div class="field-group">
-      <label>Topic (applied to all entries)</label>
-      <input id="bulk-topic" type="text" placeholder="e.g. L6/U6/L1 Vocabulary or MrsWong-S6-Novel">
+      <label>Topic</label>
+      <input id="bulk-topic" type="text" placeholder="e.g. L6/U6/L1 Vocabulary or MrsWong-Novel">
     </div>
-    <div class="field-group" style="max-width:90px"><label>Level</label><input id="bulk-level" type="number" min="1" max="9"></div>
-    <div class="field-group" style="max-width:90px"><label>Unit</label><input id="bulk-unit" type="number" min="1" max="12"></div>
-    <div class="field-group" style="max-width:90px"><label>Lesson</label><input id="bulk-lesson" type="number" min="1" max="12"></div>
+    <div class="field-group" style="max-width:80px"><label>Level</label><input id="bulk-level" type="number" min="1" max="9"></div>
+    <div class="field-group" style="max-width:80px"><label>Unit</label><input id="bulk-unit" type="number" min="1" max="12"></div>
+    <div class="field-group" style="max-width:80px"><label>Lesson</label><input id="bulk-lesson" type="number" min="1" max="12"></div>
   </div>
 
   <!-- Paste area -->
-  <div class="field-group" style="margin-bottom:16px;">
-    <label>Paste entries here</label>
-    <textarea id="bulk-input" rows="12" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.82rem;resize:vertical;" placeholder="Paste your entries here…"></textarea>
+  <div class="field-group" style="margin-bottom:10px;">
+    <label>Paste entries here <span style="font-weight:400;color:var(--text-dim);font-size:0.75em;">(pipe | or tab-separated, or copy directly from a spreadsheet)</span></label>
+    <textarea id="bulk-input" rows="10" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.82rem;resize:vertical;" placeholder="Paste your entries here…"></textarea>
   </div>
 
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
@@ -390,7 +387,7 @@
   </div>
 
   <!-- Preview table -->
-  <div id="bulk-preview" style="margin-top:20px;display:none;">
+  <div id="bulk-preview" style="margin-top:16px;display:none;">
     <h3 style="font-size:0.9rem;font-weight:800;margin-bottom:10px;color:var(--accent);">Preview <span id="bulk-preview-count"></span></h3>
     <div class="table-wrap">
       <table>
@@ -947,6 +944,11 @@ const BULK_FORMATS = {
   questions: 'One question per block, separated by blank lines.\nFormat: Question | Correct Answer | Wrong 1 | Wrong 2 | Wrong 3\n\nExamples:\nWhat is the capital of France? | Paris | London | Berlin | Madrid\nWhich tense uses "have + past participle"? | Present Perfect | Past Simple | Future Simple | Present Continuous'
 };
 
+function toggleBulkFormat() {
+  const el = document.getElementById('bulk-format');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
 function setBulkType(type) {
   bulkType = type;
   ['vocab','sentences','questions'].forEach(t => {
@@ -957,6 +959,12 @@ function setBulkType(type) {
   document.getElementById('bulk-preview').style.display = 'none';
   document.getElementById('bulk-commit-btn').disabled = true;
   bulkParsed = [];
+}
+
+function splitLine(line) {
+  // Auto-detect: if line contains tabs, use tab separator (spreadsheet paste)
+  // otherwise use pipe |
+  return line.includes('\t') ? line.split('\t') : line.split('|');
 }
 
 function parseBulkInput() {
@@ -970,7 +978,7 @@ function parseBulkInput() {
   if (bulkType === 'vocab') {
     raw.split('\n').forEach(line => {
       line = line.trim(); if (!line) return;
-      const parts = line.split('|');
+      const parts = splitLine(line);
       const word = parts[0].trim().toUpperCase();
       const hint = (parts[1] || '').trim();
       if (word) rows.push([word, hint, topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
@@ -978,17 +986,25 @@ function parseBulkInput() {
   } else if (bulkType === 'sentences') {
     raw.split('\n').forEach(line => {
       line = line.trim(); if (!line) return;
-      let correct = true;
-      if (line.toUpperCase().endsWith(' FALSE')) { correct = false; line = line.slice(0, -6).trim(); }
-      else if (line.toUpperCase().endsWith(' TRUE')) { line = line.slice(0, -5).trim(); }
-      if (line) rows.push([line, correct ? 'true' : 'false', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+      // Tab-separated: sentence [TAB] true/false
+      if (line.includes('\t')) {
+        const parts = line.split('\t');
+        const text = parts[0].trim();
+        const correct = (parts[1]||'').trim().toLowerCase() !== 'false';
+        if (text) rows.push([text, correct ? 'true' : 'false', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+      } else {
+        let correct = true;
+        if (line.toUpperCase().endsWith(' FALSE')) { correct = false; line = line.slice(0, -6).trim(); }
+        else if (line.toUpperCase().endsWith(' TRUE')) { line = line.slice(0, -5).trim(); }
+        if (line) rows.push([line, correct ? 'true' : 'false', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+      }
     });
   } else {
-    // questions — pipe-separated on one line, or blank-line separated blocks
+    // questions — blank-line separated blocks or one per line with pipe/tab
     const blocks = raw.split(/\n\s*\n/).filter(b => b.trim());
     blocks.forEach(block => {
       const line = block.replace(/\n/g, ' ').trim();
-      const parts = line.split('|').map(p => p.trim());
+      const parts = splitLine(line).map(p => p.trim());
       if (parts.length < 5) return;
       const [q, a, d1, d2, d3] = parts;
       if (q && a) rows.push([q, a, d1||'', d2||'', d3||'', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
