@@ -119,7 +119,7 @@
   // Expose a promise so game scripts can await it if needed
   window.SHEET_LOADED = (async function () {
 
-    if (SHEET_ID === '16Aj_unDyBTEsWbvR3bkT7UEh63jOQdK9aKGjJB3z-F4') {
+    if (!SHEET_ID || SHEET_ID === 'YOUR_SHEET_ID_HERE') {
       console.warn('[sheet-loader] Sheet ID not configured — using JS fallback files.');
       return false;
     }
