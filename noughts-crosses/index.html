@@ -292,55 +292,93 @@
     }
 
 
+    
     // ── Cascade picker for questions ─────────────────────────
+    function getQuestionsForFilter() {
+      const level = document.querySelector('.qf-cascade-level')?.value;
+      const unit  = document.querySelector('.qf-cascade-unit')?.value;
+      let qs = window.QUESTIONS || [];
+      if (level) qs = qs.filter(q => String(q.level) === level);
+      if (unit)  qs = qs.filter(q => String(q.unit)  === unit);
+      return qs;
+    }
+
+    function buildTopicsAndLessons() {
+      const qs = getQuestionsForFilter();
+      const topicsEl  = document.getElementById('qfTopics') || document.getElementById('qf-topics');
+      const lessonsEl = document.getElementById('qfLessons') || document.getElementById('qf-lessons');
+      if (!topicsEl) return;
+
+      // Preserve currently checked topics
+      const prevChecked = new Set([...document.querySelectorAll('#qfTopics input:checked, #qf-topics input:checked')].map(cb => cb.value));
+
+      const topics = [...new Set(qs.map(q => q.topic).filter(Boolean))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
+      topicsEl.innerHTML = '';
+      if (!topics.length) {
+        topicsEl.innerHTML = '<span class="qf-empty">No topics found</span>';
+      } else {
+        topics.forEach(t => {
+          const count = qs.filter(q => q.topic === t).length;
+          const label = document.createElement('label'); label.className = 'qf-check-label';
+          const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = t;
+          cb.checked = prevChecked.has(t);
+          cb.addEventListener('change', rebuildPool);
+          const span = document.createElement('span'); span.textContent = t;
+          const cspan = document.createElement('span'); cspan.className = 'qf-count'; cspan.textContent = count;
+          label.appendChild(cb); label.appendChild(span); label.appendChild(cspan);
+          topicsEl.appendChild(label);
+        });
+      }
+
+      if (lessonsEl) {
+        const prevCheckedL = new Set([...document.querySelectorAll('#qfLessons input:checked, #qf-lessons input:checked')].map(cb => cb.value));
+        const lessonNums = [...new Set(qs.filter(q => q.lesson != null).map(q => q.lesson))].sort((a,b) => a-b);
+        lessonsEl.innerHTML = '';
+        if (!lessonNums.length) {
+          lessonsEl.innerHTML = '<span class="qf-empty">No lesson data</span>';
+        } else {
+          lessonNums.forEach(l => {
+            const count = qs.filter(q => q.lesson === l).length;
+            const label = document.createElement('label'); label.className = 'qf-check-label';
+            const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = l;
+            cb.checked = prevCheckedL.has(String(l));
+            cb.addEventListener('change', rebuildPool);
+            const span = document.createElement('span'); span.textContent = 'Lesson ' + l;
+            const cspan = document.createElement('span'); cspan.className = 'qf-count'; cspan.textContent = count;
+            label.appendChild(cb); label.appendChild(span); label.appendChild(cspan);
+            lessonsEl.appendChild(label);
+          });
+        }
+      }
+
+      if (typeof rebuildPool === 'function') rebuildPool();
+    }
+
     function cascadeQLevelChange() {
       const level = document.querySelector('.qf-cascade-level').value;
       const unitSel = document.querySelector('.qf-cascade-unit');
       unitSel.innerHTML = '<option value="">Unit…</option>';
       unitSel.disabled = !level; unitSel.style.opacity = level ? '1' : '0.5';
       if (level) {
-        const units = new Set();
-        (window.QUESTIONS||[]).forEach(q => { if (String(q.level) === level) units.add(q.unit); });
-        [...units].filter(Boolean).sort((a,b) => a-b).forEach(u => {
+        const units = new Set((window.QUESTIONS||[]).filter(q => String(q.level) === level && q.unit != null).map(q => q.unit));
+        [...units].sort((a,b) => a-b).forEach(u => {
           const opt = document.createElement('option'); opt.value = u; opt.textContent = 'Unit ' + u;
           unitSel.appendChild(opt);
         });
       }
-      // Reset selection
-      selectedUnit = null;
-      document.querySelectorAll('.qf-unit-btn').forEach(b => b.classList.remove('active'));
-      if (typeof rebuildPool === 'function') rebuildPool();
-      if (typeof buildTopicsAndLessons === 'function') {
-        const ti = document.getElementById('qf-topics');
-        const li = document.getElementById('qf-lessons');
-        if (ti) ti.innerHTML = '<span class="qf-empty">Select a unit first</span>';
-        if (li) li.innerHTML = '<span class="qf-empty">Select a unit first</span>';
-      }
+      buildTopicsAndLessons();
     }
+
     function cascadeQUnitChange() {
-      const level = parseInt(document.querySelector('.qf-cascade-level').value);
-      const unit  = parseInt(document.querySelector('.qf-cascade-unit').value);
-      if (!unit) { selectedUnit = null; if (typeof rebuildPool==='function') rebuildPool(); return; }
-      // Simulate selecting this unit
-      selectedUnit = { level, unit };
-      if (typeof buildTopicsAndLessons === 'function') buildTopicsAndLessons();
-      if (typeof rebuildPool === 'function') rebuildPool();
-      if (typeof updateSummary === 'function') updateSummary();
-      if (typeof updateQStatus === 'function') updateQStatus();
+      buildTopicsAndLessons();
     }
+
     function cascadeQClear() {
       document.querySelector('.qf-cascade-level').value = '';
       const unitSel = document.querySelector('.qf-cascade-unit');
       unitSel.innerHTML = '<option value="">Unit…</option>';
       unitSel.disabled = true; unitSel.style.opacity = '0.5';
-      selectedUnit = null;
-      const ti = document.getElementById('qf-topics');
-      const li = document.getElementById('qf-lessons');
-      if (ti) ti.innerHTML = '<span class="qf-empty">Select a unit first</span>';
-      if (li) li.innerHTML = '<span class="qf-empty">Select a unit first</span>';
-      if (typeof rebuildPool === 'function') rebuildPool();
-      if (typeof updateSummary === 'function') updateSummary();
-      if (typeof updateQStatus === 'function') updateQStatus();
+      buildTopicsAndLessons();
     }
 
     function buildUnitButtons() {
@@ -356,7 +394,10 @@
         const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Level ' + l;
         levelSel.appendChild(opt);
       });
+      // Show all topics immediately
+      buildTopicsAndLessons();
     }
+    
     
     function selectUnit(level, unit, btnEl) {
       if (btnEl.classList.contains('active')) {
@@ -376,33 +417,7 @@
       return window.QUESTIONS.filter(q => q.level===selectedUnit.level && q.unit===selectedUnit.unit);
     }
 
-    function buildTopicsAndLessons() {
-      const qs = questionsForUnit();
-      const topicsEl = document.getElementById('qfTopics'), lessonsEl = document.getElementById('qfLessons');
-      topicsEl.innerHTML = '';
-      const topics = [...new Set(qs.map(q => q.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
-      if (!topics.length) { topicsEl.innerHTML = '<span class="qf-empty">No topics</span>'; }
-      else topics.forEach(t => {
-        const count = qs.filter(q => q.topic===t).length;
-        const label = document.createElement('label'); label.className = 'qf-check-label';
-        const cb = document.createElement('input'); cb.type='checkbox'; cb.value=t; cb.addEventListener('change', rebuildPool);
-        const span = document.createElement('span'); span.textContent = t;
-        const cs = document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
-        label.appendChild(cb); label.appendChild(span); label.appendChild(cs); topicsEl.appendChild(label);
-      });
-      lessonsEl.innerHTML = '';
-      const lessons = [...new Set(qs.filter(q=>q.lesson!=null).map(q=>q.lesson))].sort((a,b)=>a-b);
-      if (!lessons.length) { lessonsEl.innerHTML = '<span class="qf-empty">No lesson data</span>'; }
-      else lessons.forEach(l => {
-        const count = qs.filter(q=>q.lesson===l).length;
-        const label = document.createElement('label'); label.className = 'qf-check-label';
-        const cb = document.createElement('input'); cb.type='checkbox'; cb.value=l; cb.addEventListener('change', rebuildPool);
-        const span = document.createElement('span'); span.textContent='Lesson '+l;
-        const cs = document.createElement('span'); cs.className='qf-count'; cs.textContent=count;
-        label.appendChild(cb); label.appendChild(span); label.appendChild(cs); lessonsEl.appendChild(label);
-      });
-      rebuildPool();
-    }
+    
 
     function shuffle(arr) {
       for (let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
