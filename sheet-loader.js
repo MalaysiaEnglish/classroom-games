@@ -1,5 +1,5 @@
 /* ================================================================
-   SHEET LOADER — gamepack.win
+   SHEET LOADER — gamepack.win 
    Fetches vocabulary, sentences and questions from Google Sheets
    published CSVs. Falls back to content.js / questions.js silently
    if the fetch fails or times out.
