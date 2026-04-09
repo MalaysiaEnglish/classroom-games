@@ -83,8 +83,16 @@
       <div class="qf-detail">
         <div class="qf-row">
           <div class="qf-col">
-            <div class="qf-col-label">Unit</div>
-            <div class="qf-units" id="qfUnits"><span class="qf-empty">Loading…</span></div>
+<div class="qf-col-label">Level / Unit</div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <select class="qf-cascade-level" onchange="cascadeQLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;width:100%;">
+                  <option value="">Level…</option>
+                </select>
+                <select class="qf-cascade-unit" onchange="cascadeQUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;width:100%;opacity:0.5;">
+                  <option value="">Unit…</option>
+                </select>
+                <button onclick="cascadeQClear()" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;padding:2px 4px;text-align:left;">✕ clear</button>
+              </div>
           </div>
           <div class="qf-col">
             <div class="qf-col-label">Topic</div>
@@ -152,28 +160,73 @@
       updateQFSummary();
     }
 
-    function buildUnitButtons() {
-      const container = document.getElementById('qfUnits');
-      if (typeof window.QUESTIONS === 'undefined' || !window.QUESTIONS.length) {
-        container.innerHTML = '<span class="qf-empty">questions.js not loaded</span>'; return;
-      }
-      const unitMap = new Map();
-      window.QUESTIONS.forEach(q => {
-        if (q.level!=null && q.unit!=null) {
-          const key='L'+q.level+'/U'+q.unit;
-          if (!unitMap.has(key)) unitMap.set(key,{level:q.level,unit:q.unit});
-        }
-      });
-      container.innerHTML='';
-      [...unitMap.values()].sort((a,b)=>a.level!==b.level?a.level-b.level:a.unit-b.unit)
-        .forEach(({level, unit})=>{
-          const btn=document.createElement('button'); btn.className='qf-unit-btn';
-          btn.textContent='L'+level+'/U'+unit;
-          btn.onclick=()=>selectUnit(level,unit,btn);
-          container.appendChild(btn);
+
+    // ── Cascade picker for questions ─────────────────────────
+    function cascadeQLevelChange() {
+      const level = document.querySelector('.qf-cascade-level').value;
+      const unitSel = document.querySelector('.qf-cascade-unit');
+      unitSel.innerHTML = '<option value="">Unit…</option>';
+      unitSel.disabled = !level; unitSel.style.opacity = level ? '1' : '0.5';
+      if (level) {
+        const units = new Set();
+        (window.QUESTIONS||[]).forEach(q => { if (String(q.level) === level) units.add(q.unit); });
+        [...units].filter(Boolean).sort((a,b) => a-b).forEach(u => {
+          const opt = document.createElement('option'); opt.value = u; opt.textContent = 'Unit ' + u;
+          unitSel.appendChild(opt);
         });
+      }
+      // Reset selection
+      selectedUnit = null;
+      document.querySelectorAll('.qf-unit-btn').forEach(b => b.classList.remove('active'));
+      if (typeof rebuildPool === 'function') rebuildPool();
+      if (typeof buildTopicsAndLessons === 'function') {
+        const ti = document.getElementById('qf-topics');
+        const li = document.getElementById('qf-lessons');
+        if (ti) ti.innerHTML = '<span class="qf-empty">Select a unit first</span>';
+        if (li) li.innerHTML = '<span class="qf-empty">Select a unit first</span>';
+      }
+    }
+    function cascadeQUnitChange() {
+      const level = parseInt(document.querySelector('.qf-cascade-level').value);
+      const unit  = parseInt(document.querySelector('.qf-cascade-unit').value);
+      if (!unit) { selectedUnit = null; if (typeof rebuildPool==='function') rebuildPool(); return; }
+      // Simulate selecting this unit
+      selectedUnit = { level, unit };
+      if (typeof buildTopicsAndLessons === 'function') buildTopicsAndLessons();
+      if (typeof rebuildPool === 'function') rebuildPool();
+      if (typeof updateSummary === 'function') updateSummary();
+      if (typeof updateQStatus === 'function') updateQStatus();
+    }
+    function cascadeQClear() {
+      document.querySelector('.qf-cascade-level').value = '';
+      const unitSel = document.querySelector('.qf-cascade-unit');
+      unitSel.innerHTML = '<option value="">Unit…</option>';
+      unitSel.disabled = true; unitSel.style.opacity = '0.5';
+      selectedUnit = null;
+      const ti = document.getElementById('qf-topics');
+      const li = document.getElementById('qf-lessons');
+      if (ti) ti.innerHTML = '<span class="qf-empty">Select a unit first</span>';
+      if (li) li.innerHTML = '<span class="qf-empty">Select a unit first</span>';
+      if (typeof rebuildPool === 'function') rebuildPool();
+      if (typeof updateSummary === 'function') updateSummary();
+      if (typeof updateQStatus === 'function') updateQStatus();
     }
 
+    function buildUnitButtons() {
+      const levelSel = document.querySelector('.qf-cascade-level');
+      if (!levelSel) return;
+      if (typeof window.QUESTIONS === 'undefined' || !window.QUESTIONS.length) {
+        levelSel.innerHTML = '<option value="">No questions loaded</option>';
+        return;
+      }
+      const levels = [...new Set(window.QUESTIONS.filter(q => q.level != null).map(q => q.level))].sort((a,b) => a-b);
+      levelSel.innerHTML = '<option value="">Level…</option>';
+      levels.forEach(l => {
+        const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Level ' + l;
+        levelSel.appendChild(opt);
+      });
+    }
+    
     function selectUnit(level,unit,btnEl) {
       if (btnEl.classList.contains('active')) {
         btnEl.classList.remove('active'); selectedUnit=null;
