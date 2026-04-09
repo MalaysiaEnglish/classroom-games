@@ -2,630 +2,408 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Word Search</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="../content.js"      onerror="console.log('No content.js')"></script>
+<script src="../questions.js"    onerror="console.log('No questions.js')"></script>
+<script src="../sheet-loader.js" onerror="console.log('No sheet-loader.js')"></script>
 <style>
-
-/* ══ RESET ══════════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ══ VARIABLES ══════════════════════════════════════════════════ */
-:root {
-  --bg:          #0d0f18;
-  --surface:     #161924;
-  --surface2:    #1e2235;
-  --surface3:    #252a40;
-  --border:      #2c3255;
-  --text:        #e2e6ff;
-  --muted:       #6b75a8;
-  --accent:      #6c8fff;
-  --accent2:     #50d890;
-  --warn:        #ff6b6b;
-  --amber:       #ffc95c;
-
-  /* answer highlight palette — 10 distinct colours */
-  --h0:#ff6b6b; --h1:#ffc95c; --h2:#50d890; --h3:#6c8fff;
-  --h4:#ff8be0; --h5:#7be8ff; --h6:#ff9f59; --h7:#b97bff;
-  --h8:#d0ff6b; --h9:#ff7bc2;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+.qf-bar{width:100%;background:rgba(10,18,30,0.92);border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;margin-bottom:8px;}
+.qf-summary{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;user-select:none;font-size:0.82rem;color:#c8bfb0;}
+.qf-summary:hover{background:rgba(255,255,255,0.04);}
+.qf-summary-text{flex:1;}
+.qf-chevron{font-size:0.7rem;transition:transform 0.2s;}
+.qf-bar.open .qf-chevron{transform:rotate(180deg);}
+.qf-detail{display:none;padding:10px 14px 14px;border-top:1px solid rgba(255,255,255,0.07);}
+.qf-bar.open .qf-detail{display:block;}
+.qf-section-label{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(240,180,41,0.8);margin:8px 0 5px;}
+.qf-section-label:first-child{margin-top:0;}
+.qf-checks{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;}
+.qf-check-label{display:flex;align-items:center;gap:5px;font-size:0.75rem;color:#c8bfb0;cursor:pointer;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:3px 8px;transition:all 0.15s;}
+.qf-check-label:hover{background:rgba(240,180,41,0.1);}
+.qf-check-label input{accent-color:#f0c842;}
+.qf-count{font-size:0.65rem;color:rgba(240,180,41,0.7);margin-left:2px;}
+.qf-empty{font-size:0.75rem;color:rgba(255,255,255,0.3);font-style:italic;}
+.qf-status{font-size:0.75rem;color:#c8bfb0;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);margin-top:6px;}
+body{background:#0d0f18;color:#e2e6ff;font-family:'DM Sans',sans-serif;min-height:100vh;}
+.ws-header{background:rgba(10,18,30,0.95);border-bottom:1px solid rgba(255,255,255,0.08);padding:12px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20;}
+.ws-back{background:none;border:1px solid rgba(255,255,255,0.15);color:#7b82a8;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;text-decoration:none;font-family:'DM Sans',sans-serif;display:inline-block;}
+.ws-back:hover{border-color:#6c8fff;color:#6c8fff;}
+.ws-header-title{font-size:17px;font-weight:600;}
+.ws-header-sub{font-size:12px;color:#7b82a8;}
+.ws-header-right{margin-left:auto;display:flex;gap:8px;}
+.btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:#e2e6ff;border-radius:8px;padding:7px 14px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all 0.12s;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{border-color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.09);}
+.btn.active{border-color:#50d890;color:#50d890;background:rgba(80,216,144,0.08);}
+.ws-setup{max-width:620px;margin:0 auto;padding:28px 20px;}
+.ws-setup h2{font-size:20px;font-weight:800;margin-bottom:20px;}
+.setup-section{margin-bottom:18px;}
+.setup-section > label{display:block;font-size:13px;font-weight:600;color:#c8bfb0;margin-bottom:8px;}
+.ws-picker{display:flex;gap:8px;flex-wrap:wrap;}
+.ws-pick-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;padding:6px 14px;border-radius:7px;font-size:13px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+.ws-pick-btn:hover{background:rgba(240,180,41,0.1);border-color:rgba(240,180,41,0.4);}
+.ws-pick-btn.ws-sel{background:rgba(240,180,41,0.22);border-color:rgba(240,180,41,0.65);color:#f0c842;font-weight:600;}
+.word-count-note{margin-top:6px;font-size:0.78rem;color:rgba(240,180,41,0.8);min-height:1.2em;}
+.btn-generate{display:block;width:100%;padding:14px;margin-top:10px;border-radius:10px;background:#6c8fff;border:none;color:#fff;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background 0.12s;}
+.btn-generate:hover{background:#5a7ee8;}
+.btn-generate:disabled{background:rgba(108,143,255,0.3);cursor:not-allowed;}
+.ws-puzzle{display:none;flex-direction:row;min-height:calc(100vh - 56px);}
+.grid-panel{flex:1;padding:28px 20px;display:flex;flex-direction:column;align-items:center;}
+.puzzle-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;text-align:center;margin-bottom:4px;}
+.puzzle-unit{font-size:13px;color:#7b82a8;text-align:center;margin-bottom:22px;letter-spacing:0.4px;}
+.grid-wrap{display:inline-block;border:2px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;background:rgba(22,25,36,0.9);user-select:none;}
+.grid-table{border-collapse:collapse;display:block;}
+.grid-cell{width:34px;height:34px;text-align:center;vertical-align:middle;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#e2e6ff;cursor:pointer;transition:background 0.06s;}
+.grid-cell:hover{background:rgba(108,143,255,0.12);}
+.grid-cell.selecting{background:rgba(108,143,255,0.28);color:#6c8fff;}
+.words-panel{width:260px;flex-shrink:0;border-left:1px solid rgba(255,255,255,0.08);padding:28px 18px;background:rgba(16,19,30,0.9);overflow-y:auto;}
+.words-panel h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:14px;}
+.word-item{display:flex;align-items:baseline;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06);transition:opacity 0.2s;}
+.word-item:last-child{border-bottom:none;}
+.word-item.found-word{opacity:0.35;}
+.word-item.found-word .wi-word{text-decoration:line-through;}
+.wi-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,0.15);}
+.wi-word{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;min-width:80px;}
+.wi-hint{font-size:12px;color:#7b82a8;line-height:1.3;}
+.score-bar{margin-top:20px;padding:14px;background:rgba(255,255,255,0.04);border-radius:10px;border:1px solid rgba(255,255,255,0.08);text-align:center;}
+.score-num{font-size:28px;font-weight:700;color:#50d890;font-family:'IBM Plex Mono',monospace;}
+.score-label{font-size:12px;color:#7b82a8;margin-top:2px;}
+.congrats-msg{margin-top:12px;padding:12px;background:rgba(80,216,144,0.1);border:1px solid #50d890;border-radius:10px;font-size:13px;color:#50d890;text-align:center;display:none;}
+.print-words{display:none;}
+.print-footer{display:none;}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{background:#fff;color:#111;}
+  .ws-header,.ws-setup,.words-panel{display:none!important;}
+  .ws-puzzle{display:block!important;}
+  .grid-panel{padding:0;align-items:flex-start;}
+  .puzzle-title{font-size:20px;color:#111;}
+  .puzzle-unit{color:#555;}
+  .grid-wrap{border-color:#aaa;border-radius:4px;background:#fff;}
+  .grid-cell{width:28px;height:28px;font-size:13px;color:#111;background:none!important;}
+  .print-words{display:block;margin-top:18px;}
+  .print-words h3{font-family:'Playfair Display',serif;font-size:14px;border-bottom:1px solid #ccc;padding-bottom:6px;margin-bottom:10px;}
+  .print-words-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px 14px;}
+  .pw-entry{font-size:12px;display:flex;gap:5px;padding:3px 0;}
+  .pw-word{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;min-width:65px;}
+  .pw-hint{font-size:11px;color:#555;}
+  .print-footer{display:block!important;margin-top:14px;font-size:11px;color:#999;text-align:center;border-top:1px solid #ddd;padding-top:6px;}
 }
-
-/* ══ SCREEN LAYOUT ══════════════════════════════════════════════ */
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-}
-
-/* ══ HEADER ═════════════════════════════════════════════════════ */
-.gp-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.gp-back {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 13px;
-  cursor: pointer;
-  text-decoration: none;
-  font-family: 'DM Sans', sans-serif;
-  display: inline-block;
-}
-.gp-back:hover { border-color: var(--accent); color: var(--accent); }
-.gp-header-title { font-size: 17px; font-weight: 600; color: var(--text); }
-.gp-header-sub   { font-size: 12px; color: var(--muted); }
-.gp-header-right { margin-left: auto; display: flex; gap: 8px; }
-
-/* ══ TOOLBAR ════════════════════════════════════════════════════ */
-.toolbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.toolbar select {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 7px 12px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-}
-.toolbar select:focus { outline: none; border-color: var(--accent); }
-.toolbar .sep { width: 1px; height: 28px; background: var(--border); margin: 0 2px; }
-.btn {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 7px 14px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  cursor: pointer;
-  transition: border-color 0.12s, background 0.12s;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.btn:hover { border-color: var(--muted); background: var(--surface3); }
-.btn.active { border-color: var(--accent2); color: var(--accent2); background: rgba(80,216,144,0.08); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn.primary:hover { background: #5a7ee8; }
-.btn.print-btn { background: var(--surface2); }
-
-/* ══ MAIN LAYOUT ════════════════════════════════════════════════ */
-.main {
-  display: flex;
-  gap: 0;
-  min-height: calc(100vh - 120px);
-}
-
-/* ══ GRID PANEL ═════════════════════════════════════════════════ */
-.grid-panel {
-  flex: 1;
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.puzzle-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--text);
-  margin-bottom: 4px;
-  text-align: center;
-}
-.puzzle-unit {
-  font-size: 13px;
-  color: var(--muted);
-  text-align: center;
-  margin-bottom: 22px;
-  letter-spacing: 0.5px;
-}
-
-.grid-wrap {
-  display: inline-block;
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--surface);
-  user-select: none;
-}
-
-.grid-table {
-  border-collapse: collapse;
-  display: block;
-}
-
-.grid-cell {
-  width: 34px;
-  height: 34px;
-  text-align: center;
-  vertical-align: middle;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  cursor: pointer;
-  transition: background 0.08s, color 0.08s;
-  position: relative;
-}
-.grid-cell:hover { background: var(--surface3); }
-.grid-cell.selecting { background: rgba(108,143,255,0.25); color: var(--accent); }
-.grid-cell.found     { font-weight: 700; }
-.grid-cell.answer-show { opacity: 1 !important; }
-
-/* ══ WORD LIST PANEL ════════════════════════════════════════════ */
-.words-panel {
-  width: 260px;
-  flex-shrink: 0;
-  border-left: 1px solid var(--border);
-  padding: 28px 20px;
-  background: var(--surface);
-  overflow-y: auto;
-}
-.words-panel h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 14px;
-  color: var(--text);
-}
-.word-item {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 7px 0;
-  border-bottom: 1px solid var(--border);
-  transition: opacity 0.2s;
-}
-.word-item:last-child { border-bottom: none; }
-.word-item.found-word { opacity: 0.38; }
-.word-item.found-word .wi-word { text-decoration: line-through; }
-.wi-bullet {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: var(--border);
-}
-.word-item.found-word .wi-bullet { background: var(--accent2); }
-.wi-word {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
-  min-width: 80px;
-}
-.wi-hint {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.3;
-}
-
-.score-bar {
-  margin-top: 20px;
-  padding: 14px;
-  background: var(--surface2);
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  text-align: center;
-}
-.score-num { font-size: 28px; font-weight: 700; color: var(--accent2); font-family: 'IBM Plex Mono', monospace; }
-.score-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-.congrats-msg {
-  margin-top: 14px;
-  padding: 12px;
-  background: rgba(80,216,144,0.1);
-  border: 1px solid var(--accent2);
-  border-radius: 10px;
-  font-size: 13px;
-  color: var(--accent2);
-  text-align: center;
-  display: none;
-}
-
-/* ══ PRINT ══════════════════════════════════════════════════════ */
-@media print {
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  :root {
-    --bg: #fff; --surface: #fff; --surface2: #f4f5f8; --surface3: #eee;
-    --border: #ccc; --text: #111; --muted: #555; --accent: #2a5bd4; --accent2: #1a8a50;
-    --h0:#e05; --h1:#c80; --h2:#190; --h3:#24d; --h4:#c0a; --h5:#099;
-    --h6:#c50; --h7:#70c; --h8:#580; --h9:#c06;
-  }
-  body { background: #fff; }
-  .gp-header, .toolbar, .words-panel { display: none !important; }
-  .main { display: block; }
-  .grid-panel { padding: 0; }
-  .puzzle-title { font-size: 22px; color: #111; }
-  .puzzle-unit  { color: #555; }
-  .grid-wrap { border-color: #aaa; border-radius: 4px; }
-  .grid-cell { width: 28px; height: 28px; font-size: 13px; color: #111; }
-  .grid-cell:hover { background: none; }
-  .print-word-section { display: block !important; }
-  .print-footer { display: block !important; }
-}
-
-/* Print word section (hidden on screen) */
-.print-word-section {
-  display: none;
-  margin-top: 20px;
-  padding: 0 4px;
-}
-.print-word-section h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 6px;
-}
-.print-word-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px 16px;
-}
-.print-word-entry {
-  font-size: 12px;
-  display: flex;
-  gap: 6px;
-  align-items: baseline;
-  padding: 3px 0;
-}
-.pw-word { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 12px; min-width: 70px; }
-.pw-hint { font-size: 11px; color: #555; }
-
-.print-footer {
-  display: none;
-  margin-top: 16px;
-  font-size: 11px;
-  color: #888;
-  text-align: center;
-  border-top: 1px solid #ddd;
-  padding-top: 8px;
-}
-
-/* ══ EMPTY STATE ════════════════════════════════════════════════ */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--muted);
-}
-.empty-state .es-icon { font-size: 48px; margin-bottom: 14px; }
-.empty-state h3 { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-.empty-state p { font-size: 14px; line-height: 1.5; }
-
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════
-     DATA BLOCK — edit per stage / unit
-     Words pulled from content.js format:
-     { word: "UPPERCASE", hint: "definition", stage: N, unit: N }
-     ══════════════════════════════════════════════ -->
-<script>
-
-// ── UNIT SETS ─────────────────────────────────────────────────
-// Add as many as you like — they appear in the stage/unit dropdown.
-// Copy word entries directly from content.js (words[] array).
-// Words are auto-uppercased. Spaces/hyphens are stripped.
-// Minimum 8 words recommended; 12–20 is ideal for a good grid.
-
-const WORD_SETS = [
-
-  {
-    label: "Stage 3 · Unit 1 — People & Jobs",
-    words: [
-      { word: "DOCTOR",     hint: "treats sick people" },
-      { word: "TEACHER",    hint: "works in a school" },
-      { word: "ENGINEER",   hint: "designs and builds things" },
-      { word: "FARMER",     hint: "grows food on a farm" },
-      { word: "PILOT",      hint: "flies an aeroplane" },
-      { word: "NURSE",      hint: "cares for patients" },
-      { word: "CHEF",       hint: "cooks food in a restaurant" },
-      { word: "DRIVER",     hint: "operates a vehicle" },
-      { word: "POLICE",     hint: "keeps people safe" },
-      { word: "BUILDER",    hint: "constructs houses and buildings" },
-      { word: "DENTIST",    hint: "looks after teeth" },
-      { word: "SCIENTIST",  hint: "studies the natural world" },
-    ]
-  },
-
-  {
-    label: "Stage 4 · Unit 2 — Animals",
-    words: [
-      { word: "ELEPHANT",   hint: "largest land animal" },
-      { word: "DOLPHIN",    hint: "intelligent sea mammal" },
-      { word: "LEOPARD",    hint: "spotted big cat" },
-      { word: "PENGUIN",    hint: "bird that cannot fly" },
-      { word: "CROCODILE",  hint: "large reptile near rivers" },
-      { word: "CHEETAH",    hint: "fastest land animal" },
-      { word: "GORILLA",    hint: "great ape from Africa" },
-      { word: "FLAMINGO",   hint: "pink bird that stands on one leg" },
-      { word: "PYTHON",     hint: "large non-venomous snake" },
-      { word: "VULTURE",    hint: "large bird that eats dead animals" },
-      { word: "WOLVERINE",  hint: "fierce mammal of the weasel family" },
-    ]
-  },
-
-  {
-    label: "Stage 5 · Unit 4 — Weather & Nature",
-    words: [
-      { word: "THUNDER",    hint: "loud sound during a storm" },
-      { word: "LIGHTNING",  hint: "flash of electricity in the sky" },
-      { word: "DROUGHT",    hint: "long period without rain" },
-      { word: "BLIZZARD",   hint: "heavy snowstorm with strong winds" },
-      { word: "MONSOON",    hint: "season of heavy tropical rain" },
-      { word: "AVALANCHE",  hint: "mass of snow sliding down a mountain" },
-      { word: "TORNADO",    hint: "violent spinning column of air" },
-      { word: "GLACIER",    hint: "slow-moving mass of ice" },
-      { word: "EROSION",    hint: "wearing away of land by water or wind" },
-      { word: "HUMIDITY",   hint: "amount of moisture in the air" },
-    ]
-  },
-
-  {
-    label: "Stage 6 · Unit 6 — Conditionals Vocab",
-    words: [
-      { word: "IMAGINARY",  hint: "not real; existing only in the mind" },
-      { word: "CONSEQUENCE",hint: "result of an action" },
-      { word: "HYPOTHESIS", hint: "suggested explanation to be tested" },
-      { word: "PROBABLE",   hint: "likely to happen" },
-      { word: "UNLIKELY",   hint: "not expected to happen" },
-      { word: "REGRET",     hint: "feeling sorry about a past action" },
-      { word: "SCENARIO",   hint: "a description of a possible situation" },
-      { word: "CONDITIONAL", hint: "depending on something else" },
-      { word: "OUTCOME",    hint: "the final result" },
-      { word: "CLAUSE",     hint: "a group of words with a verb" },
-    ]
-  },
-
-];
-
-</script>
-<!-- ══════════════════════════════════════════════ -->
-
-
-<!-- HEADER -->
-<header class="gp-header">
-  <a href="../index.html" class="gp-back">← Back</a>
+<header class="ws-header">
+  <a href="../index.html" class="ws-back">← Back</a>
   <div>
-    <div class="gp-header-title">Word Search</div>
-    <div class="gp-header-sub" id="hdr-sub">Select a unit to begin</div>
+    <div class="ws-header-title">Word Search</div>
+    <div class="ws-header-sub" id="hdr-sub">Choose words then generate</div>
   </div>
-  <div class="gp-header-right">
-    <button class="btn print-btn" onclick="doPrint()">🖨 Print</button>
-    <button class="btn primary" id="btn-print-answers" onclick="doPrintAnswers()" style="display:none">🖨 Print + Answers</button>
+  <div class="ws-header-right" id="puzzle-btns" style="display:none">
+    <button class="btn" id="btn-answers" onclick="toggleAnswers()">👁 Show Answers</button>
+    <button class="btn" onclick="showSetup()">⚙ New Puzzle</button>
+    <button class="btn" onclick="doPrint()">🖨 Print</button>
+    <button class="btn" onclick="doPrintAnswers()">🖨 + Answers</button>
   </div>
 </header>
 
-<!-- TOOLBAR -->
-<div class="toolbar">
-  <select id="set-select" onchange="loadSet()">
-    <option value="">— Choose a unit —</option>
-  </select>
-  <div class="sep"></div>
-  <select id="diff-select" onchange="loadSet()">
-    <option value="easy">Easy (→ ↓ ↘ ↙ only)</option>
-    <option value="hard" selected>Normal (all 8 directions)</option>
-  </select>
-  <div class="sep"></div>
-  <button class="btn" id="btn-answers" onclick="toggleAnswers()" style="display:none">👁 Show Answers</button>
-  <button class="btn" id="btn-regenerate" onclick="loadSet()" style="display:none">🔀 New Layout</button>
-</div>
+<div class="ws-setup" id="setupScreen">
+  <h2>Set up your word search</h2>
 
-<!-- MAIN -->
-<div class="main">
-
-  <!-- GRID PANEL -->
-  <div class="grid-panel" id="grid-panel">
-    <div class="empty-state" id="empty-state">
-      <div class="es-icon">🔤</div>
-      <h3>Ready to search</h3>
-      <p>Choose a stage and unit above<br>to generate your word search.</p>
+  <div class="setup-section">
+    <label>Word Topics</label>
+    <div class="qf-bar open" id="wordFilterBar">
+      <div class="qf-summary" onclick="document.getElementById('wordFilterBar').classList.toggle('open')">
+        <span>📚</span>
+        <span class="qf-summary-text" id="wordFilterSummary">All built-in topics</span>
+        <span class="qf-chevron">▼</span>
+      </div>
+      <div class="qf-detail">
+        <div id="curriculumSection" style="display:none">
+          <div class="qf-section-label">Curriculum</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
+            <select id="cascadeLevel" onchange="cascadeLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;"><option value="">Level…</option></select>
+            <select id="cascadeUnit" onchange="cascadeUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;"><option value="">Unit…</option></select>
+            <select id="cascadeLesson" onchange="cascadeLessonChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;"><option value="">All lessons</option></select>
+            <button onclick="cascadeClear()" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;padding:2px 4px;">✕ clear</button>
+          </div>
+          <div style="margin-bottom:6px;">
+            <input id="topicSearch" type="text" placeholder="🔍 Search topics…" oninput="filterTopicDisplay()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:5px 10px;font-size:0.78rem;outline:none;">
+          </div>
+          <div class="qf-checks" id="curriculumTopics"><span class="qf-empty">Select a level to begin</span></div>
+        </div>
+        <div id="builtinSection">
+          <div class="qf-section-label">Built-in Topics</div>
+          <div class="qf-checks" id="builtinChecks"></div>
+        </div>
+        <div class="qf-status" id="wordFilterStatus">All built-in topics selected</div>
+      </div>
     </div>
-    <div id="puzzle-area" style="display:none; text-align:center;">
-      <div class="puzzle-title" id="puzzle-title">Word Search</div>
-      <div class="puzzle-unit" id="puzzle-unit"></div>
-      <div class="grid-wrap" id="grid-wrap">
-        <table class="grid-table" id="grid-table"></table>
-      </div>
-      <!-- Print-only word list -->
-      <div class="print-word-section" id="print-word-section">
-        <h3>Find these words:</h3>
-        <div class="print-word-grid" id="print-word-grid"></div>
-      </div>
-      <div class="print-footer" id="print-footer">gamepack.win</div>
+    <div class="word-count-note" id="wordCountNote"></div>
+  </div>
+
+  <div class="setup-section">
+    <label>Directions</label>
+    <div class="ws-picker">
+      <button class="ws-pick-btn" data-diff="easy" onclick="pickDiff(this)">Easy  →  ↓  ↘  ↙</button>
+      <button class="ws-pick-btn ws-sel" data-diff="hard" onclick="pickDiff(this)">Normal · all 8 directions</button>
     </div>
   </div>
 
-  <!-- WORDS PANEL -->
-  <div class="words-panel" id="words-panel" style="display:none">
+  <button class="btn-generate" id="generateBtn" onclick="doGenerate()" disabled>Generate Word Search</button>
+</div>
+
+<div class="ws-puzzle" id="puzzleArea">
+  <div class="grid-panel">
+    <div class="puzzle-title">Word Search</div>
+    <div class="puzzle-unit" id="puzzleUnit"></div>
+    <div class="grid-wrap"><table class="grid-table" id="gridTable"></table></div>
+    <div class="print-words" id="printWords">
+      <h3>Find these words:</h3>
+      <div class="print-words-grid" id="printWordGrid"></div>
+    </div>
+    <div class="print-footer">gamepack.win</div>
+  </div>
+  <div class="words-panel">
     <h3>Find these words</h3>
-    <div id="word-list"></div>
+    <div id="wordList"></div>
     <div class="score-bar">
-      <div class="score-num"><span id="found-count">0</span> / <span id="total-count">0</span></div>
+      <div class="score-num"><span id="foundCount">0</span>/<span id="totalCount">0</span></div>
       <div class="score-label">words found</div>
     </div>
-    <div class="congrats-msg" id="congrats-msg">
-      🎉 All words found! Well done!
-    </div>
+    <div class="congrats-msg" id="congratsMsg">🎉 All words found!</div>
   </div>
-
 </div>
 
-
 <script>
-// ════════════════════════════════════════════════════════
-// GENERATOR
-// ════════════════════════════════════════════════════════
-
-const DIRS_EASY = [[0,1],[1,0],[1,1],[1,-1]];
-const DIRS_HARD = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
-const DIR_NAMES = {
-  '0,1':'→','0,-1':'←','1,0':'↓','-1,0':'↑',
-  '1,1':'↘','1,-1':'↙','-1,1':'↗','-1,-1':'↖'
-};
-const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-let STATE = {
-  grid: [], size: 0, placed: [],
-  words: [], found: new Set(),
-  showAnswers: false, printAnswers: false,
-  selecting: false, startCell: null, cells: []
+const BUILT_IN={
+  "animals":{label:"🐘 Animals",words:["CAT","DOG","COW","PIG","FOX","OWL","BAT","FISH","FROG","BEAR","DUCK","DEER","LION","WOLF","BIRD","TIGER","HORSE","SHARK","WHALE","EAGLE","SNAKE","MOUSE","RABBIT","PARROT","MONKEY","DOLPHIN","PENGUIN","GIRAFFE","CHEETAH","LEOPARD","GORILLA","FLAMINGO","CROCODILE","TORTOISE","HEDGEHOG"]},
+  "food":{label:"🍕 Food",words:["CAKE","RICE","BREAD","MILK","EGGS","SOUP","MEAT","CORN","APPLE","MANGO","GRAPE","MELON","PIZZA","PASTA","CHIPS","JUICE","TOAST","SALAD","NOODLES","BURGER","COOKIE","HONEY","BUTTER","CHEESE","YOGURT","SUSHI","LAKSA","SATAY","RENDANG","BIRYANI","CURRY","WAFFLE","CROISSANT","BROWNIE","TIRAMISU"]},
+  "sports":{label:"⚽ Sports",words:["RUN","SWIM","JUMP","KICK","THROW","CATCH","RACE","FOOTBALL","TENNIS","CRICKET","HOCKEY","RUGBY","BOXING","CYCLING","SKATING","CLIMBING","DANCING","BOWLING","GOLF","BADMINTON","BASKETBALL","VOLLEYBALL","GYMNASTICS","ATHLETICS","TAEKWONDO","JUDO","WRESTLING","FENCING","ARCHERY","SQUASH"]},
+  "adjectives":{label:"💬 Adjectives",words:["BIG","TINY","HOT","COLD","WET","DRY","SOFT","HARD","FAST","SLOW","LOUD","QUIET","CLEAN","DIRTY","HAPPY","SAD","KIND","MEAN","BRAVE","FUNNY","SILLY","SMART","ENORMOUS","ANCIENT","MODERN","FURIOUS","PEACEFUL","GENEROUS","MYSTERIOUS","TENACIOUS","MELANCHOLIC","CAPRICIOUS","GREGARIOUS","LACONIC","SARDONIC"]},
+  "igcse_english":{label:"📝 IGCSE English",words:["METAPHOR","SIMILE","ALLITERATION","ONOMATOPOEIA","PERSONIFICATION","HYPERBOLE","IRONY","SARCASM","OXYMORON","PARADOX","FORESHADOWING","FLASHBACK","NARRATIVE","PROTAGONIST","ANTAGONIST","CHARACTERISATION","SOLILOQUY","MONOLOGUE","DIALOGUE","ATMOSPHERE","IMAGERY","SYMBOLISM","INFERENCE","CONNOTATION","RHETORIC","JUXTAPOSITION"]},
+  "countries":{label:"🌍 Countries",words:["MALAYSIA","SINGAPORE","INDONESIA","THAILAND","VIETNAM","PHILIPPINES","CAMBODIA","CHINA","JAPAN","INDIA","PAKISTAN","AUSTRALIA","EGYPT","KENYA","BRAZIL","ARGENTINA","MEXICO","CANADA","FRANCE","GERMANY","ITALY","SPAIN","PORTUGAL","SWEDEN","NORWAY","TURKEY"]},
 };
 
-function calcSize(words) {
-  const totalLetters = words.reduce((s,w)=>s+w.length,0);
-  const longest = Math.max(...words.map(w=>w.length));
-  return Math.max(longest + 3, Math.min(20, Math.ceil(Math.sqrt(totalLetters * 2.2)) + 2));
+const selectedSources=new Set();
+let curriculumWordMap={};
+let selDiff='hard';
+
+function buildWordPool(){
+  if(selectedSources.size===0)return Object.values(BUILT_IN).flatMap(c=>c.words.map(w=>({word:w,hint:''})));
+  const pool=[];
+  selectedSources.forEach(key=>{
+    if(BUILT_IN[key])BUILT_IN[key].words.forEach(w=>pool.push({word:w,hint:''}));
+    else if(curriculumWordMap[key])curriculumWordMap[key].forEach(e=>pool.push(e));
+  });
+  return pool.length?pool:Object.values(BUILT_IN).flatMap(c=>c.words.map(w=>({word:w,hint:''})));
 }
 
-function getValidBounds(size, len, dr, dc) {
-  let r0=0,r1=size-1,c0=0,c1=size-1;
-  if      (dr>0) r1=size-len;
-  else if (dr<0) r0=len-1;
-  if      (dc>0) c1=size-len;
-  else if (dc<0) c0=len-1;
-  if(r1<r0||c1<c0) return null;
-  return [r0,r1,c0,c1];
+function updateWordFilterSummary(){
+  const pool=buildWordPool();
+  const summaryEl=document.getElementById('wordFilterSummary');
+  const statusEl=document.getElementById('wordFilterStatus');
+  const noteEl=document.getElementById('wordCountNote');
+  const genBtn=document.getElementById('generateBtn');
+  if(selectedSources.size===0){summaryEl.textContent='All built-in topics';statusEl.textContent=pool.length+' words available';}
+  else{summaryEl.textContent=selectedSources.size+' topic'+(selectedSources.size>1?'s':'')+' selected · '+pool.length+' words';statusEl.textContent=pool.length+' words available';}
+  const usable=pool.filter(w=>w.word.replace(/[^A-Z]/gi,'').length>=3);
+  if(usable.length<6){noteEl.textContent='⚠ Need at least 6 words — select more topics (have '+usable.length+')';genBtn.disabled=true;}
+  else{noteEl.textContent=usable.length+' words ready for the puzzle';genBtn.disabled=false;}
 }
 
-function canPlace(grid, word, r, c, dr, dc, size) {
-  for(let i=0;i<word.length;i++){
-    const nr=r+i*dr, nc=c+i*dc;
-    if(nr<0||nr>=size||nc<0||nc>=size) return false;
-    if(grid[nr][nc]&&grid[nr][nc]!==word[i]) return false;
+function buildWordPicker(){
+  const hasCurriculum=window.CUSTOM_CONTENT?.words?.length>0;
+  document.getElementById('curriculumSection').style.display=hasCurriculum?'block':'none';
+  if(hasCurriculum){
+    window.CUSTOM_CONTENT.words.forEach(w=>{
+      const t=w.topic||'Custom';
+      if(!curriculumWordMap[t])curriculumWordMap[t]=[];
+      curriculumWordMap[t].push({word:w.word,hint:w.hint||''});
+    });
+    const levelSet=new Set();
+    window.CUSTOM_CONTENT.words.forEach(w=>{
+      const m=w.topic&&w.topic.match(/^[LS](\d+)\//);
+      if(m)levelSet.add(parseInt(m[1]));
+      else if(w.level)levelSet.add(parseInt(w.level));
+    });
+    const levelSel=document.getElementById('cascadeLevel');
+    [...levelSet].sort((a,b)=>a-b).forEach(l=>{const opt=document.createElement('option');opt.value=l;opt.textContent='Level '+l;levelSel.appendChild(opt);});
+    renderTopicChips(Object.keys(curriculumWordMap).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})));
   }
+  const builtinEl=document.getElementById('builtinChecks');
+  builtinEl.innerHTML='';
+  Object.entries(BUILT_IN).forEach(([key,cat])=>{
+    const label=document.createElement('label');label.className='qf-check-label';
+    const cb=document.createElement('input');cb.type='checkbox';
+    cb.onchange=()=>{if(cb.checked)selectedSources.add(key);else selectedSources.delete(key);updateWordFilterSummary();};
+    const span=document.createElement('span');span.textContent=cat.label;
+    const cs=document.createElement('span');cs.className='qf-count';cs.textContent=cat.words.length;
+    label.appendChild(cb);label.appendChild(span);label.appendChild(cs);builtinEl.appendChild(label);
+  });
+  updateWordFilterSummary();
+}
+
+function getFilteredTopics(){
+  const level=document.getElementById('cascadeLevel').value;
+  const unit=document.getElementById('cascadeUnit').value;
+  const lesson=document.getElementById('cascadeLesson').value;
+  const search=(document.getElementById('topicSearch').value||'').toLowerCase();
+  return Object.keys(curriculumWordMap).filter(t=>{
+    const mL=t.match(/^[LS](\d+)\//);const mU=t.match(/^[LS]\d+\/U(\d+)/);const mLs=t.match(/^[LS]\d+\/U\d+\/L(\d+)/);
+    if(level&&(!mL||mL[1]!==level))return false;
+    if(unit&&(!mU||mU[1]!==unit))return false;
+    if(lesson&&(!mLs||mLs[1]!==lesson))return false;
+    if(search&&!t.toLowerCase().includes(search))return false;
+    return true;
+  }).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+}
+
+function renderTopicChips(topics){
+  const el=document.getElementById('curriculumTopics');
+  if(!topics.length){el.innerHTML='<span class="qf-empty">No topics found</span>';return;}
+  el.innerHTML='';
+  topics.forEach(topic=>{
+    const entries=curriculumWordMap[topic]||[];
+    const label=document.createElement('label');label.className='qf-check-label';
+    const cb=document.createElement('input');cb.type='checkbox';
+    cb.checked=selectedSources.has(topic);
+    cb.onchange=()=>{if(cb.checked)selectedSources.add(topic);else selectedSources.delete(topic);updateWordFilterSummary();};
+    const span=document.createElement('span');span.textContent=topic;
+    const cs=document.createElement('span');cs.className='qf-count';cs.textContent=entries.length;
+    label.appendChild(cb);label.appendChild(span);label.appendChild(cs);el.appendChild(label);
+  });
+}
+
+function cascadeLevelChange(){
+  const level=document.getElementById('cascadeLevel').value;
+  const unitSel=document.getElementById('cascadeUnit');const lessonSel=document.getElementById('cascadeLesson');
+  unitSel.innerHTML='<option value="">Unit\u2026</option>';lessonSel.innerHTML='<option value="">All lessons</option>';
+  unitSel.disabled=!level;unitSel.style.opacity=level?'1':'0.5';lessonSel.disabled=true;lessonSel.style.opacity='0.5';
+  if(level){const units=new Set();Object.keys(curriculumWordMap).forEach(t=>{const m=t.match(/^[LS](\d+)\/U(\d+)/);if(m&&m[1]===level)units.add(parseInt(m[2]));});[...units].sort((a,b)=>a-b).forEach(u=>{const opt=document.createElement('option');opt.value=u;opt.textContent='Unit '+u;unitSel.appendChild(opt);});}
+  renderTopicChips(getFilteredTopics());
+}
+
+function cascadeUnitChange(){
+  const level=document.getElementById('cascadeLevel').value;const unit=document.getElementById('cascadeUnit').value;
+  const lessonSel=document.getElementById('cascadeLesson');
+  lessonSel.innerHTML='<option value="">All lessons</option>';lessonSel.disabled=!unit;lessonSel.style.opacity=unit?'1':'0.5';
+  if(unit){const lessons=new Set();Object.keys(curriculumWordMap).forEach(t=>{const m=t.match(/^[LS](\d+)\/U(\d+)\/L(\d+)/);if(m&&m[1]===level&&m[2]===unit)lessons.add(parseInt(m[3]));});[...lessons].sort((a,b)=>a-b).forEach(l=>{const opt=document.createElement('option');opt.value=l;opt.textContent='Lesson '+l;lessonSel.appendChild(opt);});}
+  renderTopicChips(getFilteredTopics());
+}
+
+function cascadeLessonChange(){renderTopicChips(getFilteredTopics());}
+
+function cascadeClear(){
+  document.getElementById('cascadeLevel').value='';
+  document.getElementById('cascadeUnit').innerHTML='<option value="">Unit\u2026</option>';document.getElementById('cascadeUnit').disabled=true;document.getElementById('cascadeUnit').style.opacity='0.5';
+  document.getElementById('cascadeLesson').innerHTML='<option value="">All lessons</option>';document.getElementById('cascadeLesson').disabled=true;document.getElementById('cascadeLesson').style.opacity='0.5';
+  document.getElementById('topicSearch').value='';
+  renderTopicChips(Object.keys(curriculumWordMap).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})));
+}
+
+function filterTopicDisplay(){renderTopicChips(getFilteredTopics());}
+function pickDiff(btn){document.querySelectorAll('.ws-pick-btn').forEach(b=>b.classList.remove('ws-sel'));btn.classList.add('ws-sel');selDiff=btn.dataset.diff;}
+
+// ── Generator ──────────────────────────────────────────────────────
+const DIRS_EASY=[[0,1],[1,0],[1,1],[1,-1]];
+const DIRS_HARD=[[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+const ALPHA='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const HUES=['#ff6b6b','#ffc95c','#50d890','#6c8fff','#ff8be0','#7be8ff','#ff9f59','#b97bff','#d0ff6b','#ff7bc2'];
+
+let WS={grid:[],size:0,placed:[],words:[],found:new Set(),foundCells:{},showAnswers:false};
+
+function calcSize(words){
+  const tot=words.reduce((s,w)=>s+w.length,0);
+  const lon=Math.max(...words.map(w=>w.length));
+  return Math.max(lon+3,Math.min(22,Math.ceil(Math.sqrt(tot*2.4))+2));
+}
+
+function getValidBounds(size,len,dr,dc){
+  let r0=0,r1=size-1,c0=0,c1=size-1;
+  if(dr>0)r1=size-len;else if(dr<0)r0=len-1;
+  if(dc>0)c1=size-len;else if(dc<0)c0=len-1;
+  return(r1<r0||c1<c0)?null:[r0,r1,c0,c1];
+}
+
+function canPlace(grid,word,r,c,dr,dc,size){
+  for(let i=0;i<word.length;i++){const nr=r+i*dr,nc=c+i*dc;if(nr<0||nr>=size||nc<0||nc>=size)return false;if(grid[nr][nc]&&grid[nr][nc]!==word[i])return false;}
   return true;
 }
 
-function placeWord(grid, word, r, c, dr, dc) {
-  for(let i=0;i<word.length;i++) grid[r+i*dr][c+i*dc]=word[i];
-}
+function placeWord(grid,word,r,c,dr,dc){for(let i=0;i<word.length;i++)grid[r+i*dr][c+i*dc]=word[i];}
 
-function generatePuzzle(wordObjs, difficulty) {
-  const words = wordObjs.map(w=>w.word.toUpperCase().replace(/[^A-Z]/g,''));
-  const size  = calcSize(words);
-  const DIRS  = difficulty==='easy' ? DIRS_EASY : DIRS_HARD;
-  const grid  = Array.from({length:size},()=>Array(size).fill(''));
-  const placed= [];
-
-  // Sort longest first for better placement
-  const sortedWords = [...words].sort((a,b)=>b.length-a.length);
-
-  for(const word of sortedWords){
-    let success = false;
-    for(let attempt=0; attempt<400 && !success; attempt++){
-      const [dr,dc] = DIRS[Math.floor(Math.random()*DIRS.length)];
-      const bounds  = getValidBounds(size, word.length, dr, dc);
-      if(!bounds) continue;
-      const [r0,r1,c0,c1] = bounds;
-      const r = r0 + Math.floor(Math.random()*(r1-r0+1));
-      const c = c0 + Math.floor(Math.random()*(c1-c0+1));
-      if(canPlace(grid,word,r,c,dr,dc,size)){
-        placeWord(grid,word,r,c,dr,dc);
-        placed.push({word,row:r,col:c,dr,dc});
-        success = true;
-      }
+function buildGrid(wordObjs,difficulty){
+  const cleaned=wordObjs.map(wo=>({...wo,word:wo.word.toUpperCase().replace(/[^A-Z]/g,'')})).filter(wo=>wo.word.length>=3);
+  const size=calcSize(cleaned.map(wo=>wo.word));
+  const DIRS=difficulty==='easy'?DIRS_EASY:DIRS_HARD;
+  const grid=Array.from({length:size},()=>Array(size).fill(''));
+  const placed=[];
+  [...cleaned].sort((a,b)=>b.word.length-a.word.length).forEach(wo=>{
+    let ok=false;
+    for(let a=0;a<500&&!ok;a++){
+      const[dr,dc]=DIRS[Math.floor(Math.random()*DIRS.length)];
+      const bounds=getValidBounds(size,wo.word.length,dr,dc);if(!bounds)continue;
+      const[r0,r1,c0,c1]=bounds;
+      const r=r0+Math.floor(Math.random()*(r1-r0+1));const c=c0+Math.floor(Math.random()*(c1-c0+1));
+      if(canPlace(grid,wo.word,r,c,dr,dc,size)){placeWord(grid,wo.word,r,c,dr,dc);placed.push({word:wo.word,hint:wo.hint||'',row:r,col:c,dr,dc});ok=true;}
     }
-    if(!success) placed.push({word,row:-1,col:-1,dr:0,dc:1}); // failed — mark
-  }
-
-  // Fill blanks
-  for(let r=0;r<size;r++)
-    for(let c=0;c<size;c++)
-      if(!grid[r][c]) grid[r][c]=ALPHA[Math.floor(Math.random()*26)];
-
-  return {grid, size, placed};
+    if(!ok)placed.push({word:wo.word,hint:wo.hint||'',row:-1,col:-1,dr:0,dc:1});
+  });
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(!grid[r][c])grid[r][c]=ALPHA[Math.floor(Math.random()*26)];
+  return{grid,size,placed};
 }
 
-// ════════════════════════════════════════════════════════
-// ANSWER COLOURS
-// ════════════════════════════════════════════════════════
+function doGenerate(){
+  const pool=buildWordPool();if(pool.length<6)return;
+  WS.found=new Set();WS.foundCells={};WS.showAnswers=false;
+  const{grid,size,placed}=buildGrid(pool,selDiff);
+  WS.grid=grid;WS.size=size;WS.placed=placed;
+  WS.words=placed.filter(p=>p.row>=0);
+  const level=document.getElementById('cascadeLevel').value;
+  const unit=document.getElementById('cascadeUnit').value;
+  const lesson=document.getElementById('cascadeLesson').value;
+  let label='';
+  if(level)label+='Level '+level;
+  if(unit)label+=(label?' · ':'')+'Unit '+unit;
+  if(lesson)label+=' · Lesson '+lesson;
+  if(!label&&selectedSources.size)label=[...selectedSources].slice(0,3).join(', ');
+  if(!label)label='Mixed Topics';
+  document.getElementById('puzzleUnit').textContent=label;
+  document.getElementById('hdr-sub').textContent=label;
+  document.getElementById('btn-answers').className='btn';
+  document.getElementById('btn-answers').textContent='👁 Show Answers';
+  document.getElementById('setupScreen').style.display='none';
+  document.getElementById('puzzleArea').style.display='flex';
+  document.getElementById('puzzle-btns').style.display='flex';
+  renderGrid();renderWordList();buildPrintWords();
+}
 
-const HUES = [
-  '#ff6b6b','#ffc95c','#50d890','#6c8fff',
-  '#ff8be0','#7be8ff','#ff9f59','#b97bff',
-  '#d0ff6b','#ff7bc2'
-];
-
-function wordColor(i) { return HUES[i % HUES.length]; }
-
-// ════════════════════════════════════════════════════════
-// RENDER
-// ════════════════════════════════════════════════════════
+function showSetup(){
+  document.getElementById('setupScreen').style.display='block';
+  document.getElementById('puzzleArea').style.display='none';
+  document.getElementById('puzzle-btns').style.display='none';
+  WS.showAnswers=false;
+}
 
 function renderGrid(){
-  const {grid, size, placed, found, showAnswers} = STATE;
-  const table = document.getElementById('grid-table');
-  table.innerHTML='';
-
-  // Build answer map: cellKey -> {color, wordIdx}
-  const answerMap = {};
-  placed.forEach((p,wi)=>{
-    if(p.row<0) return;
-    for(let i=0;i<p.word.length;i++){
-      const k = (p.row+i*p.dr)+','+(p.col+i*p.dc);
-      if(!answerMap[k]) answerMap[k]={color:wordColor(wi),words:[]};
-      answerMap[k].words.push(wi);
-    }
-  });
-
+  const{grid,size,placed,foundCells,showAnswers}=WS;
+  const table=document.getElementById('gridTable');table.innerHTML='';
+  const ansMap={};
+  placed.forEach((p,wi)=>{if(p.row<0)return;for(let i=0;i<p.word.length;i++){const k=(p.row+i*p.dr)+','+(p.col+i*p.dc);if(!ansMap[k])ansMap[k]=HUES[wi%HUES.length];}});
   for(let r=0;r<size;r++){
     const tr=document.createElement('tr');
     for(let c=0;c<size;c++){
-      const td=document.createElement('td');
-      td.className='grid-cell';
-      td.textContent=grid[r][c];
-      td.dataset.r=r; td.dataset.c=c;
-
+      const td=document.createElement('td');td.className='grid-cell';td.textContent=grid[r][c];td.dataset.r=r;td.dataset.c=c;
       const k=r+','+c;
-
-      // Found highlight
-      if(STATE.foundCells && STATE.foundCells[k]){
-        const fc=STATE.foundCells[k];
-        td.style.background=fc.color+'33';
-        td.style.color=fc.color;
-      }
-
-      // Answer overlay
-      if(showAnswers && answerMap[k]){
-        const col=answerMap[k].color;
-        td.style.background=col+'33';
-        td.style.color=col;
-        td.classList.add('answer-show');
-      }
-
-      // Mouse events
-      td.addEventListener('mousedown', onCellDown);
-      td.addEventListener('mouseover', onCellOver);
-      td.addEventListener('touchstart', onTouchStart, {passive:true});
-      td.addEventListener('touchmove',  onTouchMove,  {passive:true});
-
+      if(foundCells[k]){td.style.background=foundCells[k]+'40';td.style.color=foundCells[k];}
+      if(showAnswers&&ansMap[k]){td.style.background=ansMap[k]+'38';td.style.color=ansMap[k];}
+      td.addEventListener('mousedown',onCellDown);td.addEventListener('mouseover',onCellOver);
+      td.addEventListener('touchstart',onTouchStart,{passive:true});td.addEventListener('touchmove',onTouchMove,{passive:true});
       tr.appendChild(td);
     }
     table.appendChild(tr);
@@ -633,231 +411,81 @@ function renderGrid(){
 }
 
 function renderWordList(){
-  const wl = document.getElementById('word-list');
-  wl.innerHTML='';
-  STATE.words.forEach((w,i)=>{
-    const div=document.createElement('div');
-    div.className='word-item'+(STATE.found.has(w.word)?' found-word':'');
-    div.id='wi-'+i;
-    const col=wordColor(i);
-    div.innerHTML=`
-      <div class="wi-bullet" style="${STATE.found.has(w.word)?'background:'+col:''}"></div>
-      <div class="wi-word">${w.word}</div>
-      <div class="wi-hint">${w.hint||''}</div>`;
+  const wl=document.getElementById('wordList');wl.innerHTML='';
+  WS.words.forEach((p,i)=>{
+    const col=HUES[i%HUES.length];const fnd=WS.found.has(p.word);
+    const div=document.createElement('div');div.className='word-item'+(fnd?' found-word':'');
+    div.innerHTML=`<div class="wi-dot" style="${fnd?'background:'+col:''}"></div><div class="wi-word">${p.word}</div><div class="wi-hint">${p.hint}</div>`;
     wl.appendChild(div);
   });
-  const fc=STATE.found.size;
-  const tc=STATE.words.length;
-  document.getElementById('found-count').textContent=fc;
-  document.getElementById('total-count').textContent=tc;
-  document.getElementById('congrats-msg').style.display = (fc===tc&&tc>0)?'block':'none';
+  document.getElementById('foundCount').textContent=WS.found.size;
+  document.getElementById('totalCount').textContent=WS.words.length;
+  document.getElementById('congratsMsg').style.display=(WS.found.size>0&&WS.found.size===WS.words.length)?'block':'none';
 }
 
-function renderPrintWords(){
-  const pg = document.getElementById('print-word-grid');
-  pg.innerHTML='';
-  STATE.words.forEach(w=>{
-    const d=document.createElement('div');
-    d.className='print-word-entry';
-    d.innerHTML=`<span class="pw-word">${w.word}</span><span class="pw-hint">${w.hint||''}</span>`;
-    pg.appendChild(d);
-  });
+function buildPrintWords(){
+  const pg=document.getElementById('printWordGrid');pg.innerHTML='';
+  WS.words.forEach(p=>{const d=document.createElement('div');d.className='pw-entry';d.innerHTML=`<span class="pw-word">${p.word}</span><span class="pw-hint">${p.hint}</span>`;pg.appendChild(d);});
 }
-
-// ════════════════════════════════════════════════════════
-// LOAD SET
-// ════════════════════════════════════════════════════════
-
-function populateDropdown(){
-  const sel=document.getElementById('set-select');
-  sel.innerHTML='<option value="">— Choose a unit —</option>';
-  WORD_SETS.forEach((s,i)=>{
-    const opt=document.createElement('option');
-    opt.value=i; opt.textContent=s.label;
-    sel.appendChild(opt);
-  });
-}
-
-function loadSet(){
-  const setIdx = document.getElementById('set-select').value;
-  if(setIdx==='') return;
-  const diff   = document.getElementById('diff-select').value;
-  const set    = WORD_SETS[setIdx];
-
-  STATE.showAnswers=false;
-  STATE.printAnswers=false;
-  STATE.found=new Set();
-  STATE.foundCells={};
-  STATE.selecting=false;
-  STATE.words = set.words.map(w=>({...w,word:w.word.toUpperCase().replace(/[^A-Z]/g,'')}));
-
-  const {grid,size,placed} = generatePuzzle(STATE.words, diff);
-  STATE.grid=grid; STATE.size=size; STATE.placed=placed;
-
-  // Filter to only successfully placed words
-  STATE.placedMap={};
-  placed.forEach((p,i)=>{ if(p.row>=0) STATE.placedMap[p.word]=i; });
-
-  document.getElementById('empty-state').style.display='none';
-  document.getElementById('puzzle-area').style.display='block';
-  document.getElementById('words-panel').style.display='block';
-  document.getElementById('puzzle-title').textContent='Word Search';
-  document.getElementById('puzzle-unit').textContent=set.label;
-  document.getElementById('hdr-sub').textContent=set.label;
-  document.getElementById('btn-answers').style.display='inline-flex';
-  document.getElementById('btn-regenerate').style.display='inline-flex';
-  document.getElementById('btn-print-answers').style.display='inline-flex';
-  document.getElementById('btn-answers').className='btn';
-  document.getElementById('btn-answers').textContent='👁 Show Answers';
-
-  renderGrid();
-  renderWordList();
-  renderPrintWords();
-}
-
-// ════════════════════════════════════════════════════════
-// SHOW / HIDE ANSWERS
-// ════════════════════════════════════════════════════════
 
 function toggleAnswers(){
-  STATE.showAnswers=!STATE.showAnswers;
+  WS.showAnswers=!WS.showAnswers;
   const btn=document.getElementById('btn-answers');
-  btn.textContent = STATE.showAnswers ? '🙈 Hide Answers' : '👁 Show Answers';
-  btn.className = STATE.showAnswers ? 'btn active' : 'btn';
+  btn.textContent=WS.showAnswers?'🙈 Hide Answers':'👁 Show Answers';
+  btn.className=WS.showAnswers?'btn active':'btn';
   renderGrid();
 }
 
-// ════════════════════════════════════════════════════════
-// PRINT
-// ════════════════════════════════════════════════════════
+function doPrint(){const was=WS.showAnswers;WS.showAnswers=false;renderGrid();window.print();WS.showAnswers=was;renderGrid();}
+function doPrintAnswers(){const was=WS.showAnswers;WS.showAnswers=true;renderGrid();window.print();WS.showAnswers=was;renderGrid();}
 
-function doPrint(){
-  STATE.printAnswers=false;
-  // Temporarily hide found highlights and answer overlay for clean print
-  const wasShowing=STATE.showAnswers;
-  STATE.showAnswers=false;
-  renderGrid();
-  window.print();
-  STATE.showAnswers=wasShowing;
-  renderGrid();
-}
+// ── Interactive selection ───────────────────────────────────────
+let _sel=false,_start=null,_cells=[];
 
-function doPrintAnswers(){
-  const wasShowing=STATE.showAnswers;
-  STATE.showAnswers=true;
-  renderGrid();
-  window.print();
-  STATE.showAnswers=wasShowing;
-  renderGrid();
-}
-
-// ════════════════════════════════════════════════════════
-// INTERACTIVE SELECTION
-// ════════════════════════════════════════════════════════
-
-function cellAt(r,c){
-  return document.querySelector(`.grid-cell[data-r="${r}"][data-c="${c}"]`);
-}
-
-function clearSelection(){
-  document.querySelectorAll('.grid-cell.selecting').forEach(el=>el.classList.remove('selecting'));
-}
-
-function getSelectionCells(r0,c0,r1,c1){
-  const dr=r1-r0, dc=c1-c0;
+function getLine(r0,c0,r1,c1){
+  const dr=r1-r0,dc=c1-c0;
+  if(dr===0&&dc===0)return[{r:r0,c:c0}];
+  if(dr!==0&&dc!==0&&Math.abs(dr)!==Math.abs(dc))return[];
   const len=Math.max(Math.abs(dr),Math.abs(dc));
-  if(len===0) return [{r:r0,c:c0}];
-  // Only valid in one of 8 directions
-  if(dr!==0&&dc!==0&&Math.abs(dr)!==Math.abs(dc)) return [];
-  const sr=dr===0?0:dr/Math.abs(dr);
-  const sc=dc===0?0:dc/Math.abs(dc);
-  const cells=[];
-  for(let i=0;i<=len;i++) cells.push({r:r0+i*sr,c:c0+i*sc});
-  return cells;
+  const sr=dr===0?0:dr/Math.abs(dr);const sc=dc===0?0:dc/Math.abs(dc);
+  const out=[];for(let i=0;i<=len;i++)out.push({r:r0+i*sr,c:c0+i*sc});
+  return out;
 }
 
-function highlightSelection(r1,c1){
-  clearSelection();
-  if(!STATE.startCell) return;
-  const cells=getSelectionCells(STATE.startCell.r,STATE.startCell.c,r1,c1);
-  cells.forEach(({r,c})=>{
-    const el=cellAt(r,c);
-    if(el&&!el.classList.contains('found')) el.classList.add('selecting');
-  });
-  STATE.selCells=cells;
+function clearSel(){document.querySelectorAll('.grid-cell.selecting').forEach(el=>el.classList.remove('selecting'));}
+
+function highlightSel(r1,c1){
+  clearSel();if(!_start)return;
+  _cells=getLine(_start.r,_start.c,r1,c1);
+  _cells.forEach(({r,c})=>{const el=document.querySelector(`.grid-cell[data-r="${r}"][data-c="${c}"]`);if(el)el.classList.add('selecting');});
 }
 
-function checkSelection(){
-  if(!STATE.selCells||STATE.selCells.length<2) return;
-  const letters=STATE.selCells.map(({r,c})=>STATE.grid[r][c]).join('');
-  const rev=[...letters].reverse().join('');
-  const match=STATE.words.find(w=>w.word===letters||w.word===rev);
-  if(match&&!STATE.found.has(match.word)){
-    const p=STATE.placed.find(pp=>pp.word===match.word);
-    if(p&&p.row>=0){
-      const wi=STATE.words.findIndex(w=>w.word===match.word);
-      const col=wordColor(wi);
-      STATE.found.add(match.word);
-      // Record found cells with colour
-      for(let i=0;i<match.word.length;i++){
-        const k=(p.row+i*p.dr)+','+(p.col+i*p.dc);
-        STATE.foundCells[k]={color:col};
-      }
-      renderGrid();
-      renderWordList();
-    }
+function checkSel(){
+  if(_cells.length<2){clearSel();_cells=[];return;}
+  const fwd=_cells.map(({r,c})=>WS.grid[r][c]).join('');
+  const rev=[...fwd].reverse().join('');
+  const match=WS.words.find(p=>(p.word===fwd||p.word===rev)&&!WS.found.has(p.word));
+  if(match){
+    const wi=WS.words.findIndex(p=>p.word===match.word);const col=HUES[wi%HUES.length];
+    WS.found.add(match.word);
+    const p=WS.placed.find(pp=>pp.word===match.word);
+    if(p&&p.row>=0)for(let i=0;i<p.word.length;i++)WS.foundCells[(p.row+i*p.dr)+','+(p.col+i*p.dc)]=col;
+    renderGrid();renderWordList();
   }
-  clearSelection();
-  STATE.selCells=[];
+  clearSel();_cells=[];
 }
 
-function onCellDown(e){
-  STATE.selecting=true;
-  const r=+e.currentTarget.dataset.r, c=+e.currentTarget.dataset.c;
-  STATE.startCell={r,c};
-  STATE.selCells=[];
-  clearSelection();
-  e.currentTarget.classList.add('selecting');
-}
+function onCellDown(e){_sel=true;_start={r:+e.currentTarget.dataset.r,c:+e.currentTarget.dataset.c};_cells=[];clearSel();e.currentTarget.classList.add('selecting');}
+function onCellOver(e){if(!_sel)return;highlightSel(+e.currentTarget.dataset.r,+e.currentTarget.dataset.c);}
+document.addEventListener('mouseup',()=>{if(_sel){checkSel();_sel=false;_start=null;}});
+function onTouchStart(e){_sel=true;_start={r:+e.currentTarget.dataset.r,c:+e.currentTarget.dataset.c};_cells=[];}
+function onTouchMove(e){if(!_sel)return;const el=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);if(el?.classList.contains('grid-cell'))highlightSel(+el.dataset.r,+el.dataset.c);}
+document.addEventListener('touchend',()=>{if(_sel){checkSel();_sel=false;_start=null;}});
 
-function onCellOver(e){
-  if(!STATE.selecting) return;
-  const r=+e.currentTarget.dataset.r, c=+e.currentTarget.dataset.c;
-  highlightSelection(r,c);
-}
-
-document.addEventListener('mouseup',()=>{
-  if(STATE.selecting){ checkSelection(); STATE.selecting=false; STATE.startCell=null; }
+window.addEventListener('load',async()=>{
+  if(window.SHEET_LOADED)await window.SHEET_LOADED;
+  buildWordPicker();
 });
-
-// Touch support
-function cellFromTouch(e){
-  const t=e.touches[0];
-  const el=document.elementFromPoint(t.clientX,t.clientY);
-  if(el&&el.classList.contains('grid-cell')) return el;
-  return null;
-}
-function onTouchStart(e){
-  STATE.selecting=true;
-  const r=+e.currentTarget.dataset.r, c=+e.currentTarget.dataset.c;
-  STATE.startCell={r,c};
-  STATE.selCells=[];
-}
-function onTouchMove(e){
-  if(!STATE.selecting) return;
-  const el=cellFromTouch(e);
-  if(!el) return;
-  highlightSelection(+el.dataset.r, +el.dataset.c);
-}
-document.addEventListener('touchend',()=>{
-  if(STATE.selecting){ checkSelection(); STATE.selecting=false; STATE.startCell=null; }
-});
-
-// ════════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════════
-
-populateDropdown();
 </script>
 </body>
 </html>
