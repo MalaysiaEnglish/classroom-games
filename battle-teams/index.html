@@ -409,8 +409,9 @@
     document.getElementById('home').onclick=()=>window.location.href='../index.html';
 
     buildGrid();
-    window.addEventListener('load', buildUnitButtons);
+    window.addEventListener('load', async () => { if (window.SHEET_LOADED) await window.SHEET_LOADED; buildUnitButtons(); });
   </script>
   <script src="../questions.js"></script>
+  <script src="../sheet-loader.js" onerror="console.log('No sheet-loader.js')"></script>
 </body>
 </html>

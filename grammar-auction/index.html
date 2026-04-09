@@ -138,6 +138,8 @@
     select, select option { background: #1a2a38 !important; color: white !important; }
   </style>
   <script src="../content.js" onerror="console.log('No content.js')"></script>
+  <script src="../questions.js" onerror="console.log('No questions.js')"></script>
+  <script src="../sheet-loader.js" onerror="console.log('No sheet-loader.js')"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -175,8 +177,24 @@
         <!-- Topic filter UI -->
         <div id="topicFilterWrap" style="margin-bottom:14px;">
 
-          <!-- Quick-select buttons, built dynamically -->
-          <div id="unitQuickSelect" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
+          <!-- Cascade dropdowns -->
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
+            <select id="gaCascadeLevel" onchange="gaCascadeLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;">
+              <option value="">Level…</option>
+            </select>
+            <select id="gaCascadeUnit" onchange="gaCascadeUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+              <option value="">Unit…</option>
+            </select>
+            <select id="gaCascadeLesson" onchange="gaCascadeLessonChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+              <option value="">All lessons</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="gaCascadeClear()">✕ clear</button>
+          </div>
+
+          <!-- Topic search -->
+          <div style="margin-bottom:8px;">
+            <input id="gaTopicSearch" type="text" placeholder="🔍 Search topics…" oninput="gaFilterTopics()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:5px 10px;font-size:0.78rem;outline:none;">
+          </div>
 
           <!-- Checkbox list -->
           <div id="topicCheckboxes" style="
@@ -266,51 +284,103 @@ function loadContentSentences() {
 function populateFilters() {
   const topics = [...new Set(allSentences.map(s => s.topic).filter(Boolean))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
 
-  // Build unit quick-select buttons (e.g. "S6/U6" groups all S6/U6/Lx topics)
-  const unitGroups = {};
-  topics.forEach(t => {
-    const m = t.match(/^(L\d+\/U\d+)/);
-    if (m) {
-      const key = m[1];
-      if (!unitGroups[key]) unitGroups[key] = [];
-      unitGroups[key].push(t);
-    }
+  // Populate level dropdown
+  const levelSet = new Set();
+  topics.forEach(t => { const m = t.match(/^L(\d+)\//); if (m) levelSet.add(parseInt(m[1])); });
+  const levelSel = document.getElementById('gaCascadeLevel');
+  levelSel.innerHTML = '<option value="">Level…</option>';
+  [...levelSet].sort((a,b) => a-b).forEach(l => {
+    const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Level ' + l;
+    levelSel.appendChild(opt);
   });
 
-  const quickWrap = document.getElementById('unitQuickSelect');
-  quickWrap.innerHTML = '';
-  Object.keys(unitGroups).sort().forEach(unit => {
-    const btn = document.createElement('button');
-    btn.className = 'btn btn-outline btn-sm';
-    btn.textContent = `${unit} All`;
-    btn.onclick = () => selectUnitTopics(unitGroups[unit]);
-    quickWrap.appendChild(btn);
-  });
+  gaRenderTopicCheckboxes(topics);
+}
 
-  // Build checkboxes
+function gaGetFilteredTopics() {
+  const level  = document.getElementById('gaCascadeLevel').value;
+  const unit   = document.getElementById('gaCascadeUnit').value;
+  const lesson = document.getElementById('gaCascadeLesson').value;
+  const search = (document.getElementById('gaTopicSearch').value || '').toLowerCase();
+  const topics = [...new Set(allSentences.map(s => s.topic).filter(Boolean))];
+  return topics.filter(t => {
+    const mL  = t.match(/^L(\d+)\//);
+    const mU  = t.match(/^L\d+\/U(\d+)/);
+    const mLs = t.match(/^L\d+\/U\d+\/L(\d+)/);
+    if (level  && (!mL  || mL[1]  !== level))  return false;
+    if (unit   && (!mU  || mU[1]  !== unit))   return false;
+    if (lesson && (!mLs || mLs[1] !== lesson)) return false;
+    if (search && !t.toLowerCase().includes(search)) return false;
+    return true;
+  }).sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
+}
+
+function gaRenderTopicCheckboxes(topics) {
   const wrap = document.getElementById('topicCheckboxes');
+  const prevChecked = new Set([...wrap.querySelectorAll('input:checked')].map(cb => cb.value));
   wrap.innerHTML = '';
   topics.forEach(t => {
     const label = document.createElement('label');
-    label.style.cssText = `
-      display:inline-flex; align-items:center; gap:6px;
-      padding:5px 10px; border-radius:20px; cursor:pointer;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      font-size:0.8rem; color:var(--text);
-      transition: all 0.15s; user-select:none;
-    `;
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.value = t;
+    label.style.cssText = `display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:20px; cursor:pointer; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); font-size:0.8rem; color:var(--text); transition: all 0.15s; user-select:none;`;
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = t;
+    cb.checked = prevChecked.has(t);
     cb.style.accentColor = '#F5A623';
     cb.addEventListener('change', applyFilters);
-    label.appendChild(cb);
-    label.appendChild(document.createTextNode(t));
+    label.appendChild(cb); label.appendChild(document.createTextNode(t));
     label.addEventListener('mouseenter', () => label.style.borderColor = 'rgba(245,166,35,0.4)');
     label.addEventListener('mouseleave', () => label.style.borderColor = 'rgba(255,255,255,0.12)');
     wrap.appendChild(label);
   });
+}
+
+function gaFilterTopics() { gaRenderTopicCheckboxes(gaGetFilteredTopics()); }
+
+function gaCascadeLevelChange() {
+  const level = document.getElementById('gaCascadeLevel').value;
+  const unitSel = document.getElementById('gaCascadeUnit');
+  const lessonSel = document.getElementById('gaCascadeLesson');
+  unitSel.innerHTML = '<option value="">Unit…</option>';
+  lessonSel.innerHTML = '<option value="">All lessons</option>';
+  unitSel.disabled = !level; unitSel.style.opacity = level ? '1' : '0.5';
+  lessonSel.disabled = true; lessonSel.style.opacity = '0.5';
+  if (level) {
+    const units = new Set();
+    allSentences.forEach(s => { const m = s.topic && s.topic.match(/^L(\d+)\/U(\d+)/); if (m && m[1] === level) units.add(parseInt(m[2])); });
+    [...units].sort((a,b) => a-b).forEach(u => {
+      const opt = document.createElement('option'); opt.value = u; opt.textContent = 'Unit ' + u;
+      unitSel.appendChild(opt);
+    });
+  }
+  gaRenderTopicCheckboxes(gaGetFilteredTopics());
+}
+
+function gaCascadeUnitChange() {
+  const level = document.getElementById('gaCascadeLevel').value;
+  const unit  = document.getElementById('gaCascadeUnit').value;
+  const lessonSel = document.getElementById('gaCascadeLesson');
+  lessonSel.innerHTML = '<option value="">All lessons</option>';
+  lessonSel.disabled = !unit; lessonSel.style.opacity = unit ? '1' : '0.5';
+  if (unit) {
+    const lessons = new Set();
+    allSentences.forEach(s => { const m = s.topic && s.topic.match(/^L(\d+)\/U(\d+)\/L(\d+)/); if (m && m[1] === level && m[2] === unit) lessons.add(parseInt(m[3])); });
+    [...lessons].sort((a,b) => a-b).forEach(l => {
+      const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Lesson ' + l;
+      lessonSel.appendChild(opt);
+    });
+  }
+  gaRenderTopicCheckboxes(gaGetFilteredTopics());
+}
+
+function gaCascadeLessonChange() { gaRenderTopicCheckboxes(gaGetFilteredTopics()); }
+
+function gaCascadeClear() {
+  document.getElementById('gaCascadeLevel').value = '';
+  document.getElementById('gaCascadeUnit').innerHTML = '<option value="">Unit…</option>';
+  document.getElementById('gaCascadeUnit').disabled = true; document.getElementById('gaCascadeUnit').style.opacity = '0.5';
+  document.getElementById('gaCascadeLesson').innerHTML = '<option value="">All lessons</option>';
+  document.getElementById('gaCascadeLesson').disabled = true; document.getElementById('gaCascadeLesson').style.opacity = '0.5';
+  document.getElementById('gaTopicSearch').value = '';
+  gaRenderTopicCheckboxes(gaGetFilteredTopics());
 }
 
 function getCheckedTopics() {
@@ -575,7 +645,11 @@ function hexToRgb(hex) {
   return `${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)}`;
 }
 
-init();
+if (window.SHEET_LOADED) {
+  window.SHEET_LOADED.then(() => init());
+} else {
+  init();
+}
 </script>
 </body>
 </html>

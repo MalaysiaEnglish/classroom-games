@@ -6,6 +6,8 @@
   <title>Wheel of Fortune</title>
   <link rel="stylesheet" href="../style.css">
   <script src="../content.js" onerror="console.log('No content.js')"></script>
+  <script src="../questions.js" onerror="console.log('No questions.js')"></script>
+  <script src="../sheet-loader.js" onerror="console.log('No sheet-loader.js')"></script>
   <style>
     select, select option { background:#1a2a38; color:white; }
 
@@ -224,10 +226,23 @@
             <span class="qf-chevron">▼</span>
           </div>
           <div class="qf-detail">
-            <div class="qf-section-label">Unit</div>
-            <div class="qf-units" id="wofUnits"><span class="qf-empty">No content.js topics found</span></div>
-            <div class="qf-section-label" id="wofTopicLabel" style="display:none;">Topic</div>
-            <div class="qf-checks" id="wofTopics"></div>
+            <div class="qf-section-label">Curriculum</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
+              <select id="wofCascadeLevel" onchange="wofCascadeLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;">
+                <option value="">Level…</option>
+              </select>
+              <select id="wofCascadeUnit" onchange="wofCascadeUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+                <option value="">Unit…</option>
+              </select>
+              <select id="wofCascadeLesson" onchange="wofRenderTopics()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+                <option value="">All lessons</option>
+              </select>
+              <button onclick="wofCascadeClear()" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;padding:2px 4px;">✕ clear</button>
+            </div>
+            <div style="margin-bottom:6px;">
+              <input id="wofTopicSearch" type="text" placeholder="🔍 Search topics…" oninput="wofRenderTopics()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:5px 10px;font-size:0.78rem;outline:none;">
+            </div>
+            <div class="qf-checks" id="wofTopics"><span class="qf-empty">Select a level to begin</span></div>
             <div class="qf-status" id="wofStatus">Loading…</div>
           </div>
         </div>
@@ -357,7 +372,7 @@
 
     // ── Word/phrase pool (qf-bar style) ───────────────────
     const selectedWofTopics = new Set(); // empty = all topics
-    let wofSelectedUnit = null;
+    let wofTopicMap = {};
 
     function parseCustomWords() {
       const raw = (document.getElementById('customWordInput') || {}).value || '';
@@ -391,82 +406,118 @@
 
     function loadTopics() {
       const allWords = window.CUSTOM_CONTENT?.words || [];
-      const unitsEl  = document.getElementById('wofUnits');
-
       if (!allWords.length) {
-        unitsEl.innerHTML = '<span class="qf-empty">No content.js loaded — using fallback phrases</span>';
+        document.getElementById('wofTopics').innerHTML = '<span class="qf-empty">No content loaded — using fallback phrases</span>';
         document.getElementById('wofStatus').textContent = 'Using built-in fallback phrases';
         return;
       }
-
-      // Build unit map
-      const unitMap = new Map();
+      // Build topic map
       allWords.forEach(w => {
-        const m = w.topic && w.topic.match(/^L(\d+)\/U(\d+)/);
-        if (m) {
-          const key = 'L'+m[1]+'/U'+m[2];
-          if (!unitMap.has(key)) unitMap.set(key, {level:parseInt(m[1]), unit:parseInt(m[2])});
-        }
+        const t = w.topic || 'Custom';
+        if (!wofTopicMap[t]) wofTopicMap[t] = [];
+        wofTopicMap[t].push(w.word);
       });
-
-      unitsEl.innerHTML = '';
-      if (!unitMap.size) {
-        // Topics don't follow S/U pattern — show flat topic list
-        const topics = [...new Set(allWords.map(w => w.topic).filter(Boolean))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
-        topics.forEach(t => {
-          const count = allWords.filter(w => w.topic===t).length;
-          const label = document.createElement('label'); label.className = 'qf-check-label';
-          const cb = document.createElement('input'); cb.type = 'checkbox';
-          cb.onchange = () => { if (cb.checked) selectedWofTopics.add(t); else selectedWofTopics.delete(t); updateWofSummary(); };
-          const span = document.createElement('span'); span.textContent = t;
-          const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = count;
-          label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
-          unitsEl.appendChild(label);
-        });
-      } else {
-        [...unitMap.values()].sort((a,b) => a.level!==b.level ? a.level-b.level : a.unit-b.unit)
-          .forEach(({level, unit}) => {
-            const btn = document.createElement('button'); btn.className = 'qf-unit-btn';
-            btn.textContent = 'L'+level+'/U'+unit;
-            btn.onclick = () => selectWofUnit(level, unit, btn);
-            unitsEl.appendChild(btn);
-          });
-      }
-
+      // Populate level dropdown
+      const levelSet = new Set();
+      allWords.forEach(w => {
+        const m = w.topic && w.topic.match(/^L(\d+)\//);
+        if (m) levelSet.add(parseInt(m[1]));
+        else if (w.level) levelSet.add(parseInt(w.level));
+      });
+      const levelSel = document.getElementById('wofCascadeLevel');
+      [...levelSet].sort((a,b) => a-b).forEach(l => {
+        const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Level ' + l;
+        levelSel.appendChild(opt);
+      });
+      wofRenderTopics();
       updateWofSummary();
     }
 
-    function selectWofUnit(level, unit, btnEl) {
-      const topicsEl   = document.getElementById('wofTopics');
-      const topicLabel = document.getElementById('wofTopicLabel');
-      if (btnEl.classList.contains('active')) {
-        btnEl.classList.remove('active'); wofSelectedUnit = null;
-        topicsEl.innerHTML = ''; topicLabel.style.display = 'none';
-        // Remove this unit's topics from selection
-        const prefix = 'L'+level+'/U'+unit+'/';
-        const allWords = window.CUSTOM_CONTENT?.words || [];
-        allWords.filter(w => w.topic && w.topic.startsWith(prefix)).forEach(w => selectedWofTopics.delete(w.topic));
-        updateWofSummary(); return;
-      }
-      document.querySelectorAll('#wofUnits .qf-unit-btn').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active'); wofSelectedUnit = {level, unit};
+    function wofGetFilteredTopics() {
+      const level  = document.getElementById('wofCascadeLevel').value;
+      const unit   = document.getElementById('wofCascadeUnit').value;
+      const lesson = document.getElementById('wofCascadeLesson').value;
+      const search = (document.getElementById('wofTopicSearch').value || '').toLowerCase();
+      return Object.keys(wofTopicMap).filter(t => {
+        const mL  = t.match(/^L(\d+)\//);
+        const mU  = t.match(/^L\d+\/U(\d+)/);
+        const mLs = t.match(/^L\d+\/U\d+\/L(\d+)/);
+        if (level  && (!mL  || mL[1]  !== level))  return false;
+        if (unit   && (!mU  || mU[1]  !== unit))   return false;
+        if (lesson && (!mLs || mLs[1] !== lesson)) return false;
+        if (search && !t.toLowerCase().includes(search)) return false;
+        return true;
+      }).sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+    }
 
-      const prefix = 'L'+level+'/U'+unit+'/';
-      const allWords = window.CUSTOM_CONTENT?.words || [];
-      const topics = [...new Set(allWords.filter(w => w.topic && w.topic.startsWith(prefix)).map(w => w.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
-
-      topicsEl.innerHTML = ''; topicLabel.style.display = 'block';
+    function wofRenderTopics() {
+      const topics = wofGetFilteredTopics();
+      const el = document.getElementById('wofTopics');
+      if (!topics.length) { el.innerHTML = '<span class="qf-empty">No topics found</span>'; return; }
+      el.innerHTML = '';
       topics.forEach(t => {
-        const count = allWords.filter(w => w.topic===t).length;
+        const words = wofTopicMap[t] || [];
         const label = document.createElement('label'); label.className = 'qf-check-label';
         const cb = document.createElement('input'); cb.type = 'checkbox';
+        cb.checked = selectedWofTopics.has(t);
         cb.onchange = () => { if (cb.checked) selectedWofTopics.add(t); else selectedWofTopics.delete(t); updateWofSummary(); };
         const span = document.createElement('span'); span.textContent = t;
-        const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = count;
+        const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = words.length;
         label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
-        topicsEl.appendChild(label);
+        el.appendChild(label);
       });
-      updateWofSummary();
+    }
+
+    function wofCascadeLevelChange() {
+      const level = document.getElementById('wofCascadeLevel').value;
+      const unitSel = document.getElementById('wofCascadeUnit');
+      const lessonSel = document.getElementById('wofCascadeLesson');
+      unitSel.innerHTML = '<option value="">Unit…</option>';
+      lessonSel.innerHTML = '<option value="">All lessons</option>';
+      unitSel.disabled = !level; unitSel.style.opacity = level ? '1' : '0.5';
+      lessonSel.disabled = true; lessonSel.style.opacity = '0.5';
+      if (level) {
+        const units = new Set();
+        Object.keys(wofTopicMap).forEach(t => {
+          const m = t.match(/^L(\d+)\/U(\d+)/);
+          if (m && m[1] === level) units.add(parseInt(m[2]));
+        });
+        [...units].sort((a,b) => a-b).forEach(u => {
+          const opt = document.createElement('option'); opt.value = u; opt.textContent = 'Unit ' + u;
+          unitSel.appendChild(opt);
+        });
+      }
+      wofRenderTopics();
+    }
+
+    function wofCascadeUnitChange() {
+      const level = document.getElementById('wofCascadeLevel').value;
+      const unit  = document.getElementById('wofCascadeUnit').value;
+      const lessonSel = document.getElementById('wofCascadeLesson');
+      lessonSel.innerHTML = '<option value="">All lessons</option>';
+      lessonSel.disabled = !unit; lessonSel.style.opacity = unit ? '1' : '0.5';
+      if (unit) {
+        const lessons = new Set();
+        Object.keys(wofTopicMap).forEach(t => {
+          const m = t.match(/^L(\d+)\/U(\d+)\/L(\d+)/);
+          if (m && m[1] === level && m[2] === unit) lessons.add(parseInt(m[3]));
+        });
+        [...lessons].sort((a,b) => a-b).forEach(l => {
+          const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Lesson ' + l;
+          lessonSel.appendChild(opt);
+        });
+      }
+      wofRenderTopics();
+    }
+
+    function wofCascadeClear() {
+      document.getElementById('wofCascadeLevel').value = '';
+      document.getElementById('wofCascadeUnit').innerHTML = '<option value="">Unit…</option>';
+      document.getElementById('wofCascadeUnit').disabled = true; document.getElementById('wofCascadeUnit').style.opacity = '0.5';
+      document.getElementById('wofCascadeLesson').innerHTML = '<option value="">All lessons</option>';
+      document.getElementById('wofCascadeLesson').disabled = true; document.getElementById('wofCascadeLesson').style.opacity = '0.5';
+      document.getElementById('wofTopicSearch').value = '';
+      wofRenderTopics();
     }
 
 
@@ -773,7 +824,11 @@
 
     function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-    loadTopics();
+    if (window.SHEET_LOADED) {
+      window.SHEET_LOADED.then(() => loadTopics());
+    } else {
+      loadTopics();
+    }
     const _wofTa = document.getElementById('customWordInput');
     const _wofCountEl = document.getElementById('customWordCount');
     _wofTa.addEventListener('input', () => {
