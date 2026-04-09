@@ -1028,6 +1028,29 @@ function parseBulkInput() {
   return rows;
 }
 
+function bulkWarn(row, type) {
+  // Returns a warning message if the row looks wrong for the type, or null if ok
+  if (type === 'vocab') {
+    const word = row[0] || '';
+    if (word.length > 35)       return 'Word is very long — looks like a sentence?';
+    if (word.includes('?'))     return 'Word contains "?" — looks like a question?';
+    if (word.split(' ').length > 4) return 'More than 4 words — correct type?';
+  } else if (type === 'sentences') {
+    const text = row[0] || '';
+    if (text.split(' ').length < 3) return 'Very short — looks like a single word?';
+    if (text.includes('\t'))    return 'Contains tab character — check paste';
+  } else if (type === 'questions') {
+    const q  = row[0] || '';
+    const d1 = row[2] || '';
+    const d2 = row[3] || '';
+    const d3 = row[4] || '';
+    if (!d1 && !d2 && !d3)     return 'No distractors found — check format';
+    if (!d2 || !d3)             return 'Fewer than 3 distractors';
+    if (q.split(' ').length < 3) return 'Question is very short';
+  }
+  return null;
+}
+
 function previewBulk() {
   bulkParsed = parseBulkInput();
   const preview = document.getElementById('bulk-preview');
@@ -1042,22 +1065,37 @@ function previewBulk() {
     return;
   }
 
-  countEl.textContent = `(${bulkParsed.length} entries)`;
+  const warnings = bulkParsed.map(row => bulkWarn(row, bulkType));
+  const warnCount = warnings.filter(Boolean).length;
+
+  countEl.textContent = `(${bulkParsed.length} entries${warnCount ? `, ⚠️ ${warnCount} warnings` : ''})`;
 
   const headers = bulkType === 'vocab'
-    ? ['Word','Hint','Topic','L','U','Ls']
+    ? ['','Word','Hint','Topic','L','U','Ls']
     : bulkType === 'sentences'
-    ? ['Sentence','Correct','Topic','L','U','Ls']
-    : ['Question','Answer','D1','D2','D3','Topic','L','U','Ls'];
+    ? ['','Sentence','Correct','Topic','L','U','Ls']
+    : ['','Question','Answer','D1','D2','D3','Topic','L','U','Ls'];
 
   head.innerHTML = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
-  body.innerHTML = bulkParsed.map(row =>
-    '<tr>' + row.map(c => `<td style="font-size:0.78rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(String(c))}</td>`).join('') + '</tr>'
-  ).join('');
+  body.innerHTML = bulkParsed.map((row, i) => {
+    const warn = warnings[i];
+    const rowStyle = warn ? 'background:rgba(240,160,0,0.12);' : '';
+    const warnCell = warn
+      ? `<td title="${esc(warn)}" style="color:#f0a040;font-size:0.75rem;cursor:help;">⚠️</td>`
+      : '<td></td>';
+    return '<tr style="' + rowStyle + '">' + warnCell +
+      row.map(c => `<td style="font-size:0.78rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(String(c))}</td>`).join('') +
+      '</tr>';
+  }).join('');
 
   preview.style.display = 'block';
   document.getElementById('bulk-commit-btn').disabled = false;
-  showFeedback('bulk-feedback', `${bulkParsed.length} entries ready to import`, 'success');
+
+  if (warnCount) {
+    showFeedback('bulk-feedback', `${bulkParsed.length} entries — ⚠️ ${warnCount} rows have warnings (hover ⚠️ to see). Check before importing.`, 'error');
+  } else {
+    showFeedback('bulk-feedback', `${bulkParsed.length} entries ready — no issues found ✓`, 'success');
+  }
 }
 
 async function commitBulk() {
