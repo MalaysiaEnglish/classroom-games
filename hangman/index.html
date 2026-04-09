@@ -87,11 +87,25 @@
             <span class="qf-chevron">▼</span>
           </div>
           <div class="qf-detail">
-            <!-- Curriculum words (from content.js) -->
+            <!-- Curriculum words (from content.js / Sheet) -->
             <div id="curriculumSection" style="display:none;">
-              <div class="qf-section-label">Curriculum (content.js)</div>
-              <div class="qf-units" id="curriculumUnits"></div>
-              <div class="qf-checks" id="curriculumTopics"><span class="qf-empty">Select a unit first</span></div>
+              <div class="qf-section-label">Curriculum</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
+                <select id="cascadeLevel" onchange="cascadeLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;">
+                  <option value="">Level…</option>
+                </select>
+                <select id="cascadeUnit" onchange="cascadeUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+                  <option value="">Unit…</option>
+                </select>
+                <select id="cascadeLesson" onchange="cascadeLessonChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+                  <option value="">All lessons</option>
+                </select>
+                <button onclick="cascadeClear()" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;padding:2px 4px;">✕ clear</button>
+              </div>
+              <div style="margin-bottom:6px;">
+                <input id="topicSearch" type="text" placeholder="🔍 Search topics…" oninput="filterTopicDisplay()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:5px 10px;font-size:0.78rem;outline:none;">
+              </div>
+              <div class="qf-checks" id="curriculumTopics"><span class="qf-empty">Select a level to begin</span></div>
             </div>
             <!-- Built-in categories -->
             <div id="builtinSection">
@@ -171,7 +185,6 @@
     // selectedSources: Set of keys — each key is either a builtin key or a curriculum topic string
     const selectedSources = new Set(); // empty = all built-ins
     let curriculumWordMap = {}; // topic → [words]
-    let selectedCurriculumUnit = null; // {level, unit} or null
 
     function parseCustomWords() {
       const raw = (document.getElementById('customWordInput') || {}).value || '';
@@ -218,31 +231,27 @@
       currSection.style.display = hasCurriculum ? 'block' : 'none';
 
       if (hasCurriculum) {
-        // Build unit map
-        const unitMap = new Map();
         window.CUSTOM_CONTENT.words.forEach(w => {
-          // topic format: "L5/U8/L3 Something" — extract level/unit
-          const m = w.topic && w.topic.match(/^L(\d+)\/U(\d+)/);
-          if (m) {
-            const key = 'L'+m[1]+'/U'+m[2];
-            if (!unitMap.has(key)) unitMap.set(key, {level:parseInt(m[1]), unit:parseInt(m[2])});
-          }
-          // Also build word map by topic
           const t = w.topic || 'Custom';
           if (!curriculumWordMap[t]) curriculumWordMap[t] = [];
           curriculumWordMap[t].push(w.word);
         });
 
-        const unitsEl = document.getElementById('curriculumUnits');
-        unitsEl.innerHTML = '';
-        [...unitMap.values()].sort((a,b) => a.level!==b.level ? a.level-b.level : a.unit-b.unit)
-          .forEach(({level, unit}) => {
-            const btn = document.createElement('button');
-            btn.className = 'qf-unit-btn';
-            btn.textContent = 'L'+level+'/U'+unit;
-            btn.onclick = () => selectCurriculumUnit(level, unit, btn);
-            unitsEl.appendChild(btn);
-          });
+        // Populate level dropdown from topic strings AND numeric level field
+        const levelSet = new Set();
+        window.CUSTOM_CONTENT.words.forEach(w => {
+          const m = w.topic && w.topic.match(/^L(\d+)\//);
+          if (m) levelSet.add(parseInt(m[1]));
+          else if (w.level) levelSet.add(parseInt(w.level));
+        });
+        const levelSel = document.getElementById('cascadeLevel');
+        [...levelSet].sort((a,b) => a-b).forEach(l => {
+          const opt = document.createElement('option');
+          opt.value = l; opt.textContent = 'Level ' + l;
+          levelSel.appendChild(opt);
+        });
+
+        renderTopicChips(Object.keys(curriculumWordMap).sort((a,b) => a.localeCompare(b, undefined, {numeric:true})));
       }
 
       // ── Built-in section ──
@@ -265,31 +274,34 @@
       updateWordFilterSummary();
     }
 
-    function selectCurriculumUnit(level, unit, btnEl) {
-      const topicsEl = document.getElementById('curriculumTopics');
-      if (btnEl.classList.contains('active')) {
-        // Deselect unit — remove all its topics from sources
-        btnEl.classList.remove('active');
-        selectedCurriculumUnit = null;
-        topicsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
-        // Remove any curriculum sources from this unit
-        const prefix = 'L'+level+'/U'+unit+'/';
-        [...selectedSources].forEach(k => { if (k.startsWith(prefix)) selectedSources.delete(k); });
-        updateWordFilterSummary(); return;
-      }
-      document.querySelectorAll('#curriculumUnits .qf-unit-btn').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active');
-      selectedCurriculumUnit = {level, unit};
+    // ── Cascade picker functions ──────────────────────────────
+    function getFilteredTopics() {
+      const level = document.getElementById('cascadeLevel').value;
+      const unit  = document.getElementById('cascadeUnit').value;
+      const lesson = document.getElementById('cascadeLesson').value;
+      const search = (document.getElementById('topicSearch').value || '').toLowerCase();
 
-      // Build topic checkboxes for this unit
-      topicsEl.innerHTML = '';
-      const unitPrefix = 'L'+level+'/U'+unit+'/';
-      const unitTopics = Object.keys(curriculumWordMap).filter(t => t.startsWith(unitPrefix)).sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
-      if (!unitTopics.length) { topicsEl.innerHTML = '<span class="qf-empty">No words for this unit</span>'; return; }
-      unitTopics.forEach(topic => {
-        const words = curriculumWordMap[topic];
+      return Object.keys(curriculumWordMap).filter(t => {
+        const mL = t.match(/^L(\d+)\//);
+        const mU = t.match(/^L\d+\/U(\d+)/);
+        const mLs = t.match(/^L\d+\/U\d+\/L(\d+)/);
+        if (level  && (!mL  || mL[1]  !== level))  return false;
+        if (unit   && (!mU  || mU[1]  !== unit))   return false;
+        if (lesson && (!mLs || mLs[1] !== lesson)) return false;
+        if (search && !t.toLowerCase().includes(search)) return false;
+        return true;
+      }).sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+    }
+
+    function renderTopicChips(topics) {
+      const el = document.getElementById('curriculumTopics');
+      if (!topics.length) { el.innerHTML = '<span class="qf-empty">No topics found</span>'; return; }
+      el.innerHTML = '';
+      topics.forEach(topic => {
+        const words = curriculumWordMap[topic] || [];
         const label = document.createElement('label'); label.className = 'qf-check-label';
         const cb = document.createElement('input'); cb.type = 'checkbox';
+        cb.checked = selectedSources.has(topic);
         cb.onchange = () => {
           if (cb.checked) selectedSources.add(topic);
           else selectedSources.delete(topic);
@@ -298,9 +310,68 @@
         const span = document.createElement('span'); span.textContent = topic;
         const cs = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = words.length;
         label.appendChild(cb); label.appendChild(span); label.appendChild(cs);
-        topicsEl.appendChild(label);
+        el.appendChild(label);
       });
-      updateWordFilterSummary();
+    }
+
+    function cascadeLevelChange() {
+      const level = document.getElementById('cascadeLevel').value;
+      const unitSel = document.getElementById('cascadeUnit');
+      const lessonSel = document.getElementById('cascadeLesson');
+      unitSel.innerHTML = '<option value="">Unit…</option>';
+      lessonSel.innerHTML = '<option value="">All lessons</option>';
+      unitSel.disabled = !level; unitSel.style.opacity = level ? '1' : '0.5';
+      lessonSel.disabled = true; lessonSel.style.opacity = '0.5';
+      if (level) {
+        const units = new Set();
+        Object.keys(curriculumWordMap).forEach(t => {
+          const m = t.match(/^L(\d+)\/U(\d+)/);
+          if (m && m[1] === level) units.add(parseInt(m[2]));
+        });
+        [...units].sort((a,b) => a-b).forEach(u => {
+          const opt = document.createElement('option'); opt.value = u; opt.textContent = 'Unit ' + u;
+          unitSel.appendChild(opt);
+        });
+      }
+      renderTopicChips(getFilteredTopics());
+    }
+
+    function cascadeUnitChange() {
+      const level = document.getElementById('cascadeLevel').value;
+      const unit  = document.getElementById('cascadeUnit').value;
+      const lessonSel = document.getElementById('cascadeLesson');
+      lessonSel.innerHTML = '<option value="">All lessons</option>';
+      lessonSel.disabled = !unit; lessonSel.style.opacity = unit ? '1' : '0.5';
+      if (unit) {
+        const lessons = new Set();
+        Object.keys(curriculumWordMap).forEach(t => {
+          const m = t.match(/^L(\d+)\/U(\d+)\/L(\d+)/);
+          if (m && m[1] === level && m[2] === unit) lessons.add(parseInt(m[3]));
+        });
+        [...lessons].sort((a,b) => a-b).forEach(l => {
+          const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Lesson ' + l;
+          lessonSel.appendChild(opt);
+        });
+      }
+      renderTopicChips(getFilteredTopics());
+    }
+
+    function cascadeLessonChange() {
+      renderTopicChips(getFilteredTopics());
+    }
+
+    function cascadeClear() {
+      document.getElementById('cascadeLevel').value = '';
+      document.getElementById('cascadeUnit').innerHTML = '<option value="">Unit…</option>';
+      document.getElementById('cascadeUnit').disabled = true; document.getElementById('cascadeUnit').style.opacity = '0.5';
+      document.getElementById('cascadeLesson').innerHTML = '<option value="">All lessons</option>';
+      document.getElementById('cascadeLesson').disabled = true; document.getElementById('cascadeLesson').style.opacity = '0.5';
+      document.getElementById('topicSearch').value = '';
+      renderTopicChips(Object.keys(curriculumWordMap).sort((a,b) => a.localeCompare(b, undefined, {numeric:true})));
+    }
+
+    function filterTopicDisplay() {
+      renderTopicChips(getFilteredTopics());
     }
 
     // ── Picker setup ───────────────────────────────────────
