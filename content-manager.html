@@ -1000,15 +1000,30 @@ function parseBulkInput() {
       }
     });
   } else {
-    // questions — blank-line separated blocks or one per line with pipe/tab
-    const blocks = raw.split(/\n\s*\n/).filter(b => b.trim());
-    blocks.forEach(block => {
-      const line = block.replace(/\n/g, ' ').trim();
-      const parts = splitLine(line).map(p => p.trim());
-      if (parts.length < 5) return;
-      const [q, a, d1, d2, d3] = parts;
-      if (q && a) rows.push([q, a, d1||'', d2||'', d3||'', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
-    });
+    // questions — if tab-separated, each line is one question
+    // if pipe-separated, blank lines separate blocks
+    const lines = raw.split('\n').filter(l => l.trim());
+    const isTabSep = lines.some(l => l.includes('\t'));
+
+    if (isTabSep) {
+      // Spreadsheet paste — one question per line
+      lines.forEach(line => {
+        const parts = line.split('\t').map(p => p.trim()).filter((_, i) => i < 5);
+        if (parts.length < 2) return;
+        const [q, a, d1, d2, d3] = parts;
+        if (q && a) rows.push([q, a, d1||'', d2||'', d3||'', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+      });
+    } else {
+      // Manual pipe format — blank lines separate blocks
+      const blocks = raw.split(/\n\s*\n/).filter(b => b.trim());
+      blocks.forEach(block => {
+        const line = block.replace(/\n/g, ' ').trim();
+        const parts = line.split('|').map(p => p.trim());
+        if (parts.length < 5) return;
+        const [q, a, d1, d2, d3] = parts;
+        if (q && a) rows.push([q, a, d1||'', d2||'', d3||'', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+      });
+    }
   }
   return rows;
 }
