@@ -219,6 +219,9 @@
     <button class="tab-btn" onclick="switchTab('questions')" id="tab-questions-btn">
       Questions <span class="tab-count" id="count-questions">0</span>
     </button>
+    <button class="tab-btn" onclick="switchTab('bulk')" id="tab-bulk-btn">
+      📥 Bulk Import
+    </button>
   </div>
 
   <!-- ══ VOCAB TAB ══ -->
@@ -226,6 +229,7 @@
     <div class="toolbar">
       <select id="vocab-filter-level" onchange="renderVocab()"><option value="">All Levels</option></select>
       <select id="vocab-filter-unit"  onchange="renderVocab()"><option value="">All Units</option></select>
+      <select id="vocab-filter-topic" onchange="renderVocab()"><option value="">All Topics</option></select>
       <input type="text" id="vocab-search" placeholder="Search words…" oninput="renderVocab()">
       <button class="btn btn-primary btn-sm" onclick="toggleAdd('vocab')">+ Add Word</button>
       <span class="count-badge" id="vocab-showing"></span>
@@ -263,6 +267,7 @@
     <div class="toolbar">
       <select id="sent-filter-level" onchange="renderSentences()"><option value="">All Levels</option></select>
       <select id="sent-filter-unit"  onchange="renderSentences()"><option value="">All Units</option></select>
+      <select id="sent-filter-topic" onchange="renderSentences()"><option value="">All Topics</option></select>
       <select id="sent-filter-correct" onchange="renderSentences()">
         <option value="">All</option><option value="true">✓ Correct</option><option value="false">✗ Incorrect</option>
       </select>
@@ -306,6 +311,7 @@
     <div class="toolbar">
       <select id="q-filter-level" onchange="renderQuestions()"><option value="">All Levels</option></select>
       <select id="q-filter-unit"  onchange="renderQuestions()"><option value="">All Units</option></select>
+      <select id="q-filter-topic" onchange="renderQuestions()"><option value="">All Topics</option></select>
       <input type="text" id="q-search" placeholder="Search questions…" oninput="renderQuestions()">
       <button class="btn btn-primary btn-sm" onclick="toggleAdd('questions')">+ Add Question</button>
       <span class="count-badge" id="q-showing"></span>
@@ -337,6 +343,59 @@
           <th>Question</th><th>Answer</th><th>Distractors</th><th>Topic</th><th>L</th><th>U</th><th></th>
         </tr></thead>
         <tbody id="q-tbody"><tr><td colspan="7" class="empty-state">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── BULK IMPORT PANEL ── -->
+<div class="tab-panel" id="panel-bulk" style="padding:24px;max-width:800px;">
+
+  <div style="margin-bottom:20px;">
+    <h2 style="font-size:1.1rem;font-weight:800;margin-bottom:6px;">Bulk Import</h2>
+    <p style="font-size:0.85rem;color:var(--text-dim);line-height:1.6;">Paste multiple entries at once. Each line is one item. Use the format below for each type.</p>
+  </div>
+
+  <!-- Type selector -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button class="btn btn-secondary" id="bulk-type-vocab"     onclick="setBulkType('vocab')"     style="font-weight:700;">📚 Vocabulary</button>
+    <button class="btn btn-secondary" id="bulk-type-sentences" onclick="setBulkType('sentences')" style="font-weight:700;">✍️ Sentences</button>
+    <button class="btn btn-secondary" id="bulk-type-questions" onclick="setBulkType('questions')" style="font-weight:700;">❓ Questions</button>
+  </div>
+
+  <!-- Format guide -->
+  <div id="bulk-format" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:16px;font-size:0.8rem;font-family:'DM Mono',monospace;color:var(--text-dim);line-height:1.8;"></div>
+
+  <!-- Common fields -->
+  <div class="field-row" style="margin-bottom:16px;">
+    <div class="field-group">
+      <label>Topic (applied to all entries)</label>
+      <input id="bulk-topic" type="text" placeholder="e.g. L6/U6/L1 Vocabulary or MrsWong-S6-Novel">
+    </div>
+    <div class="field-group" style="max-width:90px"><label>Level</label><input id="bulk-level" type="number" min="1" max="9"></div>
+    <div class="field-group" style="max-width:90px"><label>Unit</label><input id="bulk-unit" type="number" min="1" max="12"></div>
+    <div class="field-group" style="max-width:90px"><label>Lesson</label><input id="bulk-lesson" type="number" min="1" max="12"></div>
+  </div>
+
+  <!-- Paste area -->
+  <div class="field-group" style="margin-bottom:16px;">
+    <label>Paste entries here</label>
+    <textarea id="bulk-input" rows="12" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.82rem;resize:vertical;" placeholder="Paste your entries here…"></textarea>
+  </div>
+
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+    <button class="btn btn-secondary" onclick="previewBulk()">👁 Preview</button>
+    <button class="btn btn-primary" onclick="commitBulk()" id="bulk-commit-btn" disabled>⬆ Import to Sheet</button>
+    <span id="bulk-feedback" style="font-size:0.82rem;"></span>
+  </div>
+
+  <!-- Preview table -->
+  <div id="bulk-preview" style="margin-top:20px;display:none;">
+    <h3 style="font-size:0.9rem;font-weight:800;margin-bottom:10px;color:var(--accent);">Preview <span id="bulk-preview-count"></span></h3>
+    <div class="table-wrap">
+      <table>
+        <thead id="bulk-preview-head"></thead>
+        <tbody id="bulk-preview-body"></tbody>
       </table>
     </div>
   </div>
@@ -542,16 +601,30 @@ function buildFilters() {
     sel.innerHTML = '<option value="">All Levels</option>' + levels.map(l => `<option value="${l}">Level ${l}</option>`).join('');
     sel.value = cur;
   });
+
+  // Build topic dropdowns per tab
+  const buildTopicSel = (id, rows) => {
+    const sel = document.getElementById(id); if (!sel) return;
+    const cur = sel.value;
+    const topics = [...new Set(rows.map(r => r.topic).filter(Boolean))].sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+    sel.innerHTML = '<option value="">All Topics</option>' + topics.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
+    sel.value = cur;
+  };
+  buildTopicSel('vocab-filter-topic', data.vocab);
+  buildTopicSel('sent-filter-topic', data.sentences);
+  buildTopicSel('q-filter-topic', data.questions);
 }
 
 function renderVocab() {
   const level  = document.getElementById('vocab-filter-level').value;
   const unit   = document.getElementById('vocab-filter-unit').value;
+  const topic  = document.getElementById('vocab-filter-topic').value;
   const search = document.getElementById('vocab-search').value.toLowerCase();
 
   let rows = data.vocab;
   if (level)  rows = rows.filter(r => r.level == level);
   if (unit)   rows = rows.filter(r => r.unit == unit);
+  if (topic)  rows = rows.filter(r => r.topic == topic);
   if (search) rows = rows.filter(r => (r.word+r.hint+r.topic).toLowerCase().includes(search));
 
   const units = [...new Set(rows.map(r => r.unit).filter(Boolean))].sort((a,b) => a-b);
@@ -578,12 +651,14 @@ function renderVocab() {
 function renderSentences() {
   const level   = document.getElementById('sent-filter-level').value;
   const unit    = document.getElementById('sent-filter-unit').value;
+  const topic   = document.getElementById('sent-filter-topic').value;
   const correct = document.getElementById('sent-filter-correct').value;
   const search  = document.getElementById('sent-search').value.toLowerCase();
 
   let rows = data.sentences;
   if (level)   rows = rows.filter(r => r.level == level);
   if (unit)    rows = rows.filter(r => r.unit == unit);
+  if (topic)   rows = rows.filter(r => r.topic == topic);
   if (correct) rows = rows.filter(r => r.correct.toLowerCase() == correct);
   if (search)  rows = rows.filter(r => r.text.toLowerCase().includes(search));
 
@@ -613,11 +688,13 @@ function renderSentences() {
 function renderQuestions() {
   const level  = document.getElementById('q-filter-level').value;
   const unit   = document.getElementById('q-filter-unit').value;
+  const topic  = document.getElementById('q-filter-topic').value;
   const search = document.getElementById('q-search').value.toLowerCase();
 
   let rows = data.questions;
   if (level)  rows = rows.filter(r => r.level == level);
   if (unit)   rows = rows.filter(r => r.unit == unit);
+  if (topic)  rows = rows.filter(r => r.topic == topic);
   if (search) rows = rows.filter(r => (r.question+r.answer+r.topic).toLowerCase().includes(search));
 
   const units = [...new Set(rows.map(r => r.unit).filter(Boolean))].sort((a,b) => a-b);
@@ -656,7 +733,7 @@ async function addVocab() {
   const lesson = document.getElementById('av-lesson').value.trim();
   if (!word) { showFeedback('av-feedback','Word is required','error'); return; }
   try {
-    await sheetsAppend(RANGES.vocab, [[word, hint, topic, level, unit, lesson]]);
+    await sheetsAppend(RANGES.vocab, [[word, hint, topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']]);
     showFeedback('av-feedback','Saved!','success');
     await loadAllData();
     ['av-word','av-hint','av-topic','av-level','av-unit','av-lesson'].forEach(id => document.getElementById(id).value = '');
@@ -672,7 +749,7 @@ async function addSentence() {
   const lesson  = document.getElementById('as-lesson').value.trim();
   if (!text) { showFeedback('as-feedback','Sentence is required','error'); return; }
   try {
-    await sheetsAppend(RANGES.sentences, [[text, correct, topic, level, unit, lesson]]);
+    await sheetsAppend(RANGES.sentences, [[text, correct, topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']]);
     showFeedback('as-feedback','Saved!','success');
     await loadAllData();
     document.getElementById('as-text').value = '';
@@ -691,7 +768,7 @@ async function addQuestion() {
   const lesson = document.getElementById('aq-lesson').value.trim();
   if (!q || !a || !d1 || !d2 || !d3) { showFeedback('aq-feedback','All fields required','error'); return; }
   try {
-    await sheetsAppend(RANGES.questions, [[q, a, d1, d2, d3, topic, level, unit, lesson]]);
+    await sheetsAppend(RANGES.questions, [[q, a, d1, d2, d3, topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']]);
     showFeedback('aq-feedback','Saved!','success');
     await loadAllData();
     ['aq-q','aq-a','aq-d1','aq-d2','aq-d3','aq-topic','aq-level','aq-unit','aq-lesson'].forEach(id => document.getElementById(id).value = '');
@@ -859,6 +936,122 @@ document.getElementById('edit-modal').addEventListener('click', function(e) {
 if (CLIENT_ID === '977994909893-1q4l0ka094pv1po2326pv5qj3at9eluq.apps.googleusercontent.com' || SHEET_ID === '16Aj_unDyBTEsWbvR3bkT7UEh63jOQdK9aKGjJB3z-F4') {
   document.getElementById('config-warn').style.display = '';
 }
+
+// ── BULK IMPORT ───────────────────────────────────────────────────────
+let bulkType = 'vocab';
+let bulkParsed = [];
+
+const BULK_FORMATS = {
+  vocab:     'One word per line. Optionally add a hint after a pipe | character.\n\nExamples:\nENDURANCE\nBEWILDERED | confused and surprised\nPHOTOSYNTHESIS | process plants use to make food from sunlight',
+  sentences: 'One sentence per line. Mark correct sentences with TRUE at the end, incorrect with FALSE.\nIf no marker, defaults to TRUE.\n\nExamples:\nShe has lived here since five years. FALSE\nHe doesn\'t know the answer. TRUE\nThey went to the cinema last night.',
+  questions: 'One question per block, separated by blank lines.\nFormat: Question | Correct Answer | Wrong 1 | Wrong 2 | Wrong 3\n\nExamples:\nWhat is the capital of France? | Paris | London | Berlin | Madrid\nWhich tense uses "have + past participle"? | Present Perfect | Past Simple | Future Simple | Present Continuous'
+};
+
+function setBulkType(type) {
+  bulkType = type;
+  ['vocab','sentences','questions'].forEach(t => {
+    document.getElementById('bulk-type-'+t).classList.toggle('btn-primary', t === type);
+    document.getElementById('bulk-type-'+t).classList.toggle('btn-secondary', t !== type);
+  });
+  document.getElementById('bulk-format').textContent = BULK_FORMATS[type];
+  document.getElementById('bulk-preview').style.display = 'none';
+  document.getElementById('bulk-commit-btn').disabled = true;
+  bulkParsed = [];
+}
+
+function parseBulkInput() {
+  const raw = document.getElementById('bulk-input').value.trim();
+  const topic  = document.getElementById('bulk-topic').value.trim();
+  const level  = document.getElementById('bulk-level').value.trim();
+  const unit   = document.getElementById('bulk-unit').value.trim();
+  const lesson = document.getElementById('bulk-lesson').value.trim();
+  const rows = [];
+
+  if (bulkType === 'vocab') {
+    raw.split('\n').forEach(line => {
+      line = line.trim(); if (!line) return;
+      const parts = line.split('|');
+      const word = parts[0].trim().toUpperCase();
+      const hint = (parts[1] || '').trim();
+      if (word) rows.push([word, hint, topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+    });
+  } else if (bulkType === 'sentences') {
+    raw.split('\n').forEach(line => {
+      line = line.trim(); if (!line) return;
+      let correct = true;
+      if (line.toUpperCase().endsWith(' FALSE')) { correct = false; line = line.slice(0, -6).trim(); }
+      else if (line.toUpperCase().endsWith(' TRUE')) { line = line.slice(0, -5).trim(); }
+      if (line) rows.push([line, correct ? 'true' : 'false', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+    });
+  } else {
+    // questions — pipe-separated on one line, or blank-line separated blocks
+    const blocks = raw.split(/\n\s*\n/).filter(b => b.trim());
+    blocks.forEach(block => {
+      const line = block.replace(/\n/g, ' ').trim();
+      const parts = line.split('|').map(p => p.trim());
+      if (parts.length < 5) return;
+      const [q, a, d1, d2, d3] = parts;
+      if (q && a) rows.push([q, a, d1||'', d2||'', d3||'', topic, level?parseInt(level):'', unit?parseInt(unit):'', lesson?parseInt(lesson):'']);
+    });
+  }
+  return rows;
+}
+
+function previewBulk() {
+  bulkParsed = parseBulkInput();
+  const preview = document.getElementById('bulk-preview');
+  const countEl = document.getElementById('bulk-preview-count');
+  const head    = document.getElementById('bulk-preview-head');
+  const body    = document.getElementById('bulk-preview-body');
+
+  if (!bulkParsed.length) {
+    showFeedback('bulk-feedback', 'No valid entries found — check format', 'error');
+    preview.style.display = 'none';
+    document.getElementById('bulk-commit-btn').disabled = true;
+    return;
+  }
+
+  countEl.textContent = `(${bulkParsed.length} entries)`;
+
+  const headers = bulkType === 'vocab'
+    ? ['Word','Hint','Topic','L','U','Ls']
+    : bulkType === 'sentences'
+    ? ['Sentence','Correct','Topic','L','U','Ls']
+    : ['Question','Answer','D1','D2','D3','Topic','L','U','Ls'];
+
+  head.innerHTML = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+  body.innerHTML = bulkParsed.map(row =>
+    '<tr>' + row.map(c => `<td style="font-size:0.78rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(String(c))}</td>`).join('') + '</tr>'
+  ).join('');
+
+  preview.style.display = 'block';
+  document.getElementById('bulk-commit-btn').disabled = false;
+  showFeedback('bulk-feedback', `${bulkParsed.length} entries ready to import`, 'success');
+}
+
+async function commitBulk() {
+  if (!bulkParsed.length) return;
+  const range = RANGES[bulkType];
+  showLoading(`Importing ${bulkParsed.length} entries…`);
+  try {
+    // Append in batches of 100
+    for (let i = 0; i < bulkParsed.length; i += 100) {
+      await sheetsAppend(range, bulkParsed.slice(i, i + 100));
+    }
+    showFeedback('bulk-feedback', `✓ ${bulkParsed.length} entries imported successfully!`, 'success');
+    document.getElementById('bulk-input').value = '';
+    document.getElementById('bulk-preview').style.display = 'none';
+    document.getElementById('bulk-commit-btn').disabled = true;
+    bulkParsed = [];
+    await loadAllData();
+  } catch(e) {
+    showFeedback('bulk-feedback', 'Error: ' + e.message, 'error');
+  }
+  hideLoading();
+}
+
+// Initialise bulk tab
+setBulkType('vocab');
 </script>
 </body>
 </html>
