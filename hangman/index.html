@@ -6,6 +6,8 @@
   <title>Hangman Modes</title>
   <link rel="stylesheet" href="../style.css">
   <script src="../content.js" onerror="console.log('No content.js')"></script>
+  <script src="../questions.js" onerror="console.log('No questions.js')"></script>
+  <script src="../sheet-loader.js" onerror="console.log('No sheet-loader.js')"></script>
   <style>
     /* ── Word filter bar ── */
     .qf-bar {
@@ -563,7 +565,8 @@
 
     drawHangman(0);
     window.addEventListener('resize', () => { if (currentWord) renderBoard(); });
-    window.addEventListener('load', () => {
+    window.addEventListener('load', async () => {
+      if (window.SHEET_LOADED) await window.SHEET_LOADED;
       buildWordPicker();
       const ta = document.getElementById('customWordInput');
       const countEl = document.getElementById('customWordCount');
