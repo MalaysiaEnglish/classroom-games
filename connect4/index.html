@@ -115,7 +115,10 @@
     </div>
     <div class="qf-col qf-col-wide">
       <div class="qf-heading">&#128214; Topic</div>
-      <div class="qf-checklist" id="qf-topics"><span class="qf-empty">Select a Level / Unit first</span></div>
+      <div style="margin-bottom:5px;">
+                <input id="qTopicSearch" type="text" placeholder="🔍 Search topics…" oninput="qFilterTopics()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.75rem;outline:none;">
+              </div>
+              <div class="qf-checks" id="qf-topics"><span class="qf-empty">Select a unit first</span></div>
     </div>
     <div class="qf-col">
       <div class="qf-heading">&#128203; Lesson</div>
@@ -382,6 +385,15 @@
 
     function cascadeQUnitChange() {
       buildTopicsAndLessons();
+    }
+
+    function qFilterTopics() {
+      const search = (document.getElementById('qTopicSearch')?.value || '').toLowerCase();
+      const allLabels = document.querySelectorAll('#qf-topics .qf-check-label');
+      allLabels.forEach(label => {
+        const text = label.textContent.toLowerCase();
+        label.style.display = search && !text.includes(search) ? 'none' : '';
+      });
     }
 
     function cascadeQClear() {
