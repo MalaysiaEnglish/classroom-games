@@ -134,7 +134,7 @@
         ]
       },
       {
-        unit: 5, label: "Unit 5 — [topic]",
+        unit: 5, label: "Unit 5 — Toys",
         words: [
           { word: "YO-YO", hint: "a yo-yo", img: "u5_103_a-yo-yo.jpg", emoji: "🪀", lesson: "a" },
           { word: "BASEBALL", hint: "a baseball", img: "u5_104_a-baseball.jpg", emoji: "🖼️", lesson: "a" },
@@ -165,7 +165,7 @@
         ]
       },
       {
-        unit: 6, label: "Unit 6 — [topic]",
+        unit: 6, label: "Unit 6 — Weather",
         words: [
           { word: "SUNNY", hint: "sunny", img: "u6_129_sunny.jpg", emoji: "🖼️", lesson: "a" },
           { word: "RAINY", hint: "rainy", img: "u6_130_rainy.jpg", emoji: "🖼️", lesson: "a" },
@@ -195,7 +195,7 @@
         ]
       },
       {
-        unit: 7, label: "Unit 7 — [topic]",
+        unit: 7, label: "Unit 7 — Food and Drinks",
         words: [
           { word: "BANANA", hint: "a banana", img: "u7_154_a-banana.jpg", emoji: "🍌", lesson: "a" },
           { word: "SODA", hint: "a soda", img: "u7_155_a-soda.jpg", emoji: "🖼️", lesson: "a" },
@@ -224,7 +224,7 @@
         ]
       },
       {
-        unit: 8, label: "Unit 8 — [topic]",
+        unit: 8, label: "Unit 8 — Animals",
         words: [
           { word: "CAT..", hint: "a cat", img: "u8_178_a-cat.jpg", emoji: "🐱", lesson: "a" },
           { word: "DOG", hint: "a dog", img: "u8_179_a-dog.jpg", emoji: "🐶", lesson: "a" },

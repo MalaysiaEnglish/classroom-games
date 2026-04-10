@@ -12,7 +12,7 @@
     imgBase:  "../../img/letsgol5/",
     units: [
       {
-        unit: 1, label: "Unit 1 — [topic]",
+        unit: 1, label: "Unit 1 — Food and Quantities",
         words: [
           { word: "CAN OF TOMATOES", hint: "a can of tomatoes", img: "u1_001_a-can-of-tomatoes.jpg", emoji: "🖼️", lesson: "a" },
           { word: "CANS OF BEANS", hint: "cans of beans", img: "u1_002_cans-of-beans.jpg", emoji: "🖼️", lesson: "a" },
@@ -41,7 +41,7 @@
         ]
       },
       {
-        unit: 2, label: "Unit 2 — [topic]",
+        unit: 2, label: "Unit 2 — Animals",
         words: [
           { word: "WOLF", hint: "a wolf", img: "u2_025_a-wolf.jpg", emoji: "🖼️", lesson: "a" },
           { word: "ZEBRA", hint: "a zebra", img: "u2_026_a-zebra.jpg", emoji: "🖼️", lesson: "a" },
@@ -70,7 +70,7 @@
         ]
       },
       {
-        unit: 3, label: "Unit 3 — [topic]",
+        unit: 3, label: "Unit 3 — Past Activities",
         words: [
           { word: "WENT FOR A WALK", hint: "went for a walk", img: "u3_049_went-for-a-walk.jpg", emoji: "🖼️", lesson: "a" },
           { word: "WENT FOR A BIKE RIDE", hint: "went for a bike ride", img: "u3_050_went-for-a-bike-ride.jpg", emoji: "🖼️", lesson: "a" },
@@ -93,7 +93,7 @@
         ]
       },
       {
-        unit: 4, label: "Unit 4 — [topic]",
+        unit: 4, label: "Unit 4 — Instructions",
         words: [
           { word: "PUT ON SUNSCREEN", hint: "put on sunscreen", img: "u4_067_put-on-sunscreen.jpg", emoji: "🖼️", lesson: "a" },
           { word: "TURN ON THE TV", hint: "turn on the TV", img: "u4_068_turn-on-the-tv.jpg", emoji: "🖼️", lesson: "a" },
@@ -118,7 +118,7 @@
         ]
       },
       {
-        unit: 5, label: "Unit 5 — [topic]",
+        unit: 5, label: "Unit 5 — Jobs",
         words: [
           { word: "TENNIS PLAYER", hint: "a tennis player", img: "u5_087_a-tennis-player.jpg", emoji: "🖼️", lesson: "a" },
           { word: "MOVIE DIRECTOR", hint: "a movie director", img: "u5_088_a-movie-director.jpg", emoji: "🖼️", lesson: "a" },
@@ -143,7 +143,7 @@
         ]
       },
       {
-        unit: 6, label: "Unit 6 — [topic]",
+        unit: 6, label: "Unit 6 — Seasons and Activities",
         words: [
           { word: "ICE SKATING", hint: "ice skating", img: "u6_107_ice-skating.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SKIING", hint: "skiing", img: "u6_108_skiing.jpg", emoji: "🖼️", lesson: "a" },
@@ -172,7 +172,7 @@
         ]
       },
       {
-        unit: 7, label: "Unit 7 — [topic]",
+        unit: 7, label: "Unit 7 — The Senses",
         words: [
           { word: "LOOK AT THE BUTTERFLY", hint: "Look at the butterfly", img: "u7_131_look-at-the-butterfly.jpg", emoji: "🖼️", lesson: "a" },
           { word: "LISTEN TO THE MUSIC", hint: "Listen to the music", img: "u7_132_listen-to-the-music.jpg", emoji: "🖼️", lesson: "a" },
@@ -201,7 +201,7 @@
         ]
       },
       {
-        unit: 8, label: "Unit 8 — [topic]",
+        unit: 8, label: "Unit 8 — Countries and Places",
         words: [
           { word: "EGYPT", hint: "Egypt", img: "u8_155_egypt.jpg", emoji: "🖼️", lesson: "a" },
           { word: "CHINA", hint: "China", img: "u8_156_china.jpg", emoji: "🖼️", lesson: "a" },

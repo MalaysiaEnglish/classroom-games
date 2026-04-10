@@ -12,7 +12,7 @@
     imgBase:  "../../img/letsgol4/",
     units: [
       {
-        unit: 1, label: "Unit 1 — [topic]",
+        unit: 1, label: "Unit 1 — Weather",
         words: [
           { word: "COOL", hint: "cool", img: "u1_001_cool.jpg", emoji: "😎", lesson: "a" },
           { word: "COLD", hint: "cold", img: "u1_002_cold.jpg", emoji: "🧊", lesson: "a" },
@@ -45,7 +45,7 @@
         ]
       },
       {
-        unit: 2, label: "Unit 2 — [topic]",
+        unit: 2, label: "Unit 2 — Jobs",
         words: [
           { word: "ASTRONAUT", hint: "an astronaut", img: "u2_029_an-astronaut.jpg", emoji: "👨‍🚀", lesson: "a" },
           { word: "SINGER", hint: "a singer", img: "u2_030_a-singer.jpg", emoji: "🎤", lesson: "a" },
@@ -74,7 +74,7 @@
         ]
       },
       {
-        unit: 3, label: "Unit 3 — [topic]",
+        unit: 3, label: "Unit 3 — Past Actions",
         words: [
           { word: "HAD A PARTY", hint: "had a party", img: "u3_053_had-a-party.jpg", emoji: "🖼️", lesson: "a" },
           { word: "WENT TO THE MALL", hint: "went to the mall", img: "u3_054_went-to-the-mall.jpg", emoji: "🖼️", lesson: "a" },
@@ -97,7 +97,7 @@
         ]
       },
       {
-        unit: 4, label: "Unit 4 — [topic]",
+        unit: 4, label: "Unit 4 — School Subjects",
         words: [
           { word: "HISTORY", hint: "history", img: "u4_071_history.jpg", emoji: "📜", lesson: "a" },
           { word: "SCIENCE", hint: "science", img: "u4_072_science.jpg", emoji: "🔬", lesson: "a" },
@@ -134,7 +134,7 @@
         ]
       },
       {
-        unit: 5, label: "Unit 5 — [topic]",
+        unit: 5, label: "Unit 5 — Feelings",
         words: [
           { word: "EXCITED", hint: "excited", img: "u5_103_excited.jpg", emoji: "😃", lesson: "a" },
           { word: "WORRIED", hint: "worried", img: "u5_104_worried.jpg", emoji: "😟", lesson: "a" },
@@ -163,7 +163,7 @@
         ]
       },
       {
-        unit: 6, label: "Unit 6 — [topic]",
+        unit: 6, label: "Unit 6 — Family",
         words: [
           { word: "GRANDMA", hint: "grandma", img: "u6_127_grandma.jpg", emoji: "👵", lesson: "a" },
           { word: "GRANDPA", hint: "grandpa", img: "u6_128_grandpa.jpg", emoji: "👴", lesson: "a" },
@@ -207,7 +207,7 @@
         ]
       },
       {
-        unit: 7, label: "Unit 7 — [topic]",
+        unit: 7, label: "Unit 7 — Activities",
         words: [
           { word: "SEE A PLAY", hint: "see a play", img: "u7_166_see-a-play.jpg", emoji: "🖼️", lesson: "a" },
           { word: "PLANT FLOWERS", hint: "plant flowers", img: "u7_167_plant-flowers.jpg", emoji: "🖼️", lesson: "a" },
@@ -234,7 +234,7 @@
         ]
       },
       {
-        unit: 8, label: "Unit 8 — [topic]",
+        unit: 8, label: "Unit 8 — Health and Illness",
         words: [
           { word: "COLD", hint: "a cold", img: "u8_190_a-cold.jpg", emoji: "🧊", lesson: "a" },
           { word: "FEVER", hint: "a fever", img: "u8_191_a-fever.jpg", emoji: "🖼️", lesson: "a" },

@@ -12,7 +12,7 @@
     imgBase:  "../../img/letsgol3/",
     units: [
       {
-        unit: 1, label: "Unit 1 — [topic]",
+        unit: 1, label: "Unit 1 — Snacks",
         words: [
           { word: "POPCORN", hint: "popcorn", img: "u1_001_popcorn.jpg", emoji: "🍿", lesson: "a" },
           { word: "CANDY", hint: "candy", img: "u1_002_candy.jpg", emoji: "🍬", lesson: "a" },
@@ -44,7 +44,7 @@
         ]
       },
       {
-        unit: 2, label: "Unit 2 — [topic]",
+        unit: 2, label: "Unit 2 — Clothing Patterns",
         words: [
           { word: "STRIPED", hint: "striped", img: "u2_028_striped.jpg", emoji: "🖼️", lesson: "a" },
           { word: "POLKA-DOT", hint: "polka-dot", img: "u2_029_polka-dot.jpg", emoji: "🖼️", lesson: "a" },
@@ -75,7 +75,7 @@
         ]
       },
       {
-        unit: 3, label: "Unit 3 — [topic]",
+        unit: 3, label: "Unit 3 — Rooms at School",
         words: [
           { word: "MUSIC ROOM", hint: "music room", img: "u3_054_music-room.jpg", emoji: "🖼️", lesson: "a" },
           { word: "CLASSROOM", hint: "classroom", img: "u3_055_classroom.jpg", emoji: "🖼️", lesson: "a" },
@@ -107,7 +107,7 @@
         ]
       },
       {
-        unit: 4, label: "Unit 4 — [topic]",
+        unit: 4, label: "Unit 4 — Jobs",
         words: [
           { word: "PILOT", hint: "a pilot", img: "u4_081_a-pilot.jpg", emoji: "✈️", lesson: "a" },
           { word: "ZOOKEEPER", hint: "a zookeeper", img: "u4_082_a-zookeeper.jpg", emoji: "🖼️", lesson: "a" },
@@ -132,7 +132,7 @@
         ]
       },
       {
-        unit: 5, label: "Unit 5 — [topic]",
+        unit: 5, label: "Unit 5 — Days of the Week",
         words: [
           { word: "SUNDAY", hint: "Sunday", img: "u5_101_sunday.jpg", emoji: "📅", lesson: "a" },
           { word: "MONDAY", hint: "Monday", img: "u5_102_monday.jpg", emoji: "📅", lesson: "a" },
@@ -160,7 +160,7 @@
         ]
       },
       {
-        unit: 6, label: "Unit 6 — [topic]",
+        unit: 6, label: "Unit 6 — Time and Frequency",
         words: [
           { word: "3:15 THREE FIFTEEN A QUARTER AFTER THREE", hint: "3:15 three fifteen a quarter after three", img: "u6_124_3-15-three-fifteen-a-quarter-a.jpg", emoji: "🖼️", lesson: "a" },
           { word: "3:30 THREE THIRTY HALF PAST THREE", hint: "3:30 three thirty half past three", img: "u6_125_3-30-three-thirty-half-past-th.jpg", emoji: "🖼️", lesson: "a" },
@@ -183,7 +183,7 @@
         ]
       },
       {
-        unit: 7, label: "Unit 7 — [topic]",
+        unit: 7, label: "Unit 7 — Weather and Places",
         words: [
           { word: "AT THE ZOO", hint: "at the zoo", img: "u7_142_at-the-zoo.jpg", emoji: "🖼️", lesson: "a" },
           { word: "AT THE STORE", hint: "at the store", img: "u7_143_at-the-store.jpg", emoji: "🖼️", lesson: "a" },
@@ -211,7 +211,7 @@
         ]
       },
       {
-        unit: 8, label: "Unit 8 — [topic]",
+        unit: 8, label: "Unit 8 — Rooms at Home",
         words: [
           { word: "BEDROOM", hint: "bedroom", img: "u8_165_bedroom.jpg", emoji: "🛏️", lesson: "a" },
           { word: "LIVING ROOM", hint: "living room", img: "u8_166_living-room.jpg", emoji: "🖼️", lesson: "a" },

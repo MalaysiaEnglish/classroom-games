@@ -12,7 +12,7 @@
     imgBase:  "../../img/letsgol2/",
     units: [
       {
-        unit: 1, label: "Unit 1 — [topic]",
+        unit: 1, label: "Unit 1 — Classroom Objects",
         words: [
           { word: "PICTURE", hint: "a picture", img: "u1_001_a-picture.jpg", emoji: "🖼️", lesson: "a" },
           { word: "WINDOW", hint: "a window", img: "u1_002_a-window.jpg", emoji: "🪟", lesson: "a" },
@@ -43,7 +43,7 @@
         ]
       },
       {
-        unit: 2, label: "Unit 2 — [topic]",
+        unit: 2, label: "Unit 2 — Personal Items",
         words: [
           { word: "KEY", hint: "a key", img: "u2_027_a-key.jpg", emoji: "🔑", lesson: "a" },
           { word: "CANDY BAR", hint: "a candy bar", img: "u2_028_a-candy-bar.jpg", emoji: "🖼️", lesson: "a" },
@@ -74,7 +74,7 @@
         ]
       },
       {
-        unit: 3, label: "Unit 3 — [topic]",
+        unit: 3, label: "Unit 3 — Actions and Skills",
         words: [
           { word: "RIDE A PONY", hint: "ride a pony", img: "u3_053_ride-a-pony.jpg", emoji: "🖼️", lesson: "a" },
           { word: "PLAY THE PIANO", hint: "play the piano", img: "u3_054_play-the-piano.jpg", emoji: "🖼️", lesson: "a" },
@@ -105,7 +105,7 @@
         ]
       },
       {
-        unit: 4, label: "Unit 4 — [topic]",
+        unit: 4, label: "Unit 4 — Jobs",
         words: [
           { word: "COOK", hint: "a cook", img: "u4_079_a-cook.jpg", emoji: "👨‍🍳", lesson: "a" },
           { word: "NURSE", hint: "a nurse", img: "u4_080_a-nurse.jpg", emoji: "👩‍⚕️", lesson: "a" },
@@ -136,7 +136,7 @@
         ]
       },
       {
-        unit: 5, label: "Unit 5 — [topic]",
+        unit: 5, label: "Unit 5 — Food",
         words: [
           { word: "OMELET", hint: "an omelet", img: "u5_105_an-omelet.jpg", emoji: "🍳", lesson: "a" },
           { word: "PEACH", hint: "a peach", img: "u5_106_a-peach.jpg", emoji: "🍑", lesson: "a" },
@@ -167,7 +167,7 @@
         ]
       },
       {
-        unit: 6, label: "Unit 6 — [topic]",
+        unit: 6, label: "Unit 6 — Home and Furniture",
         words: [
           { word: "BED", hint: "a bed", img: "u6_131_a-bed.jpg", emoji: "🛏️", lesson: "a" },
           { word: "BATHTUB", hint: "a bathtub", img: "u6_132_a-bathtub.jpg", emoji: "🛁", lesson: "a" },
@@ -193,7 +193,7 @@
         ]
       },
       {
-        unit: 7, label: "Unit 7 — [topic]",
+        unit: 7, label: "Unit 7 — Daily Routine",
         words: [
           { word: "GET UP", hint: "get up", img: "u7_152_get-up.jpg", emoji: "🖼️", lesson: "a" },
           { word: "BRUSH MY TEETH", hint: "brush my teeth", img: "u7_153_brush-my-teeth.jpg", emoji: "🖼️", lesson: "a" },
@@ -220,7 +220,7 @@
         ]
       },
       {
-        unit: 8, label: "Unit 8 — [topic]",
+        unit: 8, label: "Unit 8 — Activities",
         words: [
           { word: "DANCING", hint: "dancing", img: "u8_174_dancing.jpg", emoji: "💃", lesson: "a" },
           { word: "SWIMMING", hint: "swimming", img: "u8_175_swimming.jpg", emoji: "🏊", lesson: "a" },

@@ -12,7 +12,7 @@
     imgBase:  "../../img/letsgol6/",
     units: [
       {
-        unit: 1, label: "Unit 1 — [topic]",
+        unit: 1, label: "Unit 1 — Accessories",
         words: [
           { word: "SCARF", hint: "scarf", img: "u1_001_scarf.jpg", emoji: "🧣", lesson: "a" },
           { word: "MITTENS", hint: "mittens", img: "u1_002_mittens.jpg", emoji: "🧤", lesson: "a" },
@@ -35,7 +35,7 @@
         ]
       },
       {
-        unit: 2, label: "Unit 2 — [topic]",
+        unit: 2, label: "Unit 2 — Feelings and Adjectives",
         words: [
           { word: "SHE WAS AMAZED", hint: "She was amazed", img: "u2_019_she-was-amazed.jpg", emoji: "🖼️", lesson: "a" },
           { word: "PENGUINS WERE AMAZING", hint: "The penguins were amazing", img: "u2_020_the-penguins-were-amazing.jpg", emoji: "🖼️", lesson: "a" },
@@ -64,7 +64,7 @@
         ]
       },
       {
-        unit: 3, label: "Unit 3 — [topic]",
+        unit: 3, label: "Unit 3 — Gifts",
         words: [
           { word: "SCARF.", hint: "a scarf", img: "u3_043_a-scarf.jpg", emoji: "🧣", lesson: "a" },
           { word: "BRACELET", hint: "a bracelet", img: "u3_044_a-bracelet.jpg", emoji: "🖼️", lesson: "a" },
@@ -89,7 +89,7 @@
         ]
       },
       {
-        unit: 4, label: "Unit 4 — [topic]",
+        unit: 4, label: "Unit 4 — Shops and Places",
         words: [
           { word: "ICE CREAM SHOP", hint: "ice cream shop", img: "u4_063_ice-cream-shop.jpg", emoji: "🖼️", lesson: "a" },
           { word: "BAKERY", hint: "bakery", img: "u4_064_bakery.jpg", emoji: "🖼️", lesson: "a" },
@@ -124,7 +124,7 @@
         ]
       },
       {
-        unit: 5, label: "Unit 5 — [topic]",
+        unit: 5, label: "Unit 5 — Countries",
         words: [
           { word: "AUSTRALIA", hint: "Australia", img: "u5_093_australia.jpg", emoji: "🖼️", lesson: "a" },
           { word: "AUSTRALIAN", hint: "Australian", img: "u5_094_australian.jpg", emoji: "🖼️", lesson: "a" },
@@ -151,7 +151,7 @@
         ]
       },
       {
-        unit: 6, label: "Unit 6 — [topic]",
+        unit: 6, label: "Unit 6 — Past Actions",
         words: [
           { word: "CLEANED HIS DESK", hint: "cleaned his desk", img: "u6_115_cleaned-his-desk.jpg", emoji: "🖼️", lesson: "a" },
           { word: "WASHED HER HANDS", hint: "washed her hands", img: "u6_116_washed-her-hands.jpg", emoji: "🖼️", lesson: "a" },
@@ -176,7 +176,7 @@
         ]
       },
       {
-        unit: 7, label: "Unit 7 — [topic]",
+        unit: 7, label: "Unit 7 — Personality",
         words: [
           { word: "OUTGOING", hint: "outgoing", img: "u7_135_outgoing.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SHY", hint: "shy", img: "u7_136_shy.jpg", emoji: "🖼️", lesson: "a" },
@@ -201,7 +201,7 @@
         ]
       },
       {
-        unit: 8, label: "Unit 8 — [topic]",
+        unit: 8, label: "Unit 8 — Adventure Places",
         words: [
           { word: "AMAZON JUNGLE", hint: "the Amazon jungle", img: "u8_155_the-amazon-jungle.jpg", emoji: "🖼️", lesson: "a" },
           { word: "MT. EVEREST", hint: "Mt. Everest", img: "u8_156_mt-everest.jpg", emoji: "🖼️", lesson: "a" },
