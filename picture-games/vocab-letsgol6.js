@@ -66,7 +66,7 @@
       {
         unit: 3, label: "Unit 3 — [topic]",
         words: [
-          { word: "SCARF", hint: "a scarf", img: "u3_043_a-scarf.jpg", emoji: "🧣", lesson: "a" },
+          { word: "SCARF.", hint: "a scarf", img: "u3_043_a-scarf.jpg", emoji: "🧣", lesson: "a" },
           { word: "BRACELET", hint: "a bracelet", img: "u3_044_a-bracelet.jpg", emoji: "🖼️", lesson: "a" },
           { word: "BOX OF CHOCOLATES", hint: "a box of chocolates", img: "u3_045_a-box-of-chocolates.jpg", emoji: "🖼️", lesson: "a" },
           { word: "COOKBOOK", hint: "a cookbook", img: "u3_046_a-cookbook.jpg", emoji: "🖼️", lesson: "a" },
@@ -105,11 +105,11 @@
           { word: "ON THE LEFT", hint: "on the left", img: "u4_074_on-the-left.jpg", emoji: "🖼️", lesson: "a" },
           { word: "ACROSS THE STREET FROM", hint: "across the street from", img: "u4_075_across-the-street-from.jpg", emoji: "🖼️", lesson: "a" },
           { word: "NEXT TO", hint: "next to", img: "u4_076_next-to.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "BAKERY", hint: "bakery", img: "u4_077_bakery.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "BAKERY.", hint: "bakery", img: "u4_077_bakery.jpg", emoji: "🖼️", lesson: "a" },
           { word: "RESTAURANT", hint: "restaurant", img: "u4_078_restaurant.jpg", emoji: "🍽️", lesson: "a" },
-          { word: "MUSIC STORE", hint: "music store", img: "u4_079_music-store.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "ICE CREAM SHOP", hint: "ice cream shop", img: "u4_080_ice-cream-shop.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "BOOKSTORE", hint: "bookstore", img: "u4_081_bookstore.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "MUSIC STORE.", hint: "music store", img: "u4_079_music-store.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "ICE CREAM SHOP.", hint: "ice cream shop", img: "u4_080_ice-cream-shop.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "BOOKSTORE.", hint: "bookstore", img: "u4_081_bookstore.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BEAUTY SHOP", hint: "beauty shop", img: "u4_082_beauty-shop.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BANK", hint: "bank", img: "u4_083_bank.jpg", emoji: "🏦", lesson: "b" },
           { word: "GROCERY STORE", hint: "grocery store", img: "u4_084_grocery-store.jpg", emoji: "🖼️", lesson: "b" },
@@ -140,7 +140,7 @@
           { word: "FRENCH", hint: "French", img: "u5_104_french.jpg", emoji: "🖼️", lesson: "a" },
           { word: "ITALY", hint: "Italy", img: "u5_105_italy.jpg", emoji: "🖼️", lesson: "a" },
           { word: "ITALIAN", hint: "Italian", img: "u5_106_italian.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "MEXICO", hint: "Mexico", img: "u5_107_mexico.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "MEXICO.", hint: "Mexico", img: "u5_107_mexico.jpg", emoji: "🖼️", lesson: "b" },
           { word: "SPANISH", hint: "Spanish", img: "u5_108_spanish.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BLACK BEANS", hint: "black beans", img: "u5_109_black-beans.jpg", emoji: "🖼️", lesson: "b" },
           { word: "CROISSANTS", hint: "croissants", img: "u5_110_croissants.jpg", emoji: "🖼️", lesson: "b" },
@@ -224,7 +224,4 @@
       { label: "Revision 1 — Units 1 + 2", units: [1, 2] },
       { label: "Revision 2 — Units 3 + 4", units: [3, 4] },
       { label: "Revision 3 — Units 5 + 6", units: [5, 6] },
-      { label: "Revision 4 — Units 7 + 8", units: [7, 8] },
-    ]
-  });
-})();
+      { label: "Revisio
