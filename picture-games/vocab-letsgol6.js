@@ -224,4 +224,7 @@
       { label: "Revision 1 — Units 1 + 2", units: [1, 2] },
       { label: "Revision 2 — Units 3 + 4", units: [3, 4] },
       { label: "Revision 3 — Units 5 + 6", units: [5, 6] },
-      { label: "Revisio
+      { label: "Revision 4 — Units 7 + 8", units: [7, 8] },
+    ]
+  });
+})();
