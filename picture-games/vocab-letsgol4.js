@@ -2,6 +2,7 @@
 // Let's Go Level 4 — Flashcard Vocabulary
 // Auto-generated. Lesson a/b split is 50/50 — adjust with splitter tool.
 // ─────────────────────────────────────────────────────────────
+// Lesson A/B split corrected with lesson-splitter.html
 
 (function() {
   window.VOCAB_REGISTRY = window.VOCAB_REGISTRY || [];
@@ -114,8 +115,8 @@
           { word: "WARM", hint: "warm", img: "u4_084_warm.jpg", emoji: "🌤️", lesson: "a" },
           { word: "HUMID", hint: "humid", img: "u4_085_humid.jpg", emoji: "💧", lesson: "a" },
           { word: "COOL", hint: "cool", img: "u4_086_cool.jpg", emoji: "😎", lesson: "a" },
-          { word: "WINDY", hint: "windy", img: "u4_087_windy.jpg", emoji: "💨", lesson: "b" },
-          { word: "CLOUDY", hint: "cloudy", img: "u4_088_cloudy.jpg", emoji: "☁️", lesson: "b" },
+          { word: "WINDY", hint: "windy", img: "u4_087_windy.jpg", emoji: "💨", lesson: "a" },
+          { word: "CLOUDY", hint: "cloudy", img: "u4_088_cloudy.jpg", emoji: "☁️", lesson: "a" },
           { word: "BIG", hint: "big", img: "u4_089_big.jpg", emoji: "🐘", lesson: "b" },
           { word: "SMALL", hint: "small", img: "u4_090_small.jpg", emoji: "🐭", lesson: "b" },
           { word: "HEAVY", hint: "heavy", img: "u4_091_heavy.jpg", emoji: "🏋️", lesson: "b" },
@@ -183,12 +184,12 @@
           { word: "BLOND HAIR", hint: "blond hair", img: "u6_143_blond-hair.jpg", emoji: "🖼️", lesson: "a" },
           { word: "RED HAIR", hint: "red hair", img: "u6_144_red-hair.jpg", emoji: "🖼️", lesson: "a" },
           { word: "BROWN HAIR", hint: "brown hair", img: "u6_145_brown-hair.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "GRAY HAIR", hint: "gray hair", img: "u6_146_gray-hair.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "BLACK HAIR", hint: "black hair", img: "u6_147_black-hair.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "BROWN EYES", hint: "brown eyes", img: "u6_148_brown-eyes.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "BLUE EYES", hint: "blue eyes", img: "u6_149_blue-eyes.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "GREEN EYES", hint: "green eyes", img: "u6_150_green-eyes.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "BLACK EYES", hint: "black eyes", img: "u6_151_black-eyes.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "GRAY HAIR", hint: "gray hair", img: "u6_146_gray-hair.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "BLACK HAIR", hint: "black hair", img: "u6_147_black-hair.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "BROWN EYES", hint: "brown eyes", img: "u6_148_brown-eyes.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "BLUE EYES", hint: "blue eyes", img: "u6_149_blue-eyes.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "GREEN EYES", hint: "green eyes", img: "u6_150_green-eyes.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "BLACK EYES", hint: "black eyes", img: "u6_151_black-eyes.jpg", emoji: "🖼️", lesson: "a" },
           { word: "VEST", hint: "a vest", img: "u6_152_a-vest.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BASEBALL CAP", hint: "a baseball cap", img: "u6_153_a-baseball-cap.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BLOUSE", hint: "a blouse", img: "u6_154_a-blouse.jpg", emoji: "🖼️", lesson: "b" },
@@ -219,7 +220,7 @@
           { word: "GO BACKPACKING", hint: "go backpacking", img: "u7_174_go-backpacking.jpg", emoji: "🖼️", lesson: "a" },
           { word: "GO ON VACATION", hint: "go on vacation", img: "u7_175_go-on-vacation.jpg", emoji: "🖼️", lesson: "a" },
           { word: "MAIL A LETTER", hint: "mail a letter", img: "u7_176_mail-a-letter.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "READ A NOVEL", hint: "read a novel", img: "u7_177_read-a-novel.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "READ A NOVEL", hint: "read a novel", img: "u7_177_read-a-novel.jpg", emoji: "🖼️", lesson: "a" },
           { word: "DEPARTMENT STORE", hint: "department store", img: "u7_178_department-store.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BARBER SHOP", hint: "barber shop", img: "u7_179_barber-shop.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BEAUTY SALON", hint: "beauty salon", img: "u7_180_beauty-salon.jpg", emoji: "🖼️", lesson: "b" },
@@ -248,7 +249,7 @@
           { word: "WATCH DVDS", hint: "watch DVDs", img: "u8_200_watch-dvds.jpg", emoji: "🖼️", lesson: "a" },
           { word: "COLLECT BASEBALL CARDS", hint: "collect baseball cards", img: "u8_201_collect-baseball-cards.jpg", emoji: "🖼️", lesson: "a" },
           { word: "PLAY SOCCER", hint: "play soccer", img: "u8_202_play-soccer.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "PLAY BADMINTON", hint: "play badminton", img: "u8_203_play-badminton.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "PLAY BADMINTON", hint: "play badminton", img: "u8_203_play-badminton.jpg", emoji: "🖼️", lesson: "a" },
           { word: "CLEAR THE TABLE", hint: "clear the table", img: "u8_204_clear-the-table.jpg", emoji: "🖼️", lesson: "b" },
           { word: "WASH THE DISHES", hint: "wash the dishes", img: "u8_205_wash-the-dishes.jpg", emoji: "🖼️", lesson: "b" },
           { word: "DRY THE DISHES", hint: "dry the dishes", img: "u8_206_dry-the-dishes.jpg", emoji: "🖼️", lesson: "b" },

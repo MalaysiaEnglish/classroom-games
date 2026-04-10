@@ -2,6 +2,7 @@
 // Let's Go Level 3 — Flashcard Vocabulary
 // Auto-generated. Lesson a/b split is 50/50 — adjust with splitter tool.
 // ─────────────────────────────────────────────────────────────
+// Lesson A/B split corrected with lesson-splitter.html
 
 (function() {
   window.VOCAB_REGISTRY = window.VOCAB_REGISTRY || [];
@@ -57,7 +58,7 @@
           { word: "SHORTS", hint: "shorts", img: "u2_037_shorts.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SHOES", hint: "shoes", img: "u2_038_shoes.jpg", emoji: "👟", lesson: "a" },
           { word: "SOCKS", hint: "socks", img: "u2_039_socks.jpg", emoji: "🧦", lesson: "a" },
-          { word: "T-SHIRT", hint: "a T-shirt", img: "u2_040_a-t-shirt.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "T-SHIRT", hint: "a T-shirt", img: "u2_040_a-t-shirt.jpg", emoji: "🖼️", lesson: "b" },
           { word: "JACKET", hint: "a jacket", img: "u2_041_a-jacket.jpg", emoji: "🧥", lesson: "b" },
           { word: "SWEATER", hint: "a sweater", img: "u2_042_a-sweater.jpg", emoji: "🧶", lesson: "b" },
           { word: "SWEATSHIRT", hint: "a sweatshirt", img: "u2_043_a-sweatshirt.jpg", emoji: "🖼️", lesson: "b" },
@@ -89,8 +90,8 @@
           { word: "REPAIR SHOP", hint: "repair shop", img: "u3_064_repair-shop.jpg", emoji: "🖼️", lesson: "a" },
           { word: "OFFICE", hint: "office", img: "u3_065_office.jpg", emoji: "🖼️", lesson: "a" },
           { word: "FACTORY", hint: "factory", img: "u3_066_factory.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "STORE", hint: "store", img: "u3_067_store.jpg", emoji: "🏪", lesson: "b" },
-          { word: "BAKERY", hint: "bakery", img: "u3_068_bakery.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "STORE", hint: "store", img: "u3_067_store.jpg", emoji: "🏪", lesson: "a" },
+          { word: "BAKERY", hint: "bakery", img: "u3_068_bakery.jpg", emoji: "🖼️", lesson: "a" },
           { word: "BY CAR", hint: "by car", img: "u3_069_by-car.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BY BIKE", hint: "by bike", img: "u3_070_by-bike.jpg", emoji: "🖼️", lesson: "b" },
           { word: "ON FOOT", hint: "on foot", img: "u3_071_on-foot.jpg", emoji: "🖼️", lesson: "b" },
@@ -144,8 +145,8 @@
           { word: "ENGLISH CLASS", hint: "English class", img: "u5_109_english-class.jpg", emoji: "🖼️", lesson: "a" },
           { word: "MUSIC CLASS", hint: "music class", img: "u5_110_music-class.jpg", emoji: "🖼️", lesson: "a" },
           { word: "MATH CLASS", hint: "math class", img: "u5_111_math-class.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "SWIMMING CLASS", hint: "swimming class", img: "u5_112_swimming-class.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "COMPUTER CLASS", hint: "computer class", img: "u5_113_computer-class.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "SWIMMING CLASS", hint: "swimming class", img: "u5_112_swimming-class.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "COMPUTER CLASS", hint: "computer class", img: "u5_113_computer-class.jpg", emoji: "🖼️", lesson: "a" },
           { word: "PLAY OUTSIDE", hint: "play outside", img: "u5_114_play-outside.jpg", emoji: "🖼️", lesson: "b" },
           { word: "TAKE A NAP", hint: "take a nap", img: "u5_115_take-a-nap.jpg", emoji: "🖼️", lesson: "b" },
           { word: "WATCH TV", hint: "watch TV", img: "u5_116_watch-tv.jpg", emoji: "🖼️", lesson: "b" },
@@ -169,7 +170,7 @@
           { word: "USUALLY 80% TU TH", hint: "usually 80% Tu Th", img: "u6_129_usually-80-tu-th.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SOMETIMES 40% TU TH", hint: "sometimes 40% Tu Th", img: "u6_130_sometimes-40-tu-th.jpg", emoji: "🖼️", lesson: "a" },
           { word: "NEVER 0% TU TH", hint: "never 0% Tu Th", img: "u6_131_never-0-tu-th.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "PLAY TENNIS", hint: "play tennis", img: "u6_132_play-tennis.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "PLAY TENNIS", hint: "play tennis", img: "u6_132_play-tennis.jpg", emoji: "🖼️", lesson: "b" },
           { word: "READ E-MAIL", hint: "read e-mail", img: "u6_133_read-e-mail.jpg", emoji: "🖼️", lesson: "b" },
           { word: "DO GYMNASTICS", hint: "do gymnastics", img: "u6_134_do-gymnastics.jpg", emoji: "🖼️", lesson: "b" },
           { word: "STUDY ENGLISH I LIKE ENGLISH", hint: "study English I like English", img: "u6_135_study-english-i-like-english.jpg", emoji: "🖼️", lesson: "b" },
@@ -224,8 +225,8 @@
           { word: "SLED", hint: "a sled", img: "u8_174_a-sled.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SNOWBOARD", hint: "a snowboard", img: "u8_175_a-snowboard.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SKIS", hint: "skis", img: "u8_176_skis.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "IN-LINE SKATES", hint: "in-line skates", img: "u8_177_in-line-skates.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "ICE SKATES", hint: "ice skates", img: "u8_178_ice-skates.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "IN-LINE SKATES", hint: "in-line skates", img: "u8_177_in-line-skates.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "ICE SKATES", hint: "ice skates", img: "u8_178_ice-skates.jpg", emoji: "🖼️", lesson: "a" },
           { word: "EAT BREAKFAST", hint: "eat breakfast", img: "u8_179_eat-breakfast.jpg", emoji: "🖼️", lesson: "b" },
           { word: "DO HOMEWORK", hint: "do homework", img: "u8_180_do-homework.jpg", emoji: "🖼️", lesson: "b" },
           { word: "WATCH TV", hint: "watch TV", img: "u8_181_watch-tv.jpg", emoji: "🖼️", lesson: "b" },

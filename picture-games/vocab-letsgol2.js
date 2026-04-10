@@ -2,6 +2,7 @@
 // Let's Go Level 2 — Flashcard Vocabulary
 // Auto-generated. Lesson a/b split is 50/50 — adjust with splitter tool.
 // ─────────────────────────────────────────────────────────────
+// Lesson A/B split corrected with lesson-splitter.html
 
 (function() {
   window.VOCAB_REGISTRY = window.VOCAB_REGISTRY || [];
@@ -21,11 +22,11 @@
           { word: "CLOCK", hint: "a clock", img: "u1_006_a-clock.jpg", emoji: "⏰", lesson: "a" },
           { word: "DOOR", hint: "a door", img: "u1_007_a-door.jpg", emoji: "🚪", lesson: "a" },
           { word: "CALENDAR", hint: "a calendar", img: "u1_008_a-calendar.jpg", emoji: "📅", lesson: "a" },
-          { word: "PAPER CLIPS", hint: "paper clips", img: "u1_009_paper-clips.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "PICTURES", hint: "pictures", img: "u1_010_pictures.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "CLOCKS", hint: "clocks", img: "u1_011_clocks.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "WORKBOOKS", hint: "workbooks", img: "u1_012_workbooks.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "CALENDARS", hint: "calendars", img: "u1_013_calendars.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "PAPER CLIPS", hint: "paper clips", img: "u1_009_paper-clips.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "PICTURES", hint: "pictures", img: "u1_010_pictures.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "CLOCKS", hint: "clocks", img: "u1_011_clocks.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "WORKBOOKS", hint: "workbooks", img: "u1_012_workbooks.jpg", emoji: "🖼️", lesson: "b" },
+          { word: "CALENDARS", hint: "calendars", img: "u1_013_calendars.jpg", emoji: "🖼️", lesson: "b" },
           { word: "PENCIL SHARPENERS", hint: "pencil sharpeners", img: "u1_014_pencil-sharpeners.jpg", emoji: "🖼️", lesson: "b" },
           { word: "WINDOWS", hint: "windows", img: "u1_015_windows.jpg", emoji: "🖼️", lesson: "b" },
           { word: "DOORS", hint: "doors", img: "u1_016_doors.jpg", emoji: "🖼️", lesson: "b" },
@@ -57,9 +58,9 @@
           { word: "MUSIC PLAYER", hint: "a music player", img: "u2_037_a-music-player.jpg", emoji: "🖼️", lesson: "a" },
           { word: "CALCULATOR", hint: "a calculator", img: "u2_038_a-calculator.jpg", emoji: "🖼️", lesson: "a" },
           { word: "TRAIN PASS", hint: "a train pass", img: "u2_039_a-train-pass.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "UMBRELLA", hint: "an umbrella", img: "u2_040_an-umbrella.jpg", emoji: "☂️", lesson: "b" },
-          { word: "LUNCH BOX", hint: "a lunch box", img: "u2_041_a-lunch-box.jpg", emoji: "🖼️", lesson: "b" },
-          { word: "WALLET", hint: "a wallet", img: "u2_042_a-wallet.jpg", emoji: "👛", lesson: "b" },
+          { word: "UMBRELLA", hint: "an umbrella", img: "u2_040_an-umbrella.jpg", emoji: "☂️", lesson: "a" },
+          { word: "LUNCH BOX", hint: "a lunch box", img: "u2_041_a-lunch-box.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "WALLET", hint: "a wallet", img: "u2_042_a-wallet.jpg", emoji: "👛", lesson: "a" },
           { word: "LISTEN TO MUSIC", hint: "Listen to music", img: "u2_043_listen-to-music.jpg", emoji: "🖼️", lesson: "b" },
           { word: "EAT LUNCH", hint: "Eat lunch", img: "u2_044_eat-lunch.jpg", emoji: "🖼️", lesson: "b" },
           { word: "BUY A COMIC BOOK", hint: "Buy a comic book", img: "u2_045_buy-a-comic-book.jpg", emoji: "🖼️", lesson: "b" },
