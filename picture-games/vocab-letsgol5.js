@@ -47,7 +47,7 @@
           { word: "ZEBRA", hint: "a zebra", img: "u2_026_a-zebra.jpg", emoji: "🖼️", lesson: "a" },
           { word: "CHEETAH", hint: "a cheetah", img: "u2_027_a-cheetah.jpg", emoji: "🖼️", lesson: "a" },
           { word: "GAZELLE", hint: "a gazelle", img: "u2_028_a-gazelle.jpg", emoji: "🖼️", lesson: "a" },
-          { word: "NEED PHOTO A RHINOCEROS", hint: "Need photo a rhinoceros", img: "u2_029_need-photo-a-rhinoceros.jpg", emoji: "🖼️", lesson: "a" },
+          { word: "A RHINOCEROS", hint: "a rhinoceros", img: "u2_029_a-rhinoceros.jpg", emoji: "🦏", lesson: "a" },
           { word: "POLAR BEAR", hint: "a polar bear", img: "u2_030_a-polar-bear.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SQUIRREL", hint: "a squirrel", img: "u2_031_a-squirrel.jpg", emoji: "🖼️", lesson: "a" },
           { word: "SKUNK", hint: "a skunk", img: "u2_032_a-skunk.jpg", emoji: "🖼️", lesson: "a" },
