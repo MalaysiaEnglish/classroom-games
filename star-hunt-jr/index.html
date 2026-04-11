@@ -362,9 +362,9 @@
   </div>
 
   <div class="legend">
-    <div class="leg-item"><div class="leg-dot" style="background:var(--hot)"></div>🔥 Hot = 1 away</div>
-    <div class="leg-item"><div class="leg-dot" style="background:var(--warm)"></div>🌡️ Warm = 2 away</div>
-    <div class="leg-item"><div class="leg-dot" style="background:var(--cold)"></div>🧊 Cold = 3+ away</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--hot)"></div>🔥 Hot</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--warm)"></div>🌡️ Warm</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--cold)"></div>🧊 Cold</div>
     <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>+5 bonus</div>
     <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>−5 oops!</div>
     <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>🔄 Reset</div>
@@ -798,9 +798,9 @@ function showHintPopup(r, c) {
   const dist = chebyshev(r, c, starR, starC);
   const hint = getHint(r, c);
   const data = {
-    hot:  { icon:'🔥', label:'HOT!',  color:'#ff6b35', sub:`Only ${dist} square${dist===1?'':'s'} away!` },
-    warm: { icon:'🌡️', label:'WARM',  color:'#ffd60a', sub:`${dist} squares away` },
-    cold: { icon:'🧊', label:'COLD!',  color:'#58a6ff', sub:`${dist} squares away — keep looking!` },
+    hot:  { icon:'🔥', label:'HOT!',  color:'#ff6b35', sub:'Getting very close…' },
+    warm: { icon:'🌡️', label:'WARM',  color:'#ffd60a', sub:'Somewhere nearby…' },
+    cold: { icon:'🧊', label:'COLD!', color:'#58a6ff', sub:'Keep hunting!' },
   }[hint];
   document.getElementById('hint-icon').textContent          = data.icon;
   document.getElementById('hint-label').textContent         = data.label;
