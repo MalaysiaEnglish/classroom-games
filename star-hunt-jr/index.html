@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>⭐ Star Hunt Jr.</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --card:    #1f2937;
+      --border:  rgba(255,255,255,0.1);
+      --text:    #f0f6fc;
+      --muted:   rgba(240,246,252,0.5);
+      --star:    #ffd700;
+      --hot:     #ff6b35;
+      --warm:    #ffd60a;
+      --cold:    #58a6ff;
+      --green:   #3fb950;
+      --red:     #f85149;
+      --purple:  #bc8cff;
+      --radius:  12px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      width: 100%;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: var(--star);
+      letter-spacing: 0.5px;
+    }
+    .header-btns { display: flex; gap: 8px; }
+    .header-btn {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); border-radius: 8px;
+      padding: 5px 12px; font-size: 13px;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer; text-decoration: none; display: inline-block;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .header-btn:hover { border-color: var(--text); color: var(--text); }
+    .header-btn.fs { font-size: 15px; padding: 5px 10px; }
+
+    /* ── SCREENS ── */
+    .screen { display: none; width: 100%; max-width: 700px; padding: 16px; }
+    .screen.active { display: block; }
+
+    /* ── SETUP ── */
+    .setup-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 18px; padding: 28px 24px; margin-top: 12px;
+    }
+    .setup-card h2 {
+      font-family: 'Fredoka One', cursive; font-size: 28px;
+      color: var(--star); text-align: center; margin-bottom: 4px;
+    }
+    .setup-card p {
+      text-align: center; color: var(--muted);
+      font-size: 14px; margin-bottom: 24px;
+    }
+    .setup-label {
+      font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--star); margin-bottom: 10px;
+    }
+    .team-row {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 10px;
+    }
+    .team-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
+    .team-input {
+      flex: 1; background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border); color: var(--text);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 15px; font-family: 'Nunito', sans-serif; font-weight: 700;
+    }
+    .team-input:focus { outline: none; border-color: var(--star); }
+    .remove-btn {
+      background: none; border: none; color: var(--red);
+      font-size: 18px; cursor: pointer; padding: 4px;
+    }
+    .add-team-btn {
+      width: 100%; background: none;
+      border: 1px dashed var(--border); color: var(--muted);
+      border-radius: 10px; padding: 10px;
+      font-size: 13px; font-family: 'Nunito', sans-serif;
+      cursor: pointer; margin-bottom: 20px;
+    }
+    .add-team-btn:hover { border-color: var(--muted); color: var(--text); }
+
+    /* Category picker */
+    .cat-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px;
+    }
+    .cat-btn {
+      background: rgba(255,255,255,0.04); border: 2px solid var(--border);
+      border-radius: 12px; padding: 12px 10px; text-align: center;
+      cursor: pointer; transition: all 0.15s; color: var(--text);
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 14px;
+    }
+    .cat-btn:hover { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.4); }
+    .cat-btn.selected { background: rgba(255,215,0,0.18); border-color: var(--star); color: var(--star); }
+    .cat-btn .cat-icon { font-size: 28px; display: block; margin-bottom: 4px; }
+    .cat-btn.all-btn { grid-column: 1 / -1; }
+
+    .start-btn {
+      width: 100%; background: linear-gradient(135deg, #ffd700, #ff9500);
+      color: #1a0a00; border: none; border-radius: 14px; padding: 14px;
+      font-size: 19px; font-family: 'Fredoka One', cursive;
+      letter-spacing: 0.5px; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ── SCOREBOARD ── */
+    .scoreboard {
+      display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .score-chip {
+      flex: 1; min-width: 80px;
+      background: var(--surface); border: 2px solid var(--border);
+      border-radius: 12px; padding: 8px 10px; text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .score-chip.active { border-color: var(--star); background: rgba(255,215,0,0.08); }
+    .chip-name { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .chip-score { font-family: 'Fredoka One', cursive; font-size: 22px; }
+    .chip-stars { font-size: 11px; color: var(--star); }
+
+    /* Turn / score row */
+    .turn-row {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .turn-row .t-name { font-weight: 800; font-size: 15px; }
+    .turn-row .t-score-label { font-size: 11px; color: var(--muted); text-align: right; }
+    .turn-row .t-score-val {
+      font-family: 'Fredoka One', cursive; font-size: 26px;
+      color: var(--star); text-align: right; line-height: 1;
+    }
+
+    /* ── GRID ── */
+    .grid-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 10px; margin-bottom: 10px;
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;
+    }
+    .cell {
+      aspect-ratio: 1; border-radius: 9px;
+      background: rgba(255,255,255,0.05); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(16px, 3vw, 22px);
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: border-color 0.15s, transform 0.1s, background 0.2s;
+      user-select: none;
+    }
+    .cell:hover:not(.revealed):not(.star-cell) {
+      border-color: var(--star); transform: scale(1.06);
+    }
+    .cell.revealed { cursor: default; }
+    .cell.hint-hot  { background: rgba(255,107,53,0.25); border-color: var(--hot); }
+    .cell.hint-warm { background: rgba(255,214,10,0.2);  border-color: var(--warm); }
+    .cell.hint-cold { background: rgba(88,166,255,0.15); border-color: var(--cold); }
+    .cell.star-cell {
+      background: rgba(255,215,0,0.2); border-color: var(--star); cursor: default;
+      animation: starPulse 1s ease infinite alternate;
+    }
+    @keyframes starPulse {
+      from { box-shadow: 0 0 6px rgba(255,215,0,0.4); }
+      to   { box-shadow: 0 0 20px rgba(255,215,0,1); }
+    }
+    .cell.special-plus  { background: rgba(63,185,80,0.2);  border-color: var(--green); }
+    .cell.special-minus { background: rgba(248,81,73,0.2);  border-color: var(--red); }
+    .cell.special-reset { background: rgba(188,140,255,0.2); border-color: var(--purple); }
+    .cell.wrong-flash { animation: wrongFlash 0.4s ease; }
+    @keyframes wrongFlash {
+      0%,100% { background: rgba(255,255,255,0.05); }
+      50% { background: rgba(248,81,73,0.4); border-color: var(--red); }
+    }
+    .cell-num { font-size: clamp(9px,2vw,13px); color: var(--muted); font-family: 'Fredoka One', cursive; }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+    }
+    .leg-item {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: var(--muted);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 10px;
+    }
+    .leg-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+    /* ── QUESTION MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); z-index: 200;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 22px; padding: 28px 24px;
+      max-width: 400px; width: 100%;
+      text-align: center; animation: popIn 0.2s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.88); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .modal-pic {
+      font-size: 90px; margin-bottom: 10px; display: block;
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,0.5));
+    }
+    .modal-q {
+      font-size: 18px; font-weight: 800; margin-bottom: 20px;
+      color: var(--text); line-height: 1.3;
+    }
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .choice-btn {
+      background: rgba(255,255,255,0.06); border: 2px solid var(--border);
+      color: var(--text); border-radius: 12px; padding: 14px 8px;
+      font-size: 17px; font-family: 'Nunito', sans-serif;
+      font-weight: 800; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    }
+    .choice-btn:hover:not(:disabled) { border-color: var(--star); transform: translateY(-2px); }
+    .choice-btn.correct { background: rgba(63,185,80,0.25); border-color: var(--green); color: var(--green); }
+    .choice-btn.wrong   { background: rgba(248,81,73,0.2);  border-color: var(--red);   color: var(--red); }
+    .choice-btn:disabled { cursor: default; transform: none; }
+
+    /* ── POPUPS ── */
+    .popup-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); z-index: 300;
+      align-items: center; justify-content: center;
+    }
+    .popup-overlay.open { display: flex; }
+    .popup-card {
+      background: var(--surface); border-radius: 22px;
+      padding: 36px 32px; text-align: center;
+      animation: popIn 0.2s ease; max-width: 320px; width: 90%;
+    }
+    .popup-icon { font-size: 72px; margin-bottom: 10px; }
+    .popup-label { font-family: 'Fredoka One', cursive; font-size: 34px; margin-bottom: 6px; }
+    .popup-sub   { color: var(--muted); font-size: 14px; margin-bottom: 22px; }
+    .popup-continue {
+      background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+      color: var(--text); border-radius: 12px; padding: 10px 28px;
+      font-size: 15px; font-family: 'Nunito', sans-serif; font-weight: 800; cursor: pointer;
+    }
+    .popup-continue:hover { border-color: var(--star); }
+
+    .found-card {
+      background: var(--surface); border: 2px solid var(--star);
+      border-radius: 22px; padding: 32px 28px; text-align: center;
+      animation: popIn 0.2s ease; max-width: 340px; width: 90%;
+      box-shadow: 0 0 40px rgba(255,215,0,0.25);
+    }
+    .found-card h2 { font-family: 'Fredoka One', cursive; font-size: 32px; color: var(--star); margin-bottom: 6px; }
+    .found-score { font-family: 'Fredoka One', cursive; font-size: 54px; color: var(--star); margin: 10px 0; line-height: 1; }
+    .found-btn {
+      background: linear-gradient(135deg, #ffd700, #ff9500);
+      color: #1a0a00; border: none; border-radius: 14px;
+      padding: 12px 30px; font-size: 17px;
+      font-family: 'Fredoka One', cursive; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .found-btn:hover { opacity: 0.9; transform: scale(1.04); }
+
+    /* ── FINAL ── */
+    #screen-final {
+      display: none; max-width: 500px; text-align: center; margin: 20px auto; padding: 16px;
+    }
+    #screen-final.active { display: block; }
+    .final-row {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 18px; margin-bottom: 10px;
+    }
+    .final-row.win { border-color: var(--star); background: rgba(255,215,0,0.08); }
+    .final-rank { font-size: 1.8rem; width: 36px; text-align: center; }
+    .final-name { flex: 1; font-size: 1.1rem; font-weight: 800; text-align: left; }
+    .final-pts  { font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--star); }
+    .final-stars { font-size: 0.75rem; color: var(--muted); display: block; }
+    .again-btn {
+      background: linear-gradient(135deg, #ffd700, #ff9500);
+      color: #1a0a00; border: none; border-radius: 40px;
+      padding: 13px 40px; font-size: 1.1rem;
+      font-family: 'Fredoka One', cursive; cursor: pointer; margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <a href="../index.html" class="header-btn">← Home</a>
+  <div class="header-title">⭐ Star Hunt Jr.</div>
+  <div class="header-btns">
+    <button class="header-btn" onclick="restartGame()">🔄</button>
+    <button class="header-btn fs" onclick="toggleFS()">⛶</button>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="screen active" id="screen-setup">
+  <div class="setup-card">
+    <h2>⭐ Star Hunt Jr.</h2>
+    <p>Find the hidden star! Answer the picture questions to get clues 🔥🧊</p>
+
+    <div class="setup-label">Teams</div>
+    <div id="team-list"></div>
+    <button class="add-team-btn" onclick="addTeam()">＋ Add Team</button>
+
+    <div class="setup-label">Pick a Category</div>
+    <div class="cat-grid" id="cat-grid"></div>
+
+    <button class="start-btn" onclick="startGame()">🚀 Let's Play!</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="screen-game">
+  <div class="scoreboard" id="scoreboard"></div>
+
+  <div class="turn-row">
+    <div class="t-name" id="turn-name">Team 1</div>
+    <div>
+      <div class="t-score-label">Points</div>
+      <div class="t-score-val" id="round-score">40</div>
+    </div>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--hot)"></div>🔥 Hot = 1 away</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--warm)"></div>🌡️ Warm = 2 away</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--cold)"></div>🧊 Cold = 3+ away</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>+5 bonus</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>−5 oops!</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>🔄 Reset</div>
+  </div>
+</div>
+
+<!-- FINAL SCORES -->
+<div id="screen-final">
+  <h2 style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--star);margin-bottom:20px">🏆 Final Scores!</h2>
+  <div id="final-rows"></div>
+  <button class="again-btn" onclick="restartGame()">Play Again!</button>
+</div>
+
+<!-- QUESTION MODAL -->
+<div class="modal-overlay" id="modal-q">
+  <div class="modal-box">
+    <span class="modal-pic" id="modal-pic">🐶</span>
+    <div class="modal-q"   id="modal-q-text">What is this?</div>
+    <div class="choices"   id="modal-choices"></div>
+  </div>
+</div>
+
+<!-- HINT POPUP -->
+<div class="popup-overlay" id="popup-hint">
+  <div class="popup-card">
+    <div class="popup-icon" id="hint-icon">🔥</div>
+    <div class="popup-label" id="hint-label" style="color:var(--hot)">HOT!</div>
+    <div class="popup-sub"   id="hint-sub">1 square away!</div>
+    <button class="popup-continue" onclick="closeHint()">Continue →</button>
+  </div>
+</div>
+
+<!-- SPECIAL POPUP -->
+<div class="popup-overlay" id="popup-special">
+  <div class="popup-card">
+    <div class="popup-icon" id="special-icon">🎉</div>
+    <div class="popup-label" id="special-label" style="color:var(--green)">+5!</div>
+    <div class="popup-sub"   id="special-sub">Lucky square!</div>
+    <button class="popup-continue" onclick="closeSpecial()">Continue →</button>
+  </div>
+</div>
+
+<!-- FOUND POPUP -->
+<div class="popup-overlay" id="popup-found">
+  <div class="found-card">
+    <div style="font-size:64px;margin-bottom:8px">🌟</div>
+    <h2>Star Found!</h2>
+    <div style="font-size:1.2rem;font-weight:900;margin-bottom:4px" id="found-team">Team 1</div>
+    <div style="color:var(--muted);font-size:13px">scored</div>
+    <div class="found-score" id="found-score">28</div>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:18px">points!</div>
+    <button class="found-btn" id="found-next" onclick="nextRound()">Next Team →</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  QUESTION DATA — Picture / Emoji
+// ═══════════════════════════════════════════════
+const CATEGORIES = {
+  all: {
+    label: '🌟 All Categories', icon: '🌈'
+  },
+  animals: {
+    label: '🐾 Animals', icon: '🐾',
+    questions: [
+      { pic:"🐶", q:"What animal is this?", a:"Dog",      ch:["Cat","Bird","Fish"] },
+      { pic:"🐱", q:"What animal is this?", a:"Cat",      ch:["Cow","Frog","Duck"] },
+      { pic:"🐸", q:"What animal is this?", a:"Frog",     ch:["Fish","Bird","Bear"] },
+      { pic:"🐻", q:"What animal is this?", a:"Bear",     ch:["Lion","Cow","Pig"] },
+      { pic:"🐷", q:"What animal is this?", a:"Pig",      ch:["Cow","Duck","Dog"] },
+      { pic:"🐮", q:"What animal is this?", a:"Cow",      ch:["Horse","Pig","Sheep"] },
+      { pic:"🦁", q:"What animal is this?", a:"Lion",     ch:["Tiger","Bear","Fox"] },
+      { pic:"🐘", q:"What animal is this?", a:"Elephant", ch:["Hippo","Rhino","Bear"] },
+      { pic:"🐧", q:"What animal is this?", a:"Penguin",  ch:["Duck","Owl","Chicken"] },
+      { pic:"🦊", q:"What animal is this?", a:"Fox",      ch:["Wolf","Dog","Cat"] },
+      { pic:"🐰", q:"What animal is this?", a:"Rabbit",   ch:["Mouse","Hamster","Cat"] },
+      { pic:"🐢", q:"What animal is this?", a:"Turtle",   ch:["Frog","Crocodile","Snake"] },
+      { pic:"🦋", q:"What animal is this?", a:"Butterfly",ch:["Bee","Dragonfly","Moth"] },
+      { pic:"🦆", q:"What animal is this?", a:"Duck",     ch:["Bird","Chicken","Swan"] },
+      { pic:"🐔", q:"What animal is this?", a:"Chicken",  ch:["Duck","Turkey","Bird"] },
+      { pic:"🐨", q:"What animal is this?", a:"Koala",    ch:["Bear","Panda","Monkey"] },
+      { pic:"🦒", q:"What animal is this?", a:"Giraffe",  ch:["Deer","Horse","Camel"] },
+      { pic:"🐬", q:"What animal is this?", a:"Dolphin",  ch:["Fish","Shark","Whale"] },
+      { pic:"🐙", q:"What animal is this?", a:"Octopus",  ch:["Jellyfish","Crab","Squid"] },
+      { pic:"🦅", q:"What animal is this?", a:"Eagle",    ch:["Owl","Hawk","Parrot"] },
+    ]
+  },
+  colors: {
+    label: '🎨 Colors', icon: '🎨',
+    questions: [
+      { pic:"🔴", q:"What color is this?", a:"Red",    ch:["Orange","Pink","Purple"] },
+      { pic:"🔵", q:"What color is this?", a:"Blue",   ch:["Green","Purple","Black"] },
+      { pic:"🟡", q:"What color is this?", a:"Yellow", ch:["Orange","Gold","White"] },
+      { pic:"🟢", q:"What color is this?", a:"Green",  ch:["Blue","Teal","Yellow"] },
+      { pic:"🟠", q:"What color is this?", a:"Orange", ch:["Red","Yellow","Brown"] },
+      { pic:"🟣", q:"What color is this?", a:"Purple", ch:["Pink","Blue","Red"] },
+      { pic:"⬛", q:"What color is this?", a:"Black",  ch:["Grey","Brown","Dark blue"] },
+      { pic:"⬜", q:"What color is this?", a:"White",  ch:["Grey","Silver","Yellow"] },
+      { pic:"🟤", q:"What color is this?", a:"Brown",  ch:["Orange","Red","Black"] },
+      { pic:"🩷", q:"What color is this?", a:"Pink",   ch:["Red","Purple","Orange"] },
+    ]
+  },
+  food: {
+    label: '🍕 Food', icon: '🍕',
+    questions: [
+      { pic:"🍎", q:"What food is this?", a:"Apple",      ch:["Orange","Pear","Cherry"] },
+      { pic:"🍌", q:"What food is this?", a:"Banana",     ch:["Mango","Lemon","Pear"] },
+      { pic:"🍕", q:"What food is this?", a:"Pizza",      ch:["Pie","Cake","Bread"] },
+      { pic:"🍦", q:"What food is this?", a:"Ice cream",  ch:["Cake","Milk","Cookie"] },
+      { pic:"🍰", q:"What food is this?", a:"Cake",       ch:["Bread","Pie","Biscuit"] },
+      { pic:"🍓", q:"What food is this?", a:"Strawberry", ch:["Cherry","Tomato","Apple"] },
+      { pic:"🍊", q:"What food is this?", a:"Orange",     ch:["Apple","Lemon","Pear"] },
+      { pic:"🍇", q:"What food is this?", a:"Grapes",     ch:["Blueberry","Cherry","Plum"] },
+      { pic:"🌮", q:"What food is this?", a:"Taco",       ch:["Sandwich","Burger","Wrap"] },
+      { pic:"🍔", q:"What food is this?", a:"Burger",     ch:["Sandwich","Taco","Hot dog"] },
+      { pic:"🍩", q:"What food is this?", a:"Donut",      ch:["Bagel","Cookie","Cake"] },
+      { pic:"🍣", q:"What food is this?", a:"Sushi",      ch:["Sandwich","Rice","Fish"] },
+      { pic:"🥕", q:"What food is this?", a:"Carrot",     ch:["Potato","Turnip","Radish"] },
+      { pic:"🌽", q:"What food is this?", a:"Corn",       ch:["Banana","Zucchini","Pea"] },
+      { pic:"🍉", q:"What food is this?", a:"Watermelon", ch:["Melon","Apple","Tomato"] },
+    ]
+  },
+  numbers: {
+    label: '🔢 Numbers', icon: '🔢',
+    questions: [
+      { pic:"1️⃣", q:"What number is this?", a:"One",   ch:["Two","Three","Four"] },
+      { pic:"2️⃣", q:"What number is this?", a:"Two",   ch:["One","Three","Five"] },
+      { pic:"3️⃣", q:"What number is this?", a:"Three", ch:["Two","Four","Six"] },
+      { pic:"4️⃣", q:"What number is this?", a:"Four",  ch:["Five","Three","Eight"] },
+      { pic:"5️⃣", q:"What number is this?", a:"Five",  ch:["Four","Six","Seven"] },
+      { pic:"6️⃣", q:"What number is this?", a:"Six",   ch:["Five","Seven","Nine"] },
+      { pic:"7️⃣", q:"What number is this?", a:"Seven", ch:["Six","Eight","Five"] },
+      { pic:"8️⃣", q:"What number is this?", a:"Eight", ch:["Seven","Nine","Six"] },
+      { pic:"9️⃣", q:"What number is this?", a:"Nine",  ch:["Eight","Ten","Seven"] },
+      { pic:"🔟", q:"What number is this?",  a:"Ten",   ch:["Nine","Eight","Eleven"] },
+    ]
+  },
+  shapes: {
+    label: '🔷 Shapes & Objects', icon: '🔷',
+    questions: [
+      { pic:"⭕", q:"What shape is this?",   a:"Circle",    ch:["Oval","Square","Triangle"] },
+      { pic:"🔷", q:"What shape is this?",   a:"Diamond",   ch:["Square","Rectangle","Kite"] },
+      { pic:"🔺", q:"What shape is this?",   a:"Triangle",  ch:["Arrow","Pyramid","Diamond"] },
+      { pic:"⭐", q:"What is this?",         a:"Star",      ch:["Sun","Moon","Flower"] },
+      { pic:"🌙", q:"What is this?",         a:"Moon",      ch:["Star","Sun","Cloud"] },
+      { pic:"☀️", q:"What is this?",         a:"Sun",       ch:["Moon","Star","Fire"] },
+      { pic:"🌈", q:"What is this?",         a:"Rainbow",   ch:["Cloud","Sky","Umbrella"] },
+      { pic:"🏠", q:"What is this?",         a:"House",     ch:["School","Castle","Tent"] },
+      { pic:"🚗", q:"What is this?",         a:"Car",       ch:["Bus","Truck","Bike"] },
+      { pic:"✈️", q:"What is this?",         a:"Plane",     ch:["Bird","Rocket","Kite"] },
+      { pic:"🎈", q:"What is this?",         a:"Balloon",   ch:["Ball","Bubble","Cloud"] },
+      { pic:"🌸", q:"What is this?",         a:"Flower",    ch:["Leaf","Tree","Fruit"] },
+      { pic:"🌳", q:"What is this?",         a:"Tree",      ch:["Plant","Flower","Grass"] },
+      { pic:"🎁", q:"What is this?",         a:"Present",   ch:["Box","Bag","Hat"] },
+      { pic:"📚", q:"What is this?",         a:"Books",     ch:["Bag","Paper","Pencil"] },
+    ]
+  },
+};
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+const GRID_SIZE   = 7;
+const TEAM_COLORS = ["#ffd700","#58a6ff","#3fb950","#ff6b35","#bc8cff","#f778ba"];
+let teamNames     = ["Team 1","Team 2"];
+let selectedCat   = 'all';
+let teams         = [];
+let currentIdx    = 0;
+let roundScore    = 40;
+let starR, starC;
+let grid          = [];
+let pendingCell   = null;
+let pendingQ      = null;
+let afterSpecial  = null;
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+(function init() {
+  renderTeamInputs();
+  buildCatGrid();
+})();
+
+function renderTeamInputs() {
+  const el = document.getElementById('team-list');
+  el.innerHTML = teamNames.map((n, i) => `
+    <div class="team-row">
+      <div class="team-dot" style="background:${TEAM_COLORS[i % TEAM_COLORS.length]}"></div>
+      <input class="team-input" value="${n}" oninput="teamNames[${i}]=this.value" placeholder="Team ${i+1}">
+      ${teamNames.length > 2 ? `<button class="remove-btn" onclick="removeTeam(${i})">✕</button>` : ''}
+    </div>
+  `).join('');
+}
+
+function addTeam() {
+  if (teamNames.length >= 6) return;
+  teamNames.push(`Team ${teamNames.length + 1}`);
+  renderTeamInputs();
+}
+
+function removeTeam(i) {
+  teamNames.splice(i, 1);
+  renderTeamInputs();
+}
+
+function buildCatGrid() {
+  const el = document.getElementById('cat-grid');
+  const cats = Object.entries(CATEGORIES);
+  el.innerHTML = cats.map(([key, cat]) => `
+    <button class="cat-btn ${key === 'all' ? 'all-btn' : ''} ${key === selectedCat ? 'selected' : ''}"
+      onclick="selectCat('${key}')">
+      <span class="cat-icon">${cat.icon}</span>
+      ${cat.label}
+    </button>
+  `).join('');
+}
+
+function selectCat(key) {
+  selectedCat = key;
+  buildCatGrid();
+}
+
+function getQuestions() {
+  if (selectedCat === 'all') {
+    return Object.values(CATEGORIES)
+      .filter(c => c.questions)
+      .flatMap(c => c.questions);
+  }
+  return CATEGORIES[selectedCat].questions || [];
+}
+
+// ═══════════════════════════════════════════════
+//  GAME START
+// ═══════════════════════════════════════════════
+function startGame() {
+  document.querySelectorAll('.team-input').forEach((inp, i) => {
+    teamNames[i] = inp.value.trim() || `Team ${i+1}`;
+  });
+
+  teams = teamNames.map((name, i) => ({
+    name, color: TEAM_COLORS[i % TEAM_COLORS.length],
+    starsFound: 0, totalScore: 0,
+  }));
+
+  currentIdx = 0;
+  document.getElementById('screen-setup').classList.remove('active');
+  document.getElementById('screen-game').classList.add('active');
+  initRound();
+}
+
+function restartGame() {
+  document.getElementById('screen-final').classList.remove('active');
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-setup').classList.add('active');
+  teamNames = teams.length ? teams.map(t => t.name) : ["Team 1","Team 2"];
+  renderTeamInputs();
+  buildCatGrid();
+}
+
+// ═══════════════════════════════════════════════
+//  ROUND
+// ═══════════════════════════════════════════════
+function initRound() {
+  roundScore = 40;
+  starR = Math.floor(Math.random() * GRID_SIZE);
+  starC = Math.floor(Math.random() * GRID_SIZE);
+
+  grid = Array.from({ length: GRID_SIZE }, () =>
+    Array.from({ length: GRID_SIZE }, () => ({
+      revealed: false, special: null, question: null,
+    }))
+  );
+
+  placeSpecials('+5',   randInt(1, 3));
+  placeSpecials('-5',   randInt(1, 3));
+  placeSpecials('reset', randInt(1, 2));
+
+  const qs = shuffle([...getQuestions()]);
+  let qi = 0;
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      grid[r][c].question = qs[qi % qs.length];
+      qi++;
+    }
+  }
+
+  renderGrid();
+  renderScoreboard();
+  updateTurnRow();
+}
+
+function placeSpecials(type, count) {
+  let placed = 0, att = 0;
+  while (placed < count && att < 200) {
+    att++;
+    const r = Math.floor(Math.random() * GRID_SIZE);
+    const c = Math.floor(Math.random() * GRID_SIZE);
+    if (r === starR && c === starC) continue;
+    if (grid[r][c].special) continue;
+    grid[r][c].special = type;
+    placed++;
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════
+function renderGrid() {
+  const el = document.getElementById('grid');
+  el.innerHTML = '';
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.dataset.r = r; cell.dataset.c = c;
+      const d = grid[r][c];
+
+      if (d.revealed) {
+        cell.classList.add('revealed');
+        if (r === starR && c === starC) {
+          cell.classList.add('star-cell');
+          cell.textContent = '⭐';
+        } else if (d.special === '+5') {
+          cell.classList.add('special-plus'); cell.textContent = '+5';
+        } else if (d.special === '-5') {
+          cell.classList.add('special-minus'); cell.textContent = '−5';
+        } else if (d.special === 'reset') {
+          cell.classList.add('special-reset'); cell.textContent = '🔄';
+        } else {
+          const h = getHint(r, c);
+          cell.classList.add(`hint-${h}`);
+          cell.textContent = { hot:'🔥', warm:'🌡️', cold:'🧊' }[h];
+        }
+      } else {
+        const num = r * GRID_SIZE + c + 1;
+        const span = document.createElement('span');
+        span.className = 'cell-num';
+        span.textContent = num;
+        cell.appendChild(span);
+        cell.addEventListener('click', () => onCellClick(r, c));
+      }
+      el.appendChild(cell);
+    }
+  }
+}
+
+function renderScoreboard() {
+  const el = document.getElementById('scoreboard');
+  el.innerHTML = teams.map((t, i) => `
+    <div class="score-chip ${i === currentIdx ? 'active' : ''}">
+      <div class="chip-name" style="color:${t.color}">${t.name}</div>
+      <div class="chip-score">${t.totalScore}</div>
+      <div class="chip-stars">${'⭐'.repeat(t.starsFound) || '–'}</div>
+    </div>
+  `).join('');
+}
+
+function updateTurnRow() {
+  const t = teams[currentIdx];
+  document.getElementById('turn-name').textContent = `${t.name}'s Turn`;
+  document.getElementById('turn-name').style.color = t.color;
+  document.getElementById('round-score').textContent = roundScore;
+}
+
+// ═══════════════════════════════════════════════
+//  CLICK
+// ═══════════════════════════════════════════════
+function onCellClick(r, c) {
+  if (grid[r][c].revealed) return;
+  roundScore = Math.max(0, roundScore - 1);
+  updateTurnRow();
+  pendingCell = { r, c };
+  pendingQ    = grid[r][c].question;
+  showQuestion(pendingQ);
+}
+
+function showQuestion(q) {
+  document.getElementById('modal-pic').textContent    = q.pic;
+  document.getElementById('modal-q-text').textContent = q.q;
+  const choices = shuffle([q.a, ...q.ch]);
+  const cont    = document.getElementById('modal-choices');
+  cont.innerHTML = '';
+  choices.forEach(ch => {
+    const btn = document.createElement('button');
+    btn.className   = 'choice-btn';
+    btn.textContent = ch;
+    btn.addEventListener('click', () => onChoicePick(ch, q.a, btn));
+    cont.appendChild(btn);
+  });
+  document.getElementById('modal-q').classList.add('open');
+}
+
+function onChoicePick(choice, correct, btn) {
+  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+  if (choice === correct) {
+    btn.classList.add('correct');
+    setTimeout(() => {
+      document.getElementById('modal-q').classList.remove('open');
+      revealCell(pendingCell.r, pendingCell.c);
+    }, 650);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.choice-btn').forEach(b => {
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+    setTimeout(() => {
+      document.getElementById('modal-q').classList.remove('open');
+      const cellEl = document.querySelector(`.cell[data-r="${pendingCell.r}"][data-c="${pendingCell.c}"]`);
+      if (cellEl) { cellEl.classList.add('wrong-flash'); setTimeout(()=>cellEl.classList.remove('wrong-flash'),400); }
+    }, 900);
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  REVEAL
+// ═══════════════════════════════════════════════
+function revealCell(r, c) {
+  const d = grid[r][c];
+  d.revealed = true;
+  if (r === starR && c === starC) { renderGrid(); showFoundPopup(); return; }
+  if (d.special) { renderGrid(); showSpecialPopup(d.special); return; }
+  renderGrid();
+  showHintPopup(r, c);
+}
+
+// ═══════════════════════════════════════════════
+//  POPUPS
+// ═══════════════════════════════════════════════
+function showHintPopup(r, c) {
+  const dist = chebyshev(r, c, starR, starC);
+  const hint = getHint(r, c);
+  const data = {
+    hot:  { icon:'🔥', label:'HOT!',  color:'#ff6b35', sub:`Only ${dist} square${dist===1?'':'s'} away!` },
+    warm: { icon:'🌡️', label:'WARM',  color:'#ffd60a', sub:`${dist} squares away` },
+    cold: { icon:'🧊', label:'COLD!',  color:'#58a6ff', sub:`${dist} squares away — keep looking!` },
+  }[hint];
+  document.getElementById('hint-icon').textContent          = data.icon;
+  document.getElementById('hint-label').textContent         = data.label;
+  document.getElementById('hint-label').style.color         = data.color;
+  document.getElementById('hint-sub').textContent           = data.sub;
+  document.getElementById('popup-hint').classList.add('open');
+}
+
+function closeHint() { document.getElementById('popup-hint').classList.remove('open'); }
+
+function showSpecialPopup(type) {
+  let icon, label, color, sub;
+  if (type === '+5') {
+    roundScore += 5;
+    icon='🎉'; label='+5 POINTS!'; color='#3fb950'; sub='Lucky square! Bonus added! 🎊';
+  } else if (type === '-5') {
+    roundScore = Math.max(0, roundScore - 5);
+    icon='💀'; label='−5 POINTS!'; color='#f85149'; sub="Oops! Penalty square. Whoops!";
+  } else {
+    icon='🔄'; label='RESET!'; color='#bc8cff'; sub='The board resets — score stays!';
+    afterSpecial = () => initRound();
+  }
+  updateTurnRow();
+  document.getElementById('special-icon').textContent  = icon;
+  document.getElementById('special-label').textContent = label;
+  document.getElementById('special-label').style.color = color;
+  document.getElementById('special-sub').textContent   = sub;
+  document.getElementById('popup-special').classList.add('open');
+}
+
+function closeSpecial() {
+  document.getElementById('popup-special').classList.remove('open');
+  if (afterSpecial) { const cb = afterSpecial; afterSpecial = null; cb(); }
+}
+
+function showFoundPopup() {
+  const t = teams[currentIdx];
+  t.starsFound++;
+  t.totalScore += roundScore;
+  document.getElementById('found-team').textContent = t.name;
+  document.getElementById('found-team').style.color  = t.color;
+  document.getElementById('found-score').textContent = roundScore;
+  const isLast = currentIdx === teams.length - 1;
+  document.getElementById('found-next').textContent = isLast ? '🏆 See Scores!' : 'Next Team →';
+  document.getElementById('popup-found').classList.add('open');
+}
+
+function nextRound() {
+  document.getElementById('popup-found').classList.remove('open');
+  currentIdx++;
+  if (currentIdx >= teams.length) { showFinalScores(); return; }
+  roundScore = 40;
+  renderScoreboard();
+  updateTurnRow();
+  initRound();
+}
+
+function showFinalScores() {
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-final').classList.add('active');
+  const sorted = [...teams].sort((a,b)=>b.totalScore-a.totalScore);
+  const ranks  = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
+  document.getElementById('final-rows').innerHTML = sorted.map((t,i)=>`
+    <div class="final-row ${i===0?'win':''}">
+      <div class="final-rank">${ranks[i]}</div>
+      <div class="final-name" style="color:${t.color}">${t.name}</div>
+      <div>
+        <div class="final-pts">${t.totalScore}</div>
+        <span class="final-stars">${'⭐'.repeat(t.starsFound)||'–'}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════
+function chebyshev(r1,c1,r2,c2) { return Math.max(Math.abs(r1-r2),Math.abs(c1-c2)); }
+function getHint(r,c) { const d=chebyshev(r,c,starR,starC); return d===1?'hot':d===2?'warm':'cold'; }
+function shuffle(arr) { for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+function randInt(min,max) { return Math.floor(Math.random()*(max-min+1))+min; }
+function toggleFS() { if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} }
+</script>
+</body>
+</html>
