@@ -7,72 +7,93 @@
   <link rel="stylesheet" href="../style.css">
   <script src="../questions.js"></script>
   <style>
-    /* ── Page layout ───────────────────────────────────── */
     body { padding: 8px 8px 60px; }
 
-    /* ── Setup overrides ───────────────────────────────── */
-    .setup-screen { max-width: 600px; gap: 18px; }
-    .setup-screen h2 { font-size: clamp(1.6rem, 5vw, 2.2rem); }
+    /* ── Setup ─────────────────────────────────── */
+    .setup-screen { max-width: 640px; gap: 18px; }
 
     .team-row {
-      display: flex; gap: 8px; align-items: center;
-      margin-bottom: 8px;
+      display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
     }
-    .team-dot {
-      width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
-    }
+    .team-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
     .team-input {
-      flex: 1;
-      background: var(--glass-hi); border: 1px solid var(--glass-border);
+      flex: 1; background: var(--glass-hi); border: 1px solid var(--glass-border);
       color: white; border-radius: 8px; padding: 9px 12px;
       font-size: 0.95rem; font-weight: 600; font-family: inherit;
     }
     .team-input:focus { outline: none; border-color: var(--accent); }
     .remove-btn {
       background: none; border: none; color: var(--danger);
-      font-size: 1.2rem; cursor: pointer; padding: 4px 6px;
-      min-width: unset; border-radius: 6px;
+      font-size: 1.2rem; cursor: pointer; padding: 4px 6px; min-width: unset; border-radius: 6px;
     }
     .remove-btn:hover { background: rgba(239,68,68,0.15); }
-
     .add-team-btn {
-      width: 100%; background: none;
-      border: 1px dashed var(--glass-border); color: var(--text-dim);
-      border-radius: 8px; padding: 9px; font-size: 0.85rem;
-      cursor: pointer; min-width: unset; margin-bottom: 4px;
-      font-family: inherit;
+      width: 100%; background: none; border: 1px dashed var(--glass-border);
+      color: var(--text-dim); border-radius: 8px; padding: 9px; font-size: 0.85rem;
+      cursor: pointer; min-width: unset; margin-bottom: 4px; font-family: inherit;
     }
     .add-team-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Question picker */
-    .q-picker { width: 100%; }
-    .q-picker-label {
-      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
-      display: block;
+    /* ── Question filter panel (matches connect4 style) ── */
+    .qf-wrap {
+      width: 100%;
+      background: rgba(10,18,30,0.92);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; overflow: hidden;
     }
-    .level-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-    .level-btn {
-      padding: 7px 14px; background: var(--glass-hi);
-      border: 2px solid var(--glass-border); border-radius: 8px;
-      color: var(--text); font-size: 0.82rem; font-weight: 700;
-      cursor: pointer; min-width: unset; transition: all 0.15s;
+    .qf-row { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; padding: 12px 14px 0; }
+    .qf-col { flex: 1; min-width: 120px; }
+    .qf-col-label {
+      font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: rgba(240,180,41,0.8); margin-bottom: 5px;
     }
-    .level-btn.selected {
-      background: var(--accent); border-color: var(--accent); color: #000;
+    .qf-selects { display: flex; flex-direction: column; gap: 5px; }
+    .qf-select {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      color: #c8bfb0; border-radius: 6px; padding: 5px 8px;
+      font-size: 0.78rem; cursor: pointer; width: 100%;
     }
-    .q-count {
-      font-size: 0.78rem; color: var(--text-dim); margin-top: 8px;
-      padding: 6px 10px; background: var(--glass); border-radius: 6px;
-      border: 1px solid var(--glass-border);
+    .qf-select:disabled { opacity: 0.4; cursor: not-allowed; }
+    .qf-clear {
+      background: none; border: none; color: rgba(255,255,255,0.3);
+      font-size: 0.72rem; cursor: pointer; padding: 2px 4px;
+      text-align: left; min-width: unset; font-family: inherit;
     }
-    .q-count span { color: var(--accent); font-weight: 700; }
+    .qf-clear:hover { color: rgba(255,255,255,0.6); }
 
-    /* ── Game layout ───────────────────────────────────── */
-    .game-wrapper { padding: 0; }
-    #currentTurn { max-width: 800px; }
+    .qf-topic-search {
+      width: 100%; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15); color: #c8bfb0;
+      border-radius: 6px; padding: 5px 8px; font-size: 0.75rem; outline: none;
+      margin-bottom: 5px; box-sizing: border-box; font-family: inherit;
+    }
+    .qf-checks {
+      display: flex; flex-wrap: wrap; gap: 4px;
+      max-height: 140px; overflow-y: auto;
+    }
+    .qf-checks::-webkit-scrollbar { width: 4px; }
+    .qf-checks::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
 
-    /* Turn / score banner */
+    .qf-check-label {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.75rem; color: #c8bfb0; cursor: pointer;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 5px; padding: 3px 8px; transition: all 0.15s;
+    }
+    .qf-check-label:hover { background: rgba(240,180,41,0.1); }
+    .qf-check-label input { accent-color: #f0c842; }
+    .qf-count { font-size: 0.65rem; color: rgba(240,180,41,0.7); margin-left: 2px; }
+    .qf-empty { font-size: 0.75rem; color: rgba(255,255,255,0.3); font-style: italic; }
+
+    .qf-status-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+      padding: 10px 14px 12px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 10px;
+    }
+    .qf-status { font-size: 0.78rem; color: #c8bfb0; }
+    .qf-status strong { color: var(--accent); }
+
+    /* ── Game layout ───────────────────────────── */
     .turn-banner {
       display: flex; align-items: center; justify-content: space-between;
       gap: 12px; flex-wrap: wrap;
@@ -81,47 +102,32 @@
       margin: 8px auto; max-width: 800px; width: 100%;
     }
     .turn-team { font-size: clamp(1rem, 3vw, 1.35rem); font-weight: 800; }
-    .round-score-box { text-align: right; }
     .round-score-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); }
     .round-score-val {
-      font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 900;
-      color: var(--accent2); line-height: 1;
+      font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 900; color: var(--accent2); line-height: 1;
     }
 
-    /* ── Grid ──────────────────────────────────────────── */
+    /* ── Grid ──────────────────────────────────── */
     .grid-wrap {
       background: var(--glass); border: 1px solid var(--glass-border);
-      border-radius: 16px; padding: 10px;
-      margin: 8px auto; max-width: 800px; width: 100%;
+      border-radius: 16px; padding: 10px; margin: 8px auto; max-width: 800px; width: 100%;
     }
-    .sh-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-    }
+    .sh-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
     .sh-cell {
-      aspect-ratio: 1;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.06);
-      border: 2px solid rgba(255,255,255,0.1);
+      aspect-ratio: 1; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.1);
       display: flex; align-items: center; justify-content: center;
-      font-size: clamp(0.7rem, 2vw, 1rem);
       cursor: pointer; position: relative; overflow: hidden;
       transition: border-color 0.15s, transform 0.1s, background 0.2s;
       user-select: none;
     }
     .sh-cell:hover:not(.revealed):not(.star-found) {
-      border-color: var(--accent); transform: scale(1.05);
-      background: rgba(255,255,255,0.1);
+      border-color: var(--accent); transform: scale(1.05); background: rgba(255,255,255,0.1);
     }
     .sh-cell.revealed { cursor: default; }
-
-    /* Hint colors */
     .sh-cell.hint-hot  { background: rgba(239,68,68,0.22);  border-color: #ef4444; }
     .sh-cell.hint-warm { background: rgba(247,183,49,0.22); border-color: var(--accent2); }
     .sh-cell.hint-cold { background: rgba(96,165,250,0.18); border-color: #60a5fa; }
-
-    /* Star */
     .sh-cell.star-found {
       background: rgba(247,183,49,0.25); border-color: var(--accent2);
       animation: starPulse 1s ease infinite alternate; cursor: default;
@@ -130,43 +136,32 @@
       from { box-shadow: 0 0 6px rgba(247,183,49,0.5); }
       to   { box-shadow: 0 0 20px rgba(247,183,49,1); }
     }
-
-    /* Special cells */
     .sh-cell.special-plus  { background: rgba(34,197,94,0.22);  border-color: var(--safe); }
     .sh-cell.special-minus { background: rgba(239,68,68,0.22);  border-color: var(--danger); }
     .sh-cell.special-reset { background: rgba(139,92,246,0.22); border-color: #8b5cf6; }
-
-    /* Wrong flash */
     .sh-cell.wrong-flash { animation: wrongFlash 0.45s ease; }
     @keyframes wrongFlash {
       0%,100% { background: rgba(255,255,255,0.06); }
       50% { background: rgba(239,68,68,0.4); border-color: var(--danger); }
     }
-
-    .cell-num {
-      font-size: clamp(0.62rem, 1.8vw, 0.9rem);
-      font-weight: 700; color: var(--text-dim);
-    }
+    .cell-num  { font-size: clamp(0.62rem, 1.8vw, 0.88rem); font-weight: 700; color: var(--text-dim); }
     .cell-icon { font-size: clamp(1rem, 2.5vw, 1.4rem); }
 
-    /* ── Legend ────────────────────────────────────────── */
+    /* ── Legend ────────────────────────────────── */
     .legend {
       display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
       margin: 8px auto; max-width: 800px;
     }
     .leg-item {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 0.72rem; color: var(--text-dim);
-      background: var(--glass); border: 1px solid var(--glass-border);
-      border-radius: 20px; padding: 4px 10px;
+      display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--text-dim);
+      background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 4px 10px;
     }
     .leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ── Question modal ─────────────────────────────────── */
+    /* ── Question modal ─────────────────────────── */
     .q-modal-inner {
       background: #1a2535; border: 1px solid var(--glass-border);
-      border-radius: 20px; padding: 28px 24px;
-      max-width: 460px; width: 100%;
+      border-radius: 20px; padding: 28px 24px; max-width: 460px; width: 100%;
       animation: popIn 0.2s ease;
     }
     @keyframes popIn {
@@ -181,13 +176,10 @@
       padding: 3px 10px; margin-bottom: 14px;
     }
     .q-text {
-      font-size: clamp(1rem, 3vw, 1.2rem); font-weight: 700;
-      color: #fff; margin-bottom: 20px; line-height: 1.45;
-      text-align: center;
+      font-size: clamp(1rem, 3vw, 1.2rem); font-weight: 700; color: #fff;
+      margin-bottom: 20px; line-height: 1.45; text-align: center;
     }
-    .q-choices {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-    }
+    .q-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .q-choice {
       background: var(--glass-hi); border: 2px solid var(--glass-border);
       color: var(--text); border-radius: 12px; padding: 13px 10px;
@@ -195,14 +187,12 @@
       cursor: pointer; min-width: unset; text-align: center; line-height: 1.3;
       transition: border-color 0.15s, background 0.15s, transform 0.1s;
     }
-    .q-choice:hover:not(:disabled) {
-      border-color: var(--accent); transform: translateY(-2px);
-    }
+    .q-choice:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
     .q-choice.correct { background: rgba(34,197,94,0.25); border-color: var(--safe); color: #86efac; }
     .q-choice.wrong   { background: rgba(239,68,68,0.2);  border-color: var(--danger); color: #fca5a5; }
     .q-choice:disabled { cursor: default; transform: none; }
 
-    /* ── Popup cards (hint / special / found) ────────────── */
+    /* ── Popups ─────────────────────────────────── */
     .popup-overlay {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,0.78); z-index: 300;
@@ -210,18 +200,14 @@
       backdrop-filter: blur(4px);
     }
     .popup-overlay.open { display: flex; }
-
     .popup-card {
       background: #1a2535; border: 1px solid var(--glass-border);
       border-radius: 22px; padding: 32px 28px; text-align: center;
-      max-width: 320px; width: 100%;
-      animation: popIn 0.2s ease;
+      max-width: 320px; width: 100%; animation: popIn 0.2s ease;
     }
-    .popup-icon { font-size: 4.5rem; margin-bottom: 10px; display: block; }
-    .popup-label {
-      font-size: 2rem; font-weight: 900; margin-bottom: 6px; line-height: 1.1;
-    }
-    .popup-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; }
+    .popup-icon   { font-size: 4.5rem; margin-bottom: 10px; display: block; }
+    .popup-label  { font-size: 2rem; font-weight: 900; margin-bottom: 6px; line-height: 1.1; }
+    .popup-sub    { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; }
     .popup-continue {
       background: var(--glass-hi); border: 1px solid var(--glass-border);
       color: var(--text); border-radius: 10px; padding: 10px 28px;
@@ -229,59 +215,45 @@
     }
     .popup-continue:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* Color variants */
-    .label-hot  { color: #ef4444; }
-    .label-warm { color: var(--accent2); }
-    .label-cold { color: #60a5fa; }
+    .label-hot   { color: #ef4444; }
+    .label-warm  { color: var(--accent2); }
+    .label-cold  { color: #60a5fa; }
     .label-plus  { color: var(--safe); }
     .label-minus { color: var(--danger); }
     .label-reset { color: #a78bfa; }
-    .label-star  { color: var(--accent2); }
 
     /* Found card */
     .found-card {
       background: #1a2535; border: 2px solid var(--accent2);
       border-radius: 22px; padding: 32px 28px; text-align: center;
-      max-width: 340px; width: 100%;
-      animation: popIn 0.2s ease;
+      max-width: 340px; width: 100%; animation: popIn 0.2s ease;
       box-shadow: 0 0 40px rgba(247,183,49,0.25);
     }
-    .found-score {
-      font-size: 4rem; font-weight: 900; color: var(--accent2);
-      margin: 8px 0; line-height: 1;
-    }
+    .found-score { font-size: 4rem; font-weight: 900; color: var(--accent2); margin: 8px 0; line-height: 1; }
     .found-next-btn {
-      background: var(--accent2); color: #0a0d14;
-      border: none; border-radius: 40px; padding: 12px 32px;
-      font-size: 1rem; font-weight: 900; cursor: pointer;
-      min-width: unset; margin-top: 4px;
-      transition: filter 0.2s, transform 0.1s;
+      background: var(--accent2); color: #0a0d14; border: none; border-radius: 40px;
+      padding: 12px 32px; font-size: 1rem; font-weight: 900; cursor: pointer;
+      min-width: unset; margin-top: 4px; transition: filter 0.2s, transform 0.1s;
     }
     .found-next-btn:hover { filter: brightness(1.1); transform: scale(1.03); }
 
-    /* ── Final scores screen ────────────────────────────── */
-    #screen-final {
-      display: none; max-width: 520px; margin: 0 auto;
-      padding: 24px 16px; text-align: center;
-    }
+    /* ── Final scores ───────────────────────────── */
+    #screen-final { display: none; max-width: 520px; margin: 0 auto; padding: 24px 16px; text-align: center; }
     #screen-final.active { display: block; }
     .final-row {
       display: flex; align-items: center; gap: 12px;
       background: var(--glass); border: 1px solid var(--glass-border);
       border-radius: 14px; padding: 14px 18px; margin-bottom: 10px;
-      transition: border-color 0.2s;
     }
     .final-row.winner { border-color: var(--accent2); background: rgba(247,183,49,0.08); }
     .final-rank { font-size: 1.6rem; width: 36px; text-align: center; flex-shrink: 0; }
     .final-name { flex: 1; font-size: 1.1rem; font-weight: 800; text-align: left; }
-    .final-pts { font-size: 1.4rem; font-weight: 900; color: var(--accent2); }
+    .final-pts  { font-size: 1.4rem; font-weight: 900; color: var(--accent2); }
     .final-stars { font-size: 0.8rem; color: var(--text-dim); display: block; }
     .play-again-btn {
-      background: var(--accent); color: #000; border: none;
-      border-radius: 40px; padding: 13px 40px;
-      font-size: 1.1rem; font-weight: 900; cursor: pointer;
-      min-width: unset; margin-top: 20px;
-      transition: filter 0.2s, transform 0.1s;
+      background: var(--accent); color: #000; border: none; border-radius: 40px;
+      padding: 13px 40px; font-size: 1.1rem; font-weight: 900; cursor: pointer;
+      min-width: unset; margin-top: 20px; transition: filter 0.2s, transform 0.1s;
     }
     .play-again-btn:hover { filter: brightness(1.1); transform: scale(1.03); }
   </style>
@@ -290,58 +262,93 @@
 <body>
   <h1>⭐ Star Hunt</h1>
 
-  <!-- ══════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
        SETUP SCREEN
-  ══════════════════════════════════════════════════ -->
+  ══════════════════════════════════════════ -->
   <div class="setup-screen" id="screen-setup">
 
+    <!-- Teams -->
     <div class="setup-section">
       <label>Teams</label>
       <div id="team-list"></div>
       <button class="add-team-btn" onclick="addTeam()">＋ Add Team</button>
     </div>
 
-    <div class="setup-section q-picker">
-      <label class="q-picker-label">Questions</label>
-      <div class="level-btns" id="level-btns"></div>
-      <div class="q-count" id="q-count">
-        Select a level or use <span>All</span> questions
-      </div>
+    <!-- Question filter -->
+    <div class="setup-section">
+      <label>Questions</label>
+      <div class="qf-wrap">
+
+        <div class="qf-row">
+
+          <!-- Level + Unit cascade -->
+          <div class="qf-col">
+            <div class="qf-col-label">Level / Unit</div>
+            <div class="qf-selects">
+              <select class="qf-select" id="qfLevel" onchange="cascadeQLevelChange()">
+                <option value="">Level…</option>
+              </select>
+              <select class="qf-select" id="qfUnit" onchange="buildTopicsAndLessons()" disabled>
+                <option value="">Unit…</option>
+              </select>
+              <button class="qf-clear" onclick="cascadeQClear()">✕ clear</button>
+            </div>
+          </div>
+
+          <!-- Topics -->
+          <div class="qf-col" style="flex:2; min-width:180px;">
+            <div class="qf-col-label">Topic</div>
+            <input class="qf-topic-search" id="qTopicSearch" type="text"
+              placeholder="🔍 Search topics…" oninput="qFilterTopics()">
+            <div class="qf-checks" id="qfTopics">
+              <span class="qf-empty">Loading…</span>
+            </div>
+          </div>
+
+          <!-- Lessons -->
+          <div class="qf-col">
+            <div class="qf-col-label">Lesson</div>
+            <div class="qf-checks" id="qfLessons">
+              <span class="qf-empty">Loading…</span>
+            </div>
+          </div>
+
+        </div><!-- /.qf-row -->
+
+        <div class="qf-status-bar">
+          <span class="qf-status" id="qf-status">No questions selected — tick a topic to begin</span>
+        </div>
+      </div><!-- /.qf-wrap -->
     </div>
 
     <button class="start-btn" onclick="startGame()">🚀 Start Game</button>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
        GAME SCREEN
-  ══════════════════════════════════════════════════ -->
+  ══════════════════════════════════════════ -->
   <div id="screen-game" style="display:none;">
 
-    <!-- Controls -->
     <div class="controls">
       <button id="home"       onclick="location.href='../index.html'">🏠 Home</button>
       <button id="fullscreen" onclick="toggleFS()">⛶ Fullscreen</button>
       <button id="newGame"    onclick="restartGame()">🔄 New Game</button>
     </div>
 
-    <!-- Scoreboard -->
     <div class="scoreboard" id="scoreboard"></div>
 
-    <!-- Turn + round score banner -->
     <div class="turn-banner">
       <div class="turn-team" id="turn-team">Team 1</div>
-      <div class="round-score-box">
+      <div>
         <div class="round-score-label">Points Available</div>
         <div class="round-score-val" id="round-score">40</div>
       </div>
     </div>
 
-    <!-- Grid -->
     <div class="grid-wrap">
       <div class="sh-grid" id="sh-grid"></div>
     </div>
 
-    <!-- Legend -->
     <div class="legend">
       <div class="leg-item"><div class="leg-dot" style="background:#ef4444"></div>🔥 Hot = 1 away</div>
       <div class="leg-item"><div class="leg-dot" style="background:#f7b731"></div>🌡️ Warm = 2 away</div>
@@ -352,29 +359,27 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
-       FINAL SCORES SCREEN
-  ══════════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════
+       FINAL SCORES
+  ══════════════════════════════════════════ -->
   <div id="screen-final">
     <h1 style="margin-bottom:24px">🏆 Final Scores</h1>
     <div id="final-rows"></div>
     <button class="play-again-btn" onclick="restartGame()">Play Again</button>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════
        QUESTION MODAL
-  ══════════════════════════════════════════════════ -->
+  ══════════════════════════════════════════ -->
   <div class="modal-overlay" id="modal-q">
     <div class="q-modal-inner">
-      <div class="q-topic-tag" id="q-topic">Vocabulary</div>
-      <div class="q-text" id="q-text">Question text</div>
-      <div class="q-choices" id="q-choices"></div>
+      <div class="q-topic-tag" id="q-topic">Topic</div>
+      <div class="q-text"      id="q-text">Question</div>
+      <div class="q-choices"   id="q-choices"></div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
-       HINT POPUP (hot/warm/cold)
-  ══════════════════════════════════════════════════ -->
+  <!-- HINT POPUP -->
   <div class="popup-overlay" id="popup-hint">
     <div class="popup-card">
       <span class="popup-icon" id="hint-icon">🔥</span>
@@ -384,9 +389,7 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
-       SPECIAL POPUP (+5 / -5 / reset)
-  ══════════════════════════════════════════════════ -->
+  <!-- SPECIAL POPUP -->
   <div class="popup-overlay" id="popup-special">
     <div class="popup-card">
       <span class="popup-icon" id="special-icon">🎉</span>
@@ -396,9 +399,7 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════
-       FOUND POPUP
-  ══════════════════════════════════════════════════ -->
+  <!-- FOUND POPUP -->
   <div class="popup-overlay" id="popup-found">
     <div class="found-card">
       <div style="font-size:3.5rem;margin-bottom:8px">🌟</div>
@@ -412,121 +413,225 @@
   </div>
 
 <script>
-// ═══════════════════════════════════════════════
-//  CONSTANTS & CONFIG
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════
 const GRID_SIZE   = 7;
-const TEAM_COLORS = ["#f7b731","#00c9a7","#3b82f6","#f97316","#a78bfa","#ec4899"];
-const TEAM_NAMES  = ["Team 1","Team 2"];
 const START_SCORE = 40;
+const TEAM_COLORS = ["#f7b731","#00c9a7","#3b82f6","#f97316","#a78bfa","#ec4899"];
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  SETUP STATE
-// ═══════════════════════════════════════════════
-let teamNames     = [...TEAM_NAMES];
-let selectedLevel = 'all';
-let questionPool  = [];
+// ═══════════════════════════════════════════
+let teamNames    = ["Team 1","Team 2"];
+let questionPool = [];   // filled by rebuildPool()
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  GAME STATE
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 let teams        = [];
 let currentIdx   = 0;
 let roundScore   = START_SCORE;
 let starR, starC;
 let grid         = [];
 let pendingCell  = null;
-let pendingQ     = null;
 let afterSpecial = null;
 
-// ═══════════════════════════════════════════════
-//  INIT SETUP UI
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
 (function init() {
   renderTeamInputs();
-  buildLevelButtons();
-  setLevel('all');
+  buildLevelDropdown();   // populate level select & initial topic/lesson lists
 })();
 
+// ══════════════════════════════════════════════════════════
+//  TEAM UI
+// ══════════════════════════════════════════════════════════
 function renderTeamInputs() {
   const el = document.getElementById('team-list');
   el.innerHTML = teamNames.map((n, i) => `
     <div class="team-row">
       <div class="team-dot" style="background:${TEAM_COLORS[i % TEAM_COLORS.length]}"></div>
-      <input class="team-input" value="${n}"
-        oninput="teamNames[${i}] = this.value"
-        placeholder="Team ${i + 1} name">
+      <input class="team-input" value="${n}" oninput="teamNames[${i}]=this.value" placeholder="Team ${i+1} name">
       ${teamNames.length > 2
         ? `<button class="remove-btn" onclick="removeTeam(${i})">✕</button>`
         : ''}
     </div>
   `).join('');
 }
+function addTeam()      { if (teamNames.length < 6) { teamNames.push(`Team ${teamNames.length+1}`); renderTeamInputs(); } }
+function removeTeam(i)  { teamNames.splice(i,1); renderTeamInputs(); }
 
-function addTeam() {
-  if (teamNames.length >= 6) return;
-  teamNames.push(`Team ${teamNames.length + 1}`);
-  renderTeamInputs();
-}
-
-function removeTeam(i) {
-  teamNames.splice(i, 1);
-  renderTeamInputs();
-}
-
-function buildLevelButtons() {
-  const ALL_Q  = (window.QUESTIONS || []);
-  const levels = [...new Set(ALL_Q.filter(q => q.level).map(q => q.level))].sort((a,b)=>a-b);
-  const btns   = document.getElementById('level-btns');
-  const defs   = [{ val: 'all', label: 'All' }, ...levels.map(l => ({ val: l, label: `L${l}` }))];
-  btns.innerHTML = defs.map(d =>
-    `<button class="level-btn ${d.val === selectedLevel ? 'selected' : ''}"
-      onclick="setLevel(${JSON.stringify(d.val)})">${d.label}</button>`
-  ).join('');
-}
-
-function setLevel(val) {
-  selectedLevel = val;
-  const ALL_Q = (window.QUESTIONS || []);
-  questionPool = val === 'all'
-    ? shuffle([...ALL_Q])
-    : shuffle(ALL_Q.filter(q => q.level == val));
-
-  document.querySelectorAll('.level-btn').forEach(b => {
-    b.classList.toggle('selected',
-      b.textContent === (val === 'all' ? 'All' : `L${val}`));
-  });
-
-  const el = document.getElementById('q-count');
-  el.innerHTML = `<span>${questionPool.length}</span> questions available${val !== 'all' ? ` for Level ${val}` : ''}`;
-}
-
-// ═══════════════════════════════════════════════
-//  START GAME
-// ═══════════════════════════════════════════════
-function startGame() {
-  // Collect current team names from inputs
-  document.querySelectorAll('.team-input').forEach((inp, i) => {
-    teamNames[i] = inp.value.trim() || `Team ${i + 1}`;
-  });
-
-  if (questionPool.length < 10) {
-    alert('Please select a question level first (or make sure questions.js is loaded).');
+// ══════════════════════════════════════════════════════════
+//  QUESTION FILTER — mirrors connect4 cascade logic
+// ══════════════════════════════════════════════════════════
+function buildLevelDropdown() {
+  const sel = document.getElementById('qfLevel');
+  const ALL  = window.QUESTIONS || [];
+  if (!ALL.length) {
+    sel.innerHTML = '<option value="">No questions loaded</option>';
+    buildTopicsAndLessons();
     return;
   }
+  const levels = [...new Set(ALL.filter(q => q.level != null).map(q => q.level))].sort((a,b) => a-b);
+  sel.innerHTML = '<option value="">Level…</option>';
+  levels.forEach(l => {
+    const opt = document.createElement('option');
+    opt.value = l; opt.textContent = 'Level ' + l;
+    sel.appendChild(opt);
+  });
+  buildTopicsAndLessons();
+}
 
+function cascadeQLevelChange() {
+  const level   = document.getElementById('qfLevel').value;
+  const unitSel = document.getElementById('qfUnit');
+  unitSel.innerHTML = '<option value="">Unit…</option>';
+  unitSel.disabled  = !level;
+
+  if (level) {
+    const units = [...new Set(
+      (window.QUESTIONS||[])
+        .filter(q => String(q.level) === level && q.unit != null)
+        .map(q => q.unit)
+    )].sort((a,b) => a-b);
+    units.forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u; opt.textContent = 'Unit ' + u;
+      unitSel.appendChild(opt);
+    });
+  }
+  buildTopicsAndLessons();
+}
+
+function getFilteredBase() {
+  const level = document.getElementById('qfLevel').value;
+  const unit  = document.getElementById('qfUnit').value;
+  let qs = window.QUESTIONS || [];
+  if (level) qs = qs.filter(q => String(q.level) === level);
+  if (unit)  qs = qs.filter(q => String(q.unit)  === unit);
+  return qs;
+}
+
+function buildTopicsAndLessons() {
+  const qs        = getFilteredBase();
+  const topicsEl  = document.getElementById('qfTopics');
+  const lessonsEl = document.getElementById('qfLessons');
+
+  // Preserve checked state
+  const prevTopics  = new Set([...document.querySelectorAll('#qfTopics  input:checked')].map(cb => cb.value));
+  const prevLessons = new Set([...document.querySelectorAll('#qfLessons input:checked')].map(cb => cb.value));
+
+  // Topics
+  const topics = [...new Set(qs.map(q => q.topic).filter(Boolean))]
+    .sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
+  topicsEl.innerHTML = '';
+  if (!topics.length) {
+    topicsEl.innerHTML = '<span class="qf-empty">No topics found</span>';
+  } else {
+    topics.forEach(t => {
+      const count = qs.filter(q => q.topic === t).length;
+      const label = document.createElement('label'); label.className = 'qf-check-label';
+      const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = t;
+      cb.checked = prevTopics.has(t);
+      cb.addEventListener('change', rebuildPool);
+      label.appendChild(cb);
+      const span = document.createElement('span'); span.textContent = t;
+      const cs   = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = count;
+      label.appendChild(span); label.appendChild(cs);
+      topicsEl.appendChild(label);
+    });
+  }
+
+  // Lessons
+  const lessonNums = [...new Set(qs.filter(q => q.lesson != null).map(q => q.lesson))].sort((a,b) => a-b);
+  lessonsEl.innerHTML = '';
+  if (!lessonNums.length) {
+    lessonsEl.innerHTML = '<span class="qf-empty">No lesson data</span>';
+  } else {
+    lessonNums.forEach(l => {
+      const count = qs.filter(q => q.lesson === l).length;
+      const label = document.createElement('label'); label.className = 'qf-check-label';
+      const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = l;
+      cb.checked = prevLessons.has(String(l));
+      cb.addEventListener('change', rebuildPool);
+      label.appendChild(cb);
+      const span = document.createElement('span'); span.textContent = 'Lesson ' + l;
+      const cs   = document.createElement('span'); cs.className = 'qf-count'; cs.textContent = count;
+      label.appendChild(span); label.appendChild(cs);
+      lessonsEl.appendChild(label);
+    });
+  }
+
+  rebuildPool();
+}
+
+function qFilterTopics() {
+  const search = (document.getElementById('qTopicSearch').value || '').toLowerCase();
+  document.querySelectorAll('#qfTopics .qf-check-label').forEach(label => {
+    label.style.display = search && !label.textContent.toLowerCase().includes(search) ? 'none' : '';
+  });
+}
+
+function cascadeQClear() {
+  document.getElementById('qfLevel').value = '';
+  const unitSel = document.getElementById('qfUnit');
+  unitSel.innerHTML = '<option value="">Unit…</option>';
+  unitSel.disabled  = true;
+  buildTopicsAndLessons();
+}
+
+function rebuildPool() {
+  const checkedTopics  = [...document.querySelectorAll('#qfTopics  input:checked')].map(i => i.value);
+  const checkedLessons = [...document.querySelectorAll('#qfLessons input:checked')].map(i => parseInt(i.value));
+  const base = getFilteredBase();
+
+  if (!checkedTopics.length && !checkedLessons.length) {
+    questionPool = [];
+  } else {
+    const seen = new Set();
+    questionPool = shuffle(base.filter(q => {
+      const hit = (checkedTopics.length  && checkedTopics.includes(q.topic)) ||
+                  (checkedLessons.length && q.lesson != null && checkedLessons.includes(q.lesson));
+      if (!hit || seen.has(q.question)) return false;
+      seen.add(q.question);
+      return true;
+    }));
+  }
+
+  updateQFStatus();
+}
+
+function updateQFStatus() {
+  const el = document.getElementById('qf-status');
+  if (!questionPool.length) {
+    el.innerHTML = 'No questions selected — tick a topic or lesson to begin';
+  } else {
+    const topics = [...new Set(questionPool.map(q => q.topic))];
+    const tStr   = topics.length === 1 ? topics[0] : `${topics.length} topics`;
+    el.innerHTML = `<strong>${questionPool.length} questions</strong> ready &mdash; ${tStr}`;
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  START / RESTART
+// ══════════════════════════════════════════════════════════
+function startGame() {
+  document.querySelectorAll('.team-input').forEach((inp, i) => {
+    teamNames[i] = inp.value.trim() || `Team ${i+1}`;
+  });
+  if (questionPool.length < 5) {
+    alert('Please select at least one topic or lesson from the question filter.');
+    return;
+  }
   teams = teamNames.map((name, i) => ({
-    name,
-    color: TEAM_COLORS[i % TEAM_COLORS.length],
-    starsFound: 0,
-    totalScore: 0,
+    name, color: TEAM_COLORS[i % TEAM_COLORS.length],
+    starsFound: 0, totalScore: 0,
   }));
-
   currentIdx = 0;
-
   document.getElementById('screen-setup').style.display = 'none';
   document.getElementById('screen-game').style.display  = 'block';
-
   initRound();
 }
 
@@ -534,45 +639,33 @@ function restartGame() {
   document.getElementById('screen-final').classList.remove('active');
   document.getElementById('screen-game').style.display  = 'none';
   document.getElementById('screen-setup').style.display = 'block';
-  teamNames = teams.map(t => t.name);
+  if (teams.length) teamNames = teams.map(t => t.name);
   renderTeamInputs();
-  buildLevelButtons();
-  setLevel(selectedLevel);
 }
 
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 //  ROUND
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 function initRound() {
   roundScore = START_SCORE;
-
-  // Place star randomly
   starR = Math.floor(Math.random() * GRID_SIZE);
   starC = Math.floor(Math.random() * GRID_SIZE);
 
-  // Build grid array
   grid = Array.from({ length: GRID_SIZE }, () =>
-    Array.from({ length: GRID_SIZE }, () => ({
-      revealed: false,
-      special: null, // '+5' | '-5' | 'reset' | null
-      question: null,
-    }))
+    Array.from({ length: GRID_SIZE }, () => ({ revealed: false, special: null, question: null }))
   );
 
-  // Place specials (skip star cell)
-  placeSpecials('+5',   randInt(1, 3));
-  placeSpecials('-5',   randInt(1, 3));
-  placeSpecials('reset', randInt(1, 2));
+  placeSpecials('+5',    randInt(1,3));
+  placeSpecials('-5',    randInt(1,3));
+  placeSpecials('reset', randInt(1,2));
 
-  // Assign questions to all cells
   const shuffled = shuffle([...questionPool]);
   let qi = 0;
-  for (let r = 0; r < GRID_SIZE; r++) {
+  for (let r = 0; r < GRID_SIZE; r++)
     for (let c = 0; c < GRID_SIZE; c++) {
       grid[r][c].question = shuffled[qi % shuffled.length];
       qi++;
     }
-  }
 
   renderGrid();
   renderScoreboard();
@@ -580,9 +673,9 @@ function initRound() {
 }
 
 function placeSpecials(type, count) {
-  let placed = 0, attempts = 0;
-  while (placed < count && attempts < 200) {
-    attempts++;
+  let placed = 0, att = 0;
+  while (placed < count && att < 200) {
+    att++;
     const r = Math.floor(Math.random() * GRID_SIZE);
     const c = Math.floor(Math.random() * GRID_SIZE);
     if (r === starR && c === starC) continue;
@@ -592,9 +685,9 @@ function placeSpecials(type, count) {
   }
 }
 
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 //  RENDER
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 function renderGrid() {
   const el = document.getElementById('sh-grid');
   el.innerHTML = '';
@@ -602,8 +695,7 @@ function renderGrid() {
     for (let c = 0; c < GRID_SIZE; c++) {
       const cell = document.createElement('div');
       cell.className = 'sh-cell';
-      cell.dataset.r = r;
-      cell.dataset.c = c;
+      cell.dataset.r = r; cell.dataset.c = c;
       const d = grid[r][c];
 
       if (d.revealed) {
@@ -613,22 +705,21 @@ function renderGrid() {
           cell.innerHTML = '<span class="cell-icon">⭐</span>';
         } else if (d.special === '+5') {
           cell.classList.add('special-plus');
-          cell.innerHTML = '<span class="cell-icon">+5</span>';
+          cell.innerHTML = '<span class="cell-icon" style="font-size:0.9em;font-weight:900">+5</span>';
         } else if (d.special === '-5') {
           cell.classList.add('special-minus');
-          cell.innerHTML = '<span class="cell-icon">−5</span>';
+          cell.innerHTML = '<span class="cell-icon" style="font-size:0.9em;font-weight:900">−5</span>';
         } else if (d.special === 'reset') {
           cell.classList.add('special-reset');
           cell.innerHTML = '<span class="cell-icon">🔄</span>';
         } else {
-          const h = getHint(r, c);
+          const h = getHint(r,c);
           cell.classList.add(`hint-${h}`);
-          cell.innerHTML = `<span class="cell-icon">${{ hot:'🔥', warm:'🌡️', cold:'🧊' }[h]}</span>`;
+          cell.innerHTML = `<span class="cell-icon">${{hot:'🔥',warm:'🌡️',cold:'🧊'}[h]}</span>`;
         }
       } else {
-        const num = r * GRID_SIZE + c + 1;
-        cell.innerHTML = `<span class="cell-num">${num}</span>`;
-        cell.addEventListener('click', () => onCellClick(r, c));
+        cell.innerHTML = `<span class="cell-num">${r*GRID_SIZE+c+1}</span>`;
+        cell.addEventListener('click', () => onCellClick(r,c));
       }
       el.appendChild(cell);
     }
@@ -636,63 +727,54 @@ function renderGrid() {
 }
 
 function renderScoreboard() {
-  const el = document.getElementById('scoreboard');
-  el.innerHTML = teams.map((t, i) => `
-    <div class="team-score ${i === currentIdx ? 'active' : ''}"
-         style="${i === currentIdx ? `border-color:${t.color};box-shadow:0 0 16px ${t.color}44` : ''}">
+  document.getElementById('scoreboard').innerHTML = teams.map((t,i) => `
+    <div class="team-score ${i===currentIdx?'active':''}"
+         style="${i===currentIdx?`border-color:${t.color};box-shadow:0 0 16px ${t.color}44`:''}">
       <small style="color:${t.color}">${t.name}</small>
       ${t.totalScore}
-      <span style="font-size:0.6em;color:${t.color};display:block">${'⭐'.repeat(t.starsFound) || '–'}</span>
+      <span style="font-size:0.6em;color:${t.color};display:block">${'⭐'.repeat(t.starsFound)||'–'}</span>
     </div>
   `).join('');
 }
 
 function updateBanner() {
   const t = teams[currentIdx];
-  document.getElementById('turn-team').innerHTML =
-    `<span style="color:${t.color}">${t.name}</span>'s Turn`;
+  document.getElementById('turn-team').innerHTML  = `<span style="color:${t.color}">${t.name}</span>'s Turn`;
   document.getElementById('round-score').textContent = roundScore;
 }
 
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 //  CELL CLICK
-// ═══════════════════════════════════════════════
-function onCellClick(r, c) {
+// ══════════════════════════════════════════════════════════
+function onCellClick(r,c) {
   if (grid[r][c].revealed) return;
-
-  // Deduct 1 point per click
   roundScore = Math.max(0, roundScore - 1);
   updateBanner();
-
-  pendingCell = { r, c };
-  pendingQ    = grid[r][c].question;
-  showQuestion(pendingQ);
+  pendingCell = {r,c};
+  showQuestion(grid[r][c].question);
 }
 
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 //  QUESTION MODAL
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 function showQuestion(q) {
   document.getElementById('q-topic').textContent = q.topic || 'Question';
   document.getElementById('q-text').textContent  = q.question;
-
-  const choices = shuffle([q.answer, ...q.distractors]);
+  const choices   = shuffle([q.answer, ...q.distractors]);
   const container = document.getElementById('q-choices');
   container.innerHTML = '';
   choices.forEach(ch => {
     const btn = document.createElement('button');
-    btn.className = 'q-choice';
+    btn.className   = 'q-choice';
     btn.textContent = ch;
     btn.addEventListener('click', () => onChoicePick(ch, q.answer, btn));
     container.appendChild(btn);
   });
-
   document.getElementById('modal-q').classList.add('show');
 }
 
 function onChoicePick(choice, correct, btn) {
   document.querySelectorAll('.q-choice').forEach(b => b.disabled = true);
-
   if (choice === correct) {
     btn.classList.add('correct');
     setTimeout(() => {
@@ -701,83 +783,56 @@ function onChoicePick(choice, correct, btn) {
     }, 650);
   } else {
     btn.classList.add('wrong');
-    document.querySelectorAll('.q-choice').forEach(b => {
-      if (b.textContent === correct) b.classList.add('correct');
-    });
+    document.querySelectorAll('.q-choice').forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
     setTimeout(() => {
       document.getElementById('modal-q').classList.remove('show');
       const cellEl = document.querySelector(`.sh-cell[data-r="${pendingCell.r}"][data-c="${pendingCell.c}"]`);
-      if (cellEl) {
-        cellEl.classList.add('wrong-flash');
-        setTimeout(() => cellEl.classList.remove('wrong-flash'), 450);
-      }
+      if (cellEl) { cellEl.classList.add('wrong-flash'); setTimeout(()=>cellEl.classList.remove('wrong-flash'),450); }
     }, 900);
   }
 }
 
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 //  REVEAL
-// ═══════════════════════════════════════════════
-function revealCell(r, c) {
-  const d = grid[r][c];
-  d.revealed = true;
-
-  if (r === starR && c === starC) {
-    renderGrid();
-    showFoundPopup();
-    return;
-  }
-
-  if (d.special) {
-    renderGrid();
-    showSpecialPopup(d.special);
-    return;
-  }
-
+// ══════════════════════════════════════════════════════════
+function revealCell(r,c) {
+  grid[r][c].revealed = true;
+  if (r===starR && c===starC) { renderGrid(); showFoundPopup(); return; }
+  if (grid[r][c].special)     { renderGrid(); showSpecialPopup(grid[r][c].special); return; }
   renderGrid();
-  showHintPopup(r, c);
+  showHintPopup(r,c);
 }
 
-// ═══════════════════════════════════════════════
-//  HINT POPUP
-// ═══════════════════════════════════════════════
-function showHintPopup(r, c) {
-  const dist = chebyshev(r, c, starR, starC);
-  const hint = getHint(r, c);
-  const data = {
-    hot:  { icon:'🔥', label:'HOT!',  cls:'label-hot',  sub:`Only ${dist} square${dist === 1 ? '' : 's'} away!` },
-    warm: { icon:'🌡️', label:'WARM',  cls:'label-warm', sub:`${dist} squares away` },
-    cold: { icon:'🧊', label:'COLD',  cls:'label-cold', sub:`${dist} squares away — keep hunting!` },
+// ══════════════════════════════════════════════════════════
+//  POPUPS
+// ══════════════════════════════════════════════════════════
+function showHintPopup(r,c) {
+  const dist = chebyshev(r,c,starR,starC);
+  const hint = getHint(r,c);
+  const d = {
+    hot:  {icon:'🔥', label:'HOT!', cls:'label-hot',  sub:`Only ${dist} square${dist===1?'':'s'} away!`},
+    warm: {icon:'🌡️', label:'WARM', cls:'label-warm', sub:`${dist} squares away`},
+    cold: {icon:'🧊', label:'COLD', cls:'label-cold', sub:`${dist} squares away — keep hunting!`},
   }[hint];
-
-  document.getElementById('hint-icon').textContent  = data.icon;
-  document.getElementById('hint-label').textContent = data.label;
-  document.getElementById('hint-label').className   = `popup-label ${data.cls}`;
-  document.getElementById('hint-sub').textContent   = data.sub;
+  document.getElementById('hint-icon').textContent  = d.icon;
+  document.getElementById('hint-label').textContent = d.label;
+  document.getElementById('hint-label').className   = `popup-label ${d.cls}`;
+  document.getElementById('hint-sub').textContent   = d.sub;
   document.getElementById('popup-hint').classList.add('open');
 }
+function closeHint() { document.getElementById('popup-hint').classList.remove('open'); }
 
-function closeHint() {
-  document.getElementById('popup-hint').classList.remove('open');
-}
-
-// ═══════════════════════════════════════════════
-//  SPECIAL POPUP
-// ═══════════════════════════════════════════════
 function showSpecialPopup(type) {
   let icon, label, cls, sub;
-  if (type === '+5') {
+  if (type==='+5') {
     roundScore += 5;
-    icon = '🎉'; label = '+5 POINTS!'; cls = 'label-plus';
-    sub  = 'Lucky square! Bonus added!';
-  } else if (type === '-5') {
-    roundScore = Math.max(0, roundScore - 5);
-    icon = '💀'; label = '−5 POINTS!'; cls = 'label-minus';
-    sub  = "Oops! Penalty square. That's life.";
+    icon='🎉'; label='+5 POINTS!'; cls='label-plus'; sub='Lucky square! Bonus added!';
+  } else if (type==='-5') {
+    roundScore = Math.max(0, roundScore-5);
+    icon='💀'; label='−5 POINTS!'; cls='label-minus'; sub="Oops! Penalty square. That's life.";
   } else {
-    icon = '🔄'; label = 'RESET!'; cls = 'label-reset';
-    sub  = 'Board resets — your score stays!';
-    afterSpecial = resetBoard;
+    icon='🔄'; label='RESET!'; cls='label-reset'; sub='Board resets — score stays!';
+    afterSpecial = initRound;
   }
   updateBanner();
   document.getElementById('special-icon').textContent  = icon;
@@ -786,108 +841,55 @@ function showSpecialPopup(type) {
   document.getElementById('special-sub').textContent   = sub;
   document.getElementById('popup-special').classList.add('open');
 }
-
 function closeSpecial() {
   document.getElementById('popup-special').classList.remove('open');
-  if (afterSpecial) {
-    const cb = afterSpecial;
-    afterSpecial = null;
-    cb();
-  }
+  if (afterSpecial) { const cb=afterSpecial; afterSpecial=null; cb(); }
 }
 
-function resetBoard() {
-  initRound();
-}
-
-// ═══════════════════════════════════════════════
-//  FOUND POPUP
-// ═══════════════════════════════════════════════
 function showFoundPopup() {
   const t = teams[currentIdx];
-  t.starsFound++;
-  t.totalScore += roundScore;
-
+  t.starsFound++; t.totalScore += roundScore;
   document.getElementById('found-team-name').textContent = t.name;
   document.getElementById('found-team-name').style.color = t.color;
   document.getElementById('found-score-val').textContent = roundScore;
-
-  const isLast = (currentIdx === teams.length - 1);
-  const btn    = document.getElementById('found-next-btn');
-  btn.textContent = isLast ? '🏆 See Final Scores' : 'Next Team →';
-
+  const isLast = currentIdx === teams.length-1;
+  document.getElementById('found-next-btn').textContent = isLast ? '🏆 See Final Scores' : 'Next Team →';
   document.getElementById('popup-found').classList.add('open');
 }
 
 function nextRound() {
   document.getElementById('popup-found').classList.remove('open');
   currentIdx++;
-
-  if (currentIdx >= teams.length) {
-    showFinalScores();
-    return;
-  }
-
+  if (currentIdx >= teams.length) { showFinalScores(); return; }
   roundScore = START_SCORE;
-  renderScoreboard();
-  updateBanner();
-  initRound();
+  renderScoreboard(); updateBanner(); initRound();
 }
 
-// ═══════════════════════════════════════════════
-//  FINAL SCORES
-// ═══════════════════════════════════════════════
 function showFinalScores() {
   document.getElementById('screen-game').style.display = 'none';
   document.getElementById('screen-final').classList.add('active');
-
-  const sorted  = [...teams].sort((a, b) => b.totalScore - a.totalScore);
-  const ranks   = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
-  document.getElementById('final-rows').innerHTML = sorted.map((t, i) => `
-    <div class="final-row ${i === 0 ? 'winner' : ''}">
+  const sorted = [...teams].sort((a,b) => b.totalScore-a.totalScore);
+  const ranks  = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
+  document.getElementById('final-rows').innerHTML = sorted.map((t,i) => `
+    <div class="final-row ${i===0?'winner':''}">
       <div class="final-rank">${ranks[i]}</div>
       <div class="final-name" style="color:${t.color}">${t.name}</div>
       <div>
         <div class="final-pts">${t.totalScore}</div>
-        <span class="final-stars">${'⭐'.repeat(t.starsFound) || '–'} stars found</span>
+        <span class="final-stars">${'⭐'.repeat(t.starsFound)||'–'} stars found</span>
       </div>
     </div>
   `).join('');
 }
 
-// ═══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 //  HELPERS
-// ═══════════════════════════════════════════════
-function chebyshev(r1, c1, r2, c2) {
-  return Math.max(Math.abs(r1 - r2), Math.abs(c1 - c2));
-}
-
-function getHint(r, c) {
-  const d = chebyshev(r, c, starR, starC);
-  if (d === 1) return 'hot';
-  if (d === 2) return 'warm';
-  return 'cold';
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function toggleFS() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(() => {});
-  } else {
-    document.exitFullscreen().catch(() => {});
-  }
-}
+// ══════════════════════════════════════════════════════════
+function chebyshev(r1,c1,r2,c2) { return Math.max(Math.abs(r1-r2), Math.abs(c1-c2)); }
+function getHint(r,c) { const d=chebyshev(r,c,starR,starC); return d===1?'hot':d===2?'warm':'cold'; }
+function shuffle(arr) { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function randInt(min,max) { return Math.floor(Math.random()*(max-min+1))+min; }
+function toggleFS() { if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} }
 </script>
 </body>
 </html>
