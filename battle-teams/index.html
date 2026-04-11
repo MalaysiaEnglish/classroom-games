@@ -82,8 +82,16 @@
       <div class="qf-detail">
         <div class="qf-row">
           <div class="qf-col">
-            <div class="qf-col-label">Unit</div>
-            <div class="qf-units" id="qfUnits"><span class="qf-empty">Loading…</span></div>
+            <div class="qf-col-label">Level / Unit</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <select id="qfLevel" onchange="cascadeLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;">
+                <option value="">Level…</option>
+              </select>
+              <select id="qfUnit" onchange="cascadeUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+                <option value="">Unit…</option>
+              </select>
+              <button onclick="cascadeClear()" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;padding:2px 4px;text-align:left;">✕ clear</button>
+            </div>
           </div>
           <div class="qf-col">
             <div class="qf-col-label">Topic</div>
@@ -142,7 +150,7 @@
     let awaitingAnswer=false, pendingTileEvent=null;
 
     // ── Question system ────────────────────────────────────
-    let qPool=[], qIndex=0, qMode='screen', selectedUnit=null;
+    let qPool=[], qIndex=0, qMode='screen';
 
     function toggleQF() { document.getElementById('qfBar').classList.toggle('open'); }
 
@@ -154,39 +162,55 @@
     }
 
     function buildUnitButtons() {
-      const container=document.getElementById('qfUnits');
+      const levelSel=document.getElementById('qfLevel');
       if (typeof window.QUESTIONS==='undefined'||!window.QUESTIONS.length) {
-        container.innerHTML='<span class="qf-empty">questions.js not loaded</span>'; return;
+        levelSel.innerHTML='<option value="">No questions loaded</option>'; return;
       }
-      const unitMap=new Map();
-      window.QUESTIONS.forEach(q=>{ if(q.level!=null&&q.unit!=null) { const key='L'+q.level+'/U'+q.unit; if(!unitMap.has(key)) unitMap.set(key,{level:q.level,unit:q.unit}); } });
-      container.innerHTML='';
-      [...unitMap.values()].sort((a,b)=>a.level!==b.level?a.level-b.level:a.unit-b.unit).forEach(({level, unit})=>{
-        const btn=document.createElement('button'); btn.className='qf-unit-btn'; btn.textContent='L'+level+'/U'+unit;
-        btn.onclick=()=>selectUnit(level,unit,btn); container.appendChild(btn);
-      });
+      const levels=[...new Set(window.QUESTIONS.filter(q=>q.level!=null).map(q=>q.level))].sort((a,b)=>a-b);
+      levelSel.innerHTML='<option value="">Level…</option>';
+      levels.forEach(l=>{ const opt=document.createElement('option'); opt.value=l; opt.textContent='Level '+l; levelSel.appendChild(opt); });
     }
 
-    function selectUnit(level,unit,btnEl) {
-      if (btnEl.classList.contains('active')) {
-        btnEl.classList.remove('active'); selectedUnit=null;
-        document.getElementById('qfTopics').innerHTML='<span class="qf-empty">Select a unit first</span>';
-        document.getElementById('qfLessons').innerHTML='<span class="qf-empty">Select a unit first</span>';
-        rebuildPool(); return;
+    function cascadeLevelChange() {
+      const level=document.getElementById('qfLevel').value;
+      const unitSel=document.getElementById('qfUnit');
+      unitSel.innerHTML='<option value="">Unit…</option>';
+      unitSel.disabled=!level; unitSel.style.opacity=level?'1':'0.5';
+      if (level) {
+        const units=new Set((window.QUESTIONS||[]).filter(q=>String(q.level)===level&&q.unit!=null).map(q=>q.unit));
+        [...units].sort((a,b)=>a-b).forEach(u=>{ const opt=document.createElement('option'); opt.value=u; opt.textContent='Unit '+u; unitSel.appendChild(opt); });
       }
-      document.querySelectorAll('.qf-unit-btn').forEach(b=>b.classList.remove('active'));
-      btnEl.classList.add('active'); selectedUnit={level:parseInt(level),unit:parseInt(unit)};
+      buildTopicsAndLessons();
+    }
+
+    function cascadeUnitChange() { buildTopicsAndLessons(); }
+
+    function cascadeClear() {
+      document.getElementById('qfLevel').value='';
+      const unitSel=document.getElementById('qfUnit');
+      unitSel.innerHTML='<option value="">Unit…</option>';
+      unitSel.disabled=true; unitSel.style.opacity='0.5';
       buildTopicsAndLessons();
     }
 
     function questionsForUnit() {
-      if (!selectedUnit) return [];
-      return window.QUESTIONS.filter(q=>q.level===selectedUnit.level&&q.unit===selectedUnit.unit);
+      const level=document.getElementById('qfLevel')?.value;
+      const unit=document.getElementById('qfUnit')?.value;
+      if (!level) return [];
+      let qs=(window.QUESTIONS||[]).filter(q=>String(q.level)===level);
+      if (unit) qs=qs.filter(q=>String(q.unit)===unit);
+      return qs;
     }
 
     function buildTopicsAndLessons() {
       const qs=questionsForUnit();
       const topicsEl=document.getElementById('qfTopics'), lessonsEl=document.getElementById('qfLessons');
+      const level=document.getElementById('qfLevel')?.value;
+      if (!level) {
+        topicsEl.innerHTML='<span class="qf-empty">Select a unit first</span>';
+        lessonsEl.innerHTML='<span class="qf-empty">Select a unit first</span>';
+        rebuildPool(); return;
+      }
       topicsEl.innerHTML='';
       const topics=[...new Set(qs.map(q=>q.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
       if (!topics.length) topicsEl.innerHTML='<span class="qf-empty">No topics</span>';
@@ -237,7 +261,9 @@
       if (!qPool.length) { el.textContent='No questions — free play'; st.textContent='No questions selected — free play'; }
       else {
         const topics=[...new Set(qPool.map(q=>q.topic))];
-        const unitStr=selectedUnit?'L'+selectedUnit.level+'/U'+selectedUnit.unit+' · ':'';
+        const level=document.getElementById('qfLevel')?.value;
+        const unit=document.getElementById('qfUnit')?.value;
+        const unitStr=(level&&unit)?'L'+level+'/U'+unit+' · ':(level?'L'+level+' · ':'');
         const topicStr=topics.length===1?topics[0]:topics.length+' topics';
         el.innerHTML=unitStr+'<strong>'+qPool.length+' questions</strong> · '+topicStr+' · '+(qMode==='teacher'?'Teacher reads':'On screen');
         st.innerHTML='<strong>'+qPool.length+' questions</strong> ready — '+topicStr;

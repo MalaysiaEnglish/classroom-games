@@ -20,55 +20,29 @@
       padding: 0 !important;
     }
 
-    /* ── Filter panel — expanded ── */
-    .qf-panel {
-      background: #161c2e;
-      border-bottom: 2px solid rgba(240,180,41,0.25);
-      padding: 10px 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: flex-start;
-    }
-    .qf-panel.collapsed { display: none; }
-
-    /* ── Collapsed summary bar ── */
-    .qf-summary {
-      background: #161c2e;
-      border-bottom: 2px solid rgba(240,180,41,0.2);
-      padding: 6px 14px;
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .qf-summary.visible { display: flex; }
-    .qf-summary:hover { background: #1c2340; }
-    .qf-summary-text { font-size: 0.75rem; color: rgba(240,180,41,0.8); }
-    .qf-summary-text strong { color: #f0c842; }
-    .qf-summary-edit { font-size: 0.7rem; color: rgba(240,180,41,0.45); white-space: nowrap; }
-
-    .qf-col { display: flex; flex-direction: column; gap: 5px; min-width: 150px; }
-    .qf-col-wide { min-width: 200px; flex: 1; }
-    .qf-heading { font-size: 0.68rem; color: rgba(240,180,41,0.7); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 1px; }
-    .qf-units { display: flex; flex-wrap: wrap; gap: 4px; }
-    .qf-unit-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #c8bfb0; padding: 3px 9px; border-radius: 5px; font-size: 0.72rem; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
-    .qf-unit-btn:hover { background: rgba(240,180,41,0.12); border-color: rgba(240,180,41,0.4); }
-    .qf-unit-btn.active { background: rgba(240,180,41,0.22); border-color: rgba(240,180,41,0.65); color: #f0c842; font-weight: 600; }
-    .qf-checklist { display: flex; flex-direction: column; gap: 3px; max-height: 130px; overflow-y: auto; }
-    .qf-check-label { display: flex; align-items: center; gap: 6px; font-size: 0.74rem; color: #c8bfb0; cursor: pointer; padding: 2px 5px; border-radius: 4px; transition: background 0.15s; }
-    .qf-check-label:hover { background: rgba(240,180,41,0.08); }
-    .qf-check-label input[type=checkbox] { accent-color: #f0c842; width: 13px; height: 13px; cursor: pointer; flex-shrink: 0; }
-    .qf-check-label .qf-count { font-size: 0.65rem; color: rgba(200,191,176,0.4); margin-left: auto; }
-    .qf-empty { font-size: 0.72rem; color: rgba(200,191,176,0.35); font-style: italic; padding: 3px 0; }
-    .qf-status-bar { width: 100%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 5px; border-top: 1px solid rgba(255,255,255,0.06); }
-    .qf-status { font-size: 0.74rem; color: rgba(240,180,41,0.75); }
-    .qf-status strong { color: #f0c842; }
-    .qf-mode-btns { display: flex; gap: 5px; }
-    .qf-mode-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14); color: #c8bfb0; padding: 3px 10px; border-radius: 5px; font-size: 0.72rem; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
-    .qf-mode-btn.active { background: rgba(240,180,41,0.22); border-color: rgba(240,180,41,0.6); color: #f0c842; font-weight: 600; }
+    /* ── Question filter bar ── */
+    .qf-bar { width:100%; background:rgba(10,18,30,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:12px; overflow:hidden; margin-bottom:8px; }
+    .qf-summary { display:flex; align-items:center; gap:10px; padding:8px 14px; cursor:pointer; user-select:none; font-size:0.82rem; color:#c8bfb0; }
+    .qf-summary:hover { background:rgba(255,255,255,0.04); }
+    .qf-summary-text { flex:1; }
+    .qf-chevron { font-size:0.7rem; transition:transform 0.2s; }
+    .qf-bar.open .qf-chevron { transform:rotate(180deg); }
+    .qf-detail { display:none; padding:10px 14px 14px; border-top:1px solid rgba(255,255,255,0.07); }
+    .qf-bar.open .qf-detail { display:block; }
+    .qf-row { display:flex; gap:8px; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; }
+    .qf-col { flex:1; min-width:120px; }
+    .qf-col-label { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:rgba(240,180,41,0.8); margin-bottom:5px; }
+    .qf-checks { display:flex; flex-wrap:wrap; gap:4px; }
+    .qf-check-label { display:flex; align-items:center; gap:5px; font-size:0.75rem; color:#c8bfb0; cursor:pointer; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:5px; padding:3px 8px; transition:all 0.15s; }
+    .qf-check-label:hover { background:rgba(240,180,41,0.1); }
+    .qf-check-label input { accent-color:#f0c842; }
+    .qf-count { font-size:0.65rem; color:rgba(240,180,41,0.7); margin-left:2px; }
+    .qf-empty { font-size:0.75rem; color:rgba(255,255,255,0.3); font-style:italic; }
+    .qf-status-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); margin-top:6px; }
+    .qf-status { font-size:0.75rem; color:#c8bfb0; }
+    .qf-mode-btns { display:flex; gap:5px; }
+    .qf-mode-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14); color:#c8bfb0; padding:3px 10px; border-radius:5px; font-size:0.72rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+    .qf-mode-btn.active { background:rgba(240,180,41,0.22); border-color:rgba(240,180,41,0.6); color:#f0c842; font-weight:600; }
 
     /* ── Question panel ── */
     #question-panel { display: none; background: #111828; border-bottom: 2px solid rgba(240,180,41,0.18); padding: 12px 16px; text-align: center; }
@@ -92,46 +66,45 @@
 <body class="connect4-page">
   <h1>Connect 4 &ndash; Classroom Edition</h1>
 
-  <!-- Collapsed summary bar -->
-  <div class="qf-summary" id="qf-summary" onclick="expandFilter()" title="Click to change questions">
-    <span class="qf-summary-text" id="qf-summary-text">No questions &mdash; free play</span>
-    <span class="qf-summary-edit">&#9998; change</span>
-  </div>
-
-  <!-- Full filter panel -->
-  <div class="qf-panel" id="qf-panel">
-    <div class="qf-col">
-      <div class="qf-heading">&#127891; Level / Unit</div>
-      <div class="qf-col-label">Level / Unit</div>
-              <div style="display:flex;flex-direction:column;gap:5px;">
-                <select class="qf-cascade-level" onchange="cascadeQLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;width:100%;">
-                  <option value="">Level…</option>
-                </select>
-                <select class="qf-cascade-unit" onchange="cascadeQUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;width:100%;opacity:0.5;">
-                  <option value="">Unit…</option>
-                </select>
-                <button onclick="cascadeQClear()" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;padding:2px 4px;text-align:left;">✕ clear</button>
-              </div>
+  <!-- Question filter bar -->
+  <div class="qf-bar" id="qfBar">
+    <div class="qf-summary" onclick="toggleQF()">
+      <span>❓</span>
+      <span class="qf-summary-text" id="qfSummary">No questions — free play</span>
+      <span class="qf-chevron">▼</span>
     </div>
-    <div class="qf-col qf-col-wide">
-      <div class="qf-heading">&#128214; Topic</div>
-      <div style="margin-bottom:5px;">
-                <input id="qTopicSearch" type="text" placeholder="🔍 Search topics…" oninput="qFilterTopics()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.75rem;outline:none;">
-              </div>
-              <div class="qf-checks" id="qf-topics"><span class="qf-empty">Select a unit first</span></div>
-    </div>
-    <div class="qf-col">
-      <div class="qf-heading">&#128203; Lesson</div>
-      <div class="qf-checklist" id="qf-lessons"><span class="qf-empty">Select a Level / Unit first</span></div>
-    </div>
-    <div class="qf-status-bar">
-      <span class="qf-status" id="qf-status">No questions selected &mdash; free play</span>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <div class="qf-detail">
+      <div class="qf-row">
+        <div class="qf-col">
+          <div class="qf-col-label">Level / Unit</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <select id="qfLevel" onchange="cascadeQLevelChange()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;">
+              <option value="">Level…</option>
+            </select>
+            <select id="qfUnit" onchange="cascadeQUnitChange()" disabled style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.78rem;cursor:pointer;opacity:0.5;">
+              <option value="">Unit…</option>
+            </select>
+            <button onclick="cascadeQClear()" style="background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.72rem;cursor:pointer;padding:2px 4px;text-align:left;">✕ clear</button>
+          </div>
+        </div>
+        <div class="qf-col">
+          <div class="qf-col-label">Topic</div>
+          <div style="margin-bottom:5px;">
+            <input id="qTopicSearch" type="text" placeholder="🔍 Search topics…" oninput="qFilterTopics()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.75rem;outline:none;">
+          </div>
+          <div class="qf-checks" id="qfTopics"><span class="qf-empty">Select a unit first</span></div>
+        </div>
+        <div class="qf-col">
+          <div class="qf-col-label">Lesson</div>
+          <div class="qf-checks" id="qfLessons"><span class="qf-empty">Select a unit first</span></div>
+        </div>
+      </div>
+      <div class="qf-status-bar">
+        <span class="qf-status" id="qfStatus">No questions selected — free play</span>
         <div class="qf-mode-btns">
           <button class="qf-mode-btn active" id="mode-screen" onclick="setQMode('screen')">On Screen</button>
           <button class="qf-mode-btn" id="mode-teacher" onclick="setQMode('teacher')">Teacher Reads</button>
         </div>
-        <button class="qf-mode-btn" onclick="startGame()" style="border-color:rgba(240,180,41,0.5);color:#f0c842;">&#9654; Start Game</button>
       </div>
     </div>
   </div>
@@ -174,7 +147,6 @@
     const ROWS = 6, COLS = 7;
     let board, currentPlayer, gameOver, playToEnd, wins, resetTimer;
     let qMode = 'screen', qPool = [], qIndex = 0, pendingCol = null, awaitingAnswer = false;
-    let selectedUnit = null, gameStarted = false;
 
     function initState() {
       board = Array(ROWS).fill(null).map(() => Array(COLS).fill(null));
@@ -273,30 +245,26 @@
       initState(); createBoard();
       currentTurnEl.textContent = 'Team 1 (Red) \u2014 pick a column!';
       updateScoreboard(); updateActiveTeam(); hideQuestion();
-      if (gameStarted) collapseFilter();
+      collapseFilter();
     }
 
-    // ── Filter collapse / expand ───────────────────────────────────
-    function collapseFilter() {
-      gameStarted = true;
-      document.getElementById('qf-panel').classList.add('collapsed');
-      document.getElementById('qf-summary').classList.add('visible');
-      updateSummaryBar();
-    }
-    function expandFilter() {
-      document.getElementById('qf-panel').classList.remove('collapsed');
-      document.getElementById('qf-summary').classList.remove('visible');
-    }
-    function startGame() { collapseFilter(); }
-    function updateSummaryBar() {
-      const el = document.getElementById('qf-summary-text');
-      if (!qPool.length) { el.innerHTML = 'No questions \u2014 free play'; return; }
-      const unitStr = selectedUnit && selectedUnit !== 'unlinked'
-        ? 'L' + selectedUnit.level + '/U' + selectedUnit.unit + ' \u00b7 ' : '';
-      const topics = [...new Set(qPool.map(q => q.topic))];
-      const topicStr = topics.length === 1 ? topics[0] : topics.length + ' topics';
-      el.innerHTML = unitStr + '<strong>' + qPool.length + ' questions</strong> \u00b7 ' + topicStr +
-        ' \u00b7 ' + (qMode === 'teacher' ? 'Teacher reads' : 'On screen');
+    // ── Filter bar ────────────────────────────────────────────────
+    function toggleQF() { document.getElementById('qfBar').classList.toggle('open'); }
+    function collapseFilter() { document.getElementById('qfBar').classList.remove('open'); }
+    function updateQFSummary() {
+      const el = document.getElementById('qfSummary'), st = document.getElementById('qfStatus');
+      if (!qPool.length) {
+        el.textContent = 'No questions \u2014 free play';
+        st.textContent = 'No questions selected \u2014 free play';
+      } else {
+        const level = document.getElementById('qfLevel').value;
+        const unit  = document.getElementById('qfUnit').value;
+        const unitStr = (level && unit) ? 'L'+level+'/U'+unit+' \u00b7 ' : (level ? 'L'+level+' \u00b7 ' : '');
+        const topics = [...new Set(qPool.map(q => q.topic))];
+        const topicStr = topics.length === 1 ? topics[0] : topics.length + ' topics';
+        el.innerHTML = unitStr + '<strong>' + qPool.length + ' questions</strong> \u00b7 ' + topicStr + ' \u00b7 ' + (qMode === 'teacher' ? 'Teacher reads' : 'On screen');
+        st.innerHTML = '<strong>' + qPool.length + ' questions</strong> ready \u2014 ' + topicStr;
+      }
     }
 
     // ── Filter system ──────────────────────────────────────────────
@@ -309,8 +277,8 @@
     
     // ── Cascade picker for questions ─────────────────────────
     function getQuestionsForFilter() {
-      const level = document.querySelector('.qf-cascade-level')?.value;
-      const unit  = document.querySelector('.qf-cascade-unit')?.value;
+      const level = document.getElementById('qfLevel')?.value;
+      const unit  = document.getElementById('qfUnit')?.value;
       let qs = window.QUESTIONS || [];
       if (level) qs = qs.filter(q => String(q.level) === level);
       if (unit)  qs = qs.filter(q => String(q.unit)  === unit);
@@ -319,12 +287,18 @@
 
     function buildTopicsAndLessons() {
       const qs = getQuestionsForFilter();
-      const topicsEl  = document.getElementById('qf-topics');
-      const lessonsEl = document.getElementById('qf-lessons');
+      const topicsEl  = document.getElementById('qfTopics');
+      const lessonsEl = document.getElementById('qfLessons');
       if (!topicsEl) return;
+      const level = document.getElementById('qfLevel')?.value;
+      if (!level) {
+        topicsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
+        if (lessonsEl) lessonsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
+        rebuildPool(); return;
+      }
 
       // Preserve currently checked topics
-      const prevChecked = new Set([...document.querySelectorAll('#qf-topics input:checked')].map(cb => cb.value));
+      const prevChecked = new Set([...document.querySelectorAll('#qfTopics input:checked')].map(cb => cb.value));
 
       const topics = [...new Set(qs.map(q => q.topic).filter(Boolean))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
       topicsEl.innerHTML = '';
@@ -345,7 +319,7 @@
       }
 
       if (lessonsEl) {
-        const prevCheckedL = new Set([...document.querySelectorAll('#qf-lessons input:checked')].map(cb => cb.value));
+        const prevCheckedL = new Set([...document.querySelectorAll('#qfLessons input:checked')].map(cb => cb.value));
         const lessonNums = [...new Set(qs.filter(q => q.lesson != null).map(q => q.lesson))].sort((a,b) => a-b);
         lessonsEl.innerHTML = '';
         if (!lessonNums.length) {
@@ -369,8 +343,8 @@
     }
 
     function cascadeQLevelChange() {
-      const level = document.querySelector('.qf-cascade-level').value;
-      const unitSel = document.querySelector('.qf-cascade-unit');
+      const level = document.getElementById('qfLevel').value;
+      const unitSel = document.getElementById('qfUnit');
       unitSel.innerHTML = '<option value="">Unit…</option>';
       unitSel.disabled = !level; unitSel.style.opacity = level ? '1' : '0.5';
       if (level) {
@@ -383,13 +357,11 @@
       buildTopicsAndLessons();
     }
 
-    function cascadeQUnitChange() {
-      buildTopicsAndLessons();
-    }
+    function cascadeQUnitChange() { buildTopicsAndLessons(); }
 
     function qFilterTopics() {
       const search = (document.getElementById('qTopicSearch')?.value || '').toLowerCase();
-      const allLabels = document.querySelectorAll('#qf-topics .qf-check-label');
+      const allLabels = document.querySelectorAll('#qfTopics .qf-check-label');
       allLabels.forEach(label => {
         const text = label.textContent.toLowerCase();
         label.style.display = search && !text.includes(search) ? 'none' : '';
@@ -397,15 +369,15 @@
     }
 
     function cascadeQClear() {
-      document.querySelector('.qf-cascade-level').value = '';
-      const unitSel = document.querySelector('.qf-cascade-unit');
+      document.getElementById('qfLevel').value = '';
+      const unitSel = document.getElementById('qfUnit');
       unitSel.innerHTML = '<option value="">Unit…</option>';
       unitSel.disabled = true; unitSel.style.opacity = '0.5';
       buildTopicsAndLessons();
     }
 
     function buildUnitButtons() {
-      const levelSel = document.querySelector('.qf-cascade-level');
+      const levelSel = document.getElementById('qfLevel');
       if (!levelSel) return;
       if (typeof window.QUESTIONS === 'undefined' || !window.QUESTIONS.length) {
         levelSel.innerHTML = '<option value="">No questions loaded</option>';
@@ -417,30 +389,12 @@
         const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Level ' + l;
         levelSel.appendChild(opt);
       });
-      // Show all topics immediately
-      buildTopicsAndLessons();
     }
-    
-    
-    function selectUnit(level, unit, btnEl) {
-      if (btnEl.classList.contains('active')) {
-        btnEl.classList.remove('active');
-        selectedUnit = null;
-        document.getElementById('qf-topics').innerHTML = '<span class="qf-empty">Select a Level / Unit first</span>';
-        document.getElementById('qf-lessons').innerHTML = '<span class="qf-empty">Select a Level / Unit first</span>';
-        rebuildPool(); return;
-      }
-      document.querySelectorAll('.qf-unit-btn').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active');
-      selectedUnit = level === 'unlinked' ? 'unlinked' : { level: parseInt(level), unit: parseInt(unit) };
-      buildTopicsAndLessons();
-    }
-    function questionsForUnit() { return getQuestionsForFilter(); }
-    
+
     function rebuildPool() {
-      const checkedTopics = [...document.querySelectorAll('#qf-topics input:checked')].map(i => i.value);
-      const checkedLessons = [...document.querySelectorAll('#qf-lessons input:checked')].map(i => parseInt(i.value));
-      const candidates = questionsForUnit();
+      const checkedTopics = [...document.querySelectorAll('#qfTopics input:checked')].map(i => i.value);
+      const checkedLessons = [...document.querySelectorAll('#qfLessons input:checked')].map(i => parseInt(i.value));
+      const candidates = getQuestionsForFilter();
       if (!checkedTopics.length && !checkedLessons.length) {
         qPool = [];
       } else {
@@ -453,17 +407,7 @@
         }));
       }
       qIndex = 0;
-      updateStatus();
-    }
-    function updateStatus() {
-      const el = document.getElementById('qf-status');
-      if (!qPool.length) {
-        el.innerHTML = 'No questions selected \u2014 free play';
-      } else {
-        const topics = [...new Set(qPool.map(q => q.topic))];
-        el.innerHTML = '<strong>' + qPool.length + ' questions</strong> ready \u2014 ' +
-          (topics.length === 1 ? topics[0] : topics.length + ' topics');
-      }
+      updateQFSummary();
     }
     function setQMode(mode) {
       qMode = mode;
