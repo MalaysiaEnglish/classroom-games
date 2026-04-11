@@ -92,11 +92,11 @@
           <div style="margin-bottom:5px;">
             <input id="qTopicSearch" type="text" placeholder="🔍 Search topics…" oninput="qFilterTopics()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.75rem;outline:none;">
           </div>
-          <div class="qf-checks" id="qfTopics"><span class="qf-empty">Select a unit first</span></div>
+          <div class="qf-checks" id="qfTopics"><span class="qf-empty">Loading…</span></div>
         </div>
         <div class="qf-col">
           <div class="qf-col-label">Lesson</div>
-          <div class="qf-checks" id="qfLessons"><span class="qf-empty">Select a unit first</span></div>
+          <div class="qf-checks" id="qfLessons"><span class="qf-empty">Loading…</span></div>
         </div>
       </div>
       <div class="qf-status-bar">
@@ -290,12 +290,6 @@
       const topicsEl  = document.getElementById('qfTopics');
       const lessonsEl = document.getElementById('qfLessons');
       if (!topicsEl) return;
-      const level = document.getElementById('qfLevel')?.value;
-      if (!level) {
-        topicsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
-        if (lessonsEl) lessonsEl.innerHTML = '<span class="qf-empty">Select a unit first</span>';
-        rebuildPool(); return;
-      }
 
       // Preserve currently checked topics
       const prevChecked = new Set([...document.querySelectorAll('#qfTopics input:checked')].map(cb => cb.value));
@@ -389,6 +383,8 @@
         const opt = document.createElement('option'); opt.value = l; opt.textContent = 'Level ' + l;
         levelSel.appendChild(opt);
       });
+      // Populate topics immediately — level/unit selection is optional filtering only
+      buildTopicsAndLessons();
     }
 
     function rebuildPool() {
