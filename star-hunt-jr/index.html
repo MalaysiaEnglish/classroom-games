@@ -628,8 +628,8 @@ function restartGame() {
 // ═══════════════════════════════════════════════
 //  ROUND
 // ═══════════════════════════════════════════════
-function initRound() {
-  roundScore = 40;
+function initRound(keepScore = false) {
+  if (!keepScore) roundScore = 40;
   starR = Math.floor(Math.random() * GRID_SIZE);
   starC = Math.floor(Math.random() * GRID_SIZE);
 
@@ -821,7 +821,7 @@ function showSpecialPopup(type) {
     icon='💀'; label='−5 POINTS!'; color='#f85149'; sub="Oops! Penalty square. Whoops!";
   } else {
     icon='🔄'; label='RESET!'; color='#bc8cff'; sub='The board resets — score stays!';
-    afterSpecial = () => initRound();
+    afterSpecial = () => initRound(true);
   }
   updateTurnRow();
   document.getElementById('special-icon').textContent  = icon;
