@@ -49,6 +49,7 @@ The `index.html` has:
 | `figure-factory` | Figures of speech |
 | `star-hunt` | Hot/Cold star hunt — text questions from questions.js, level filter |
 | `star-hunt-jr` | Hot/Cold star hunt — picture/emoji questions, preschool categories |
+| `evil` | Score closest to zero — keep or give your points away (3–6 teams) |
 
 ### Unit-based / Topic Games (linked from unit cards)
 | Folder | Topic |
@@ -109,9 +110,68 @@ Every game page typically has:
 ## Session history
 - **April 2026**: Project connected to Cowork. Full inventory taken. 47 game folders documented.
 - **April 2026**: Added Star Hunt (toolkit text version) and Star Hunt Jr. (preschool picture version). Both added to toolkit modal in index.html.
+- **April 2026**: TTS added to Picture Games flashcards. Bug fixes across Battleships, Blockbusters, Noughts-Crosses, Battle Teams. Evil game created and added to toolkit.
 
 ## Star Hunt — design notes
 - **Mechanics**: 7×7 grid, hidden star. Teams click cells to reveal hot/warm/cold hints. Each click costs 1 point (starts at 40). Finding the star scores remaining points.
 - **Special cells**: +5 (green), −5 (red), 🔄 Reset (purple — new grid, score stays)
 - **star-hunt**: uses `../questions.js`, filtered by level (All / L1–L9). Standard style.css design.
 - **star-hunt-jr**: self-contained, emoji picture questions in categories: Animals, Colors, Food, Numbers, Shapes & Objects. Use for preschool / beginner classes.
+
+## Evil — design notes
+- **Mechanics**: Questions drawn from `../questions.js` (same cascade picker as other toolkit games). Each question has a random point value from −9 to +9 (equal numbers of each, deck shuffled Fisher-Yates, cycled). After answering correctly, the active team sees the value and chooses: ✋ Keep (add to own score) or 😈 Give (add to another team's score). Wrong answer = Skip, next team's turn.
+- **Win condition**: Closest to 0 at game end. Tie-break: positive beats negative (+1 wins over −1).
+- **Teams**: 3–6, each with a colour from `TEAM_COLORS = ['#00c9a7','#f7b731','#e74c3c','#a29bfe','#fd79a8','#74b9ff']`.
+- **Visual**: Animated zero-line tracker — horizontal bar, team markers slide with CSS transition. Score cards colour-coded: teal = positive, red = negative, gold = zero.
+- **Value reveal**: Full-screen dramatic overlay (2.2 s) before Keep/Give modal appears.
+- **Keep/Give modal**: Shows projected score for both options before committing.
+- **File**: `evil/index.html` — single self-contained file, no extra assets.
+
+## CRITICAL ARCHITECTURE: Question picker pattern
+Several toolkit games use a **cascade dropdown question picker** (Level → Unit → Topic checkboxes → Lesson checkboxes). There is one correct and one broken pattern for reading from it:
+
+### ✅ CORRECT — `getQuestionsForFilter()`
+Reads directly from the cascade dropdown DOM. Use this in `rebuildPool()` and anywhere you need the currently-selected questions.
+
+### ❌ BROKEN — `questionsForUnit()` (legacy pattern)
+Depends on a `selectedUnit` variable that is set only by old button UI that no longer exists. Returns `[]` always. **Do not use `questionsForUnit()` in `rebuildPool()`.**
+
+### Affected files fixed (April 2026)
+| File | Fix |
+|------|-----|
+| `battleships/index.html` | `rebuildPool()` now uses `getQuestionsForFilter()` |
+| `blockbusters/index.html` | same |
+| `noughts-crosses/index.html` | same |
+
+### `updateQFSummary()` fix (same three files)
+The unit label was reading from `selectedUnit` (always null). Fixed to read from DOM:
+```js
+const level = document.querySelector('.qf-cascade-level')?.value;
+const unit  = document.querySelector('.qf-cascade-unit')?.value;
+const unitStr = (level && unit) ? 'L'+level+'/U'+unit+' · ' : '';
+```
+
+## CRITICAL ARCHITECTURE: Topic visibility (no level required)
+Topics must be visible from page load — users should be able to search by topic without first selecting a level or unit. Three things must all be true:
+
+1. **`questionsForUnit()`** must NOT have `if (!level) return []` — filter by level/unit only if values are present.
+2. **`buildTopicsAndLessons()`** must NOT have an early-return guard like `if (!level) { show 'Select a unit first'; return; }`.
+3. **`buildUnitButtons()`** (or equivalent init function) must call `buildTopicsAndLessons()` at the end so topics populate on load.
+
+### Files fixed (April 2026)
+| File | What was broken | Fix |
+|------|----------------|-----|
+| `battle-teams/index.html` | All three issues above | Removed guards, added `buildTopicsAndLessons()` call in `buildUnitButtons()` |
+
+Battleships, Blockbusters, Noughts-Crosses did **not** have this bug — they already showed topics without a level.
+
+## Picture Games — TTS (Text-to-Speech)
+Added Web Speech API TTS to the flashcard screen in `picture-games/index.html`. Words are spoken automatically when a card is flipped; a 🔊 button allows replay.
+
+- **API**: `window.speechSynthesis` / `SpeechSynthesisUtterance` — browser-native, no key, works offline.
+- **Settings**: `lang='en-US'`, `rate=0.82`, `pitch=1.1`
+- The 🔊 button gets class `speaking` while audio plays (pulse animation).
+- `fcMove()` cancels any in-progress speech so there's no overlap between cards.
+
+## Battle Teams — Topic Search
+Added 🔍 topic search input to `battle-teams/index.html` (was already present in Battleships, Blockbusters, Noughts-Crosses). Input calls `qFilterTopics()` which shows/hides `.qf-check-label` elements based on text match.
