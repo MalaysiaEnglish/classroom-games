@@ -172,6 +172,7 @@
       const levels=[...new Set(window.QUESTIONS.filter(q=>q.level!=null).map(q=>q.level))].sort((a,b)=>a-b);
       levelSel.innerHTML='<option value="">Level…</option>';
       levels.forEach(l=>{ const opt=document.createElement('option'); opt.value=l; opt.textContent='Level '+l; levelSel.appendChild(opt); });
+      buildTopicsAndLessons(); // show all topics immediately — no level needed
     }
 
     function cascadeLevelChange() {
@@ -206,21 +207,15 @@
     function questionsForUnit() {
       const level=document.getElementById('qfLevel')?.value;
       const unit=document.getElementById('qfUnit')?.value;
-      if (!level) return [];
-      let qs=(window.QUESTIONS||[]).filter(q=>String(q.level)===level);
-      if (unit) qs=qs.filter(q=>String(q.unit)===unit);
+      let qs=window.QUESTIONS||[];
+      if (level) qs=qs.filter(q=>String(q.level)===level);
+      if (unit)  qs=qs.filter(q=>String(q.unit)===unit);
       return qs;
     }
 
     function buildTopicsAndLessons() {
       const qs=questionsForUnit();
       const topicsEl=document.getElementById('qfTopics'), lessonsEl=document.getElementById('qfLessons');
-      const level=document.getElementById('qfLevel')?.value;
-      if (!level) {
-        topicsEl.innerHTML='<span class="qf-empty">Select a unit first</span>';
-        lessonsEl.innerHTML='<span class="qf-empty">Select a unit first</span>';
-        rebuildPool(); return;
-      }
       topicsEl.innerHTML='';
       const topicSearch=document.getElementById('qTopicSearch'); if(topicSearch) topicSearch.value='';
       const topics=[...new Set(qs.map(q=>q.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
