@@ -95,6 +95,9 @@
           </div>
           <div class="qf-col">
             <div class="qf-col-label">Topic</div>
+            <div style="margin-bottom:5px;">
+              <input id="qTopicSearch" type="text" placeholder="🔍 Search topics…" oninput="qFilterTopics()" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#c8bfb0;border-radius:6px;padding:4px 8px;font-size:0.75rem;outline:none;">
+            </div>
             <div class="qf-checks" id="qfTopics"><span class="qf-empty">Select a unit first</span></div>
           </div>
           <div class="qf-col">
@@ -193,6 +196,13 @@
       buildTopicsAndLessons();
     }
 
+    function qFilterTopics() {
+      const search=(document.getElementById('qTopicSearch')?.value||'').toLowerCase();
+      document.querySelectorAll('#qfTopics .qf-check-label').forEach(label=>{
+        label.style.display=search&&!label.textContent.toLowerCase().includes(search)?'none':'';
+      });
+    }
+
     function questionsForUnit() {
       const level=document.getElementById('qfLevel')?.value;
       const unit=document.getElementById('qfUnit')?.value;
@@ -212,6 +222,7 @@
         rebuildPool(); return;
       }
       topicsEl.innerHTML='';
+      const topicSearch=document.getElementById('qTopicSearch'); if(topicSearch) topicSearch.value='';
       const topics=[...new Set(qs.map(q=>q.topic))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true }));
       if (!topics.length) topicsEl.innerHTML='<span class="qf-empty">No topics</span>';
       else topics.forEach(t=>{
