@@ -531,7 +531,8 @@
     function rebuildPool() {
       const checkedTopics = [...document.querySelectorAll('#qfTopics input:checked')].map(i=>i.value);
       const checkedLessons = [...document.querySelectorAll('#qfLessons input:checked')].map(i=>parseInt(i.value));
-      const candidates = questionsForUnit();
+      // Use the cascade dropdowns (not selectedUnit) so the filter actually works
+      const candidates = getQuestionsForFilter();
       if (!checkedTopics.length && !checkedLessons.length) { qPool = []; }
       else {
         const seen = new Set();
@@ -554,7 +555,10 @@
         st.textContent = 'No questions selected — free play';
       } else {
         const topics = [...new Set(qPool.map(q=>q.topic))];
-        const unitStr = selectedUnit ? 'L'+selectedUnit.level+'/U'+selectedUnit.unit+' · ' : '';
+        // Read level/unit from the cascade dropdowns instead of selectedUnit
+        const level = document.querySelector('.qf-cascade-level')?.value;
+        const unit  = document.querySelector('.qf-cascade-unit')?.value;
+        const unitStr = (level && unit) ? 'L'+level+'/U'+unit+' · ' : '';
         const topicStr = topics.length===1 ? topics[0] : topics.length+' topics';
         el.innerHTML = unitStr+'<strong>'+qPool.length+' questions</strong> · '+topicStr+' · '+(qMode==='teacher'?'Teacher reads':'On screen');
         st.innerHTML = '<strong>'+qPool.length+' questions</strong> ready — '+topicStr;
