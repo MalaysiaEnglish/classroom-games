@@ -118,6 +118,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .fc-lesson-tag.a{background:rgba(91,142,240,0.2);color:var(--accent);}
 .fc-lesson-tag.b{background:rgba(72,199,116,0.2);color:var(--accent2);}
 
+/* ── TTS ── */
+.tts-wrap{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:10px;}
+.tts-btn{background:none;border:2px solid var(--border);color:var(--muted);border-radius:50%;width:48px;height:48px;font-size:24px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tts-btn:hover{border-color:var(--accent);color:var(--accent);}
+.tts-btn.speaking{border-color:var(--accent2);color:var(--accent2);animation:tts-pulse 0.9s ease-in-out infinite;}
+@keyframes tts-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.55;transform:scale(1.12)}}
+
 /* ── Memory match ── */
 .mm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .mm-card{aspect-ratio:1;border-radius:var(--radius);border:2px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);transition:transform 0.12s,border-color 0.12s;user-select:none;overflow:hidden;padding:3px;}
@@ -246,6 +253,9 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
   <div class="fc-nav">
     <button onclick="fcMove(-1)">← Prev</button>
     <button class="fc-next" onclick="fcMove(1)">Next →</button>
+  </div>
+  <div class="tts-wrap">
+    <button class="tts-btn" id="tts-btn" onclick="ttsReplay()" title="Hear the word again">🔊</button>
   </div>
   <div class="fc-dots" id="fc-dots"></div>
 </div>
@@ -463,6 +473,32 @@ function selectionLabel() {
 function goSetup() { sh('screen-setup'); }
 
 // ══════════════════════════════════════════════════════════════
+// TTS  (Web Speech API — works offline, no key needed)
+// ══════════════════════════════════════════════════════════════
+const ttsSynth = window.speechSynthesis || null;
+
+function speak(text) {
+  if (!ttsSynth) return;
+  ttsSynth.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang  = 'en-US';
+  utt.rate  = 0.82;   // a touch slower — easier for young learners
+  utt.pitch = 1.1;
+  const btn = $('tts-btn');
+  if (btn) {
+    btn.classList.add('speaking');
+    utt.onend  = () => btn.classList.remove('speaking');
+    utt.onerror= () => btn.classList.remove('speaking');
+  }
+  ttsSynth.speak(utt);
+}
+
+function ttsReplay() {
+  const v = curWords[fcIdx];
+  if (v) speak(v.hint);
+}
+
+// ══════════════════════════════════════════════════════════════
 // FLASHCARD
 // ══════════════════════════════════════════════════════════════
 let fcIdx=0, fcFlipped=false, fcSeen=[];
@@ -499,8 +535,17 @@ function renderFlash() {
   }).join('');
 }
 
-function fcFlip()  { if(!fcFlipped){ fcFlipped=true; fcSeen[fcIdx]=true; renderFlash(); } }
-function fcMove(d) { fcIdx=(fcIdx+d+curWords.length)%curWords.length; fcFlipped=false; renderFlash(); }
+function fcFlip()  {
+  if (!fcFlipped) {
+    fcFlipped=true; fcSeen[fcIdx]=true; renderFlash();
+    speak(curWords[fcIdx].hint);   // 🔊 auto-speak on reveal
+  }
+}
+function fcMove(d) {
+  ttsSynth && ttsSynth.cancel();   // stop any in-progress speech
+  fcIdx=(fcIdx+d+curWords.length)%curWords.length;
+  fcFlipped=false; renderFlash();
+}
 
 // ══════════════════════════════════════════════════════════════
 // MEMORY MATCH
