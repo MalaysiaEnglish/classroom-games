@@ -568,10 +568,15 @@ function buildTopicsAndLessons() {
 }
 
 function qFilterTopics() {
-  const search = (document.getElementById('qTopicSearch').value || '').toLowerCase();
+  const search = (document.getElementById('qTopicSearch').value || '').toLowerCase().trim();
   document.querySelectorAll('#qfTopics .qf-check-label').forEach(label => {
-    label.style.display = search && !label.textContent.toLowerCase().includes(search) ? 'none' : '';
+    const matches = !search || label.textContent.toLowerCase().includes(search);
+    label.style.display = matches ? '' : 'none';
+    // Auto-select matching topics when a search term is active
+    const cb = label.querySelector('input');
+    if (search) cb.checked = matches;
   });
+  if (search) rebuildPool();
 }
 
 function cascadeQClear() {
