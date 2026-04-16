@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>⭐ Star Hunt</title>
   <link rel="stylesheet" href="../style.css">
-  <script src="../questions.js"></script>
   <style>
     body { padding: 8px 8px 60px; }
 
@@ -440,10 +439,11 @@ let afterSpecial = null;
 // ═══════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════
-(function init() {
+window.addEventListener('load', async () => {
+  if (window.SHEET_LOADED) await window.SHEET_LOADED;
   renderTeamInputs();
   buildLevelDropdown();   // populate level select & initial topic/lesson lists
-})();
+});
 
 // ══════════════════════════════════════════════════════════
 //  TEAM UI
@@ -896,5 +896,8 @@ function shuffle(arr) { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=
 function randInt(min,max) { return Math.floor(Math.random()*(max-min+1))+min; }
 function toggleFS() { if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}else{document.exitFullscreen().catch(()=>{});} }
 </script>
+
+  <script src="../questions.js"></script>
+  <script src="../sheet-loader.js" onerror="console.log('No sheet-loader.js')"></script>
 </body>
 </html>
