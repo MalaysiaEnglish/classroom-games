@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sentence Type Sorter — Year 7</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── Setup screen ───────────────────────────────────────────── */
+    #setup {
+      max-width: 560px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+    }
+    #setup h2 { font-size: 1.3rem; color: #a0e4cb; margin-bottom: 6px; font-weight: 700; }
+    #setup p  { font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+    .team-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .team-row input[type="text"] {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      padding: 7px 12px;
+    }
+    .team-row .team-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .setup-row { display:flex; gap:10px; justify-content:center; align-items:center; margin-bottom:20px; }
+    .setup-row label { font-size:0.88rem; color:rgba(255,255,255,0.7); }
+    .setup-row input[type="number"] {
+      width:64px; padding:6px 10px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:8px; color:#fff; font-size:0.95rem; text-align:center;
+    }
+    #startBtn {
+      background: linear-gradient(135deg,#00c9a7,#007a66);
+      border: none; color: #fff; font-size: 1.1rem;
+      padding: 13px 40px; border-radius: 12px;
+      cursor: pointer; font-weight: 800; margin-top: 8px;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    #startBtn:hover { filter:brightness(1.15); transform:translateY(-2px); }
+
+    /* ── Game screen ────────────────────────────────────────────── */
+    #game { display:none; }
+
+    /* Progress bar */
+    .progress-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .progress-pips {
+      display: flex;
+      gap: 5px;
+    }
+    .pip {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transition: background 0.3s;
+    }
+    .pip.done   { background: #00c9a7; }
+    .pip.active { background: #f7b731; }
+
+    /* Sentence display */
+    .sentence-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin: 0 auto 20px;
+      max-width: 860px;
+      text-align: center;
+      transition: border-color 0.4s, background 0.4s;
+    }
+    .sentence-card.correct { border-color: #22c55e; background: rgba(34,197,94,0.07); }
+    .sentence-card.wrong   { border-color: #ef4444; background: rgba(239,68,68,0.07); }
+
+    .sentence-text {
+      font-size: clamp(1.4rem, 3.5vw, 2.1rem);
+      font-weight: 600;
+      color: #f0e6d0;
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+    .explanation {
+      font-size: clamp(0.82rem, 1.8vw, 1rem);
+      color: #a0e4cb;
+      font-style: italic;
+      min-height: 1.4em;
+      transition: opacity 0.3s;
+    }
+    .explanation.hidden { opacity: 0; }
+
+    /* Category buttons */
+    .category-row {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 12px;
+      max-width: 860px;
+      margin: 0 auto 20px;
+    }
+    @media(min-width:700px) {
+      .category-row { grid-template-columns: repeat(4,1fr); }
+    }
+    .cat-btn {
+      padding: 18px 12px;
+      border-radius: 14px;
+      font-size: clamp(0.85rem, 2vw, 1.05rem);
+      font-weight: 800;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      letter-spacing: 0.03em;
+      line-height: 1.25;
+    }
+    .cat-btn.simple          { background:rgba(96,165,250,0.15); border-color:rgba(96,165,250,0.4); color:#93c5fd; }
+    .cat-btn.compound        { background:rgba(167,139,250,0.15); border-color:rgba(167,139,250,0.4); color:#c4b5fd; }
+    .cat-btn.complex         { background:rgba(251,146,60,0.15); border-color:rgba(251,146,60,0.4); color:#fdba74; }
+    .cat-btn.compound-complex{ background:rgba(244,63,94,0.15); border-color:rgba(244,63,94,0.4); color:#fb7185; }
+
+    .cat-btn:hover:not(:disabled) { filter:brightness(1.25); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+    .cat-btn:disabled { cursor: default; }
+    .cat-btn.revealed-correct { background:rgba(34,197,94,0.28); border-color:#22c55e; color:#fff; transform:scale(1.04); }
+    .cat-btn.revealed-wrong   { opacity: 0.35; }
+
+    .cat-name { display:block; font-size:1em; }
+    .cat-example { display:block; font-size:0.7em; font-weight:400; opacity:0.75; margin-top:3px; }
+
+    /* Score strip */
+    .score-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto 10px;
+    }
+    .score-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255,255,255,0.07);
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 8px 18px;
+      min-width: 90px;
+      cursor: pointer;
+      transition: all 0.18s;
+      user-select: none;
+    }
+    .score-card:hover { border-color: rgba(247,183,49,0.6); background:rgba(247,183,49,0.1); }
+    .score-card:active { transform:scale(0.95); }
+    .score-card .sc-name { font-size:0.78rem; font-weight:700; color:rgba(255,255,255,0.75); text-transform:uppercase; letter-spacing:0.06em; }
+    .score-card .sc-score { font-size:1.8rem; font-weight:900; line-height:1.1; }
+    .score-card .sc-hint { font-size:0.62rem; color:rgba(255,255,255,0.3); margin-top:1px; }
+
+    /* Bump animation */
+    @keyframes bump { 0%{transform:scale(1)} 40%{transform:scale(1.22)} 100%{transform:scale(1)} }
+    .score-card.bumped { animation: bump 0.3s ease; }
+
+    /* Next / done overlay */
+    .next-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    #nextBtn {
+      background: linear-gradient(135deg,#f7b731,#d97706);
+      border:none; color:#1a0f00; font-size:1rem;
+      padding:11px 36px; border-radius:10px;
+      cursor:pointer; font-weight:800;
+      transition:filter 0.15s, transform 0.1s;
+      display:none;
+    }
+    #nextBtn:hover { filter:brightness(1.12); transform:translateY(-2px); }
+
+    /* End screen */
+    #endScreen {
+      display:none;
+      text-align:center;
+      padding:40px 20px;
+    }
+    #endScreen h2 { font-size:2.2rem; font-weight:900; color:#f7b731; margin-bottom:24px; }
+    .end-scores {
+      display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:32px;
+    }
+    .end-card {
+      background:rgba(255,255,255,0.08);
+      border-radius:16px; padding:18px 28px;
+      font-size:2.4rem; font-weight:900;
+    }
+    .end-card .end-name { font-size:0.85rem; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px; }
+    .end-card.winner { border:2px solid #f7b731; background:rgba(247,183,49,0.12); }
+
+    /* ── Overlay flash ──────────────────────────────────────────── */
+    #flash {
+      pointer-events:none;
+      position:fixed; inset:0; z-index:999;
+      opacity:0; transition:opacity 0.5s;
+    }
+    #flash.show-correct { background:rgba(34,197,94,0.18); opacity:1; }
+    #flash.show-wrong   { background:rgba(239,68,68,0.15); opacity:1; }
+  </style>
+</head>
+<body>
+
+<div id="flash"></div>
+
+<!-- ═══ SETUP SCREEN ═══ -->
+<div id="setup">
+  <h2>⚡ Sentence Type Sorter</h2>
+  <p>Year 7 · Units 1 &amp; 2 — Simple · Compound · Complex · Compound-Complex</p>
+
+  <div class="setup-row">
+    <label>Number of teams:
+      <input type="number" id="teamCount" min="2" max="6" value="3">
+    </label>
+  </div>
+
+  <div id="teamInputs"></div>
+
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+</div>
+
+<!-- ═══ GAME SCREEN ═══ -->
+<div id="game">
+  <h1>Sentence Type Sorter</h1>
+
+  <div class="controls">
+    <button onclick="location.href=\'../index.html\'" id="home">🏠 Home</button>
+    <button onclick="toggleFullscreen()" id="fullscreen">⛶ Fullscreen</button>
+    <button onclick="restartGame()">↺ Restart</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <span id="progressText">Question 1 / 15</span>
+    <div class="progress-pips" id="pips"></div>
+  </div>
+
+  <!-- Sentence card -->
+  <div class="sentence-card" id="sentenceCard">
+    <div class="sentence-text" id="sentenceText"></div>
+    <div class="explanation hidden" id="explanation"></div>
+  </div>
+
+  <!-- Category buttons -->
+  <div class="category-row" id="catRow">
+    <button class="cat-btn simple"           data-type="simple"           onclick="checkAnswer('simple')">
+      <span class="cat-name">SIMPLE</span>
+      <span class="cat-example">One clause</span>
+    </button>
+    <button class="cat-btn compound"         data-type="compound"         onclick="checkAnswer('compound')">
+      <span class="cat-name">COMPOUND</span>
+      <span class="cat-example">and / but / or…</span>
+    </button>
+    <button class="cat-btn complex"          data-type="complex"          onclick="checkAnswer('complex')">
+      <span class="cat-name">COMPLEX</span>
+      <span class="cat-example">although / when / because…</span>
+    </button>
+    <button class="cat-btn compound-complex" data-type="compound-complex" onclick="checkAnswer('compound-complex')">
+      <span class="cat-name">COMPOUND-COMPLEX</span>
+      <span class="cat-example">both types combined</span>
+    </button>
+  </div>
+
+  <!-- Next button -->
+  <div class="next-bar">
+    <button id="nextBtn" onclick="nextQuestion()">Next Sentence →</button>
+  </div>
+
+  <!-- Score strip — click a team to award a point -->
+  <div class="score-strip" id="scoreStrip"></div>
+  <p style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:4px;">
+    👆 Tap a team card to award a point after the correct answer is revealed
+  </p>
+</div>
+
+<!-- ═══ END SCREEN ═══ -->
+<div id="endScreen">
+  <h2>🏆 Game Over!</h2>
+  <div class="end-scores" id="endScores"></div>
+  <button onclick="restartGame()" style="background:#f7b731;border:none;color:#1a0f00;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:800;cursor:pointer;">Play Again</button>
+  &nbsp;
+  <button onclick="location.href=\'../index.html\'" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:700;cursor:pointer;">🏠 Home</button>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  SENTENCE BANK — Y7 Units 1 & 2 (Adventure & Suspense)
+// ════════════════════════════════════════════════════════
+const SENTENCES = [
+  {
+    text: "The door creaked open.",
+    type: "simple",
+    explanation: "SIMPLE — One subject (The door) + one verb (creaked). One independent clause."
+  },
+  {
+    text: "She sprinted through the dark forest.",
+    type: "simple",
+    explanation: "SIMPLE — One subject (She) + one verb (sprinted). No joining words needed."
+  },
+  {
+    text: "A shadowy figure waited at the end of the tunnel.",
+    type: "simple",
+    explanation: "SIMPLE — One clause. Long phrases add detail but it's still one main verb: waited."
+  },
+  {
+    text: "The map had vanished.",
+    type: "simple",
+    explanation: "SIMPLE — Short and sharp. One clause. Often used for dramatic effect in suspense writing."
+  },
+  {
+    text: "He heard a noise, but he didn't look back.",
+    type: "compound",
+    explanation: "COMPOUND — Two independent clauses joined by 'but' (a coordinating conjunction)."
+  },
+  {
+    text: "She reached the top, and the view took her breath away.",
+    type: "compound",
+    explanation: "COMPOUND — Two independent clauses joined by 'and'. Each could stand alone as a sentence."
+  },
+  {
+    text: "They could climb down, or they could wait for help.",
+    type: "compound",
+    explanation: "COMPOUND — Two independent clauses joined by 'or'. Notice the repeated subject 'they'."
+  },
+  {
+    text: "The storm was getting closer; they had to move fast.",
+    type: "compound",
+    explanation: "COMPOUND — A semicolon joins two independent clauses. Works just like 'and' or 'but' here."
+  },
+  {
+    text: "Although she was afraid, she stepped into the tunnel.",
+    type: "complex",
+    explanation: "COMPLEX — 'Although she was afraid' is a dependent clause (can't stand alone). Joined to the main clause by 'although'."
+  },
+  {
+    text: "When the door slammed shut, the whole room went silent.",
+    type: "complex",
+    explanation: "COMPLEX — 'When the door slammed shut' depends on the main clause. 'When' is the subordinating conjunction."
+  },
+  {
+    text: "Because the map was wrong, they had no idea where they were.",
+    type: "complex",
+    explanation: "COMPLEX — 'Because' introduces the dependent clause. The main clause is 'they had no idea where they were'."
+  },
+  {
+    text: "She kept running until her legs gave way.",
+    type: "complex",
+    explanation: "COMPLEX — 'until her legs gave way' is the dependent clause. 'Until' is the subordinating conjunction."
+  },
+  {
+    text: "Although it was dark, she kept walking, and she didn't stop until dawn.",
+    type: "compound-complex",
+    explanation: "COMPOUND-COMPLEX — 'Although it was dark' = dependent clause. 'she kept walking' + 'she didn't stop' = two independent clauses joined by 'and'."
+  },
+  {
+    text: "When he finally reached the cave, the treasure was gone, but the adventure had only just begun.",
+    type: "compound-complex",
+    explanation: "COMPOUND-COMPLEX — 'When he reached the cave' = dependent clause. Two main clauses joined by 'but': 'the treasure was gone' and 'the adventure had only just begun'."
+  },
+  {
+    text: "Because she had trained for years, she was ready, yet her hands still trembled.",
+    type: "compound-complex",
+    explanation: "COMPOUND-COMPLEX — Dependent clause: 'Because she had trained'. Two independent clauses joined by 'yet': 'she was ready' and 'her hands still trembled'."
+  }
+];
+
+// ════════════════════════════════════════════
+//  TEAM COLOURS
+// ════════════════════════════════════════════
+const TEAM_COLORS = ['#00c9a7','#f7b731','#e74c3c','#a29bfe','#fd79a8','#74b9ff'];
+
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
+let teams       = [];
+let scores      = [];
+let order       = [];
+let current     = 0;
+let answered    = false;
+
+// ════════════════════════════════════════════
+//  SETUP
+// ════════════════════════════════════════════
+const teamCountInput = document.getElementById('teamCount');
+teamCountInput.addEventListener('input', renderTeamInputs);
+renderTeamInputs();
+
+function renderTeamInputs() {
+  const n = Math.min(6, Math.max(2, parseInt(teamCountInput.value) || 3));
+  const defaults = ['Team 1','Team 2','Team 3','Team 4','Team 5','Team 6'];
+  const container = document.getElementById('teamInputs');
+  const existing  = Array.from(container.querySelectorAll('input')).map(i => i.value);
+  container.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const row = document.createElement('div');
+    row.className = 'team-row';
+    const dot = document.createElement('div');
+    dot.className = 'team-dot';
+    dot.style.background = TEAM_COLORS[i];
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.placeholder = defaults[i];
+    inp.value = existing[i] || defaults[i];
+    row.appendChild(dot);
+    row.appendChild(inp);
+    container.appendChild(row);
+  }
+}
+
+function startGame() {
+  const inputs = document.querySelectorAll('#teamInputs input');
+  teams  = Array.from(inputs).map(i => i.value.trim() || i.placeholder);
+  scores = teams.map(() => 0);
+
+  // Shuffle sentences
+  order = shuffleArray([...Array(SENTENCES.length).keys()]);
+  current  = 0;
+  answered = false;
+
+  document.getElementById('setup').style.display   = 'none';
+  document.getElementById('game').style.display    = 'block';
+  document.getElementById('endScreen').style.display = 'none';
+
+  buildScoreStrip();
+  buildPips();
+  loadQuestion();
+}
+
+// ════════════════════════════════════════════
+//  PIPS
+// ════════════════════════════════════════════
+function buildPips() {
+  const container = document.getElementById('pips');
+  container.innerHTML = '';
+  SENTENCES.forEach((_, i) => {
+    const pip = document.createElement('div');
+    pip.className = 'pip' + (i === 0 ? ' active' : '');
+    pip.id = 'pip-' + i;
+    container.appendChild(pip);
+  });
+}
+
+function updatePips() {
+  SENTENCES.forEach((_, i) => {
+    const pip = document.getElementById('pip-' + i);
+    if (!pip) return;
+    pip.className = 'pip' + (i < current ? ' done' : i === current ? ' active' : '');
+  });
+}
+
+// ════════════════════════════════════════════
+//  SCORE STRIP
+// ════════════════════════════════════════════
+function buildScoreStrip() {
+  const strip = document.getElementById('scoreStrip');
+  strip.innerHTML = '';
+  teams.forEach((name, i) => {
+    const card = document.createElement('div');
+    card.className = 'score-card';
+    card.id = 'sc-' + i;
+    card.style.borderColor = TEAM_COLORS[i] + '55';
+    card.innerHTML = `
+      <div class="sc-name" style="color:${TEAM_COLORS[i]}">${name}</div>
+      <div class="sc-score" style="color:${TEAM_COLORS[i]}" id="score-${i}">0</div>
+      <div class="sc-hint">tap to +1</div>
+    `;
+    card.addEventListener('click', () => awardPoint(i));
+    strip.appendChild(card);
+  });
+}
+
+function awardPoint(i) {
+  scores[i]++;
+  document.getElementById('score-' + i).textContent = scores[i];
+  const card = document.getElementById('sc-' + i);
+  card.classList.remove('bumped');
+  void card.offsetWidth; // reflow
+  card.classList.add('bumped');
+  setTimeout(() => card.classList.remove('bumped'), 350);
+}
+
+// ════════════════════════════════════════════
+//  GAMEPLAY
+// ════════════════════════════════════════════
+function loadQuestion() {
+  if (current >= SENTENCES.length) { showEndScreen(); return; }
+
+  answered = false;
+  const s = SENTENCES[order[current]];
+
+  document.getElementById('sentenceText').textContent = s.text;
+  document.getElementById('explanation').textContent  = '';
+  document.getElementById('explanation').classList.add('hidden');
+  document.getElementById('sentenceCard').className   = 'sentence-card';
+  document.getElementById('nextBtn').style.display    = 'none';
+
+  // Reset category buttons
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.classList.remove('revealed-correct','revealed-wrong');
+    btn.disabled = false;
+  });
+
+  document.getElementById('progressText').textContent =
+    `Question ${current + 1} / ${SENTENCES.length}`;
+  updatePips();
+}
+
+function checkAnswer(chosen) {
+  if (answered) return;
+  answered = true;
+
+  const s = SENTENCES[order[current]];
+  const correct = (chosen === s.type);
+
+  // Reveal buttons
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.type === s.type) {
+      btn.classList.add('revealed-correct');
+    } else {
+      btn.classList.add('revealed-wrong');
+    }
+  });
+
+  // Show explanation
+  const expl = document.getElementById('explanation');
+  expl.textContent = s.explanation;
+  expl.classList.remove('hidden');
+
+  // Card highlight
+  document.getElementById('sentenceCard').classList.add(correct ? 'correct' : 'wrong');
+
+  // Flash overlay
+  const flash = document.getElementById('flash');
+  flash.className = correct ? 'show-correct' : 'show-wrong';
+  setTimeout(() => { flash.className = ''; }, 600);
+
+  // Show next button
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= SENTENCES.length) {
+    showEndScreen();
+  } else {
+    loadQuestion();
+  }
+}
+
+// ════════════════════════════════════════════
+//  END SCREEN
+// ════════════════════════════════════════════
+function showEndScreen() {
+  document.getElementById('game').style.display    = 'none';
+  document.getElementById('endScreen').style.display = 'block';
+
+  const max = Math.max(...scores);
+  const container = document.getElementById('endScores');
+  container.innerHTML = '';
+
+  // Sort by score descending
+  const ranked = teams.map((name, i) => ({name, score: scores[i], color: TEAM_COLORS[i]}))
+    .sort((a, b) => b.score - a.score);
+
+  ranked.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'end-card' + (t.score === max ? ' winner' : '');
+    card.style.color = t.color;
+    card.innerHTML = `<div class="end-name">${t.name}</div>${t.score}`;
+    container.appendChild(card);
+  });
+}
+
+// ════════════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════════════
+function restartGame() {
+  document.getElementById('setup').style.display    = 'block';
+  document.getElementById('game').style.display     = 'none';
+  document.getElementById('endScreen').style.display = 'none';
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+</script>
+</body>
+</html>
