@@ -243,12 +243,14 @@
       text-decoration: none;
       color: var(--text);
       transition: all 0.18s;
+      overflow: hidden;
     }
     .game-link:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.14); }
 
     .gl-icon { font-size: 1.1rem; flex-shrink: 0; }
-    .gl-label { flex: 1; font-size: 0.83rem; font-weight: 600; }
-    .gl-type { font-size: 0.67rem; color: var(--muted); white-space: nowrap; }
+    .gl-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+    .gl-label { font-size: 0.83rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .gl-type  { font-size: 0.67rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .content-tag {
       display: inline-flex;
@@ -1367,18 +1369,24 @@
           <div class="unit-games">
             <a href="gangster-lineup/index.html" class="game-link">
               <span class="gl-icon">🔫</span>
-              <span class="gl-label">Gangster Lineup</span>
-              <span class="gl-type">Quiz</span>
+              <span class="gl-text">
+                <span class="gl-label">Gangster Lineup</span>
+                <span class="gl-type">Quiz</span>
+              </span>
             </a>
             <a href="passive-or-active/index.html" class="game-link">
               <span class="gl-icon">⚖️</span>
-              <span class="gl-label">Passive or Active?</span>
-              <span class="gl-type">Grammar</span>
+              <span class="gl-text">
+                <span class="gl-label">Passive or Active?</span>
+                <span class="gl-type">Grammar</span>
+              </span>
             </a>
             <a href="gangsters-vocab/index.html" class="game-link">
               <span class="gl-icon">📖</span>
-              <span class="gl-label">Gangsters Vocab</span>
-              <span class="gl-type">Matching</span>
+              <span class="gl-text">
+                <span class="gl-label">Gangsters Vocab</span>
+                <span class="gl-type">Matching</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="5" data-words-unit="1"></div>
@@ -1493,8 +1501,10 @@
           <div class="unit-games">
             <a href="danny-adventure/index.html" class="game-link">
               <span class="gl-icon">📖</span>
-              <span class="gl-label">Danny &amp; Dad's Secret</span>
-              <span class="gl-type">Adventure</span>
+              <span class="gl-text">
+                <span class="gl-label">Danny &amp; Dad's Secret</span>
+                <span class="gl-type">Adventure</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="7"></div>
@@ -1516,8 +1526,10 @@
           <div class="unit-games">
             <a href="detective-builder/index.html" class="game-link">
               <span class="gl-icon">🕵️</span>
-              <span class="gl-label">Build Your Detective</span>
-              <span class="gl-type">L2 · Show don't tell</span>
+              <span class="gl-text">
+                <span class="gl-label">Build Your Detective</span>
+                <span class="gl-type">L2 · Show don't tell</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="5" data-words-unit="8"></div>
@@ -1549,13 +1561,17 @@
           <div class="unit-games">
             <a href="crack-the-case/index.html" class="game-link">
               <span class="gl-icon">🕵️</span>
-              <span class="gl-label">Crack the Case</span>
-              <span class="gl-type">All lessons · Clue reveal</span>
+              <span class="gl-text">
+                <span class="gl-label">Crack the Case</span>
+                <span class="gl-type">All lessons · Clue reveal</span>
+              </span>
             </a>
             <a href="suspect-sorter/index.html" class="game-link">
               <span class="gl-icon">🗂️</span>
-              <span class="gl-label">Suspect Sorter</span>
-              <span class="gl-type">L2–L3 · Drag &amp; drop evidence</span>
+              <span class="gl-text">
+                <span class="gl-label">Suspect Sorter</span>
+                <span class="gl-type">L2–L3 · Drag &amp; drop evidence</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="6" data-words-unit="1"></div>
@@ -1579,13 +1595,17 @@
           <div class="unit-games">
             <a href="cutting-room/index.html" class="game-link">
               <span class="gl-icon">✂️</span>
-              <span class="gl-label">The Cutting Room</span>
-              <span class="gl-type">L1–L3 · Vocab match</span>
+              <span class="gl-text">
+                <span class="gl-label">The Cutting Room</span>
+                <span class="gl-type">L1–L3 · Vocab match</span>
+              </span>
             </a>
             <a href="direct-cut/index.html" class="game-link">
               <span class="gl-icon">🎥</span>
-              <span class="gl-label">Direct Cut</span>
-              <span class="gl-type">L2–L3 · Reported Speech</span>
+              <span class="gl-text">
+                <span class="gl-label">Direct Cut</span>
+                <span class="gl-type">L2–L3 · Reported Speech</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="6" data-words-unit="2"></div>
@@ -1609,13 +1629,17 @@
           <div class="unit-games">
             <a href="who-said-it/index.html" class="game-link">
               <span class="gl-icon">🗣️</span>
-              <span class="gl-label">Who Said It?</span>
-              <span class="gl-type">All lessons · Quote quiz</span>
+              <span class="gl-text">
+                <span class="gl-label">Who Said It?</span>
+                <span class="gl-type">All lessons · Quote quiz</span>
+              </span>
             </a>
             <a href="fix-phrasal-verb/index.html" class="game-link">
               <span class="gl-icon">🔧</span>
-              <span class="gl-label">Fix the Phrasal Verb</span>
-              <span class="gl-type">L1–L2 · Error correction</span>
+              <span class="gl-text">
+                <span class="gl-label">Fix the Phrasal Verb</span>
+                <span class="gl-type">L1–L2 · Error correction</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="6" data-words-unit="3"></div>
@@ -1639,18 +1663,24 @@
           <div class="unit-games">
             <a href="sense-sorter/index.html" class="game-link">
               <span class="gl-icon">👁️</span>
-              <span class="gl-label">Sense Sorter</span>
-              <span class="gl-type">L2 · Scotland · Five senses</span>
+              <span class="gl-text">
+                <span class="gl-label">Sense Sorter</span>
+                <span class="gl-type">L2 · Scotland · Five senses</span>
+              </span>
             </a>
             <a href="viewpoint-sorter/index.html" class="game-link">
               <span class="gl-icon">✏️</span>
-              <span class="gl-label">Viewpoint Sorter</span>
-              <span class="gl-type">L3 · Wales · Writer A vs B</span>
+              <span class="gl-text">
+                <span class="gl-label">Viewpoint Sorter</span>
+                <span class="gl-type">L3 · Wales · Writer A vs B</span>
+              </span>
             </a>
             <a href="emphasis-builder/index.html" class="game-link">
               <span class="gl-icon">💥</span>
-              <span class="gl-label">Emphasis Builder</span>
-              <span class="gl-type">L4 · N. Ireland · Cleft &amp; Inversion</span>
+              <span class="gl-text">
+                <span class="gl-label">Emphasis Builder</span>
+                <span class="gl-type">L4 · N. Ireland · Cleft &amp; Inversion</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="6" data-words-unit="4"></div>
@@ -1672,13 +1702,17 @@
           <div class="unit-games">
             <a href="history-of-language/index.html" class="game-link">
               <span class="gl-icon">🏛️</span>
-              <span class="gl-label">History of Language</span>
-              <span class="gl-type">Jeopardy Quiz</span>
+              <span class="gl-text">
+                <span class="gl-label">History of Language</span>
+                <span class="gl-type">Jeopardy Quiz</span>
+              </span>
             </a>
             <a href="language-sorter/index.html" class="game-link">
               <span class="gl-icon">⚡</span>
-              <span class="gl-label">Language Sorter</span>
-              <span class="gl-type">Quickfire</span>
+              <span class="gl-text">
+                <span class="gl-label">Language Sorter</span>
+                <span class="gl-type">Quickfire</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row">
@@ -1699,8 +1733,10 @@
           <div class="unit-games">
             <a href="curse-story-builder/index.html" class="game-link">
               <span class="gl-icon">🕯️</span>
-              <span class="gl-label">Curse Story Builder</span>
-              <span class="gl-type">L2 · 3rd Conditional</span>
+              <span class="gl-text">
+                <span class="gl-label">Curse Story Builder</span>
+                <span class="gl-type">L2 · 3rd Conditional</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="6" data-words-unit="6"></div>
@@ -1741,13 +1777,17 @@
           <div class="unit-games">
             <a href="slogan-matcher/index.html" class="game-link">
               <span class="gl-icon">💬</span>
-              <span class="gl-label">Slogan Matcher</span>
-              <span class="gl-type">L2 · Brands &amp; Slogans</span>
+              <span class="gl-text">
+                <span class="gl-label">Slogan Matcher</span>
+                <span class="gl-type">L2 · Brands &amp; Slogans</span>
+              </span>
             </a>
             <a href="ad-techniques/index.html" class="game-link">
               <span class="gl-icon">📢</span>
-              <span class="gl-label">Ad Techniques Spotter</span>
-              <span class="gl-type">L3 · Persuasive Techniques</span>
+              <span class="gl-text">
+                <span class="gl-label">Ad Techniques Spotter</span>
+                <span class="gl-type">L3 · Persuasive Techniques</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-sentences-level="6" data-sentences-unit="8"></div>
@@ -1781,13 +1821,17 @@
           <div class="unit-games">
             <a href="sentence-type-sorter/index.html" class="game-link">
               <span class="gl-icon">⚡</span>
-              <span class="gl-label">Sentence Type Sorter</span>
-              <span class="gl-type">Simple · Compound · Complex · Compound-Complex</span>
+              <span class="gl-text">
+                <span class="gl-label">Sentence Type Sorter</span>
+                <span class="gl-type">Simple · Compound · Complex · Compound-Complex</span>
+              </span>
             </a>
             <a href="text-sorter/index.html" class="game-link">
               <span class="gl-icon">📝</span>
-              <span class="gl-label">Text Sorter</span>
-              <span class="gl-type">Formal vs Informal register</span>
+              <span class="gl-text">
+                <span class="gl-label">Text Sorter</span>
+                <span class="gl-type">Formal vs Informal register</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
@@ -1811,13 +1855,17 @@
           <div class="unit-games">
             <a href="direct-speech-fixer/index.html" class="game-link">
               <span class="gl-icon">🔧</span>
-              <span class="gl-label">Direct Speech Fixer</span>
-              <span class="gl-type">Spot &amp; fix punctuation errors</span>
+              <span class="gl-text">
+                <span class="gl-label">Direct Speech Fixer</span>
+                <span class="gl-type">Spot &amp; fix punctuation errors</span>
+              </span>
             </a>
             <a href="text-sorter/index.html" class="game-link">
               <span class="gl-icon">📝</span>
-              <span class="gl-label">Text Sorter</span>
-              <span class="gl-type">Formal vs Informal register</span>
+              <span class="gl-text">
+                <span class="gl-label">Text Sorter</span>
+                <span class="gl-type">Formal vs Informal register</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
@@ -1841,13 +1889,17 @@
           <div class="unit-games">
             <a href="direct-cut/index.html" class="game-link">
               <span class="gl-icon">🎬</span>
-              <span class="gl-label">Direct Cut — At the Movies</span>
-              <span class="gl-type">Film &amp; Fame · Direct speech</span>
+              <span class="gl-text">
+                <span class="gl-label">Direct Cut — At the Movies</span>
+                <span class="gl-type">Film &amp; Fame · Direct speech</span>
+              </span>
             </a>
             <a href="direct-speech-fixer/index.html" class="game-link">
               <span class="gl-icon">🔧</span>
-              <span class="gl-label">Direct Speech Fixer</span>
-              <span class="gl-type">Spot &amp; fix punctuation errors</span>
+              <span class="gl-text">
+                <span class="gl-label">Direct Speech Fixer</span>
+                <span class="gl-type">Spot &amp; fix punctuation errors</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
@@ -1907,18 +1959,24 @@
           <div class="unit-games">
             <a href="metaphor-machine/index.html" class="game-link">
               <span class="gl-icon">🌀</span>
-              <span class="gl-label">Metaphor Machine</span>
-              <span class="gl-type">Literal vs metaphorical · Symbols</span>
+              <span class="gl-text">
+                <span class="gl-label">Metaphor Machine</span>
+                <span class="gl-type">Literal vs metaphorical · Symbols</span>
+              </span>
             </a>
             <a href="figure-factory/index.html" class="game-link">
               <span class="gl-icon">🏭</span>
-              <span class="gl-label">Figure Factory</span>
-              <span class="gl-type">Figures of speech · Poetry devices</span>
+              <span class="gl-text">
+                <span class="gl-label">Figure Factory</span>
+                <span class="gl-type">Figures of speech · Poetry devices</span>
+              </span>
             </a>
             <a href="quote-sorter/index.html" class="game-link">
               <span class="gl-icon">💬</span>
-              <span class="gl-label">Quote Sorter</span>
-              <span class="gl-type">Match quotes to themes &amp; tone</span>
+              <span class="gl-text">
+                <span class="gl-label">Quote Sorter</span>
+                <span class="gl-type">Match quotes to themes &amp; tone</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
@@ -1942,18 +2000,24 @@
           <div class="unit-games">
             <a href="persuasive-techniques/index.html" class="game-link">
               <span class="gl-icon">🎯</span>
-              <span class="gl-label">Persuasive Techniques</span>
-              <span class="gl-type">Identify &amp; classify persuasion</span>
+              <span class="gl-text">
+                <span class="gl-label">Persuasive Techniques</span>
+                <span class="gl-type">Identify &amp; classify persuasion</span>
+              </span>
             </a>
             <a href="persuasive-technique-spotter/index.html" class="game-link">
               <span class="gl-icon">🔍</span>
-              <span class="gl-label">Persuasive Technique Spotter</span>
-              <span class="gl-type">Spot techniques in context</span>
+              <span class="gl-text">
+                <span class="gl-label">Persuasive Technique Spotter</span>
+                <span class="gl-type">Spot techniques in context</span>
+              </span>
             </a>
             <a href="viewpoint-sorter/index.html" class="game-link">
               <span class="gl-icon">👀</span>
-              <span class="gl-label">Viewpoint Sorter</span>
-              <span class="gl-type">Narrative perspective · Flashback</span>
+              <span class="gl-text">
+                <span class="gl-label">Viewpoint Sorter</span>
+                <span class="gl-type">Narrative perspective · Flashback</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
@@ -1977,13 +2041,17 @@
           <div class="unit-games">
             <a href="imagery-classifier/index.html" class="game-link">
               <span class="gl-icon">👁️</span>
-              <span class="gl-label">Imagery Classifier</span>
-              <span class="gl-type">Visual · Auditory · Olfactory · Tactile</span>
+              <span class="gl-text">
+                <span class="gl-label">Imagery Classifier</span>
+                <span class="gl-type">Visual · Auditory · Olfactory · Tactile</span>
+              </span>
             </a>
             <a href="sense-sorter/index.html" class="game-link">
               <span class="gl-icon">🌿</span>
-              <span class="gl-label">Sense Sorter</span>
-              <span class="gl-type">Sensory description sorting</span>
+              <span class="gl-text">
+                <span class="gl-label">Sense Sorter</span>
+                <span class="gl-type">Sensory description sorting</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
@@ -2007,13 +2075,17 @@
           <div class="unit-games">
             <a href="antagonist-decoder/index.html" class="game-link">
               <span class="gl-icon">🦹</span>
-              <span class="gl-label">Antagonist Decoder</span>
-              <span class="gl-type">Villain techniques · Pathetic fallacy</span>
+              <span class="gl-text">
+                <span class="gl-label">Antagonist Decoder</span>
+                <span class="gl-type">Villain techniques · Pathetic fallacy</span>
+              </span>
             </a>
             <a href="figure-factory/index.html" class="game-link">
               <span class="gl-icon">🏭</span>
-              <span class="gl-label">Figure Factory</span>
-              <span class="gl-type">Extended metaphor · Figurative language</span>
+              <span class="gl-text">
+                <span class="gl-label">Figure Factory</span>
+                <span class="gl-type">Extended metaphor · Figurative language</span>
+              </span>
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
@@ -2042,13 +2114,17 @@
           <div class="unit-games">
             <a href="imagery-classifier/index.html" class="game-link">
               <span class="gl-icon">🌅</span>
-              <span class="gl-label">Imagery Classifier</span>
-              <span class="gl-type">Visual · Auditory · Olfactory · Tactile</span>
+              <span class="gl-text">
+                <span class="gl-label">Imagery Classifier</span>
+                <span class="gl-type">Visual · Auditory · Olfactory · Tactile</span>
+              </span>
             </a>
             <a href="figure-factory/index.html" class="game-link">
               <span class="gl-icon">🏭</span>
-              <span class="gl-label">Figure Factory</span>
-              <span class="gl-type">Simile · Personification · Figurative language</span>
+              <span class="gl-text">
+                <span class="gl-label">Figure Factory</span>
+                <span class="gl-type">Simile · Personification · Figurative language</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="1"></div>
@@ -2072,13 +2148,17 @@
           <div class="unit-games">
             <a href="direct-speech-fixer/index.html" class="game-link">
               <span class="gl-icon">💬</span>
-              <span class="gl-label">Direct Speech Fixer</span>
-              <span class="gl-type">Dialogue punctuation · Speech marks</span>
+              <span class="gl-text">
+                <span class="gl-label">Direct Speech Fixer</span>
+                <span class="gl-type">Dialogue punctuation · Speech marks</span>
+              </span>
             </a>
             <a href="pronoun-sorter/index.html" class="game-link">
               <span class="gl-icon">🔤</span>
-              <span class="gl-label">Pronoun Sorter</span>
-              <span class="gl-type">Subject · Object · Possessive</span>
+              <span class="gl-text">
+                <span class="gl-label">Pronoun Sorter</span>
+                <span class="gl-type">Subject · Object · Possessive</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="2"></div>
@@ -2102,8 +2182,10 @@
           <div class="unit-games">
             <a href="text-sorter/index.html" class="game-link">
               <span class="gl-icon">📰</span>
-              <span class="gl-label">Text Sorter</span>
-              <span class="gl-type">L1 · Formal vs Informal</span>
+              <span class="gl-text">
+                <span class="gl-label">Text Sorter</span>
+                <span class="gl-type">L1 · Formal vs Informal</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="3"></div>
@@ -2127,13 +2209,17 @@
           <div class="unit-games">
             <a href="persuasive-technique-spotter/index.html" class="game-link">
               <span class="gl-icon">🎯</span>
-              <span class="gl-label">Technique Spotter</span>
-              <span class="gl-type">Identify persuasive techniques</span>
+              <span class="gl-text">
+                <span class="gl-label">Technique Spotter</span>
+                <span class="gl-type">Identify persuasive techniques</span>
+              </span>
             </a>
             <a href="viewpoint-sorter/index.html" class="game-link">
               <span class="gl-icon">📰</span>
-              <span class="gl-label">Viewpoint Sorter</span>
-              <span class="gl-type">Two writers · One topic · Contrasting views</span>
+              <span class="gl-text">
+                <span class="gl-label">Viewpoint Sorter</span>
+                <span class="gl-type">Two writers · One topic · Contrasting views</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="4"></div>
@@ -2157,13 +2243,17 @@
           <div class="unit-games">
             <a href="persuasive-technique-spotter/index.html" class="game-link">
               <span class="gl-icon">🎯</span>
-              <span class="gl-label">Technique Spotter</span>
-              <span class="gl-type">Bias · Rhetoric · Counter-argument</span>
+              <span class="gl-text">
+                <span class="gl-label">Technique Spotter</span>
+                <span class="gl-type">Bias · Rhetoric · Counter-argument</span>
+              </span>
             </a>
             <a href="viewpoint-sorter/index.html" class="game-link">
               <span class="gl-icon">📰</span>
-              <span class="gl-label">Viewpoint Sorter</span>
-              <span class="gl-type">Balanced argument · Two perspectives</span>
+              <span class="gl-text">
+                <span class="gl-label">Viewpoint Sorter</span>
+                <span class="gl-type">Balanced argument · Two perspectives</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="5"></div>
@@ -2187,13 +2277,17 @@
           <div class="unit-games">
             <a href="metaphor-machine/index.html" class="game-link">
               <span class="gl-icon">⚙️</span>
-              <span class="gl-label">Metaphor Machine</span>
-              <span class="gl-type">Extended metaphor · Figurative language</span>
+              <span class="gl-text">
+                <span class="gl-label">Metaphor Machine</span>
+                <span class="gl-type">Extended metaphor · Figurative language</span>
+              </span>
             </a>
             <a href="figure-factory/index.html" class="game-link">
               <span class="gl-icon">🏭</span>
-              <span class="gl-label">Figure Factory</span>
-              <span class="gl-type">Build and analyse figurative language</span>
+              <span class="gl-text">
+                <span class="gl-label">Figure Factory</span>
+                <span class="gl-type">Build and analyse figurative language</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="6"></div>
@@ -2217,13 +2311,17 @@
           <div class="unit-games">
             <a href="active-passive-plantation/index.html" class="game-link">
               <span class="gl-icon">⚖️</span>
-              <span class="gl-label">Active or Passive?</span>
-              <span class="gl-type">The Plantation · Identify verb voice</span>
+              <span class="gl-text">
+                <span class="gl-label">Active or Passive?</span>
+                <span class="gl-type">The Plantation · Identify verb voice</span>
+              </span>
             </a>
             <a href="news-structure-builder/index.html" class="game-link">
               <span class="gl-icon">📰</span>
-              <span class="gl-label">News Structure Builder</span>
-              <span class="gl-type">Headline · Lead · News report layout</span>
+              <span class="gl-text">
+                <span class="gl-label">News Structure Builder</span>
+                <span class="gl-type">Headline · Lead · News report layout</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="7"></div>
@@ -2247,18 +2345,24 @@
           <div class="unit-games">
             <a href="adverb-challenge/index.html" class="game-link">
               <span class="gl-icon">⚡</span>
-              <span class="gl-label">Adverb Challenge</span>
-              <span class="gl-type">L2–L3 · Form &amp; position</span>
+              <span class="gl-text">
+                <span class="gl-label">Adverb Challenge</span>
+                <span class="gl-type">L2–L3 · Form &amp; position</span>
+              </span>
             </a>
             <a href="news-structure-builder/index.html" class="game-link">
               <span class="gl-icon">📰</span>
-              <span class="gl-label">News Structure Builder</span>
-              <span class="gl-type">L4 · Order &amp; label</span>
+              <span class="gl-text">
+                <span class="gl-label">News Structure Builder</span>
+                <span class="gl-type">L4 · Order &amp; label</span>
+              </span>
             </a>
             <a href="persuasive-techniques/index.html" class="game-link">
               <span class="gl-icon">🎯</span>
-              <span class="gl-label">Persuasive Techniques</span>
-              <span class="gl-type">L5 · Drag &amp; identify</span>
+              <span class="gl-text">
+                <span class="gl-label">Persuasive Techniques</span>
+                <span class="gl-type">L5 · Drag &amp; identify</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="8"></div>
@@ -2282,13 +2386,17 @@
           <div class="unit-games">
             <a href="metaphor-machine/index.html" class="game-link">
               <span class="gl-icon">⚙️</span>
-              <span class="gl-label">Metaphor Machine</span>
-              <span class="gl-type">Extended metaphor · Poetry comparison</span>
+              <span class="gl-text">
+                <span class="gl-label">Metaphor Machine</span>
+                <span class="gl-type">Extended metaphor · Poetry comparison</span>
+              </span>
             </a>
             <a href="quote-sorter/index.html" class="game-link">
               <span class="gl-icon">💬</span>
-              <span class="gl-label">Quote Sorter</span>
-              <span class="gl-type">Analyse endings · Match technique to effect</span>
+              <span class="gl-text">
+                <span class="gl-label">Quote Sorter</span>
+                <span class="gl-type">Analyse endings · Match technique to effect</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="8" data-words-unit="9"></div>
@@ -2320,13 +2428,17 @@
           <div class="unit-games">
             <a href="text-sorter/index.html" class="game-link">
               <span class="gl-icon">📰</span>
-              <span class="gl-label">Text Sorter</span>
-              <span class="gl-type">Formal vs informal · Travel writing</span>
+              <span class="gl-text">
+                <span class="gl-label">Text Sorter</span>
+                <span class="gl-type">Formal vs informal · Travel writing</span>
+              </span>
             </a>
             <a href="quote-sorter/index.html" class="game-link">
               <span class="gl-icon">💬</span>
-              <span class="gl-label">Quote Sorter</span>
-              <span class="gl-type">Language choices · Reader response</span>
+              <span class="gl-text">
+                <span class="gl-label">Quote Sorter</span>
+                <span class="gl-type">Language choices · Reader response</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="1"></div>
@@ -2350,13 +2462,17 @@
           <div class="unit-games">
             <a href="sentence-type-sorter/index.html" class="game-link">
               <span class="gl-icon">⚡</span>
-              <span class="gl-label">Sentence Type Sorter</span>
-              <span class="gl-type">Simple · Compound · Complex · Variety</span>
+              <span class="gl-text">
+                <span class="gl-label">Sentence Type Sorter</span>
+                <span class="gl-type">Simple · Compound · Complex · Variety</span>
+              </span>
             </a>
             <a href="crack-the-case/index.html" class="game-link">
               <span class="gl-icon">🔍</span>
-              <span class="gl-label">Crack the Case</span>
-              <span class="gl-type">Detective fiction · Unsolved mysteries</span>
+              <span class="gl-text">
+                <span class="gl-label">Crack the Case</span>
+                <span class="gl-type">Detective fiction · Unsolved mysteries</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="2"></div>
@@ -2380,13 +2496,17 @@
           <div class="unit-games">
             <a href="crack-the-case/index.html" class="game-link">
               <span class="gl-icon">🔍</span>
-              <span class="gl-label">Crack the Case</span>
-              <span class="gl-type">Sherlock Holmes · Victorian mystery</span>
+              <span class="gl-text">
+                <span class="gl-label">Crack the Case</span>
+                <span class="gl-type">Sherlock Holmes · Victorian mystery</span>
+              </span>
             </a>
             <a href="sense-sorter/index.html" class="game-link">
               <span class="gl-icon">👂</span>
-              <span class="gl-label">Sense Sorter</span>
-              <span class="gl-type">Aural · Tactile · Atmospheric imagery</span>
+              <span class="gl-text">
+                <span class="gl-label">Sense Sorter</span>
+                <span class="gl-type">Aural · Tactile · Atmospheric imagery</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="3"></div>
@@ -2410,13 +2530,17 @@
           <div class="unit-games">
             <a href="viewpoint-sorter/index.html" class="game-link">
               <span class="gl-icon">📰</span>
-              <span class="gl-label">Viewpoint Sorter</span>
-              <span class="gl-type">Bias · Persuasive speech · Two perspectives</span>
+              <span class="gl-text">
+                <span class="gl-label">Viewpoint Sorter</span>
+                <span class="gl-type">Bias · Persuasive speech · Two perspectives</span>
+              </span>
             </a>
             <a href="persuasive-technique-spotter/index.html" class="game-link">
               <span class="gl-icon">🎯</span>
-              <span class="gl-label">Technique Spotter</span>
-              <span class="gl-type">Identify persuasive techniques</span>
+              <span class="gl-text">
+                <span class="gl-label">Technique Spotter</span>
+                <span class="gl-type">Identify persuasive techniques</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="4"></div>
@@ -2440,8 +2564,10 @@
           <div class="unit-games">
             <a href="adverb-challenge/index.html" class="game-link">
               <span class="gl-icon">⚡</span>
-              <span class="gl-label">Adverb Challenge</span>
-              <span class="gl-type">Adverbs of degree · Form &amp; position</span>
+              <span class="gl-text">
+                <span class="gl-label">Adverb Challenge</span>
+                <span class="gl-type">Adverbs of degree · Form &amp; position</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="5"></div>
@@ -2465,13 +2591,17 @@
           <div class="unit-games">
             <a href="sense-sorter/index.html" class="game-link">
               <span class="gl-icon">🌅</span>
-              <span class="gl-label">Sense Sorter</span>
-              <span class="gl-type">Sensory imagery · Pastoral · Pathetic fallacy</span>
+              <span class="gl-text">
+                <span class="gl-label">Sense Sorter</span>
+                <span class="gl-type">Sensory imagery · Pastoral · Pathetic fallacy</span>
+              </span>
             </a>
             <a href="imagery-classifier/index.html" class="game-link">
               <span class="gl-icon">👁️</span>
-              <span class="gl-label">Imagery Classifier</span>
-              <span class="gl-type">Visual · Auditory · Olfactory · Tactile</span>
+              <span class="gl-text">
+                <span class="gl-label">Imagery Classifier</span>
+                <span class="gl-type">Visual · Auditory · Olfactory · Tactile</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="6"></div>
@@ -2495,13 +2625,17 @@
           <div class="unit-games">
             <a href="narrative-technique-spotter/index.html" class="game-link">
               <span class="gl-icon">🗺️</span>
-              <span class="gl-label">Narrative Technique Spotter</span>
-              <span class="gl-type">Motif · Flashback · Foreshadowing · Anti-climax</span>
+              <span class="gl-text">
+                <span class="gl-label">Narrative Technique Spotter</span>
+                <span class="gl-type">Motif · Flashback · Foreshadowing · Anti-climax</span>
+              </span>
             </a>
             <a href="metaphor-machine/index.html" class="game-link">
               <span class="gl-icon">⚙️</span>
-              <span class="gl-label">Metaphor Machine</span>
-              <span class="gl-type">Symbol · Extended metaphor · Fantasy language</span>
+              <span class="gl-text">
+                <span class="gl-label">Metaphor Machine</span>
+                <span class="gl-type">Symbol · Extended metaphor · Fantasy language</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="7"></div>
@@ -2525,13 +2659,17 @@
           <div class="unit-games">
             <a href="quote-sorter/index.html" class="game-link">
               <span class="gl-icon">📖</span>
-              <span class="gl-label">Quote Sorter</span>
-              <span class="gl-type">Analyse language · Binti · Different Lives</span>
+              <span class="gl-text">
+                <span class="gl-label">Quote Sorter</span>
+                <span class="gl-type">Analyse language · Binti · Different Lives</span>
+              </span>
             </a>
             <a href="persuasive-technique-spotter/index.html" class="game-link">
               <span class="gl-icon">🎯</span>
-              <span class="gl-label">Technique Spotter</span>
-              <span class="gl-type">Persuasion · Pronoun effects · Emma Watson speech</span>
+              <span class="gl-text">
+                <span class="gl-label">Technique Spotter</span>
+                <span class="gl-type">Persuasion · Pronoun effects · Emma Watson speech</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="8"></div>
@@ -2555,13 +2693,17 @@
           <div class="unit-games">
             <a href="antagonist-decoder/index.html" class="game-link">
               <span class="gl-icon">🦹</span>
-              <span class="gl-label">Antagonist Decoder</span>
-              <span class="gl-type">Villain techniques · Macbeth · Menace</span>
+              <span class="gl-text">
+                <span class="gl-label">Antagonist Decoder</span>
+                <span class="gl-type">Villain techniques · Macbeth · Menace</span>
+              </span>
             </a>
             <a href="quote-sorter/index.html" class="game-link">
               <span class="gl-icon">💬</span>
-              <span class="gl-label">Quote Sorter</span>
-              <span class="gl-type">Sci-fi conventions · Twist endings</span>
+              <span class="gl-text">
+                <span class="gl-label">Quote Sorter</span>
+                <span class="gl-type">Sci-fi conventions · Twist endings</span>
+              </span>
             </a>
           </div>
           <div class="content-loaded" data-words-level="9" data-words-unit="9"></div>
