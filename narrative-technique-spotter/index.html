@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Narrative Technique Spotter — Year 9</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── Setup screen ───────────────────────────────────────────── */
+    #setup {
+      max-width: 580px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+    }
+    #setup h2 { font-size: 1.3rem; color: #a0e4cb; margin-bottom: 6px; font-weight: 700; }
+    #setup p  { font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+    .team-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .team-row input[type="text"] {
+      flex:1; background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.18); border-radius:8px;
+      color:#fff; font-size:0.95rem; padding:7px 12px;
+    }
+    .team-row .team-dot { width:18px; height:18px; border-radius:50%; flex-shrink:0; }
+    .setup-row { display:flex; gap:10px; justify-content:center; align-items:center; margin-bottom:20px; }
+    .setup-row label { font-size:0.88rem; color:rgba(255,255,255,0.7); }
+    .setup-row input[type="number"] {
+      width:64px; padding:6px 10px; background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.18); border-radius:8px;
+      color:#fff; font-size:0.95rem; text-align:center;
+    }
+    #startBtn {
+      background: linear-gradient(135deg,#00c9a7,#007a66);
+      border:none; color:#fff; font-size:1.1rem;
+      padding:13px 40px; border-radius:12px;
+      cursor:pointer; font-weight:800; margin-top:8px;
+      transition:filter 0.15s, transform 0.1s;
+    }
+    #startBtn:hover { filter:brightness(1.15); transform:translateY(-2px); }
+
+    /* ── Technique legend on setup ── */
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .legend-item {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+    }
+    .legend-item strong { display:block; margin-bottom:3px; font-size:0.85rem; }
+
+    /* ── Game screen ────────────────────────────────────────────── */
+    #game { display:none; }
+
+    .progress-bar {
+      display:flex; justify-content:center; align-items:center;
+      gap:12px; margin-bottom:10px; font-size:0.82rem;
+      color:rgba(255,255,255,0.5);
+    }
+    .progress-pips { display:flex; gap:5px; }
+    .pip { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.15); transition:background 0.3s; }
+    .pip.done   { background:#00c9a7; }
+    .pip.active { background:#f7b731; }
+
+    /* Passage display */
+    .passage-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin: 0 auto 20px;
+      max-width: 860px;
+      transition: border-color 0.4s, background 0.4s;
+    }
+    .passage-card.correct { border-color:#22c55e; background:rgba(34,197,94,0.07); }
+    .passage-card.wrong   { border-color:#ef4444; background:rgba(239,68,68,0.07); }
+
+    .passage-label {
+      font-size:0.74rem; text-transform:uppercase; letter-spacing:0.1em;
+      color:rgba(255,255,255,0.35); margin-bottom:14px; text-align:center;
+    }
+    .passage-text {
+      font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+      font-style: italic;
+      color: #f0e6d0;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .passage-text .key-word {
+      color: #f7b731;
+      font-style: normal;
+      font-weight: 700;
+    }
+    .explanation {
+      font-size: clamp(0.82rem, 1.8vw, 1rem);
+      color: #a0e4cb;
+      font-style: italic;
+      min-height: 1.4em;
+      text-align: center;
+      transition: opacity 0.3s;
+    }
+    .explanation.hidden { opacity:0; }
+
+    /* 5 category buttons */
+    .category-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 860px;
+      margin: 0 auto 20px;
+    }
+    @media(min-width:700px) {
+      .category-row { grid-template-columns: repeat(5, 1fr); }
+    }
+    @media(max-width:420px) {
+      .category-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    .cat-btn {
+      padding: 18px 10px;
+      border-radius: 13px;
+      font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+      font-weight: 800;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+      line-height: 1.25;
+    }
+    .cat-btn.motif       { background:rgba(167,139,250,0.15); border-color:rgba(167,139,250,0.4); color:#c4b5fd; }
+    .cat-btn.flashback   { background:rgba(96,165,250,0.15);  border-color:rgba(96,165,250,0.4);  color:#93c5fd; }
+    .cat-btn.foreshadowing{ background:rgba(251,146,60,0.15); border-color:rgba(251,146,60,0.4);  color:#fdba74; }
+    .cat-btn.anticlimax  { background:rgba(244,63,94,0.15);   border-color:rgba(244,63,94,0.4);   color:#fb7185; }
+    .cat-btn.symbol      { background:rgba(34,197,94,0.15);   border-color:rgba(34,197,94,0.4);   color:#86efac; }
+
+    .cat-btn:hover:not(:disabled) { filter:brightness(1.25); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+    .cat-btn:disabled { cursor:default; }
+    .cat-btn.revealed-correct { background:rgba(34,197,94,0.28); border-color:#22c55e; color:#fff; transform:scale(1.04); }
+    .cat-btn.revealed-wrong   { opacity:0.35; }
+
+    .cat-name    { display:block; font-size:1em; }
+    .cat-example { display:block; font-size:0.68em; font-weight:400; opacity:0.72; margin-top:3px; }
+
+    /* Score strip */
+    .score-strip { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:900px; margin:0 auto 10px; }
+    .score-card {
+      display:flex; flex-direction:column; align-items:center;
+      background:rgba(255,255,255,0.07); border:2px solid rgba(255,255,255,0.12);
+      border-radius:12px; padding:8px 18px; min-width:90px;
+      cursor:pointer; transition:all 0.18s; user-select:none;
+    }
+    .score-card:hover { border-color:rgba(247,183,49,0.6); background:rgba(247,183,49,0.1); }
+    .score-card:active { transform:scale(0.95); }
+    .score-card .sc-name  { font-size:0.78rem; font-weight:700; color:rgba(255,255,255,0.75); text-transform:uppercase; letter-spacing:0.06em; }
+    .score-card .sc-score { font-size:1.8rem; font-weight:900; line-height:1.1; }
+    .score-card .sc-hint  { font-size:0.62rem; color:rgba(255,255,255,0.3); margin-top:1px; }
+
+    @keyframes bump { 0%{transform:scale(1)} 40%{transform:scale(1.22)} 100%{transform:scale(1)} }
+    .score-card.bumped { animation:bump 0.3s ease; }
+
+    .next-bar { display:flex; justify-content:center; gap:12px; margin-top:4px; }
+    #nextBtn {
+      background:linear-gradient(135deg,#f7b731,#d97706);
+      border:none; color:#1a0f00; font-size:1rem;
+      padding:11px 36px; border-radius:10px;
+      cursor:pointer; font-weight:800;
+      transition:filter 0.15s, transform 0.1s; display:none;
+    }
+    #nextBtn:hover { filter:brightness(1.12); transform:translateY(-2px); }
+
+    #endScreen { display:none; text-align:center; padding:40px 20px; }
+    #endScreen h2 { font-size:2.2rem; font-weight:900; color:#f7b731; margin-bottom:24px; }
+    .end-scores { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:32px; }
+    .end-card { background:rgba(255,255,255,0.08); border-radius:16px; padding:18px 28px; font-size:2.4rem; font-weight:900; }
+    .end-card .end-name { font-size:0.85rem; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px; }
+    .end-card.winner { border:2px solid #f7b731; background:rgba(247,183,49,0.12); }
+
+    #flash { pointer-events:none; position:fixed; inset:0; z-index:999; opacity:0; transition:opacity 0.5s; }
+    #flash.show-correct { background:rgba(34,197,94,0.18); opacity:1; }
+    #flash.show-wrong   { background:rgba(239,68,68,0.15); opacity:1; }
+  </style>
+</head>
+<body>
+
+<div id="flash"></div>
+
+<!-- ═══ SETUP SCREEN ═══ -->
+<div id="setup">
+  <h2>🗺️ Narrative Technique Spotter</h2>
+  <p>Year 9 · Unit 7 — The Journey Within · Identify the narrative technique used</p>
+
+  <div class="legend">
+    <div class="legend-item" style="color:#c4b5fd;"><strong>🔁 MOTIF</strong> A repeated symbol or idea that develops meaning</div>
+    <div class="legend-item" style="color:#93c5fd;"><strong>⏮️ FLASHBACK</strong> The narrative jumps back in time</div>
+    <div class="legend-item" style="color:#fdba74;"><strong>⚡ FORESHADOWING</strong> Hints at what is yet to come</div>
+    <div class="legend-item" style="color:#fb7185;"><strong>😶 ANTI-CLIMAX</strong> A build-up that ends with disappointment or bathos</div>
+    <div class="legend-item" style="color:#86efac; grid-column:span 2;"><strong>🌳 SYMBOL</strong> An object, person or place that represents something larger</div>
+  </div>
+
+  <div class="setup-row">
+    <label>Number of teams:
+      <input type="number" id="teamCount" min="2" max="6" value="3">
+    </label>
+  </div>
+
+  <div id="teamInputs"></div>
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+</div>
+
+<!-- ═══ GAME SCREEN ═══ -->
+<div id="game">
+  <h1>Narrative Technique Spotter</h1>
+
+  <div class="controls">
+    <button onclick="location.href='../index.html'" id="home">🏠 Home</button>
+    <button onclick="toggleFullscreen()" id="fullscreen">⛶ Fullscreen</button>
+    <button onclick="restartGame()">↺ Restart</button>
+  </div>
+
+  <div class="progress-bar">
+    <span id="progressText">Question 1 / 15</span>
+    <div class="progress-pips" id="pips"></div>
+  </div>
+
+  <div class="passage-card" id="passageCard">
+    <div class="passage-label">Which narrative technique is used here?</div>
+    <div class="passage-text" id="passageText"></div>
+    <div class="explanation hidden" id="explanation"></div>
+  </div>
+
+  <div class="category-row" id="catRow">
+    <button class="cat-btn motif"        data-type="motif"        onclick="checkAnswer('motif')">
+      <span class="cat-name">🔁 MOTIF</span>
+      <span class="cat-example">Repeated image / idea</span>
+    </button>
+    <button class="cat-btn flashback"    data-type="flashback"    onclick="checkAnswer('flashback')">
+      <span class="cat-name">⏮️ FLASHBACK</span>
+      <span class="cat-example">Jump back in time</span>
+    </button>
+    <button class="cat-btn foreshadowing" data-type="foreshadowing" onclick="checkAnswer('foreshadowing')">
+      <span class="cat-name">⚡ FORESHADOWING</span>
+      <span class="cat-example">Hints at what's ahead</span>
+    </button>
+    <button class="cat-btn anticlimax"   data-type="anticlimax"   onclick="checkAnswer('anticlimax')">
+      <span class="cat-name">😶 ANTI-CLIMAX</span>
+      <span class="cat-example">Disappointing turn</span>
+    </button>
+    <button class="cat-btn symbol"       data-type="symbol"       onclick="checkAnswer('symbol')">
+      <span class="cat-name">🌳 SYMBOL</span>
+      <span class="cat-example">Object = bigger idea</span>
+    </button>
+  </div>
+
+  <div class="next-bar">
+    <button id="nextBtn" onclick="nextQuestion()">Next →</button>
+  </div>
+
+  <div class="score-strip" id="scoreStrip"></div>
+  <p style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:4px;">
+    👆 Tap a team card to award a point after the correct answer is revealed
+  </p>
+</div>
+
+<!-- ═══ END SCREEN ═══ -->
+<div id="endScreen">
+  <h2>🏆 Game Over!</h2>
+  <div class="end-scores" id="endScores"></div>
+  <button onclick="restartGame()" style="background:#f7b731;border:none;color:#1a0f00;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:800;cursor:pointer;">Play Again</button>
+  &nbsp;
+  <button onclick="location.href='../index.html'" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:700;cursor:pointer;">🏠 Home</button>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  PASSAGE BANK — Y9 Unit 7 · The Journey Within (fantasy)
+//  5 techniques: motif · flashback · foreshadowing · anticlimax · symbol
+// ════════════════════════════════════════════════════════
+const PASSAGES = [
+  {
+    text: 'The old tree stood at the edge of the village. Three chapters later, when Ava finally understood her place in the world, she returned to find the tree still waiting — its roots deeper, its branches wider.',
+    type: 'motif',
+    explanation: 'MOTIF — The tree recurs at key turning points in Ava\'s journey. Its growth mirrors hers. A motif is any repeated element that accumulates symbolic weight across a narrative.'
+  },
+  {
+    text: '"They will never choose you," the elder had told him, years before the ceremony, when Lothar was only a boy and did not understand what being chosen might cost.',
+    type: 'flashback',
+    explanation: 'FLASHBACK — The phrase "years before" and the past tense take us back in time. The narrator steps into Lothar\'s earlier memory to add context to the present-day story.'
+  },
+  {
+    text: 'She noticed that the candle in the window had gone out — and later, much later, she would understand that this was the first sign.',
+    type: 'foreshadowing',
+    explanation: 'FORESHADOWING — "She would understand... later" signals that this detail matters to future events. The reader is warned without being told what comes next. It creates a sense of inevitability.'
+  },
+  {
+    text: 'After three days of climbing, crossing rivers, and surviving the storm of the century, Ava finally reached the summit — only to find a note that said: "Gone for lunch. Back at three."',
+    type: 'anticlimax',
+    explanation: 'ANTI-CLIMAX — The dramatic build-up (three days of peril) collapses into bathos. The mundane note deflates all tension deliberately. Writers use anti-climax for comic effect or to subvert expectation.'
+  },
+  {
+    text: 'The bronze door did not merely open onto another corridor. It was a door to adulthood — to the world of consequences, of choices, of knowing that you cannot go back.',
+    type: 'symbol',
+    explanation: 'SYMBOL — The bronze door is not just a physical object; it represents the threshold of growing up. Unlike a motif, a symbol is often a single, concentrated image that carries a large abstract meaning.'
+  },
+  {
+    text: 'In his dream, Lothar was six years old again, standing at the edge of the forest while his mother called his name from across the field.',
+    type: 'flashback',
+    explanation: 'FLASHBACK — Dreams are a common device for flashback. The verb phrase "was six years old again" and "his mother called" tell us we have moved back to a childhood memory within the narrative timeline.'
+  },
+  {
+    text: 'Every time she crossed a threshold — the school gate, her grandmother\'s front door, the entrance to the ancient library — she felt the same pull, the same trembling in her fingers.',
+    type: 'motif',
+    explanation: 'MOTIF — The threshold appears again and again, associated with the same physical sensation. This repetition is deliberate: each crossing means something, and together they form a pattern of meaning.'
+  },
+  {
+    text: 'The crow landed on the windowsill every morning for a week. By the seventh morning, she no longer tried to scare it away.',
+    type: 'symbol',
+    explanation: 'SYMBOL — The crow is a traditional symbol of death, warning, or transformation. Its repeated presence and the protagonist\'s acceptance of it suggests something is changing, or something is coming.'
+  },
+  {
+    text: 'The forest grew darker as she walked deeper into it. Something was watching. Something always watched, in places like this — places where the old rules still held.',
+    type: 'foreshadowing',
+    explanation: 'FORESHADOWING — "Something was watching" and "places where the old rules still held" creates an ominous sense of threat without specifying it. The reader anticipates danger ahead.'
+  },
+  {
+    text: 'She had fought her way through the cursed labyrinth, solved the riddle of the stone giants, and survived the lake of no return. The final treasure? A small wooden box with a daisy painted on it.',
+    type: 'anticlimax',
+    explanation: 'ANTI-CLIMAX — The list of heroic deeds builds towering expectations. The "small wooden box with a daisy" is deliberately absurd. This bathos might be funny — or it might be making a point about the nature of quests and rewards.'
+  },
+  {
+    text: '"Remember this house," her father said, as they left for the last time. She was twelve. She did not know then that she would spend the next twenty years trying to find her way back to it.',
+    type: 'foreshadowing',
+    explanation: 'FORESHADOWING — "She did not know then" and "the next twenty years" alert us to a future we haven\'t seen yet. The narrator subtly reveals that this moment is a pivot point — without telling us the full story.'
+  },
+  {
+    text: 'The tree had been there for all of it: when her parents married under its branches, when she played there as a child, when her brother left and did not say goodbye.',
+    type: 'motif',
+    explanation: 'MOTIF — The tree is woven through three key family moments. Its persistence — being there for all of it — makes it a structural motif: the family\'s history is mapped onto it.'
+  },
+  {
+    text: 'Long ago, before the forest had been given its name, a girl had walked this same path. She had been afraid too. And, like all those who came before her, she had kept walking anyway.',
+    type: 'flashback',
+    explanation: 'FLASHBACK — "Long ago, before" moves us back through narrative time. This is a distant flashback, evoking a parallel story to the present-day heroine. It creates a sense of mythic repetition across generations.'
+  },
+  {
+    text: 'The seeds she planted that spring bloomed into flowers whose petals, though she had no way of knowing it yet, were the exact colour of the flag she would one day carry.',
+    type: 'foreshadowing',
+    explanation: 'FORESHADOWING — "Though she had no way of knowing it yet" is a classic foreshadowing marker. A detail in the present is loaded with future significance that only a reader — or the narrator — can appreciate.'
+  },
+  {
+    text: 'The bridge was made of a single stone. It looked like nothing — like something a child might step over without noticing. But every hero who had crossed it had felt it: the weight of what lay on the other side.',
+    type: 'symbol',
+    explanation: 'SYMBOL — The humble bridge (easily overlooked) symbolises the transition between two states of being. This contrast — small object, enormous meaning — is a key feature of symbolic writing. The bridge doesn\'t just connect two riverbanks; it connects two versions of the protagonist.'
+  }
+];
+
+const TEAM_COLORS = ['#00c9a7','#f7b731','#e74c3c','#a29bfe','#fd79a8','#74b9ff'];
+let teams = [], shuffled = [], current = 0, answered = false;
+
+function renderTeamInputs() {
+  const n = parseInt(document.getElementById('teamCount').value) || 3;
+  const box = document.getElementById('teamInputs');
+  box.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const color = TEAM_COLORS[i % TEAM_COLORS.length];
+    box.innerHTML += `
+      <div class="team-row">
+        <div class="team-dot" style="background:${color}"></div>
+        <input type="text" id="team${i}" placeholder="Team ${i+1} name" value="Team ${i+1}">
+      </div>`;
+  }
+}
+document.getElementById('teamCount').addEventListener('input', renderTeamInputs);
+renderTeamInputs();
+
+function startGame() {
+  const n = parseInt(document.getElementById('teamCount').value) || 3;
+  teams = [];
+  for (let i = 0; i < n; i++) {
+    const name = document.getElementById('team'+i).value.trim() || `Team ${i+1}`;
+    teams.push({ name, score: 0, color: TEAM_COLORS[i % TEAM_COLORS.length] });
+  }
+  shuffled = [...PASSAGES].sort(() => Math.random() - 0.5);
+  current = 0; answered = false;
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('game').style.display  = 'block';
+  buildPips();
+  buildScoreStrip();
+  renderQuestion();
+}
+
+function buildPips() {
+  document.getElementById('pips').innerHTML = shuffled.map((_,i) =>
+    `<div class="pip${i===0?' active':''}" id="pip${i}"></div>`
+  ).join('');
+}
+
+function buildScoreStrip() {
+  document.getElementById('scoreStrip').innerHTML = teams.map((t,i) => `
+    <div class="score-card" id="sc${i}" onclick="awardPoint(${i})" style="border-color:${t.color}44;">
+      <div class="sc-name" style="color:${t.color};">${t.name}</div>
+      <div class="sc-score" style="color:${t.color};" id="sc-val${i}">0</div>
+      <div class="sc-hint">tap to +1</div>
+    </div>`).join('');
+}
+
+function renderQuestion() {
+  const q = shuffled[current];
+  document.getElementById('progressText').textContent = `Question ${current+1} / ${shuffled.length}`;
+  document.querySelectorAll('.pip').forEach((p,i) => {
+    p.className = 'pip' + (i < current ? ' done' : i === current ? ' active' : '');
+  });
+  const card = document.getElementById('passageCard');
+  card.className = 'passage-card';
+  document.getElementById('passageText').innerHTML = q.text;
+  document.getElementById('explanation').className  = 'explanation hidden';
+  document.getElementById('explanation').textContent = '';
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.disabled  = false;
+    b.className = 'cat-btn ' + b.dataset.type;
+  });
+  document.getElementById('nextBtn').style.display = 'none';
+  answered = false;
+}
+
+function checkAnswer(chosen) {
+  if (answered) return;
+  answered = true;
+  const q = shuffled[current];
+  const correct = q.type;
+  document.querySelectorAll('.cat-btn').forEach(b => b.disabled = true);
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    if (b.dataset.type === correct) b.classList.add('revealed-correct');
+    else if (b.dataset.type === chosen && chosen !== correct) b.classList.add('revealed-wrong');
+  });
+  const card  = document.getElementById('passageCard');
+  const flash = document.getElementById('flash');
+  if (chosen === correct) {
+    card.classList.add('correct');
+    flash.className = 'show-correct';
+  } else {
+    card.classList.add('wrong');
+    flash.className = 'show-wrong';
+  }
+  setTimeout(() => { flash.className = ''; }, 700);
+  const exEl = document.getElementById('explanation');
+  exEl.textContent = q.explanation;
+  exEl.className   = 'explanation';
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= shuffled.length) showEnd();
+  else renderQuestion();
+}
+
+function awardPoint(i) {
+  teams[i].score++;
+  document.getElementById('sc-val'+i).textContent = teams[i].score;
+  const card = document.getElementById('sc'+i);
+  card.classList.remove('bumped');
+  void card.offsetWidth;
+  card.classList.add('bumped');
+}
+
+function showEnd() {
+  document.getElementById('game').style.display      = 'none';
+  document.getElementById('endScreen').style.display = 'block';
+  const maxScore = Math.max(...teams.map(t => t.score));
+  document.getElementById('endScores').innerHTML = teams.map(t => `
+    <div class="end-card${t.score === maxScore ? ' winner' : ''}">
+      <div class="end-name" style="color:${t.color};">${t.name}</div>
+      ${t.score}
+    </div>`).join('');
+}
+
+function restartGame() {
+  document.getElementById('endScreen').style.display = 'none';
+  document.getElementById('setup').style.display     = 'block';
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+</script>
+</body>
+</html>

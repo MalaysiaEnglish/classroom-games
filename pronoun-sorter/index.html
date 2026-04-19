@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pronoun Sorter — Year 8</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── Setup screen ───────────────────────────────────────────── */
+    #setup {
+      max-width: 560px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+    }
+    #setup h2 { font-size: 1.3rem; color: #a0e4cb; margin-bottom: 6px; font-weight: 700; }
+    #setup p  { font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+    .team-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .team-row input[type="text"] {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      padding: 7px 12px;
+    }
+    .team-row .team-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .setup-row { display:flex; gap:10px; justify-content:center; align-items:center; margin-bottom:20px; }
+    .setup-row label { font-size:0.88rem; color:rgba(255,255,255,0.7); }
+    .setup-row input[type="number"] {
+      width:64px; padding:6px 10px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:8px; color:#fff; font-size:0.95rem; text-align:center;
+    }
+    #startBtn {
+      background: linear-gradient(135deg,#00c9a7,#007a66);
+      border: none; color: #fff; font-size: 1.1rem;
+      padding: 13px 40px; border-radius: 12px;
+      cursor: pointer; font-weight: 800; margin-top: 8px;
+      transition: filter 0.15s, transform 0.1s;
+    }
+    #startBtn:hover { filter:brightness(1.15); transform:translateY(-2px); }
+
+    /* ── Game screen ────────────────────────────────────────────── */
+    #game { display:none; }
+
+    /* Progress bar */
+    .progress-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .progress-pips { display: flex; gap: 5px; }
+    .pip {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transition: background 0.3s;
+    }
+    .pip.done   { background: #00c9a7; }
+    .pip.active { background: #f7b731; }
+
+    /* Sentence display */
+    .sentence-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin: 0 auto 20px;
+      max-width: 860px;
+      text-align: center;
+      transition: border-color 0.4s, background 0.4s;
+    }
+    .sentence-card.correct { border-color: #22c55e; background: rgba(34,197,94,0.07); }
+    .sentence-card.wrong   { border-color: #ef4444; background: rgba(239,68,68,0.07); }
+
+    .sentence-text {
+      font-size: clamp(1.4rem, 3.5vw, 2.1rem);
+      font-weight: 600;
+      color: #f0e6d0;
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+    /* Highlight the pronoun in the sentence */
+    .sentence-text .highlight {
+      color: #f7b731;
+      background: rgba(247,183,49,0.15);
+      border-radius: 6px;
+      padding: 0 5px;
+      font-style: italic;
+    }
+    .explanation {
+      font-size: clamp(0.82rem, 1.8vw, 1rem);
+      color: #a0e4cb;
+      font-style: italic;
+      min-height: 1.4em;
+      transition: opacity 0.3s;
+    }
+    .explanation.hidden { opacity: 0; }
+
+    /* Category buttons — 3 columns */
+    .category-row {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+      max-width: 700px;
+      margin: 0 auto 20px;
+    }
+    @media(max-width:480px) {
+      .category-row { grid-template-columns: 1fr; }
+    }
+    .cat-btn {
+      padding: 22px 12px;
+      border-radius: 14px;
+      font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+      font-weight: 800;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      letter-spacing: 0.03em;
+      line-height: 1.25;
+    }
+    .cat-btn.subject    { background:rgba(96,165,250,0.15); border-color:rgba(96,165,250,0.4); color:#93c5fd; }
+    .cat-btn.object     { background:rgba(251,146,60,0.15); border-color:rgba(251,146,60,0.4); color:#fdba74; }
+    .cat-btn.possessive { background:rgba(167,139,250,0.15); border-color:rgba(167,139,250,0.4); color:#c4b5fd; }
+
+    .cat-btn:hover:not(:disabled) { filter:brightness(1.25); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+    .cat-btn:disabled { cursor: default; }
+    .cat-btn.revealed-correct { background:rgba(34,197,94,0.28); border-color:#22c55e; color:#fff; transform:scale(1.04); }
+    .cat-btn.revealed-wrong   { opacity: 0.35; }
+
+    .cat-name    { display:block; font-size:1em; }
+    .cat-example { display:block; font-size:0.7em; font-weight:400; opacity:0.75; margin-top:4px; }
+
+    /* Score strip */
+    .score-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto 10px;
+    }
+    .score-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255,255,255,0.07);
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 8px 18px;
+      min-width: 90px;
+      cursor: pointer;
+      transition: all 0.18s;
+      user-select: none;
+    }
+    .score-card:hover { border-color: rgba(247,183,49,0.6); background:rgba(247,183,49,0.1); }
+    .score-card:active { transform:scale(0.95); }
+    .score-card .sc-name  { font-size:0.78rem; font-weight:700; color:rgba(255,255,255,0.75); text-transform:uppercase; letter-spacing:0.06em; }
+    .score-card .sc-score { font-size:1.8rem; font-weight:900; line-height:1.1; }
+    .score-card .sc-hint  { font-size:0.62rem; color:rgba(255,255,255,0.3); margin-top:1px; }
+
+    @keyframes bump { 0%{transform:scale(1)} 40%{transform:scale(1.22)} 100%{transform:scale(1)} }
+    .score-card.bumped { animation: bump 0.3s ease; }
+
+    /* Next button */
+    .next-bar { display:flex; justify-content:center; gap:12px; margin-top:4px; }
+    #nextBtn {
+      background: linear-gradient(135deg,#f7b731,#d97706);
+      border:none; color:#1a0f00; font-size:1rem;
+      padding:11px 36px; border-radius:10px;
+      cursor:pointer; font-weight:800;
+      transition:filter 0.15s, transform 0.1s;
+      display:none;
+    }
+    #nextBtn:hover { filter:brightness(1.12); transform:translateY(-2px); }
+
+    /* End screen */
+    #endScreen { display:none; text-align:center; padding:40px 20px; }
+    #endScreen h2 { font-size:2.2rem; font-weight:900; color:#f7b731; margin-bottom:24px; }
+    .end-scores { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:32px; }
+    .end-card {
+      background:rgba(255,255,255,0.08);
+      border-radius:16px; padding:18px 28px;
+      font-size:2.4rem; font-weight:900;
+    }
+    .end-card .end-name { font-size:0.85rem; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px; }
+    .end-card.winner { border:2px solid #f7b731; background:rgba(247,183,49,0.12); }
+
+    /* Flash overlay */
+    #flash {
+      pointer-events:none;
+      position:fixed; inset:0; z-index:999;
+      opacity:0; transition:opacity 0.5s;
+    }
+    #flash.show-correct { background:rgba(34,197,94,0.18); opacity:1; }
+    #flash.show-wrong   { background:rgba(239,68,68,0.15); opacity:1; }
+  </style>
+</head>
+<body>
+
+<div id="flash"></div>
+
+<!-- ═══ SETUP SCREEN ═══ -->
+<div id="setup">
+  <h2>🔤 Pronoun Sorter</h2>
+  <p>Year 8 · Unit 2 — Grandmother's Song · Subject / Object / Possessive</p>
+
+  <div class="setup-row">
+    <label>Number of teams:
+      <input type="number" id="teamCount" min="2" max="6" value="3">
+    </label>
+  </div>
+
+  <div id="teamInputs"></div>
+
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+</div>
+
+<!-- ═══ GAME SCREEN ═══ -->
+<div id="game">
+  <h1>Pronoun Sorter</h1>
+
+  <div class="controls">
+    <button onclick="location.href='../index.html'" id="home">🏠 Home</button>
+    <button onclick="toggleFullscreen()" id="fullscreen">⛶ Fullscreen</button>
+    <button onclick="restartGame()">↺ Restart</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <span id="progressText">Question 1 / 15</span>
+    <div class="progress-pips" id="pips"></div>
+  </div>
+
+  <!-- Sentence card -->
+  <div class="sentence-card" id="sentenceCard">
+    <div class="sentence-text" id="sentenceText"></div>
+    <div class="explanation hidden" id="explanation"></div>
+  </div>
+
+  <!-- Category buttons -->
+  <div class="category-row" id="catRow">
+    <button class="cat-btn subject"    data-type="subject"    onclick="checkAnswer('subject')">
+      <span class="cat-name">SUBJECT</span>
+      <span class="cat-example">I · you · he · she · it · we · they</span>
+    </button>
+    <button class="cat-btn object"     data-type="object"     onclick="checkAnswer('object')">
+      <span class="cat-name">OBJECT</span>
+      <span class="cat-example">me · him · her · us · them</span>
+    </button>
+    <button class="cat-btn possessive" data-type="possessive" onclick="checkAnswer('possessive')">
+      <span class="cat-name">POSSESSIVE</span>
+      <span class="cat-example">my · his · her · our · their</span>
+    </button>
+  </div>
+
+  <!-- Next button -->
+  <div class="next-bar">
+    <button id="nextBtn" onclick="nextQuestion()">Next →</button>
+  </div>
+
+  <!-- Score strip -->
+  <div class="score-strip" id="scoreStrip"></div>
+  <p style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:4px;">
+    👆 Tap a team card to award a point after the correct answer is revealed
+  </p>
+</div>
+
+<!-- ═══ END SCREEN ═══ -->
+<div id="endScreen">
+  <h2>🏆 Game Over!</h2>
+  <div class="end-scores" id="endScores"></div>
+  <button onclick="restartGame()" style="background:#f7b731;border:none;color:#1a0f00;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:800;cursor:pointer;">Play Again</button>
+  &nbsp;
+  <button onclick="location.href='../index.html'" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:700;cursor:pointer;">🏠 Home</button>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  SENTENCE BANK — Y8 Unit 2 · Grandmother's Song theme
+//  Highlighted pronoun shown in gold; answer = pronoun type
+// ════════════════════════════════════════════════════════
+const SENTENCES = [
+  {
+    text: '<span class="highlight">She</span> called to Kofi from across the courtyard.',
+    type: 'subject',
+    explanation: 'SUBJECT pronoun — "She" is doing the calling. Subject pronouns perform the action of the verb.'
+  },
+  {
+    text: 'Mama gave <span class="highlight">him</span> a bowl of groundnut soup.',
+    type: 'object',
+    explanation: 'OBJECT pronoun — "him" receives the action (the giving). Object pronouns come after a verb or preposition.'
+  },
+  {
+    text: '<span class="highlight">Their</span> voices echoed through the village at dusk.',
+    type: 'possessive',
+    explanation: 'POSSESSIVE pronoun — "Their" shows that the voices belong to them. Possessive pronouns show ownership.'
+  },
+  {
+    text: '<span class="highlight">We</span> walked together to the market every morning.',
+    type: 'subject',
+    explanation: 'SUBJECT pronoun — "We" is doing the walking. Subject pronouns tell us who performs the verb.'
+  },
+  {
+    text: 'The old woman smiled at <span class="highlight">her</span> warmly.',
+    type: 'object',
+    explanation: 'OBJECT pronoun — "her" receives the action of smiling. It comes after the preposition "at".'
+  },
+  {
+    text: '<span class="highlight">My</span> grandmother taught me to weave.',
+    type: 'possessive',
+    explanation: 'POSSESSIVE pronoun — "My" tells us the grandmother belongs to (or is connected to) the speaker.'
+  },
+  {
+    text: '<span class="highlight">They</span> sang songs as the sun went down.',
+    type: 'subject',
+    explanation: 'SUBJECT pronoun — "They" is performing the action of singing.'
+  },
+  {
+    text: 'Kofi handed <span class="highlight">us</span> the water pots to carry.',
+    type: 'object',
+    explanation: 'OBJECT pronoun — "us" is the indirect object; Kofi did the handing, we received the pots.'
+  },
+  {
+    text: '<span class="highlight">His</span> laughter filled the small house.',
+    type: 'possessive',
+    explanation: 'POSSESSIVE pronoun — "His" tells us the laughter belongs to him. Possessive pronouns replace "belonging to him/her/them".'
+  },
+  {
+    text: '<span class="highlight">I</span> could hear the drums long before we arrived.',
+    type: 'subject',
+    explanation: 'SUBJECT pronoun — "I" is the one hearing. Always use "I" (not "me") as the subject of a verb.'
+  },
+  {
+    text: 'The village elder called <span class="highlight">them</span> to the fire.',
+    type: 'object',
+    explanation: 'OBJECT pronoun — "them" is the direct object. The elder did the calling; they were called.'
+  },
+  {
+    text: '<span class="highlight">Our</span> family had lived there for generations.',
+    type: 'possessive',
+    explanation: 'POSSESSIVE pronoun — "Our" shows the family belongs to or is shared by us. Possession can also mean belonging or relationship.'
+  },
+  {
+    text: '<span class="highlight">It</span> was the most beautiful sound she had ever heard.',
+    type: 'subject',
+    explanation: 'SUBJECT pronoun — "It" is the subject, performing the verb "was". "It" can stand in for a thing or an idea.'
+  },
+  {
+    text: 'No one had told <span class="highlight">me</span> about the ceremony.',
+    type: 'object',
+    explanation: 'OBJECT pronoun — "me" receives the action of telling. Never use "I" after a verb this way ("told I" is wrong).'
+  },
+  {
+    text: '<span class="highlight">Her</span> eyes lit up when she saw the children dancing.',
+    type: 'possessive',
+    explanation: 'POSSESSIVE pronoun — "Her" tells us whose eyes they are. Note: "her" can be possessive (Her eyes) OR object (Kofi called her) — here it comes before a noun, so it is possessive.'
+  }
+];
+
+// ════════════════════════════════════════════
+//  TEAM COLOURS
+// ════════════════════════════════════════════
+const TEAM_COLORS = ['#00c9a7','#f7b731','#e74c3c','#a29bfe','#fd79a8','#74b9ff'];
+
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
+let teams       = [];
+let shuffled    = [];
+let current     = 0;
+let answered    = false;
+
+// ════════════════════════════════════════════
+//  SETUP
+// ════════════════════════════════════════════
+function renderTeamInputs() {
+  const n = parseInt(document.getElementById('teamCount').value) || 3;
+  const box = document.getElementById('teamInputs');
+  box.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const color = TEAM_COLORS[i % TEAM_COLORS.length];
+    box.innerHTML += `
+      <div class="team-row">
+        <div class="team-dot" style="background:${color}"></div>
+        <input type="text" id="team${i}" placeholder="Team ${i+1} name" value="Team ${i+1}">
+      </div>`;
+  }
+}
+document.getElementById('teamCount').addEventListener('input', renderTeamInputs);
+renderTeamInputs();
+
+function startGame() {
+  const n = parseInt(document.getElementById('teamCount').value) || 3;
+  teams = [];
+  for (let i = 0; i < n; i++) {
+    const name = document.getElementById('team'+i).value.trim() || `Team ${i+1}`;
+    teams.push({ name, score: 0, color: TEAM_COLORS[i % TEAM_COLORS.length] });
+  }
+
+  // Shuffle sentences
+  shuffled = [...SENTENCES].sort(() => Math.random() - 0.5);
+  current = 0;
+  answered = false;
+
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('game').style.display  = 'block';
+
+  buildPips();
+  buildScoreStrip();
+  renderQuestion();
+}
+
+function buildPips() {
+  const container = document.getElementById('pips');
+  container.innerHTML = shuffled.map((_,i) =>
+    `<div class="pip${i===0?' active':''}" id="pip${i}"></div>`
+  ).join('');
+}
+
+function buildScoreStrip() {
+  document.getElementById('scoreStrip').innerHTML = teams.map((t,i) => `
+    <div class="score-card" id="sc${i}" onclick="awardPoint(${i})" style="border-color:${t.color}44;">
+      <div class="sc-name" style="color:${t.color};">${t.name}</div>
+      <div class="sc-score" style="color:${t.color};" id="sc-val${i}">0</div>
+      <div class="sc-hint">tap to +1</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════
+//  GAME LOGIC
+// ════════════════════════════════════════════
+function renderQuestion() {
+  const q = shuffled[current];
+  document.getElementById('progressText').textContent = `Question ${current+1} / ${shuffled.length}`;
+
+  // Update pips
+  document.querySelectorAll('.pip').forEach((p,i) => {
+    p.className = 'pip' + (i < current ? ' done' : i === current ? ' active' : '');
+  });
+
+  const card = document.getElementById('sentenceCard');
+  card.className = 'sentence-card';
+  document.getElementById('sentenceText').innerHTML = q.text;
+  document.getElementById('explanation').className  = 'explanation hidden';
+  document.getElementById('explanation').textContent = '';
+
+  // Reset buttons
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.disabled  = false;
+    b.className = 'cat-btn ' + b.dataset.type;
+  });
+
+  document.getElementById('nextBtn').style.display = 'none';
+  answered = false;
+}
+
+function checkAnswer(chosen) {
+  if (answered) return;
+  answered = true;
+
+  const q = shuffled[current];
+  const correct = q.type;
+
+  // Disable all buttons
+  document.querySelectorAll('.cat-btn').forEach(b => b.disabled = true);
+
+  // Flash + highlight correct/wrong
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    if (b.dataset.type === correct) b.classList.add('revealed-correct');
+    else if (b.dataset.type === chosen && chosen !== correct) b.classList.add('revealed-wrong');
+  });
+
+  const card = document.getElementById('sentenceCard');
+  const flash = document.getElementById('flash');
+  if (chosen === correct) {
+    card.classList.add('correct');
+    flash.className = 'show-correct';
+  } else {
+    card.classList.add('wrong');
+    flash.className = 'show-wrong';
+  }
+  setTimeout(() => { flash.className = ''; }, 700);
+
+  // Show explanation
+  const exEl = document.getElementById('explanation');
+  exEl.textContent = q.explanation;
+  exEl.className   = 'explanation';
+
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= shuffled.length) {
+    showEnd();
+  } else {
+    renderQuestion();
+  }
+}
+
+function awardPoint(i) {
+  teams[i].score++;
+  document.getElementById('sc-val'+i).textContent = teams[i].score;
+  const card = document.getElementById('sc'+i);
+  card.classList.remove('bumped');
+  void card.offsetWidth;
+  card.classList.add('bumped');
+}
+
+// ════════════════════════════════════════════
+//  END SCREEN
+// ════════════════════════════════════════════
+function showEnd() {
+  document.getElementById('game').style.display      = 'none';
+  document.getElementById('endScreen').style.display = 'block';
+
+  const maxScore = Math.max(...teams.map(t => t.score));
+  document.getElementById('endScores').innerHTML = teams.map(t => `
+    <div class="end-card${t.score === maxScore ? ' winner' : ''}">
+      <div class="end-name" style="color:${t.color};">${t.name}</div>
+      ${t.score}
+    </div>`).join('');
+}
+
+function restartGame() {
+  document.getElementById('endScreen').style.display = 'none';
+  document.getElementById('setup').style.display     = 'block';
+}
+
+// ════════════════════════════════════════════
+//  FULLSCREEN
+// ════════════════════════════════════════════
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+</script>
+</body>
+</html>

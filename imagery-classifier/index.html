@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Imagery Classifier — Year 7</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    #setup {
+      max-width: 520px; margin: 40px auto;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px; padding: 32px 28px; text-align: center;
+    }
+    #setup h2 { font-size: 1.3rem; color: #93c5fd; margin-bottom: 6px; font-weight: 700; }
+    #setup p  { font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-bottom: 24px; }
+    .team-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .team-row input[type="text"] {
+      flex:1; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18);
+      border-radius:8px; color:#fff; font-size:0.95rem; padding:7px 12px;
+    }
+    .team-dot { width:18px; height:18px; border-radius:50%; flex-shrink:0; }
+    .setup-row { display:flex; gap:10px; justify-content:center; align-items:center; margin-bottom:20px; }
+    .setup-row label { font-size:0.88rem; color:rgba(255,255,255,0.7); }
+    .setup-row input[type="number"] {
+      width:64px; padding:6px 10px; background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.18); border-radius:8px;
+      color:#fff; font-size:0.95rem; text-align:center;
+    }
+    #startBtn {
+      background: linear-gradient(135deg,#3b82f6,#1d4ed8);
+      border:none; color:#fff; font-size:1.1rem;
+      padding:13px 40px; border-radius:12px;
+      cursor:pointer; font-weight:800; margin-top:8px;
+      transition:filter 0.15s, transform 0.1s;
+    }
+    #startBtn:hover { filter:brightness(1.15); transform:translateY(-2px); }
+
+    #game { display:none; }
+
+    .progress-bar { display:flex; justify-content:center; align-items:center; gap:12px; margin-bottom:10px; font-size:0.82rem; color:rgba(255,255,255,0.5); }
+    .progress-pips { display:flex; gap:5px; }
+    .pip { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.15); transition:background 0.3s; }
+    .pip.done   { background:#22c55e; }
+    .pip.active { background:#f7b731; }
+
+    .phrase-card {
+      background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15);
+      border-radius:18px; padding:32px 32px 20px; margin:0 auto 20px;
+      max-width:860px; text-align:center;
+      transition:border-color 0.4s, background 0.4s;
+    }
+    .phrase-card.correct { border-color:#22c55e; background:rgba(34,197,94,0.07); }
+
+    .phrase-text {
+      font-size:clamp(1.5rem,3.5vw,2.3rem); font-weight:600;
+      color:#f0e6d0; line-height:1.4; margin-bottom:14px;
+      font-family: Georgia, serif;
+    }
+    .explanation {
+      font-size:clamp(0.82rem,1.8vw,1rem); color:#93c5fd;
+      font-style:italic; min-height:1.4em; transition:opacity 0.3s;
+    }
+    .explanation.hidden { opacity:0; }
+
+    .category-row {
+      display:grid; grid-template-columns:repeat(2,1fr);
+      gap:12px; max-width:860px; margin:0 auto 20px;
+    }
+    @media(min-width:700px) { .category-row { grid-template-columns:repeat(4,1fr); } }
+
+    .cat-btn {
+      padding:20px 10px; border-radius:14px;
+      font-size:clamp(0.9rem,2vw,1.1rem); font-weight:800;
+      cursor:pointer; border:2px solid transparent;
+      transition:all 0.2s; line-height:1.3;
+    }
+    .cat-btn.visual    { background:rgba(96,165,250,0.15); border-color:rgba(96,165,250,0.4);   color:#93c5fd; }
+    .cat-btn.auditory  { background:rgba(167,139,250,0.15); border-color:rgba(167,139,250,0.4); color:#c4b5fd; }
+    .cat-btn.olfactory { background:rgba(52,211,153,0.15); border-color:rgba(52,211,153,0.4);  color:#6ee7b7; }
+    .cat-btn.tactile   { background:rgba(251,146,60,0.15); border-color:rgba(251,146,60,0.4);  color:#fdba74; }
+
+    .cat-btn:hover:not(:disabled) { filter:brightness(1.25); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+    .cat-btn:disabled { cursor:default; }
+    .cat-btn.revealed-correct { background:rgba(34,197,94,0.28); border-color:#22c55e; color:#fff; transform:scale(1.04); }
+    .cat-btn.revealed-wrong   { opacity:0.3; }
+
+    .cat-emoji  { display:block; font-size:1.8rem; margin-bottom:6px; }
+    .cat-name   { display:block; font-size:0.95em; }
+    .cat-sense  { display:block; font-size:0.68em; font-weight:400; opacity:0.7; margin-top:3px; }
+
+    .next-bar { display:flex; justify-content:center; gap:12px; margin-top:4px; }
+    #nextBtn {
+      background:linear-gradient(135deg,#f7b731,#d97706);
+      border:none; color:#1a0f00; font-size:1rem;
+      padding:11px 36px; border-radius:10px;
+      cursor:pointer; font-weight:800;
+      transition:filter 0.15s, transform 0.1s; display:none;
+    }
+    #nextBtn:hover { filter:brightness(1.12); transform:translateY(-2px); }
+
+    .score-strip { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:900px; margin:12px auto 4px; }
+    .score-card {
+      display:flex; flex-direction:column; align-items:center;
+      background:rgba(255,255,255,0.07); border:2px solid rgba(255,255,255,0.12);
+      border-radius:12px; padding:8px 18px; min-width:90px;
+      cursor:pointer; transition:all 0.18s; user-select:none;
+    }
+    .score-card:hover { border-color:rgba(247,183,49,0.6); background:rgba(247,183,49,0.1); }
+    .score-card:active { transform:scale(0.95); }
+    .sc-name  { font-size:0.78rem; font-weight:700; color:rgba(255,255,255,0.75); text-transform:uppercase; letter-spacing:0.06em; }
+    .sc-score { font-size:1.8rem; font-weight:900; line-height:1.1; }
+    .sc-hint  { font-size:0.62rem; color:rgba(255,255,255,0.3); margin-top:1px; }
+    @keyframes bump { 0%{transform:scale(1)} 40%{transform:scale(1.22)} 100%{transform:scale(1)} }
+    .score-card.bumped { animation:bump 0.3s ease; }
+
+    #endScreen { display:none; text-align:center; padding:40px 20px; }
+    #endScreen h2 { font-size:2.2rem; font-weight:900; color:#f7b731; margin-bottom:24px; }
+    .end-scores { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:32px; }
+    .end-card { background:rgba(255,255,255,0.08); border-radius:16px; padding:18px 28px; font-size:2.4rem; font-weight:900; }
+    .end-card .end-name { font-size:0.85rem; font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px; }
+    .end-card.winner { border:2px solid #f7b731; background:rgba(247,183,49,0.12); }
+
+    #flash { pointer-events:none; position:fixed; inset:0; z-index:999; opacity:0; transition:opacity 0.5s; }
+    #flash.show { background:rgba(34,197,94,0.18); opacity:1; }
+  </style>
+</head>
+<body>
+<div id="flash"></div>
+
+<div id="setup">
+  <h2>👁️ Imagery Classifier</h2>
+  <p>Year 7 · Units 8 &amp; 9 — Sort each phrase: Visual · Auditory · Olfactory · Tactile</p>
+  <div class="setup-row">
+    <label>Number of teams: <input type="number" id="teamCount" min="2" max="6" value="3"></label>
+  </div>
+  <div id="teamInputs"></div>
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+</div>
+
+<div id="game">
+  <h1>Imagery Classifier</h1>
+  <div class="controls">
+    <button onclick="location.href='../index.html'" id="home">🏠 Home</button>
+    <button onclick="toggleFullscreen()" id="fullscreen">⛶ Fullscreen</button>
+    <button onclick="restartGame()">↺ Restart</button>
+  </div>
+  <div class="progress-bar">
+    <span id="progressText">Phrase 1 / 18</span>
+    <div class="progress-pips" id="pips"></div>
+  </div>
+
+  <div class="phrase-card" id="phraseCard">
+    <div class="phrase-text" id="phraseText"></div>
+    <div class="explanation hidden" id="explanation"></div>
+  </div>
+
+  <div class="category-row">
+    <button class="cat-btn visual"    data-type="visual"    onclick="checkAnswer('visual')">
+      <span class="cat-emoji">👁️</span>
+      <span class="cat-name">VISUAL</span>
+      <span class="cat-sense">Sight</span>
+    </button>
+    <button class="cat-btn auditory"  data-type="auditory"  onclick="checkAnswer('auditory')">
+      <span class="cat-emoji">👂</span>
+      <span class="cat-name">AUDITORY</span>
+      <span class="cat-sense">Sound</span>
+    </button>
+    <button class="cat-btn olfactory" data-type="olfactory" onclick="checkAnswer('olfactory')">
+      <span class="cat-emoji">👃</span>
+      <span class="cat-name">OLFACTORY</span>
+      <span class="cat-sense">Smell</span>
+    </button>
+    <button class="cat-btn tactile"   data-type="tactile"   onclick="checkAnswer('tactile')">
+      <span class="cat-emoji">✋</span>
+      <span class="cat-name">TACTILE</span>
+      <span class="cat-sense">Touch</span>
+    </button>
+  </div>
+
+  <div class="next-bar">
+    <button id="nextBtn" onclick="nextQuestion()">Next Phrase →</button>
+  </div>
+  <div class="score-strip" id="scoreStrip"></div>
+  <p style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:4px;">👆 Tap a team card to award a point</p>
+</div>
+
+<div id="endScreen">
+  <h2>🏆 Game Over!</h2>
+  <div class="end-scores" id="endScores"></div>
+  <button onclick="restartGame()" style="background:#f7b731;border:none;color:#1a0f00;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:800;cursor:pointer;">Play Again</button>
+  &nbsp;
+  <button onclick="location.href='../index.html'" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:1rem;padding:13px 40px;border-radius:12px;font-weight:700;cursor:pointer;">🏠 Home</button>
+</div>
+
+<script>
+const PHRASES = [
+  // VISUAL — sight
+  { text: "The golden dome gleamed blindingly in the midday sun.", type:"visual", explanation:"VISUAL — 'gleamed blindingly' appeals to sight. We can picture the intense reflected light." },
+  { text: "A thick amber haze hung over the rooftops, blurring the skyline.", type:"visual", explanation:"VISUAL — colour (amber) and the blurring effect are both seen, not heard or felt." },
+  { text: "Strings of coloured lights criss-crossed the narrow alley above their heads.", type:"visual", explanation:"VISUAL — the pattern of lights is a sight image. We see the colour and the criss-cross shapes." },
+  { text: "His shadow stretched long and thin across the cobblestones.", type:"visual", explanation:"VISUAL — a shadow is seen, not heard or felt. The shape (long and thin) adds a sinister visual detail." },
+  { text: "The sea lay flat and grey, like a sheet of hammered metal.", type:"visual", explanation:"VISUAL — colour (grey) and the simile 'like hammered metal' create a picture for the eye." },
+
+  // AUDITORY — sound
+  { text: "The crash of temple bells echoed across the rooftops.", type:"auditory", explanation:"AUDITORY — 'crash' and 'echoed' are both sound words. We hear this image, not see it." },
+  { text: "A continuous roar of car horns and shouting filled the air.", type:"auditory", explanation:"AUDITORY — 'roar' and 'shouting' are heard. The word 'filled the air' suggests an overwhelming sound." },
+  { text: "The market buzzed and chattered like a vast beehive.", type:"auditory", explanation:"AUDITORY — 'buzzed and chattered' are sounds. The simile 'like a beehive' reinforces the noisy image." },
+  { text: "Waves hammered against the hull with a hollow boom.", type:"auditory", explanation:"AUDITORY — 'hammered' and 'boom' appeal to hearing. We feel the sound rather than see it." },
+  { text: "Somewhere deep in the ship, a door groaned and banged in the swell.", type:"auditory", explanation:"AUDITORY — 'groaned and banged' are sounds. The detail adds an eerie, creaking atmosphere." },
+
+  // OLFACTORY — smell
+  { text: "The sweet rot of overripe mangoes drifted from the market stalls.", type:"olfactory", explanation:"OLFACTORY — 'sweet rot' is a smell. 'Drifted' suggests a smell floating through the air." },
+  { text: "Incense smoke wound through the air, thick and cloying.", type:"olfactory", explanation:"OLFACTORY — incense is experienced through smell. 'Cloying' (sickly-sweet) reinforces the sensation." },
+  { text: "A sharp tang of salt and rotting fish hung over the harbour.", type:"olfactory", explanation:"OLFACTORY — 'tang' is a smell word. Salt and fish are both identified by their smell." },
+  { text: "The smell of frying spices and hot oil hit her the moment she stepped inside.", type:"olfactory", explanation:"OLFACTORY — smell is explicitly named here. 'Hit her' suggests an overwhelming, sudden scent." },
+
+  // TACTILE — touch/physical sensation
+  { text: "The rough stones of the ancient wall bit into her palms.", type:"tactile", explanation:"TACTILE — 'rough' and 'bit into her palms' are touch sensations. We feel the texture and sharpness." },
+  { text: "Hot, damp air pressed against her skin like a wet cloth.", type:"tactile", explanation:"TACTILE — heat and dampness are felt on skin. The simile 'like a wet cloth' intensifies the physical sensation." },
+  { text: "The ropes burned her hands as the ship pitched and rolled.", type:"tactile", explanation:"TACTILE — 'burned her hands' is pain felt through touch. Physical and immediate." },
+  { text: "Cold spray stung her cheeks with every crashing wave.", type:"tactile", explanation:"TACTILE — 'stung her cheeks' is a touch sensation. Cold and stinging are both felt, not seen or heard." },
+];
+
+const TEAM_COLORS = ['#00c9a7','#f7b731','#e74c3c','#a29bfe','#fd79a8','#74b9ff'];
+let teams=[], scores=[], order=[], current=0, answered=false;
+
+document.getElementById('teamCount').addEventListener('input', renderTeamInputs);
+renderTeamInputs();
+
+function renderTeamInputs() {
+  const n = Math.min(6, Math.max(2, parseInt(document.getElementById('teamCount').value)||3));
+  const defaults = ['Team 1','Team 2','Team 3','Team 4','Team 5','Team 6'];
+  const c = document.getElementById('teamInputs');
+  const existing = Array.from(c.querySelectorAll('input')).map(i=>i.value);
+  c.innerHTML='';
+  for(let i=0;i<n;i++){
+    const row=document.createElement('div'); row.className='team-row';
+    const dot=document.createElement('div'); dot.className='team-dot'; dot.style.background=TEAM_COLORS[i];
+    const inp=document.createElement('input'); inp.type='text'; inp.placeholder=defaults[i]; inp.value=existing[i]||defaults[i];
+    row.appendChild(dot); row.appendChild(inp); c.appendChild(row);
+  }
+}
+
+function startGame(){
+  const inputs=document.querySelectorAll('#teamInputs input');
+  teams=Array.from(inputs).map(i=>i.value.trim()||i.placeholder);
+  scores=teams.map(()=>0);
+  order=shuffle([...Array(PHRASES.length).keys()]);
+  current=0; answered=false;
+  document.getElementById('setup').style.display='none';
+  document.getElementById('game').style.display='block';
+  document.getElementById('endScreen').style.display='none';
+  buildScoreStrip(); buildPips(); loadQ();
+}
+
+function buildPips(){
+  const c=document.getElementById('pips'); c.innerHTML='';
+  PHRASES.forEach((_,i)=>{ const p=document.createElement('div'); p.className='pip'+(i===0?' active':''); p.id='pip-'+i; c.appendChild(p); });
+}
+function updatePips(){
+  PHRASES.forEach((_,i)=>{ const p=document.getElementById('pip-'+i); if(!p)return; p.className='pip'+(i<current?' done':i===current?' active':''); });
+}
+
+function buildScoreStrip(){
+  const s=document.getElementById('scoreStrip'); s.innerHTML='';
+  teams.forEach((name,i)=>{
+    const card=document.createElement('div'); card.className='score-card'; card.id='sc-'+i;
+    card.style.borderColor=TEAM_COLORS[i]+'55';
+    card.innerHTML=`<div class="sc-name" style="color:${TEAM_COLORS[i]}">${name}</div><div class="sc-score" style="color:${TEAM_COLORS[i]}" id="score-${i}">0</div><div class="sc-hint">tap to +1</div>`;
+    card.addEventListener('click',()=>award(i)); s.appendChild(card);
+  });
+}
+function award(i){
+  scores[i]++;
+  document.getElementById('score-'+i).textContent=scores[i];
+  const c=document.getElementById('sc-'+i); c.classList.remove('bumped'); void c.offsetWidth; c.classList.add('bumped');
+  setTimeout(()=>c.classList.remove('bumped'),350);
+}
+
+function loadQ(){
+  if(current>=PHRASES.length){ showEnd(); return; }
+  answered=false;
+  const p=PHRASES[order[current]];
+  document.getElementById('phraseText').textContent=p.text;
+  document.getElementById('explanation').textContent='';
+  document.getElementById('explanation').classList.add('hidden');
+  document.getElementById('phraseCard').className='phrase-card';
+  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('progressText').textContent=`Phrase ${current+1} / ${PHRASES.length}`;
+  document.querySelectorAll('.cat-btn').forEach(b=>{ b.classList.remove('revealed-correct','revealed-wrong'); b.disabled=false; });
+  updatePips();
+}
+
+function checkAnswer(chosen){
+  if(answered)return; answered=true;
+  const p=PHRASES[order[current]];
+  document.querySelectorAll('.cat-btn').forEach(b=>{
+    b.disabled=true;
+    b.classList.add(b.dataset.type===p.type?'revealed-correct':'revealed-wrong');
+  });
+  const ex=document.getElementById('explanation');
+  ex.textContent=p.explanation; ex.classList.remove('hidden');
+  document.getElementById('phraseCard').classList.add('correct');
+  const fl=document.getElementById('flash'); fl.className='show';
+  setTimeout(()=>{ fl.className=''; },600);
+  document.getElementById('nextBtn').style.display='inline-block';
+}
+
+function nextQuestion(){ current++; if(current>=PHRASES.length) showEnd(); else loadQ(); }
+
+function showEnd(){
+  document.getElementById('game').style.display='none';
+  document.getElementById('endScreen').style.display='block';
+  const max=Math.max(...scores);
+  const c=document.getElementById('endScores'); c.innerHTML='';
+  teams.map((name,i)=>({name,score:scores[i],color:TEAM_COLORS[i]}))
+    .sort((a,b)=>b.score-a.score)
+    .forEach(t=>{ const d=document.createElement('div'); d.className='end-card'+(t.score===max?' winner':''); d.style.color=t.color; d.innerHTML=`<div class="end-name">${t.name}</div>${t.score}`; c.appendChild(d); });
+}
+
+function restartGame(){
+  document.getElementById('setup').style.display='block';
+  document.getElementById('game').style.display='none';
+  document.getElementById('endScreen').style.display='none';
+}
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function toggleFullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+</script>
+</body>
+</html>
