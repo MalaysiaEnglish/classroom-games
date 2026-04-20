@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error Hunt 🔍</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0d14;--surface:#111520;--card:#161b2e;--border:rgba(255,255,255,0.08);
+  --text:#e8eaf0;--muted:rgba(232,234,240,0.45);
+  --accent:#f0b429;--accent2:#3ecfcf;--green:#48c774;--red:#e05c5c;
+  --radius:14px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── Header ── */
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:0.78rem;cursor:pointer;text-decoration:none;color:var(--muted);}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.game-title{font-size:1.1rem;font-weight:800;}
+.game-title span{color:var(--red);}
+
+.selector-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1;}
+select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:0.8rem;cursor:pointer;}
+select:focus{outline:none;border-color:var(--accent);}
+
+/* ── Mode toggle ── */
+.mode-tabs{display:flex;gap:4px;}
+.mode-tab{padding:6px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.18s;letter-spacing:0.04em;}
+.mode-tab.active{background:var(--accent);color:#0a0d14;border-color:var(--accent);}
+
+/* ── Main layout ── */
+.main{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 20px 30px;gap:16px;max-width:900px;margin:0 auto;width:100%;}
+
+/* ── Passage display ── */
+.passage-box{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 32px;width:100%;
+  font-size:1.35rem;line-height:2;
+  position:relative;
+}
+.passage-box.projector{font-size:1.7rem;line-height:2.1;}
+
+/* Error spans */
+.err-word{
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  transition:all 0.15s;
+  border-radius:3px;
+  padding:0 2px;
+}
+.err-word:hover{background:rgba(240,180,41,0.12);}
+.err-word.found{
+  background:rgba(224,92,92,0.18);
+  border-bottom-color:var(--red);
+  color:var(--red);
+  text-decoration:line-through;
+}
+.err-word.found::after{
+  content:' ✓';
+  font-size:0.8em;
+  color:var(--green);
+  text-decoration:none;
+  display:inline;
+}
+.err-word.corrected{
+  background:rgba(72,199,116,0.12);
+  border-bottom-color:var(--green);
+  color:var(--green);
+  text-decoration:none;
+}
+
+/* ── Score bar ── */
+.score-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface);border:1px solid var(--border);border-radius:40px;
+  padding:8px 20px;width:100%;gap:16px;flex-wrap:wrap;
+}
+.score-found{font-size:0.9rem;font-weight:700;color:var(--accent);}
+.score-total{font-size:0.82rem;color:var(--muted);}
+.score-teams{display:flex;gap:8px;flex-wrap:wrap;}
+.team-score{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:4px 12px;
+  font-size:0.82rem;font-weight:700;cursor:pointer;
+  transition:all 0.18s;
+}
+.team-score:hover{border-color:var(--accent2);}
+.team-score .pts{color:var(--accent2);}
+.team-add{font-size:1.1rem;color:var(--accent);}
+
+/* ── Controls ── */
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.ctrl-btn{padding:10px 22px;border:none;border-radius:40px;font-size:0.82rem;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:all 0.18s;}
+.btn-load{background:var(--accent);color:#0a0d14;}
+.btn-load:hover{filter:brightness(1.1);}
+.btn-reveal-all{background:var(--red);color:#fff;}
+.btn-reveal-all:hover{filter:brightness(1.1);}
+.btn-reset{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-reset:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.btn-print{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-print:hover{border-color:var(--accent2);color:var(--accent2);}
+.btn-bigger{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:1rem;}
+.btn-bigger:hover{background:rgba(255,255,255,0.08);}
+
+/* ── Custom input panel ── */
+.custom-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;}
+.custom-panel h3{font-size:0.85rem;font-weight:700;color:var(--accent);margin-bottom:10px;letter-spacing:0.06em;text-transform:uppercase;}
+.custom-panel p{font-size:0.8rem;color:var(--muted);margin-bottom:12px;line-height:1.5;}
+textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 12px;font-size:0.9rem;font-family:inherit;line-height:1.6;resize:vertical;min-height:120px;}
+textarea:focus{outline:none;border-color:var(--accent);}
+.custom-hint{font-size:0.75rem;color:var(--muted);margin-top:6px;}
+code{background:rgba(255,255,255,0.08);border-radius:4px;padding:1px 5px;font-size:0.85em;}
+
+/* ── Print styles ── */
+@media print {
+  .top-bar,.controls,.score-bar,.custom-panel{display:none!important;}
+  body{background:#fff;color:#000;}
+  .passage-box{border:1px solid #ccc;color:#000;background:#fff;font-size:14pt;line-height:1.9;}
+  .err-word{border-bottom:2px solid #ccc;color:#000;}
+  .err-word.found,.err-word.corrected{background:none;border-bottom-color:#ccc;color:#000;text-decoration:none;}
+  .err-word.found::after{content:'';}
+  .print-title{display:block!important;}
+}
+.print-title{display:none;font-size:14pt;font-weight:bold;margin-bottom:12pt;}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">← Back</a>
+  <span class="game-title">Error <span>Hunt</span> 🔍</span>
+  <div class="selector-row">
+    <select id="sel-level" onchange="loadLevel()">
+      <option value="">— Choose Level —</option>
+      <optgroup label="Level 5">
+        <option value="l5_1">L5 · Passive Voice errors</option>
+        <option value="l5_2">L5 · Conditional errors</option>
+      </optgroup>
+      <optgroup label="Level 6">
+        <option value="l6_1">L6 · Relative clauses</option>
+        <option value="l6_2">L6 · Reported speech</option>
+        <option value="l6_3">L6 · Phrasal verbs</option>
+      </optgroup>
+      <optgroup label="Level 7">
+        <option value="l7_1">L7 · Sentence types</option>
+        <option value="l7_2">L7 · Punctuation &amp; dialogue</option>
+        <option value="l7_3">L7 · Figurative language</option>
+      </optgroup>
+      <optgroup label="Level 8">
+        <option value="l8_1">L8 · Persuasive techniques</option>
+        <option value="l8_2">L8 · Formal vs informal</option>
+        <option value="l8_3">L8 · Active &amp; passive</option>
+      </optgroup>
+      <optgroup label="Level 9">
+        <option value="l9_1">L9 · Mixed grammar errors</option>
+        <option value="l9_2">L9 · Punctuation for effect</option>
+        <option value="l9_3">L9 · Vocabulary choices</option>
+      </optgroup>
+    </select>
+    <div class="mode-tabs">
+      <button class="mode-tab active" onclick="setMode('builtin')" id="tab-builtin">Built-in</button>
+      <button class="mode-tab" onclick="setMode('custom')" id="tab-custom">Custom</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="score-bar" id="score-bar" style="display:none">
+    <div>
+      <span class="score-found" id="found-count">0</span>
+      <span class="score-total" id="found-total"> / 0 errors found</span>
+    </div>
+    <div class="score-teams" id="teams-row">
+      <div class="team-score" onclick="addPoint(0)"><span>Team A</span><span class="pts" id="pts-0">0</span><span class="team-add">+</span></div>
+      <div class="team-score" onclick="addPoint(1)"><span>Team B</span><span class="pts" id="pts-1">0</span><span class="team-add">+</span></div>
+      <div class="team-score" onclick="addPoint(2)"><span>Team C</span><span class="pts" id="pts-2">0</span><span class="team-add">+</span></div>
+    </div>
+  </div>
+
+  <!-- Passage -->
+  <div class="passage-box" id="passage-box">
+    <div style="text-align:center;color:var(--muted);padding:40px 0;">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🔍</div>
+      <div style="font-size:0.95rem;">Choose a level above, or switch to <strong>Custom</strong> to paste your own text.</div>
+    </div>
+  </div>
+
+  <!-- Custom panel -->
+  <div class="custom-panel" id="custom-panel" style="display:none">
+    <h3>📝 Paste Your Own Text</h3>
+    <p>Wrap each error in <code>[[wrong|correct]]</code> format. The wrong version shows to students; the correct version is revealed when clicked.</p>
+    <textarea id="custom-input" placeholder='Example: The cat [[runned|ran]] across the [[rode|road]] and [[dissapeared|disappeared]] into the garden.'></textarea>
+    <div class="custom-hint">Tip: include 4–8 errors for a good game. Click <strong>Load Text</strong> when ready.</div>
+    <br>
+    <button class="ctrl-btn btn-load" onclick="loadCustom()" style="margin-top:8px;">Load Text</button>
+  </div>
+
+  <div class="controls" id="controls">
+    <button class="ctrl-btn btn-bigger" onclick="toggleSize()" title="Toggle bigger text">🔎</button>
+    <button class="ctrl-btn btn-reveal-all" id="btn-reveal-all" onclick="revealAll()" style="display:none">👁️ Reveal All</button>
+    <button class="ctrl-btn btn-reset" id="btn-reset" onclick="resetGame()" style="display:none">🔄 Reset</button>
+    <button class="ctrl-btn btn-print" onclick="window.print()">🖨️ Print</button>
+  </div>
+</div>
+
+<script>
+// ── Built-in passages ──
+// Format: segments array, each either a string or {wrong, correct, type}
+const PASSAGES = {
+  l5_1: {
+    title: 'Passive Voice — Spot 6 errors',
+    segments: [
+      'The famous painting ',{w:'painted',c:'was painted',t:'passive'},
+      ' by Leonardo da Vinci in the fifteenth century. The Mona Lisa ',
+      {w:'is know',c:'is known',t:'passive spelling'},
+      ' all over the world. Every year, millions of photographs ',
+      {w:'are took',c:'are taken',t:'passive irregular verb'},
+      ' of it in the Louvre. Recently, the painting ',
+      {w:'has restored',c:'has been restored',t:'passive perfect'},
+      ' by a team of experts. Visitors ',
+      {w:'are not allow',c:'are not allowed',t:'passive form'},
+      ' to touch the glass. It is said that the model\'s smile ',
+      {w:'still argue',c:'is still argued'},
+      ' about by art historians to this day.',
+    ]
+  },
+  l5_2: {
+    title: 'Conditionals — Spot 5 errors',
+    segments: [
+      'If I ',{w:'will study',c:'study',t:'1st conditional'},
+      ' harder, I will get better grades. But if I ',
+      {w:'had',c:'had had',t:'3rd conditional'},
+      ' more time last year, I would have done my homework every night. ',
+      'Sometimes I think: if I ',{w:'would be',c:'were',t:'2nd conditional'},
+      ' a teacher, I ',{w:'will make',c:'would make',t:'2nd conditional result'},
+      ' lessons much more fun. My friend says that if she ',
+      {w:'would have studied',c:'had studied',t:'3rd conditional'},
+      ' medicine, she would have become a doctor. We can\'t change the past — but we can change the future!',
+    ]
+  },
+  l6_1: {
+    title: 'Relative Clauses — Spot 5 errors',
+    segments: [
+      'The woman ',{w:'which',c:'who',t:'relative pronoun — person'},
+      ' won the Nobel Prize gave a powerful speech. The city ',
+      {w:'who',c:'where',t:'relative pronoun — place'},
+      ' she grew up is famous for its ancient ruins. She described the moment ',
+      {w:'which',c:'when',t:'relative clause — time'},
+      ' she first heard the news. The prize, ',
+      {w:'that',c:'which',t:'non-defining relative clause'},
+      ' is awarded every year, is one of the world\'s highest honours. ',
+      'She dedicated her work to her father, ',{w:'which',c:'whose',t:'possessive relative'},
+      ' encouragement had inspired her throughout her career.',
+    ]
+  },
+  l6_2: {
+    title: 'Reported Speech — Spot 6 errors',
+    segments: [
+      'Maria said that she ',{w:'is',c:'was',t:'tense shift'},
+      ' very tired. She told me that she ',
+      {w:'will come',c:'would come',t:'modal backshift'},
+      ' to the party. Tom asked ',
+      {w:'that where',c:'where',t:'reported question word order'},
+      ' the nearest café was. He also said that he ',
+      {w:'didn\'t knew',c:'didn\'t know',t:'auxiliary + base form'},
+      ' the area well. The teacher told the students ',
+      {w:'to not talk',c:'not to talk',t:'negative infinitive'},
+      ' during the exam. She also reminded us that the exam ',
+      {w:'has started',c:'had started',t:'past perfect in reported speech'},
+      ' at nine o\'clock sharp.',
+    ]
+  },
+  l6_3: {
+    title: 'Phrasal Verbs — Spot 5 errors',
+    segments: [
+      'I need to ',{w:'look for up',c:'look up',t:'phrasal verb word order'},
+      ' the word in my dictionary. Can you ',
+      {w:'switch the lights off them',c:'switch the lights off',t:'object placement'},
+      '? She promised to ',
+      {w:'give up never',c:'never give up',t:'adverb placement'},
+      ' on her dreams. We decided to ',
+      {w:'put off to',c:'put off',t:'phrasal verb — no preposition needed'},
+      ' the meeting until Friday. In the end, everything ',
+      {w:'worked off',c:'worked out',t:'wrong particle'},
+      ' perfectly.',
+    ]
+  },
+  l7_1: {
+    title: 'Sentence Types — Spot 5 errors',
+    segments: [
+      'The storm ',{w:'was violent, but it short.',c:'was violent, but it was short.',t:'missing verb'},
+      ' Although the wind ',
+      {w:'howling',c:'was howling',t:'missing auxiliary'},
+      ', the fishermen stayed calm. ',
+      'They knew the sea well; ',{w:'they trusted they instincts.',c:'they trusted their instincts.',t:'wrong pronoun'},
+      ' The waves, ',
+      {w:'which they crashed against the rocks,',c:'which crashed against the rocks,',t:'relative clause — remove subject'},
+      ' sent white spray high into the air. By dawn, the sea was still ',
+      {w:'again, but the beach had been left in ruins',c:'again; but the beach had been left in ruins.',t:'comma splice — should be semicolon or full stop'},
+      '.',
+    ]
+  },
+  l7_2: {
+    title: 'Punctuation & Dialogue — Spot 6 errors',
+    segments: [
+      '"I don\'t want to go," ',{w:'she told.',c:'she said.',t:'wrong reporting verb with this structure'},
+      ' "It\'s too cold." ',
+      '"Don\'t be silly',{w:'",',c:',"',t:'punctuation — comma inside quotes'},
+      ' said her brother. ',
+      '"',{w:'its',c:'It\'s',t:'apostrophe — contraction'},
+      ' only a short walk." ',
+      'She sighed',{w:'.',c:',',t:'comma before dialogue tag'},
+      ' "Fine. But I\'m wearing my ',
+      {w:'coat, hat and, scarf.',c:'coat, hat and scarf.',t:'comma before and in a list of three'},
+      '"',
+    ]
+  },
+  l7_3: {
+    title: 'Figurative Language — Spot 5 errors',
+    segments: [
+      'The moon was ',{w:'like a big round thing in the sky',c:'like a silver coin',t:'weak/vague simile'},
+      '. The wind ',
+      {w:'moved',c:'howled',t:'weak verb — needs personification'},
+      ' through the trees like a wolf. Her voice was ',
+      {w:'a metaphor for sadness',c:'pure silk',t:'meta-comment — not a metaphor itself'},
+      '. He was so hungry he could ',
+      {w:'eat some food',c:'eat a horse',t:'incomplete idiom'},
+      '. The ancient castle, standing alone on the hill, ',
+      {w:'was personification',c:'seemed to watch over the sleeping village',t:'label instead of example'},
+      '.',
+    ]
+  },
+  l8_1: {
+    title: 'Persuasive Techniques — Spot 5 errors',
+    segments: [
+      'Everyone ',{w:'sometimes thinks',c:'knows',t:'weak assertion — should use rule of three or absolute'},
+      ' that plastic pollution is a problem. Scientists, campaigners, and ',
+      {w:'also lots of other people too',c:'ordinary citizens',t:'repetition — wordy'},
+      ' agree: we must act now. ',
+      'Imagine a world where ',{w:'fish can\'t swim because of stuff.',c:'fish choke on our waste.',t:'vague — should be vivid/specific'},
+      ' This is not fiction — ',
+      {w:'it might possibly happen',c:'this is happening now',t:'hedging undermines urgency'},
+      '. Surely ',
+      {w:'you don\'t want that to occur, do you not?',c:'you don\'t want that, do you?',t:'clumsy tag question'},
+      ' Act today, before it is too late.',
+    ]
+  },
+  l8_2: {
+    title: 'Formal vs Informal — Spot 5 errors',
+    segments: [
+      'Dear Sir or Madam, ',
+      {w:'I am writing to complain cos the service was rubbish.',c:'I am writing to express my dissatisfaction with the service.',t:'informal language in formal letter'},
+      ' I visited your restaurant on Saturday and, ',
+      {w:'to be honest, the food was well bad.',c:'I regret to say, the food was of an unacceptably low standard.',t:'informal vocabulary'},
+      ' Furthermore, the waiting staff ',
+      {w:'just ignored us and stuff.',c:'appeared inattentive throughout our visit.',t:'vague/informal'},
+      ' I would be grateful if you could look into this matter ',
+      {w:'ASAP',c:'at your earliest convenience',t:'abbreviation — too informal'},
+      '. I look forward to hearing from you. ',
+      {w:'Yours truly, Jake',c:'Yours faithfully,',t:'wrong sign-off when opening is Dear Sir/Madam'},
+    ]
+  },
+  l8_3: {
+    title: 'Active & Passive — Spot 5 errors',
+    segments: [
+      'The journalist ',{w:'was interviewed the politician',c:'interviewed the politician',t:'unnecessary passive structure'},
+      ' for over an hour. The new law ',
+      {w:'passed by the government',c:'was passed by the government',t:'missing auxiliary'},
+      ' last Tuesday. Hundreds of emails ',
+      {w:'were sent the office',c:'were sent to the office',t:'missing preposition in passive'},
+      ' in protest. It is believed that the decision ',
+      {w:'affected thousands of families will',c:'will affect thousands of families',t:'word order'},
+      '. The minister said that mistakes ',
+      {w:'had make',c:'had been made',t:'passive past perfect form'},
+      ', and promised to investigate.',
+    ]
+  },
+  l9_1: {
+    title: 'Mixed Grammar — Spot 6 errors',
+    segments: [
+      'If Sherlock Holmes ',{w:'would have lived',c:'had lived',t:'3rd conditional protasis'},
+      ' today, he ',{w:'had used',c:'would have used',t:'3rd conditional apodosis'},
+      ' forensic technology. He was the kind of detective ',
+      {w:'who his methods',c:'whose methods',t:'possessive relative pronoun'},
+      ' were decades ahead of his time. Watson, ',
+      {w:'which',c:'who',t:'relative pronoun for person'},
+      ' narrated the stories, was not ',
+      {w:'as clever than',c:'as clever as',t:'comparative structure'},
+      ' Holmes. Nevertheless, without Watson\'s accounts, none of us ',
+      {w:'would knew',c:'would know',t:'modal + base form'},
+      ' about Baker Street at all.',
+    ]
+  },
+  l9_2: {
+    title: 'Punctuation for Effect — Spot 5 errors',
+    segments: [
+      'The house stood alone',{w:'.',c:' —',t:'dash creates suspense here, not full stop'},
+      ' silent, dark, waiting. Every window was shut',
+      {w:' and',c:';',t:'semicolon links balanced clauses more powerfully'},
+      ' every door locked. She hesitated',
+      {w:',',c:'.',c2:'or —',t:'full stop or dash creates more tension than comma'},
+      ' then knocked. ',
+      'Nothing',{w:' happened.',c:'. Nothing at all.',t:'repetition for effect — fragment'},
+      ' She knocked again, louder this time',
+      {w:',',c:'.',t:'end with full stop for finality — not comma'},
+    ]
+  },
+  l9_3: {
+    title: 'Vocabulary Choices — Spot 5 errors',
+    segments: [
+      'The dictator\'s speech was ',{w:'bad',c:'insidious',t:'weak adjective — needs precision'},
+      ' and deliberately misleading. Thousands of people ',
+      {w:'went to',c:'flocked to',t:'vague verb — needs vivid choice'},
+      ' the square to protest. The crowd\'s anger was ',
+      {w:'very big',c:'palpable',t:'intensifier + weak adjective'},
+      ' — you could feel it in the air. Journalists who tried to report honestly were ',
+      {w:'stopped from doing their job',c:'silenced',t:'wordy — one precise word is stronger'},
+      '. History, however, has a way of ',
+      {w:'remembering what happened',c:'recording the truth',t:'vague phrase — be specific'},
+      '.',
+    ]
+  },
+};
+
+// ── State ──
+let mode = 'builtin';
+let passageData = null;
+let foundCount = 0;
+let totalErrors = 0;
+let bigText = false;
+let teamPoints = [0,0,0];
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('tab-builtin').className = 'mode-tab' + (m==='builtin'?' active':'');
+  document.getElementById('tab-custom').className  = 'mode-tab' + (m==='custom'?' active':'');
+  document.getElementById('custom-panel').style.display = m === 'custom' ? 'block' : 'none';
+  document.getElementById('sel-level').style.display = m === 'builtin' ? '' : 'none';
+}
+
+function loadLevel() {
+  const key = document.getElementById('sel-level').value;
+  if (!key || !PASSAGES[key]) return;
+  renderPassage(PASSAGES[key]);
+}
+
+function loadCustom() {
+  const raw = document.getElementById('custom-input').value.trim();
+  if (!raw) return;
+  // Parse [[wrong|correct]] syntax
+  const segments = [];
+  const regex = /\[\[([^\|]+)\|([^\]]+)\]\]/g;
+  let last = 0, m;
+  while ((m = regex.exec(raw)) !== null) {
+    if (m.index > last) segments.push(raw.slice(last, m.index));
+    segments.push({w: m[1], c: m[2], t: 'error'});
+    last = m.index + m[0].length;
+  }
+  if (last < raw.length) segments.push(raw.slice(last));
+  if (!segments.some(s => typeof s === 'object')) {
+    alert('No errors found! Wrap errors like: [[wrong|correct]]');
+    return;
+  }
+  renderPassage({title: 'Custom text', segments});
+}
+
+function renderPassage(data) {
+  passageData = data;
+  foundCount = 0;
+  totalErrors = data.segments.filter(s => typeof s === 'object').length;
+
+  const box = document.getElementById('passage-box');
+  box.innerHTML = '<div class="print-title">Error Hunt — ' + data.title + '</div>';
+
+  data.segments.forEach((seg, i) => {
+    if (typeof seg === 'string') {
+      box.appendChild(document.createTextNode(seg));
+    } else {
+      const span = document.createElement('span');
+      span.className = 'err-word';
+      span.textContent = seg.w;
+      span.dataset.index = i;
+      span.dataset.correct = seg.c;
+      span.dataset.type = seg.t || '';
+      span.onclick = () => clickError(span);
+      box.appendChild(span);
+    }
+  });
+
+  updateScore();
+  document.getElementById('score-bar').style.display = 'flex';
+  document.getElementById('btn-reveal-all').style.display = '';
+  document.getElementById('btn-reset').style.display = '';
+}
+
+function clickError(span) {
+  if (span.classList.contains('found') || span.classList.contains('corrected')) {
+    // Second click — show correction
+    span.classList.remove('found');
+    span.classList.add('corrected');
+    span.textContent = span.dataset.correct;
+    if (span.dataset.type) {
+      span.title = span.dataset.type;
+    }
+    return;
+  }
+  // First click — mark as found
+  span.classList.add('found');
+  foundCount++;
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById('found-count').textContent = foundCount;
+  document.getElementById('found-total').textContent = ' / ' + totalErrors + ' errors found';
+}
+
+function revealAll() {
+  document.querySelectorAll('.err-word').forEach(span => {
+    if (!span.classList.contains('found') && !span.classList.contains('corrected')) {
+      span.classList.add('found');
+      foundCount++;
+    }
+    span.classList.remove('found');
+    span.classList.add('corrected');
+    span.textContent = span.dataset.correct;
+  });
+  foundCount = totalErrors;
+  updateScore();
+}
+
+function resetGame() {
+  if (!passageData) return;
+  renderPassage(passageData);
+}
+
+function toggleSize() {
+  bigText = !bigText;
+  document.getElementById('passage-box').classList.toggle('projector', bigText);
+}
+
+function addPoint(team) {
+  teamPoints[team]++;
+  document.getElementById('pts-' + team).textContent = teamPoints[team];
+}
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', () => {
+  // Default mode
+  setMode('builtin');
+});
+</script>
+</body>
+</html>

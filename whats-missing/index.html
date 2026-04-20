@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Missing? 👀</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0d14;--surface:#111520;--card:#161b2e;--border:rgba(255,255,255,0.08);
+  --text:#e8eaf0;--muted:rgba(232,234,240,0.45);
+  --accent:#f0b429;--accent2:#3ecfcf;--green:#48c774;--red:#e05c5c;
+  --radius:16px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── Header bar ── */
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:0.78rem;cursor:pointer;text-decoration:none;color:var(--muted);}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.game-title{font-size:1.1rem;font-weight:800;letter-spacing:-0.01em;}
+.game-title span{color:var(--accent);}
+
+/* ── Selectors ── */
+.selector-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1;}
+select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:0.8rem;cursor:pointer;}
+select:focus{outline:none;border-color:var(--accent);}
+.start-btn{background:var(--accent);color:#0a0d14;border:none;border-radius:8px;padding:7px 18px;font-size:0.82rem;font-weight:800;cursor:pointer;letter-spacing:0.04em;white-space:nowrap;}
+.start-btn:hover{filter:brightness(1.1);}
+
+/* ── Main arena ── */
+.arena{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;gap:20px;}
+
+/* ── Card grid ── */
+.card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%;max-width:1000px;}
+@media(max-width:700px){.card-grid{grid-template-columns:repeat(2,1fr);}}
+
+.wm-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px 12px 18px;
+  min-height:180px;
+  transition:all 0.35s ease;
+  position:relative;
+  cursor:default;
+  user-select:none;
+}
+.wm-card.hidden{
+  background:rgba(240,180,41,0.06);
+  border-color:rgba(240,180,41,0.4);
+  animation:pulse-border 1.4s ease-in-out infinite;
+}
+.wm-card.revealed{
+  background:rgba(72,199,116,0.08);
+  border-color:var(--green);
+}
+@keyframes pulse-border{0%,100%{border-color:rgba(240,180,41,0.4);}50%{border-color:rgba(240,180,41,0.9);}}
+
+.card-emoji{font-size:4.5rem;line-height:1;margin-bottom:10px;transition:all 0.3s;}
+.wm-card.hidden .card-emoji{font-size:5rem;}
+.card-word{font-size:1.05rem;font-weight:700;letter-spacing:0.04em;text-align:center;color:var(--text);text-transform:uppercase;}
+.wm-card.hidden .card-word{color:var(--accent);font-size:1.4rem;}
+
+/* ── Controls ── */
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.ctrl-btn{
+  padding:12px 28px;border:none;border-radius:40px;
+  font-size:0.88rem;font-weight:700;cursor:pointer;
+  letter-spacing:0.04em;transition:all 0.18s;
+  display:flex;align-items:center;gap:8px;
+}
+.ctrl-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.btn-new{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-new:hover:not(:disabled){background:rgba(255,255,255,0.08);color:var(--text);}
+.btn-hide{background:var(--accent);color:#0a0d14;}
+.btn-hide:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px);}
+.btn-reveal{background:var(--green);color:#0a0d14;}
+.btn-reveal:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px);}
+
+/* ── TTS toggle ── */
+.tts-toggle{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:6px 14px;font-size:0.72rem;font-weight:700;cursor:pointer;transition:all 0.18s;font-family:inherit;letter-spacing:0.05em;}
+.tts-toggle.on{background:rgba(62,207,207,0.12);border-color:var(--accent2);color:var(--accent2);}
+
+/* ── Score / round counter ── */
+.round-info{font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;text-align:center;}
+
+/* ── Empty state ── */
+.empty-state{text-align:center;color:var(--muted);padding:40px 20px;}
+.empty-state .big{font-size:3rem;margin-bottom:12px;}
+.empty-state p{font-size:0.9rem;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">← Back</a>
+  <span class="game-title">What's <span>Missing?</span> 👀</span>
+  <div class="selector-row">
+    <select id="sel-set" onchange="onSetChange()">
+      <option value="">— Choose a set —</option>
+    </select>
+    <select id="sel-unit" style="display:none">
+      <option value="">All units</option>
+    </select>
+    <select id="sel-count">
+      <option value="4">4 items</option>
+      <option value="6">6 items</option>
+    </select>
+    <button class="start-btn" onclick="newRound()">▶ Start</button>
+  </div>
+  <button class="tts-toggle" id="tts-toggle" onclick="ttsToggle()"></button>
+</div>
+
+<div class="arena">
+  <div class="empty-state" id="empty-state">
+    <div class="big">👀</div>
+    <p>Choose a set above and press <strong>Start</strong><br>to begin the game.</p>
+  </div>
+
+  <div class="card-grid" id="card-grid" style="display:none"></div>
+
+  <div class="controls" id="controls" style="display:none">
+    <button class="ctrl-btn btn-new" onclick="newRound()">🔀 New Round</button>
+    <button class="ctrl-btn btn-hide" id="btn-hide" onclick="hideOne()">👁️ Hide One</button>
+    <button class="ctrl-btn btn-reveal" id="btn-reveal" onclick="revealHidden()" disabled>✅ Reveal</button>
+  </div>
+
+  <div class="round-info" id="round-info"></div>
+</div>
+
+<!-- ── Built-in vocab sets ── -->
+<script>
+// ── Built-in sets (emoji-based, no image files needed) ──
+const BUILTIN_SETS = [
+  {
+    key:'animals', label:'🐾 Animals',
+    words:[
+      {word:'DOG',     hint:'a dog',     emoji:'🐶'},
+      {word:'CAT',     hint:'a cat',     emoji:'🐱'},
+      {word:'BIRD',    hint:'a bird',    emoji:'🐦'},
+      {word:'FISH',    hint:'a fish',    emoji:'🐟'},
+      {word:'FROG',    hint:'a frog',    emoji:'🐸'},
+      {word:'RABBIT',  hint:'a rabbit',  emoji:'🐰'},
+      {word:'LION',    hint:'a lion',    emoji:'🦁'},
+      {word:'ELEPHANT',hint:'an elephant',emoji:'🐘'},
+      {word:'PENGUIN', hint:'a penguin', emoji:'🐧'},
+      {word:'MONKEY',  hint:'a monkey',  emoji:'🐒'},
+      {word:'SNAKE',   hint:'a snake',   emoji:'🐍'},
+      {word:'TURTLE',  hint:'a turtle',  emoji:'🐢'},
+      {word:'BEAR',    hint:'a bear',    emoji:'🐻'},
+      {word:'FOX',     hint:'a fox',     emoji:'🦊'},
+      {word:'DUCK',    hint:'a duck',    emoji:'🦆'},
+    ]
+  },
+  {
+    key:'food', label:'🍎 Food',
+    words:[
+      {word:'APPLE',      hint:'an apple',      emoji:'🍎'},
+      {word:'BANANA',     hint:'a banana',      emoji:'🍌'},
+      {word:'ORANGE',     hint:'an orange',     emoji:'🍊'},
+      {word:'STRAWBERRY', hint:'a strawberry',  emoji:'🍓'},
+      {word:'GRAPES',     hint:'grapes',        emoji:'🍇'},
+      {word:'PIZZA',      hint:'pizza',         emoji:'🍕'},
+      {word:'RICE',       hint:'rice',          emoji:'🍚'},
+      {word:'CAKE',       hint:'a cake',        emoji:'🎂'},
+      {word:'ICE CREAM',  hint:'ice cream',     emoji:'🍦'},
+      {word:'CARROT',     hint:'a carrot',      emoji:'🥕'},
+      {word:'BREAD',      hint:'bread',         emoji:'🍞'},
+      {word:'MILK',       hint:'milk',          emoji:'🥛'},
+    ]
+  },
+  {
+    key:'colours', label:'🌈 Colours',
+    words:[
+      {word:'RED',    hint:'red',    emoji:'🔴'},
+      {word:'BLUE',   hint:'blue',   emoji:'🔵'},
+      {word:'GREEN',  hint:'green',  emoji:'🟢'},
+      {word:'YELLOW', hint:'yellow', emoji:'🟡'},
+      {word:'ORANGE', hint:'orange', emoji:'🟠'},
+      {word:'PURPLE', hint:'purple', emoji:'🟣'},
+      {word:'BLACK',  hint:'black',  emoji:'⚫'},
+      {word:'WHITE',  hint:'white',  emoji:'⚪'},
+      {word:'PINK',   hint:'pink',   emoji:'🩷'},
+      {word:'BROWN',  hint:'brown',  emoji:'🟫'},
+    ]
+  },
+  {
+    key:'numbers', label:'🔢 Numbers 1–10',
+    words:[
+      {word:'ONE',   hint:'one',   emoji:'1️⃣'},
+      {word:'TWO',   hint:'two',   emoji:'2️⃣'},
+      {word:'THREE', hint:'three', emoji:'3️⃣'},
+      {word:'FOUR',  hint:'four',  emoji:'4️⃣'},
+      {word:'FIVE',  hint:'five',  emoji:'5️⃣'},
+      {word:'SIX',   hint:'six',   emoji:'6️⃣'},
+      {word:'SEVEN', hint:'seven', emoji:'7️⃣'},
+      {word:'EIGHT', hint:'eight', emoji:'8️⃣'},
+      {word:'NINE',  hint:'nine',  emoji:'9️⃣'},
+      {word:'TEN',   hint:'ten',   emoji:'🔟'},
+    ]
+  },
+  {
+    key:'shapes', label:'🔷 Shapes',
+    words:[
+      {word:'CIRCLE',    hint:'a circle',    emoji:'⭕'},
+      {word:'SQUARE',    hint:'a square',    emoji:'⬛'},
+      {word:'TRIANGLE',  hint:'a triangle',  emoji:'🔺'},
+      {word:'STAR',      hint:'a star',      emoji:'⭐'},
+      {word:'HEART',     hint:'a heart',     emoji:'❤️'},
+      {word:'DIAMOND',   hint:'a diamond',   emoji:'💎'},
+      {word:'RECTANGLE', hint:'a rectangle', emoji:'▬'},
+      {word:'OVAL',      hint:'an oval',     emoji:'🥚'},
+    ]
+  },
+  {
+    key:'family', label:'👨‍👩‍👧 Family',
+    words:[
+      {word:'MUM',         hint:'mum',           emoji:'👩'},
+      {word:'DAD',         hint:'dad',           emoji:'👨'},
+      {word:'BABY',        hint:'a baby',        emoji:'👶'},
+      {word:'BOY',         hint:'a boy',         emoji:'👦'},
+      {word:'GIRL',        hint:'a girl',        emoji:'👧'},
+      {word:'GRANDMA',     hint:'grandma',       emoji:'👵'},
+      {word:'GRANDPA',     hint:'grandpa',       emoji:'👴'},
+      {word:'BROTHER',     hint:'a brother',     emoji:'👦'},
+      {word:'SISTER',      hint:'a sister',      emoji:'👧'},
+      {word:'TEACHER',     hint:'a teacher',     emoji:'🧑‍🏫'},
+    ]
+  },
+  {
+    key:'transport', label:'🚗 Transport',
+    words:[
+      {word:'CAR',        hint:'a car',        emoji:'🚗'},
+      {word:'BUS',        hint:'a bus',        emoji:'🚌'},
+      {word:'TRAIN',      hint:'a train',      emoji:'🚂'},
+      {word:'PLANE',      hint:'a plane',      emoji:'✈️'},
+      {word:'BIKE',       hint:'a bike',       emoji:'🚲'},
+      {word:'BOAT',       hint:'a boat',       emoji:'⛵'},
+      {word:'TAXI',       hint:'a taxi',       emoji:'🚕'},
+      {word:'TRUCK',      hint:'a truck',      emoji:'🚚'},
+      {word:'HELICOPTER', hint:'a helicopter', emoji:'🚁'},
+      {word:'ROCKET',     hint:'a rocket',     emoji:'🚀'},
+    ]
+  },
+  {
+    key:'weather', label:'🌦️ Weather',
+    words:[
+      {word:'SUNNY',  hint:'sunny',  emoji:'☀️'},
+      {word:'CLOUDY', hint:'cloudy', emoji:'☁️'},
+      {word:'RAINY',  hint:'rainy',  emoji:'🌧️'},
+      {word:'WINDY',  hint:'windy',  emoji:'💨'},
+      {word:'SNOWY',  hint:'snowy',  emoji:'❄️'},
+      {word:'STORMY', hint:'stormy', emoji:'⛈️'},
+      {word:'FOGGY',  hint:'foggy',  emoji:'🌫️'},
+      {word:'HOT',    hint:'hot',    emoji:'🌡️'},
+      {word:'COLD',   hint:'cold',   emoji:'🥶'},
+      {word:'RAINBOW',hint:'a rainbow',emoji:'🌈'},
+    ]
+  },
+  {
+    key:'clothes', label:'👗 Clothes',
+    words:[
+      {word:'SHIRT',   hint:'a shirt',   emoji:'👕'},
+      {word:'DRESS',   hint:'a dress',   emoji:'👗'},
+      {word:'TROUSERS',hint:'trousers',  emoji:'👖'},
+      {word:'SHOES',   hint:'shoes',     emoji:'👟'},
+      {word:'HAT',     hint:'a hat',     emoji:'🎩'},
+      {word:'COAT',    hint:'a coat',    emoji:'🧥'},
+      {word:'SOCKS',   hint:'socks',     emoji:'🧦'},
+      {word:'SKIRT',   hint:'a skirt',   emoji:'👘'},
+      {word:'GLOVES',  hint:'gloves',    emoji:'🧤'},
+      {word:'SCARF',   hint:'a scarf',   emoji:'🧣'},
+    ]
+  },
+  {
+    key:'body', label:'🦵 Body Parts',
+    words:[
+      {word:'HEAD',    hint:'head',     emoji:'🗣️'},
+      {word:'EYES',    hint:'eyes',     emoji:'👀'},
+      {word:'NOSE',    hint:'a nose',   emoji:'👃'},
+      {word:'MOUTH',   hint:'a mouth',  emoji:'👄'},
+      {word:'EARS',    hint:'ears',     emoji:'👂'},
+      {word:'HAND',    hint:'a hand',   emoji:'🤚'},
+      {word:'ARM',     hint:'an arm',   emoji:'💪'},
+      {word:'LEG',     hint:'a leg',    emoji:'🦵'},
+      {word:'FOOT',    hint:'a foot',   emoji:'🦶'},
+      {word:'HAIR',    hint:'hair',     emoji:'💇'},
+    ]
+  },
+];
+</script>
+
+<!-- ── Vocab files from picture-games ── -->
+<script src="../picture-games/vocab-letsgol1.js" onerror="console.log('L1 not found')"></script>
+<script src="../picture-games/vocab-letsgol2.js" onerror="console.log('L2 not found')"></script>
+<script src="../picture-games/vocab-letsgol3.js" onerror="console.log('L3 not found')"></script>
+<script src="../picture-games/vocab-letsgol4.js" onerror="console.log('L4 not found')"></script>
+<script src="../picture-games/vocab-letsgol5.js" onerror="console.log('L5 not found')"></script>
+<script src="../picture-games/vocab-letsgol6.js" onerror="console.log('L6 not found')"></script>
+
+<script>
+// ── State ──
+let currentWords = [];   // pool for this session
+let shownWords   = [];   // current round's 4-6 words
+let hiddenIndex  = -1;   // which card is hidden
+let roundCount   = 0;
+
+// ── TTS ──
+const ttsSynth = window.speechSynthesis || null;
+let ttsEnabled = localStorage.getItem('ttsEnabled') === 'true';
+
+function ttsUpdateUI() {
+  const btn = document.getElementById('tts-toggle');
+  if (!btn) return;
+  btn.textContent = ttsEnabled ? '🔊 Auto-read: ON' : '🔇 Auto-read: OFF';
+  btn.className = 'tts-toggle' + (ttsEnabled ? ' on' : '');
+}
+
+function ttsToggle() {
+  ttsEnabled = !ttsEnabled;
+  localStorage.setItem('ttsEnabled', ttsEnabled);
+  ttsUpdateUI();
+  if (!ttsEnabled && ttsSynth) ttsSynth.cancel();
+}
+
+function speak(text) {
+  if (!ttsSynth || !ttsEnabled) return;
+  ttsSynth.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'en-US'; utt.rate = 0.82; utt.pitch = 1.1;
+  ttsSynth.speak(utt);
+}
+
+// ── Build selectors ──
+function buildSelectors() {
+  const setSel  = document.getElementById('sel-set');
+  const unitSel = document.getElementById('sel-unit');
+
+  // Built-in sets
+  const grpBuiltin = document.createElement('optgroup');
+  grpBuiltin.label = '── Built-in Sets ──';
+  BUILTIN_SETS.forEach((s,i) => {
+    const o = document.createElement('option');
+    o.value = 'builtin_' + i;
+    o.textContent = s.label;
+    grpBuiltin.appendChild(o);
+  });
+  setSel.appendChild(grpBuiltin);
+
+  // Vocab registry (flashcard files)
+  const reg = window.VOCAB_REGISTRY || [];
+  if (reg.length) {
+    const grpFlash = document.createElement('optgroup');
+    grpFlash.label = '── Flashcard Vocab ──';
+    reg.forEach((book, i) => {
+      const o = document.createElement('option');
+      o.value = 'vocab_' + i;
+      o.textContent = '📚 ' + book.label;
+      grpFlash.appendChild(o);
+    });
+    setSel.appendChild(grpFlash);
+  }
+}
+
+function onSetChange() {
+  const val = document.getElementById('sel-set').value;
+  const unitSel = document.getElementById('sel-unit');
+  unitSel.innerHTML = '<option value="">All units</option>';
+  unitSel.style.display = 'none';
+
+  if (val.startsWith('vocab_')) {
+    const reg = window.VOCAB_REGISTRY || [];
+    const idx = parseInt(val.replace('vocab_',''));
+    const book = reg[idx];
+    if (book && book.units) {
+      book.units.forEach(u => {
+        const o = document.createElement('option');
+        o.value = u.unit;
+        o.textContent = u.label || 'Unit ' + u.unit;
+        unitSel.appendChild(o);
+      });
+      unitSel.style.display = '';
+    }
+  }
+}
+
+function getWordPool() {
+  const val = document.getElementById('sel-set').value;
+  if (!val) return [];
+
+  if (val.startsWith('builtin_')) {
+    const idx = parseInt(val.replace('builtin_',''));
+    return BUILTIN_SETS[idx].words;
+  }
+
+  if (val.startsWith('vocab_')) {
+    const reg = window.VOCAB_REGISTRY || [];
+    const bookIdx = parseInt(val.replace('vocab_',''));
+    const book = reg[bookIdx];
+    if (!book) return [];
+    const unitVal = document.getElementById('sel-unit').value;
+    let words = [];
+    book.units.forEach(u => {
+      if (!unitVal || String(u.unit) === unitVal) {
+        // Filter out instruction sentences (long hints)
+        const filtered = u.words.filter(w => w.emoji && w.emoji !== '🖼️' && w.word.length < 20);
+        words = words.concat(filtered);
+      }
+    });
+    // Deduplicate by word
+    const seen = new Set();
+    return words.filter(w => { if (seen.has(w.word)) return false; seen.add(w.word); return true; });
+  }
+  return [];
+}
+
+// ── Game logic ──
+function newRound() {
+  const pool = getWordPool();
+  if (pool.length < 4) {
+    alert('Please choose a set first!');
+    return;
+  }
+
+  const count = parseInt(document.getElementById('sel-count').value) || 4;
+  const cols = count === 6 ? 3 : (count === 4 ? 4 : 4);
+
+  // Pick random unique items
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  shownWords = shuffled.slice(0, Math.min(count, shuffled.length));
+  hiddenIndex = -1;
+  roundCount++;
+
+  document.getElementById('card-grid').style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  renderCards();
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('card-grid').style.display = 'grid';
+  document.getElementById('controls').style.display = 'flex';
+  document.getElementById('btn-hide').disabled = false;
+  document.getElementById('btn-reveal').disabled = true;
+  document.getElementById('round-info').textContent = 'Round ' + roundCount + ' · ' + shownWords.length + ' items';
+}
+
+function renderCards() {
+  const grid = document.getElementById('card-grid');
+  grid.innerHTML = '';
+  shownWords.forEach((w, i) => {
+    const card = document.createElement('div');
+    const isHidden   = i === hiddenIndex;
+    const isRevealed = i === hiddenIndex && document.getElementById('btn-hide').disabled && !document.getElementById('btn-reveal').disabled === false;
+
+    card.className = 'wm-card' + (isHidden ? ' hidden' : '');
+    card.id = 'card-' + i;
+
+    if (isHidden) {
+      card.innerHTML = `<div class="card-emoji">❓</div><div class="card-word">?</div>`;
+    } else {
+      card.innerHTML = `<div class="card-emoji">${w.emoji || '🖼️'}</div><div class="card-word">${w.word}</div>`;
+    }
+    grid.appendChild(card);
+  });
+}
+
+function hideOne() {
+  if (shownWords.length === 0) return;
+  // Pick random card to hide
+  hiddenIndex = Math.floor(Math.random() * shownWords.length);
+  renderCards();
+  document.getElementById('btn-hide').disabled = true;
+  document.getElementById('btn-reveal').disabled = false;
+  // Speak "What's missing?" 
+  speak("What's missing?");
+}
+
+function revealHidden() {
+  if (hiddenIndex < 0) return;
+  const card = document.getElementById('card-' + hiddenIndex);
+  const w = shownWords[hiddenIndex];
+  card.className = 'wm-card revealed';
+  card.innerHTML = `<div class="card-emoji">${w.emoji || '🖼️'}</div><div class="card-word">${w.word}</div>`;
+  // Speak the answer
+  speak(w.hint || w.word);
+  document.getElementById('btn-reveal').disabled = true;
+  document.getElementById('btn-hide').disabled = false;
+}
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', () => {
+  ttsUpdateUI();
+  buildSelectors();
+});
+</script>
+</body>
+</html>
