@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taboo 🚫</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0d14;--surface:#111520;--card:#161b2e;--border:rgba(255,255,255,0.08);
+  --text:#e8eaf0;--muted:rgba(232,234,240,0.45);
+  --accent:#f0b429;--accent2:#3ecfcf;--green:#48c774;--red:#e05c5c;
+  --radius:16px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:0.78rem;text-decoration:none;color:var(--muted);}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.game-title{font-size:1.1rem;font-weight:800;}
+.game-title span{color:var(--red);}
+select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:0.8rem;cursor:pointer;}
+.start-btn{background:var(--accent);color:#0a0d14;border:none;border-radius:8px;padding:7px 18px;font-size:0.82rem;font-weight:800;cursor:pointer;}
+.start-btn:hover{filter:brightness(1.1);}
+
+.arena{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:20px;}
+
+/* Main card */
+.taboo-card{
+  background:var(--card);border:2px solid var(--border);border-radius:24px;
+  padding:32px 40px;max-width:520px;width:100%;text-align:center;
+  position:relative;overflow:hidden;
+}
+.taboo-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(224,92,92,0.06),transparent 70%);pointer-events:none;}
+
+.main-word{
+  font-size:3rem;font-weight:900;letter-spacing:-0.02em;
+  color:var(--text);margin-bottom:20px;line-height:1.1;
+  text-transform:uppercase;
+}
+
+.forbidden-label{font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+
+.forbidden-list{display:flex;flex-direction:column;gap:6px;}
+.forbidden-word{
+  background:rgba(224,92,92,0.08);border:1px solid rgba(224,92,92,0.2);
+  border-radius:8px;padding:8px 14px;font-size:1.05rem;font-weight:600;
+  color:rgba(224,92,92,0.85);letter-spacing:0.03em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.forbidden-word::before{content:'🚫';font-size:0.9rem;}
+
+/* Timer */
+.timer-ring{position:relative;width:90px;height:90px;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke 0.5s;}
+.timer-ring .bg-circle{stroke:var(--border);}
+.timer-ring .fg-circle{stroke:var(--accent2);}
+.timer-ring.warning .fg-circle{stroke:var(--accent);}
+.timer-ring.danger  .fg-circle{stroke:var(--red);}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:var(--text);}
+
+/* Controls */
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.ctrl-btn{padding:12px 26px;border:none;border-radius:40px;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:8px;}
+.btn-got{background:var(--green);color:#0a0d14;}
+.btn-got:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.btn-skip{background:var(--red);color:#fff;}
+.btn-skip:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.btn-pause{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-pause:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.btn-next{background:var(--accent);color:#0a0d14;}
+.btn-next:hover{filter:brightness(1.1);}
+
+/* Scoreboard */
+.score-board{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.team-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--radius);
+  padding:10px 18px;text-align:center;cursor:pointer;transition:all 0.18s;min-width:90px;
+}
+.team-card:hover{border-color:var(--accent2);}
+.team-card.active-team{border-color:var(--accent);background:rgba(240,180,41,0.08);}
+.team-name{font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.team-points{font-size:1.8rem;font-weight:900;color:var(--accent);}
+.team-adj{font-size:0.65rem;color:var(--muted);}
+
+/* Round info */
+.round-info{font-size:0.8rem;color:var(--muted);letter-spacing:0.05em;text-align:center;}
+
+/* Custom panel */
+.custom-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;max-width:600px;width:100%;display:none;}
+.custom-panel h3{font-size:0.82rem;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;}
+.custom-panel p{font-size:0.78rem;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+code{background:rgba(255,255,255,0.08);border-radius:4px;padding:1px 5px;font-size:0.85em;}
+textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px;font-size:0.85rem;font-family:inherit;resize:vertical;min-height:100px;}
+textarea:focus{outline:none;border-color:var(--accent);}
+
+.setup-screen{text-align:center;color:var(--muted);padding:20px;}
+.setup-screen .big{font-size:3rem;margin-bottom:12px;}
+.setup-screen p{font-size:0.9rem;line-height:1.6;}
+
+/* Timer setting */
+.timer-btns{display:flex;gap:6px;}
+.timer-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 12px;font-size:0.78rem;cursor:pointer;font-weight:700;}
+.timer-btn.active{background:var(--accent);color:#0a0d14;border-color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">← Back</a>
+  <span class="game-title">Taboo <span>🚫</span></span>
+  <select id="sel-level">
+    <option value="all">All levels</option>
+    <optgroup label="Preschool / L1–4">
+      <option value="basic">Basic vocabulary</option>
+      <option value="school">School life</option>
+    </optgroup>
+    <optgroup label="Level 5–6">
+      <option value="l56gram">Grammar terms</option>
+      <option value="l56vocab">Vocabulary</option>
+    </optgroup>
+    <optgroup label="Level 7–9">
+      <option value="l79lit">Literary terms</option>
+      <option value="l79vocab">Advanced vocabulary</option>
+      <option value="l79topics">Topics &amp; themes</option>
+    </optgroup>
+  </select>
+  <div class="timer-btns">
+    <button class="timer-btn active" onclick="setTimer(60)" id="t60">60s</button>
+    <button class="timer-btn" onclick="setTimer(45)" id="t45">45s</button>
+    <button class="timer-btn" onclick="setTimer(30)" id="t30">30s</button>
+  </div>
+  <button class="start-btn" onclick="startGame()">▶ Start</button>
+  <button class="start-btn" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);" onclick="toggleCustom()">+ Custom</button>
+</div>
+
+<div class="arena">
+
+  <div class="setup-screen" id="setup-screen">
+    <div class="big">🚫</div>
+    <p>One student faces <strong>away from the screen</strong>.<br>
+    The class describes the word — without using the forbidden words!<br>
+    Press <strong>Start</strong> to begin.</p>
+  </div>
+
+  <div class="timer-ring" id="timer-ring" style="display:none">
+    <svg width="90" height="90" viewBox="0 0 90 90">
+      <circle class="bg-circle" cx="45" cy="45" r="38"/>
+      <circle class="fg-circle" id="timer-arc" cx="45" cy="45" r="38" stroke-dasharray="239" stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-num" id="timer-num">60</div>
+  </div>
+
+  <div class="taboo-card" id="taboo-card" style="display:none">
+    <div class="main-word" id="main-word">WORD</div>
+    <div class="forbidden-label">Do NOT say:</div>
+    <div class="forbidden-list" id="forbidden-list"></div>
+  </div>
+
+  <div class="controls" id="controls" style="display:none">
+    <button class="ctrl-btn btn-got" onclick="gotIt()">✅ Got it!</button>
+    <button class="ctrl-btn btn-skip" onclick="skipWord()">⏭ Skip</button>
+    <button class="ctrl-btn btn-pause" onclick="togglePause()" id="pause-btn">⏸ Pause</button>
+  </div>
+
+  <div class="round-info" id="round-info"></div>
+
+  <div class="score-board" id="score-board">
+    <div class="team-card active-team" id="team-0" onclick="selectTeam(0)">
+      <div class="team-name">Team A</div>
+      <div class="team-points" id="tp-0">0</div>
+      <div class="team-adj" id="ta-0"></div>
+    </div>
+    <div class="team-card" id="team-1" onclick="selectTeam(1)">
+      <div class="team-name">Team B</div>
+      <div class="team-points" id="tp-1">0</div>
+      <div class="team-adj" id="ta-1"></div>
+    </div>
+    <div class="team-card" id="team-2" onclick="selectTeam(2)">
+      <div class="team-name">Team C</div>
+      <div class="team-points" id="tp-2">0</div>
+      <div class="team-adj" id="ta-2"></div>
+    </div>
+    <div class="team-card" id="team-3" onclick="selectTeam(3)">
+      <div class="team-name">Team D</div>
+      <div class="team-points" id="tp-3">0</div>
+      <div class="team-adj" id="ta-3"></div>
+    </div>
+  </div>
+
+  <div class="custom-panel" id="custom-panel">
+    <h3>📝 Custom Word List</h3>
+    <p>One card per line: <code>TARGET WORD | forbidden1 | forbidden2 | forbidden3 | forbidden4 | forbidden5</code></p>
+    <textarea id="custom-input" placeholder="ELEPHANT | big | trunk | grey | Africa | animal&#10;BIRTHDAY | cake | candles | party | present | wish"></textarea>
+    <button class="start-btn" onclick="loadCustom()" style="margin-top:8px;">Load List</button>
+  </div>
+</div>
+
+<script>
+// ── Word bank ──
+const WORDS = {
+  basic:[
+    {w:'BEACH',f:['sea','sand','swim','holiday','waves']},
+    {w:'BIRTHDAY',f:['cake','candles','party','present','age']},
+    {w:'ELEPHANT',f:['big','trunk','grey','Africa','animal']},
+    {w:'PIZZA',f:['food','cheese','Italy','round','tomato']},
+    {w:'FOOTBALL',f:['kick','goal','sport','team','ball']},
+    {w:'RAIN',f:['wet','water','umbrella','cloud','drops']},
+    {w:'MUSIC',f:['sing','song','listen','notes','rhythm']},
+    {w:'DRAGON',f:['fire','fly','scales','myth','wings']},
+    {w:'MOUNTAIN',f:['high','snow','climb','rocky','hill']},
+    {w:'HOSPITAL',f:['sick','doctor','nurse','medical','bed']},
+    {w:'LIBRARY',f:['books','read','quiet','borrow','shelves']},
+    {w:'BUTTERFLY',f:['fly','wings','insect','flower','colourful']},
+    {w:'ROBOT',f:['machine','metal','program','science','AI']},
+    {w:'GHOST',f:['dead','haunted','scary','spirit','white']},
+    {w:'JUNGLE',f:['trees','hot','wild','animals','forest']},
+  ],
+  school:[
+    {w:'HOMEWORK',f:['teacher','work','home','school','task']},
+    {w:'EXAM',f:['test','write','marks','pass','school']},
+    {w:'PLAYGROUND',f:['play','outside','break','school','run']},
+    {w:'CLASSROOM',f:['school','teacher','desks','learn','lesson']},
+    {w:'PENCIL CASE',f:['pencil','pens','carry','bag','school']},
+    {w:'REPORT CARD',f:['grades','marks','school','parents','score']},
+    {w:'HEADTEACHER',f:['school','boss','office','teacher','principal']},
+    {w:'UNIFORM',f:['clothes','school','wear','tie','colour']},
+    {w:'TIMETABLE',f:['lessons','schedule','when','class','times']},
+  ],
+  l56gram:[
+    {w:'PASSIVE VOICE',f:['active','done','agent','by','grammar']},
+    {w:'RELATIVE CLAUSE',f:['who','which','where','join','sentence']},
+    {w:'REPORTED SPEECH',f:['said','told','direct','speech marks','quote']},
+    {w:'MODAL VERB',f:['can','must','should','could','might']},
+    {w:'CONDITIONAL',f:['if','would','result','cause','then']},
+    {w:'PHRASAL VERB',f:['particle','verb','give','up','turn']},
+    {w:'SUBJECT',f:['noun','sentence','does','verb','topic']},
+    {w:'CONJUNCTION',f:['and','but','because','join','connect']},
+    {w:'APOSTROPHE',f:['possessive','contraction','punctuation','mark','it\'s']},
+    {w:'TENSE',f:['past','present','future','time','verb']},
+  ],
+  l56vocab:[
+    {w:'INSIDIOUS',f:['evil','slowly','hidden','harmful','gradual']},
+    {w:'MELANCHOLY',f:['sad','unhappy','down','mood','depressed']},
+    {w:'BENEVOLENT',f:['kind','good','generous','nice','helpful']},
+    {w:'AMBIGUOUS',f:['unclear','both','two','meaning','vague']},
+    {w:'PROCRASTINATE',f:['delay','put off','later','avoid','lazy']},
+    {w:'UNANIMOUS',f:['agree','all','everyone','vote','together']},
+    {w:'PERSEVERANCE',f:['keep','going','try','hard','give up']},
+    {w:'ELOQUENT',f:['speak','words','well','language','articulate']},
+    {w:'ANTAGONIST',f:['villain','enemy','against','story','hero']},
+    {w:'FORESHADOWING',f:['hint','later','ahead','suggest','predict']},
+  ],
+  l79lit:[
+    {w:'METAPHOR',f:['like','as','comparison','simile','figurative']},
+    {w:'IAMBIC PENTAMETER',f:['rhythm','Shakespeare','stressed','syllables','verse']},
+    {w:'PATHETIC FALLACY',f:['weather','mood','nature','emotion','storm']},
+    {w:'SOLILOQUY',f:['alone','speak','stage','thinking','Hamlet']},
+    {w:'DRAMATIC IRONY',f:['audience','know','character','doesn\'t','irony']},
+    {w:'STREAM OF CONSCIOUSNESS',f:['thoughts','mind','flow','narrator','continuous']},
+    {w:'BILDUNGSROMAN',f:['growing','novel','young','journey','coming of age']},
+    {w:'CATHARSIS',f:['emotion','release','tragedy','audience','feelings']},
+    {w:'OXYMORON',f:['opposite','together','contradiction','jumbo','shrimp']},
+    {w:'ALLITERATION',f:['letter','sound','beginning','repeat','same']},
+    {w:'VOLTA',f:['turn','sonnet','poem','shift','change']},
+    {w:'ENJAMBMENT',f:['line','run on','poem','continue','break']},
+    {w:'CAESURA',f:['pause','middle','line','break','punctuation']},
+    {w:'HUBRIS',f:['pride','arrogance','fall','tragic','Greek']},
+    {w:'HYPERBOLE',f:['exaggerate','extreme','huge','massive','impossible']},
+  ],
+  l79vocab:[
+    {w:'EPHEMERAL',f:['short','brief','temporary','passing','lasting']},
+    {w:'VERBOSE',f:['words','too many','talking','long','concise']},
+    {w:'CANDID',f:['honest','open','direct','truth','frank']},
+    {w:'UBIQUITOUS',f:['everywhere','common','all','around','found']},
+    {w:'ACRIMONY',f:['bitter','anger','harsh','feelings','dispute']},
+    {w:'SYCOPHANT',f:['flatter','please','boss','compliment','fake']},
+    {w:'PEDANTIC',f:['rules','exact','detail','correct','grammar']},
+    {w:'LACONIC',f:['short','few','words','brief','say']},
+    {w:'MAGNANIMOUS',f:['generous','noble','grand','kind','forgiving']},
+    {w:'EQUIVOCATE',f:['vague','unclear','both','avoid','answer']},
+  ],
+  l79topics:[
+    {w:'PROPAGANDA',f:['government','persuade','control','media','influence']},
+    {w:'COLONIALISM',f:['empire','rule','country','power','territory']},
+    {w:'DYSTOPIA',f:['future','bad','control','society','perfect']},
+    {w:'REVOLUTION',f:['change','overthrow','power','violent','government']},
+    {w:'INDUSTRIAL REVOLUTION',f:['factories','machines','Britain','Victorian','workers']},
+    {w:'FEMINISM',f:['women','equal','rights','gender','movement']},
+    {w:'CENSORSHIP',f:['banned','control','media','government','suppress']},
+    {w:'DEMOCRACY',f:['vote','government','people','election','parliament']},
+    {w:'GLOBALISATION',f:['world','trade','connect','countries','economy']},
+    {w:'RENAISSANCE',f:['art','rebirth','Italy','da Vinci','history']},
+  ],
+};
+const ALL_WORDS = Object.values(WORDS).flat();
+
+// ── State ──
+let timerDur=60, timerLeft=60, timerInterval=null, paused=false;
+let currentWord=null, usedWords=new Set();
+let teamPts=[0,0,0,0], activeTeam=0, skips=0, got=0;
+let customWords=[];
+
+function setTimer(s){
+  timerDur=s;
+  ['60','45','30'].forEach(v=>document.getElementById('t'+v).className='timer-btn'+(v==s?' active':''));
+}
+
+function getPool(){
+  if(customWords.length) return customWords;
+  const lv=document.getElementById('sel-level').value;
+  if(lv==='all') return ALL_WORDS;
+  return WORDS[lv]||ALL_WORDS;
+}
+
+function startGame(){
+  const pool=getPool();
+  if(!pool.length){alert('Choose a level or add custom words first!');return;}
+  
+  usedWords.clear(); skips=0; got=0;
+  document.getElementById('setup-screen').style.display='none';
+  document.getElementById('taboo-card').style.display='block';
+  document.getElementById('timer-ring').style.display='flex';
+  document.getElementById('controls').style.display='flex';
+  document.getElementById('custom-panel').style.display='none';
+
+  showNextWord();
+  startTimer();
+}
+
+function showNextWord(){
+  const pool=getPool();
+  if(usedWords.size>=pool.length) usedWords.clear();
+  let idx;
+  do{idx=Math.floor(Math.random()*pool.length);}while(usedWords.has(idx));
+  usedWords.add(idx);
+  currentWord=pool[idx];
+
+  document.getElementById('main-word').textContent=currentWord.w;
+  const fl=document.getElementById('forbidden-list');
+  fl.innerHTML=currentWord.f.map(f=>`<div class="forbidden-word">${f.toUpperCase()}</div>`).join('');
+  updateRoundInfo();
+}
+
+function gotIt(){
+  teamPts[activeTeam]++;got++;
+  document.getElementById('tp-'+activeTeam).textContent=teamPts[activeTeam];
+  updateAdj(activeTeam);
+  showNextWord();
+}
+
+function skipWord(){
+  skips++;
+  // Skipping costs a point if there are enough points
+  if(teamPts[activeTeam]>0) teamPts[activeTeam]--;
+  document.getElementById('tp-'+activeTeam).textContent=teamPts[activeTeam];
+  showNextWord();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  timerLeft=timerDur;
+  paused=false;
+  document.getElementById('pause-btn').textContent='⏸ Pause';
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    if(paused) return;
+    timerLeft--;
+    updateTimerDisplay();
+    if(timerLeft<=0){ clearInterval(timerInterval); timeUp(); }
+  },1000);
+}
+
+function updateTimerDisplay(){
+  const ring=document.getElementById('timer-ring');
+  const arc=document.getElementById('timer-arc');
+  const num=document.getElementById('timer-num');
+  const pct=timerLeft/timerDur;
+  const circ=239;
+  arc.style.strokeDashoffset=(1-pct)*circ;
+  num.textContent=timerLeft;
+  ring.className='timer-ring'+(pct<0.2?' danger':pct<0.4?' warning':'');
+}
+
+function togglePause(){
+  paused=!paused;
+  document.getElementById('pause-btn').textContent=paused?'▶ Resume':'⏸ Pause';
+}
+
+function timeUp(){
+  document.getElementById('controls').innerHTML=`
+    <button class="ctrl-btn btn-next" onclick="nextTeam()">▶ Next Team's Turn</button>
+    <button class="ctrl-btn btn-next" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);" onclick="startGame()">🔄 New Round</button>
+  `;
+  document.getElementById('main-word').textContent="⏰ TIME!";
+  document.getElementById('forbidden-list').innerHTML='';
+}
+
+function nextTeam(){
+  selectTeam((activeTeam+1)%4);
+  document.getElementById('controls').innerHTML=`
+    <button class="ctrl-btn btn-got" onclick="gotIt()">✅ Got it!</button>
+    <button class="ctrl-btn btn-skip" onclick="skipWord()">⏭ Skip</button>
+    <button class="ctrl-btn btn-pause" onclick="togglePause()" id="pause-btn">⏸ Pause</button>
+  `;
+  got=0; skips=0;
+  showNextWord();
+  startTimer();
+}
+
+function selectTeam(t){
+  activeTeam=t;
+  document.querySelectorAll('.team-card').forEach((c,i)=>{
+    c.classList.toggle('active-team',i===t);
+  });
+}
+
+function updateAdj(t){
+  const adjs=['just starting','warming up','on a roll!','unstoppable!','legendary!'];
+  const pts=teamPts[t];
+  const a=pts<2?adjs[0]:pts<5?adjs[1]:pts<8?adjs[2]:pts<12?adjs[3]:adjs[4];
+  document.getElementById('ta-'+t).textContent=a;
+}
+
+function updateRoundInfo(){
+  document.getElementById('round-info').textContent=`Got: ${got} · Skipped: ${skips} · Playing: Team ${['A','B','C','D'][activeTeam]}`;
+}
+
+function toggleCustom(){
+  const p=document.getElementById('custom-panel');
+  p.style.display=p.style.display==='none'||!p.style.display?'block':'none';
+}
+
+function loadCustom(){
+  const raw=document.getElementById('custom-input').value.trim();
+  customWords=[];
+  raw.split('\n').forEach(line=>{
+    const parts=line.split('|').map(s=>s.trim());
+    if(parts.length>=2){
+      customWords.push({w:parts[0].toUpperCase(),f:parts.slice(1).map(s=>s.toLowerCase())});
+    }
+  });
+  if(customWords.length){
+    document.getElementById('custom-panel').style.display='none';
+    alert(customWords.length+' cards loaded! Press Start to play.');
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Device Bingo 🎰</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0d14;--surface:#111520;--card:#161b2e;--border:rgba(255,255,255,0.08);
+  --text:#e8eaf0;--muted:rgba(232,234,240,0.45);
+  --accent:#f0b429;--accent2:#3ecfcf;--green:#48c774;--red:#e05c5c;
+  --radius:12px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:0.78rem;text-decoration:none;color:var(--muted);}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.game-title{font-size:1.1rem;font-weight:800;}
+.game-title span{color:var(--accent);}
+select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:0.8rem;cursor:pointer;}
+.top-btn{padding:7px 16px;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;}
+.btn-print{background:var(--accent2);color:#0a0d14;}
+.btn-print:hover{filter:brightness(1.1);}
+.btn-start{background:var(--accent);color:#0a0d14;}
+.btn-start:hover{filter:brightness(1.1);}
+.btn-ghost{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-ghost:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+
+/* ── Two-column layout ── */
+.layout{display:grid;grid-template-columns:1fr 320px;gap:0;flex:1;}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}}
+
+/* ── Clue panel (main) ── */
+.clue-panel{padding:24px;display:flex;flex-direction:column;align-items:center;gap:20px;border-right:1px solid var(--border);}
+
+.clue-card{
+  background:var(--card);border:2px solid var(--border);border-radius:20px;
+  padding:32px 36px;width:100%;max-width:560px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.clue-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(240,180,41,0.05),transparent);pointer-events:none;}
+
+.clue-num{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.clue-text{font-size:1.3rem;line-height:1.6;color:var(--text);margin-bottom:16px;}
+.clue-text.big{font-size:1.6rem;}
+.device-answer{
+  display:none;background:rgba(240,180,41,0.08);border:1px solid rgba(240,180,41,0.2);
+  border-radius:10px;padding:10px 18px;
+  font-size:1.1rem;font-weight:800;color:var(--accent);letter-spacing:0.05em;text-transform:uppercase;
+}
+
+.clue-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.ctrl-btn{padding:10px 22px;border:none;border-radius:40px;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.18s;}
+.btn-reveal{background:var(--accent);color:#0a0d14;}
+.btn-reveal:hover{filter:brightness(1.1);}
+.btn-next-clue{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-next-clue:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+
+/* ── Called list ── */
+.called-list{width:100%;max-width:560px;}
+.called-title{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.called-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.called-chip{background:rgba(72,199,116,0.1);border:1px solid rgba(72,199,116,0.2);border-radius:20px;padding:3px 10px;font-size:0.72rem;font-weight:700;color:var(--green);text-transform:uppercase;}
+
+/* ── Sidebar ── */
+.sidebar{background:var(--surface);padding:20px;overflow-y:auto;}
+.sidebar-title{font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+
+/* Mini bingo card preview */
+.mini-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;}
+.mini-card h4{font-size:0.72rem;font-weight:700;color:var(--muted);margin-bottom:8px;}
+.mini-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;}
+.mini-cell{
+  background:var(--bg);border:1px solid var(--border);border-radius:4px;
+  font-size:0.5rem;font-weight:700;text-align:center;padding:4px 2px;
+  letter-spacing:0.02em;line-height:1.2;text-transform:uppercase;
+  transition:all 0.2s;
+}
+.mini-cell.free{background:rgba(240,180,41,0.12);color:var(--accent);border-color:rgba(240,180,41,0.2);}
+.mini-cell.called{background:rgba(72,199,116,0.15);color:var(--green);border-color:var(--green);}
+.mini-cell.bingo{background:rgba(240,180,41,0.25);color:var(--accent);border-color:var(--accent);animation:flash 0.6s ease infinite alternate;}
+@keyframes flash{from{opacity:1}to{opacity:0.5}}
+
+/* Devices list */
+.devices-list{display:flex;flex-direction:column;gap:4px;}
+.device-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;transition:all 0.2s;}
+.device-item.in-play{border-color:var(--accent2);color:var(--accent2);}
+.device-item.called-d{background:rgba(72,199,116,0.1);border-color:var(--green);color:var(--green);}
+
+/* ── Print styles ── */
+@media print {
+  .top-bar,.layout,.clue-panel,.sidebar{display:none!important;}
+  .print-cards{display:block!important;}
+  body{background:#fff;color:#000;}
+  .print-page{page-break-after:always;padding:15mm;}
+  .print-card-title{font-size:14pt;font-weight:bold;margin-bottom:6mm;text-align:center;}
+  .print-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2mm;width:100%;}
+  .print-cell{border:1px solid #999;padding:6mm 2mm;text-align:center;font-size:7pt;font-weight:bold;text-transform:uppercase;min-height:18mm;display:flex;align-items:center;justify-content:center;line-height:1.3;}
+  .print-cell.free-cell{background:#fffbe6;font-size:8pt;}
+  .bingo-header{display:grid;grid-template-columns:repeat(5,1fr);gap:2mm;margin-bottom:2mm;}
+  .bingo-letter{text-align:center;font-size:14pt;font-weight:900;color:#333;}
+  .print-instr{font-size:9pt;text-align:center;margin-top:4mm;color:#666;}
+}
+.print-cards{display:none;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">← Back</a>
+  <span class="game-title">Device <span>Bingo</span> 🎰</span>
+  <select id="sel-set" onchange="buildSet()">
+    <option value="core">Core devices (L7–8)</option>
+    <option value="poetry">Poetry focus (L7–9)</option>
+    <option value="rhetoric">Rhetoric &amp; persuasion (L8–9)</option>
+    <option value="narrative">Narrative techniques (L8–9)</option>
+    <option value="all">All devices</option>
+  </select>
+  <select id="sel-cards">
+    <option value="8">8 cards</option>
+    <option value="16">16 cards</option>
+    <option value="30">30 cards</option>
+  </select>
+  <button class="top-btn btn-start" onclick="initGame()">▶ Set Up</button>
+  <button class="top-btn btn-print" onclick="generatePrint()">🖨️ Print Cards</button>
+  <button class="top-btn btn-ghost" onclick="nextClue()">▶ Next Clue</button>
+</div>
+
+<!-- Print output (hidden until print) -->
+<div class="print-cards" id="print-cards"></div>
+
+<div class="layout" id="main-layout" style="display:none">
+
+  <!-- Left: clue reader -->
+  <div class="clue-panel">
+    <div class="clue-card" id="clue-card">
+      <div class="clue-num" id="clue-num">Clue 0 of 0</div>
+      <div class="clue-text" id="clue-text">Press "Next Clue" to begin!</div>
+      <div class="device-answer" id="device-answer"></div>
+    </div>
+
+    <div class="clue-controls">
+      <button class="ctrl-btn btn-reveal" onclick="revealDevice()">👁️ Reveal Answer</button>
+      <button class="ctrl-btn btn-next-clue" onclick="nextClue()">▶ Next Clue</button>
+    </div>
+
+    <div class="called-list">
+      <div class="called-title">Called so far:</div>
+      <div class="called-chips" id="called-chips"></div>
+    </div>
+  </div>
+
+  <!-- Right: sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-title">📋 Devices in play</div>
+    <div class="devices-list" id="devices-list"></div>
+  </div>
+
+</div>
+
+<!-- Setup screen -->
+<div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:40px;text-align:center;" id="setup-screen">
+  <div style="font-size:3rem;">🎰</div>
+  <div style="font-size:1rem;color:var(--muted);max-width:500px;line-height:1.7;">
+    Choose a device set and press <strong>Set Up</strong>.<br>
+    Then press <strong>Print Cards</strong> to print a class set of randomised bingo cards.<br>
+    Students cross off devices as you read the clues!
+  </div>
+</div>
+
+<script>
+// ── Device database ──
+const DEVICES = {
+  // key: { name, clues: [clue1, clue2, ...] }
+  metaphor:    {name:'METAPHOR',    clues:["\"The world is a stage\" — this technique says something IS something else without using 'like' or 'as'.",
+                                           "Calling someone a 'rock' when you mean they're strong is an example of this.",
+                                           "It makes a direct comparison, claiming one thing IS another."]},
+  simile:      {name:'SIMILE',      clues:["\"Her voice was like velvet\" — this technique uses 'like' or 'as' to compare.",
+                                           "\"He was as brave as a lion\" is a classic example of this technique.",
+                                           "It explicitly signals comparison using the words 'like' or 'as'."]},
+  personification:{name:'PERSONIFICATION',clues:["\"The wind whispered secrets\" — this technique gives human qualities to non-human things.",
+                                           "When a writer says \"the storm screamed\" or \"the sun smiled\", they're using this.",
+                                           "It brings objects or nature to life by making them behave like people."]},
+  alliteration:{name:'ALLITERATION',clues:["\"Peter Piper picked a peck of pickled peppers\" — the repetition of the same starting sound.",
+                                           "\"The slippery, silvery snake slid\" is packed with this technique.",
+                                           "When several words in a row begin with the same consonant sound."]},
+  onomatopoeia:{name:'ONOMATOPOEIA',clues:["CRASH! BANG! SIZZLE! — words that sound like what they describe.",
+                                           "\"The bees buzzed lazily in the heat\" — the key word here uses this technique.",
+                                           "When the spelling and sound of a word imitate the noise it represents."]},
+  hyperbole:   {name:'HYPERBOLE',   clues:["\"I've told you a million times!\" — extreme exaggeration for effect.",
+                                           "\"She was so hungry she could eat a horse\" is a classic example.",
+                                           "Deliberate over-exaggeration that isn't meant to be taken literally."]},
+  oxymoron:    {name:'OXYMORON',    clues:["\"Deafening silence\" — two contradictory words placed together.",
+                                           "\"Living death\", \"sweet sorrow\", \"organised chaos\" — what technique are these?",
+                                           "It creates tension or complexity by joining two opposite ideas."]},
+  irony:       {name:'IRONY',       clues:["When a character says \"Oh great!\" but means the opposite — this creates double meaning.",
+                                           "Saying \"What lovely weather!\" in a storm is a form of this.",
+                                           "The intended meaning is the opposite of the literal words spoken."]},
+  foreshadowing:{name:'FORESHADOWING',clues:["Early in Macbeth, the witches hint at his downfall — this is a technique that hints at future events.",
+                                           "When a writer plants subtle clues about what will happen later in the story.",
+                                           "It builds tension by making the reader suspect what's coming."]},
+  symbolism:   {name:'SYMBOLISM',   clues:["A white dove in a text almost always represents peace — this technique uses objects to stand for bigger ideas.",
+                                           "When a storm represents inner turmoil or a broken mirror suggests bad luck, that's this technique.",
+                                           "It uses a concrete image to represent an abstract concept."]},
+  pathetic_fallacy:{name:'PATHETIC FALLACY',clues:["When the weather matches the character's mood — \"dark storm clouds gathered as she received the news.\"",
+                                           "Dickens uses cold, foggy London to reflect the bleakness of poverty. This technique is called what?",
+                                           "It projects human emotions onto nature or the environment."]},
+  motif:       {name:'MOTIF',       clues:["Blood appears repeatedly throughout Macbeth, deepening its meaning each time — this technique is a recurring element.",
+                                           "When an image, object or idea appears again and again in a text to reinforce a theme.",
+                                           "A repeated element that builds symbolic weight as a story progresses."]},
+  imagery:     {name:'IMAGERY',     clues:["Writing that creates a vivid mental picture by appealing to the senses is called this.",
+                                           "\"The sharp tang of salt, the crash of cold waves, the sting of spray\" — this technique engages the reader's senses.",
+                                           "It includes visual, aural, tactile, olfactory and gustatory descriptions."]},
+  enjambment:  {name:'ENJAMBMENT',  clues:["When a sentence in a poem runs over from one line into the next without a pause — this creates momentum.",
+                                           "The opposite of an end-stopped line — it refuses to pause at the line break.",
+                                           "It can mirror a rushing, unstoppable feeling in the poem's meaning."]},
+  caesura:     {name:'CAESURA',     clues:["A deliberate pause in the middle of a line of poetry — often created by punctuation.",
+                                           "In \"To be, or not to be\" — the comma creates this.",
+                                           "It can slow the reader down or create a moment of tension or reflection."]},
+  volta:       {name:'VOLTA',       clues:["In a sonnet, the shift in argument or mood — often between the octave and sestet.",
+                                           "\"But\" or \"Yet\" often signal this turn in a poem.",
+                                           "A turning point in a poem where the speaker's perspective shifts."]},
+  sibilance:   {name:'SIBILANCE',   clues:["\"The soft, slippery, silent snake slithered\" — the repeated 's' sound is this technique.",
+                                           "A type of alliteration specifically using hissing 's' or 'sh' sounds.",
+                                           "It creates a sinister, whispering or soothing effect depending on context."]},
+  assonance:   {name:'ASSONANCE',   clues:["\"The rain in Spain stays mainly in the plain\" — the repeated vowel sound is this technique.",
+                                           "Repeated vowel sounds within words in close proximity — not the same as rhyme.",
+                                           "It creates a musical quality and can slow or speed the reader's pace."]},
+  anaphora:    {name:'ANAPHORA',    clues:["\"We shall fight on the beaches, we shall fight on the landing grounds, we shall fight in the fields\" — the repetition at the start of each phrase.",
+                                           "Beginning several successive phrases with the same word or group of words.",
+                                           "Churchill, Martin Luther King and Obama are all famous for using this in speeches."]},
+  antithesis:  {name:'ANTITHESIS',  clues:["\"It was the best of times, it was the worst of times\" — Dickens opens with this technique.",
+                                           "Placing two contrasting ideas in parallel structure for dramatic effect.",
+                                           "It highlights contrast by putting opposite ideas side by side."]},
+  juxtaposition:{name:'JUXTAPOSITION',clues:["Placing rich and poor characters next to each other in a scene to highlight inequality — this is the technique.",
+                                           "When a writer places two contrasting images, characters or ideas next to each other.",
+                                           "It forces the reader to compare the two contrasting elements."]},
+  repetition:  {name:'REPETITION',  clues:["\"Never, never, never, never, never\" — Lear's final words use this technique for devastating effect.",
+                                           "The deliberate repeating of a word or phrase to create emphasis or rhythm.",
+                                           "It can build urgency, create rhythm or hammer home a key idea."]},
+  rhetorical_q:{name:'RHETORICAL Q.',clues:["\"Is this a dagger which I see before me?\" — a question that doesn't expect an answer.",
+                                           "Speakers use this to involve the audience or make a point without requiring a reply.",
+                                           "It's a question used for dramatic or persuasive effect, not to get information."]},
+  euphemism:   {name:'EUPHEMISM',   clues:["Saying someone has \"passed away\" instead of died — replacing something harsh with something gentler.",
+                                           "Politicians often use this to soften bad news: \"downsizing\" instead of \"sacking people\".",
+                                           "It substitutes a polite or indirect expression for a blunt or uncomfortable one."]},
+  tricolon:    {name:'TRICOLON',    clues:["\"Government of the people, by the people, for the people\" — a group of three parallel phrases.",
+                                           "\"I came, I saw, I conquered\" — Julius Caesar uses this technique.",
+                                           "Three balanced items or phrases in a row — creates rhythm and feels complete."]},
+  free_space:  {name:'FREE SPACE',  clues:[]},
+};
+
+const SETS = {
+  core:['metaphor','simile','personification','alliteration','onomatopoeia','hyperbole','oxymoron',
+        'irony','foreshadowing','symbolism','pathetic_fallacy','imagery','repetition','rhetorical_q',
+        'juxtaposition','antithesis','tricolon','euphemism','sibilance','assonance','free_space'],
+  poetry:['metaphor','simile','personification','alliteration','onomatopoeia','hyperbole','oxymoron',
+          'imagery','enjambment','caesura','volta','sibilance','assonance','symbolism','motif',
+          'repetition','antithesis','juxtaposition','pathetic_fallacy','anaphora','free_space'],
+  rhetoric:['anaphora','tricolon','rhetorical_q','antithesis','juxtaposition','repetition',
+            'hyperbole','oxymoron','euphemism','irony','metaphor','simile','alliteration',
+            'sibilance','personification','imagery','symbolism','motif','foreshadowing','free_space'],
+  narrative:['foreshadowing','symbolism','motif','pathetic_fallacy','irony','imagery',
+             'metaphor','simile','personification','juxtaposition','antithesis','repetition',
+             'oxymoron','hyperbole','rhetorical_q','euphemism','anaphora','alliteration','free_space'],
+  all: Object.keys(DEVICES),
+};
+
+// ── State ──
+let activeSet=[], calledDevices=[], clueQueue=[], clueIdx=0;
+let printCards=[];
+
+function buildSet(){
+  const key=document.getElementById('sel-set').value;
+  activeSet=SETS[key]||SETS.core;
+}
+
+function initGame(){
+  buildSet();
+  calledDevices=[];
+  
+  // Build clue queue: shuffle all clues for all devices in set (excluding free space)
+  clueQueue=[];
+  const devices=activeSet.filter(d=>d!=='free_space');
+  devices.forEach(key=>{
+    const dev=DEVICES[key];
+    dev.clues.forEach(c=>clueQueue.push({key,name:dev.name,clue:c}));
+  });
+  clueQueue.sort(()=>Math.random()-0.5);
+  clueIdx=0;
+
+  // Show layout
+  document.getElementById('setup-screen').style.display='none';
+  document.getElementById('main-layout').style.display='grid';
+
+  // Build sidebar
+  const dl=document.getElementById('devices-list');
+  dl.innerHTML='';
+  activeSet.forEach(key=>{
+    if(key==='free_space') return;
+    const el=document.createElement('div');
+    el.className='device-item';
+    el.id='dev-'+key;
+    el.textContent=DEVICES[key].name;
+    dl.appendChild(el);
+  });
+
+  // Show first clue prompt
+  document.getElementById('clue-num').textContent='Ready — press "Next Clue" to begin!';
+  document.getElementById('clue-text').textContent='Students: mark the FREE SPACE in the centre of your card.';
+  document.getElementById('device-answer').style.display='none';
+}
+
+function nextClue(){
+  if(!activeSet.length){initGame();return;}
+  if(clueIdx>=clueQueue.length){
+    document.getElementById('clue-text').textContent='All clues used! You can start again.';
+    document.getElementById('clue-num').textContent='Done!';
+    return;
+  }
+  const item=clueQueue[clueIdx++];
+  document.getElementById('clue-num').textContent=`Clue ${clueIdx} of ${clueQueue.length}`;
+  document.getElementById('clue-text').textContent=item.clue;
+  document.getElementById('device-answer').style.display='none';
+  document.getElementById('device-answer').textContent=item.name;
+
+  // Mark as called if not already
+  if(!calledDevices.includes(item.key)){
+    calledDevices.push(item.key);
+    updateCalledDisplay();
+    // Update sidebar
+    const el=document.getElementById('dev-'+item.key);
+    if(el) el.className='device-item called-d';
+  }
+}
+
+function revealDevice(){
+  document.getElementById('device-answer').style.display='block';
+}
+
+function updateCalledDisplay(){
+  const chips=document.getElementById('called-chips');
+  chips.innerHTML=calledDevices.map(k=>`<div class="called-chip">${DEVICES[k].name}</div>`).join('');
+}
+
+// ── Print cards ──
+function generatePrint(){
+  buildSet();
+  const n=parseInt(document.getElementById('sel-cards').value)||8;
+  const container=document.getElementById('print-cards');
+  container.innerHTML='';
+
+  for(let i=0;i<n;i++){
+    // Build a random 5x5 card from activeSet
+    const devices=activeSet.filter(d=>d!=='free_space');
+    const shuffled=[...devices].sort(()=>Math.random()-0.5).slice(0,24);
+    // Insert FREE SPACE at position 12 (centre)
+    shuffled.splice(12,0,'free_space');
+
+    const page=document.createElement('div');
+    page.className='print-page';
+    
+    const title=document.createElement('div');
+    title.className='print-card-title';
+    title.textContent='Literary Device Bingo — Card '+(i+1);
+    page.appendChild(title);
+
+    const header=document.createElement('div');
+    header.className='bingo-header';
+    'BINGO'.split('').forEach(l=>{
+      const h=document.createElement('div');
+      h.className='bingo-letter';h.textContent=l;header.appendChild(h);
+    });
+    page.appendChild(header);
+
+    const grid=document.createElement('div');
+    grid.className='print-grid';
+    shuffled.forEach(key=>{
+      const cell=document.createElement('div');
+      cell.className='print-cell'+(key==='free_space'?' free-cell':'');
+      cell.textContent=key==='free_space'?'★ FREE':DEVICES[key]?.name||key.toUpperCase();
+      grid.appendChild(cell);
+    });
+    page.appendChild(grid);
+
+    const instr=document.createElement('div');
+    instr.className='print-instr';
+    instr.textContent='Cross off each device when the teacher reads its clue. Get 5 in a row to win!';
+    page.appendChild(instr);
+
+    container.appendChild(page);
+  }
+  window.print();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odd One Out Jr. 🐾</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0d14;--surface:#111520;--card:#161b2e;--border:rgba(255,255,255,0.08);
+  --text:#e8eaf0;--muted:rgba(232,234,240,0.45);
+  --accent:#f0b429;--accent2:#3ecfcf;--green:#48c774;--red:#e05c5c;
+  --radius:18px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:0.78rem;cursor:pointer;text-decoration:none;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.game-title{font-size:1.1rem;font-weight:800;}
+.game-title span{color:var(--accent);}
+select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:0.8rem;cursor:pointer;}
+.start-btn{background:var(--accent);color:#0a0d14;border:none;border-radius:8px;padding:7px 18px;font-size:0.82rem;font-weight:800;cursor:pointer;}
+.start-btn:hover{filter:brightness(1.1);}
+.tts-toggle{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:6px 14px;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;}
+.tts-toggle.on{background:rgba(62,207,207,0.12);border-color:var(--accent2);color:var(--accent2);}
+
+.arena{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;gap:24px;}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:100%;max-width:900px;}
+@media(max-width:600px){.card-grid{grid-template-columns:repeat(2,1fr);}}
+
+.ooo-card{
+  background:var(--card);border:3px solid var(--border);border-radius:var(--radius);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 12px 20px;cursor:pointer;transition:all 0.25s;
+  min-height:190px;user-select:none;
+}
+.ooo-card:hover{border-color:rgba(255,255,255,0.2);transform:translateY(-3px);}
+.ooo-card.correct{background:rgba(72,199,116,0.12);border-color:var(--green);transform:scale(1.04);}
+.ooo-card.wrong{background:rgba(224,92,92,0.1);border-color:var(--red);animation:shake 0.4s ease;}
+.ooo-card.dim{opacity:0.35;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+.card-emoji{font-size:5rem;line-height:1;margin-bottom:12px;}
+.card-label{font-size:1rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;text-align:center;}
+.ooo-card.correct .card-label{color:var(--green);}
+.ooo-card.wrong   .card-label{color:var(--red);}
+
+/* Reason bubble */
+.reason-box{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 28px;max-width:700px;text-align:center;
+  font-size:1rem;line-height:1.6;display:none;
+}
+.reason-box .why{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);font-weight:700;margin-bottom:4px;}
+
+/* Category label */
+.category-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);}
+
+.controls{display:flex;gap:10px;}
+.ctrl-btn{padding:11px 26px;border:none;border-radius:40px;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.18s;}
+.btn-next{background:var(--accent);color:#0a0d14;}
+.btn-next:hover{filter:brightness(1.1);}
+.btn-new{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-new:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+
+.score-row{display:flex;gap:16px;align-items:center;}
+.score-pill{background:var(--surface);border:1px solid var(--border);border-radius:40px;padding:6px 16px;font-size:0.8rem;color:var(--muted);}
+.score-pill strong{color:var(--accent);}
+
+.empty-hint{text-align:center;color:var(--muted);font-size:0.9rem;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">← Back</a>
+  <span class="game-title">Odd One <span>Out Jr.</span> 🐾</span>
+  <select id="sel-cat">
+    <option value="all">All categories</option>
+    <option value="animals">🐾 Animals</option>
+    <option value="food">🍎 Food</option>
+    <option value="colours">🌈 Colours</option>
+    <option value="transport">🚗 Transport</option>
+    <option value="clothes">👗 Clothes</option>
+    <option value="body">🦵 Body Parts</option>
+    <option value="weather">🌦️ Weather</option>
+    <option value="mixed">🎲 Mixed categories</option>
+  </select>
+  <button class="start-btn" onclick="newRound()">▶ Start</button>
+  <button class="tts-toggle" id="tts-toggle" onclick="ttsToggle()"></button>
+</div>
+
+<div class="arena">
+  <div class="empty-hint" id="empty-hint">Choose a category and press Start 👆</div>
+  <div class="category-label" id="cat-label" style="display:none"></div>
+  <div class="card-grid" id="card-grid" style="display:none"></div>
+  <div class="reason-box" id="reason-box"><div class="why">Why?</div><div id="reason-text"></div></div>
+  <div class="controls" id="controls" style="display:none">
+    <button class="ctrl-btn btn-new" onclick="newRound()">🔀 New Question</button>
+  </div>
+  <div class="score-row" id="score-row" style="display:none">
+    <div class="score-pill">Correct: <strong id="score-correct">0</strong></div>
+    <div class="score-pill">Questions: <strong id="score-total">0</strong></div>
+  </div>
+</div>
+
+<script>
+// ── Data ──
+const SETS = {
+  animals:[
+    {emoji:'🐶',word:'DOG'},{emoji:'🐱',word:'CAT'},{emoji:'🐦',word:'BIRD'},
+    {emoji:'🐟',word:'FISH'},{emoji:'🐸',word:'FROG'},{emoji:'🐰',word:'RABBIT'},
+    {emoji:'🦁',word:'LION'},{emoji:'🐘',word:'ELEPHANT'},{emoji:'🐧',word:'PENGUIN'},
+    {emoji:'🐒',word:'MONKEY'},{emoji:'🐢',word:'TURTLE'},{emoji:'🐻',word:'BEAR'},
+    {emoji:'🦊',word:'FOX'},{emoji:'🦆',word:'DUCK'},{emoji:'🐍',word:'SNAKE'},
+  ],
+  food:[
+    {emoji:'🍎',word:'APPLE'},{emoji:'🍌',word:'BANANA'},{emoji:'🍊',word:'ORANGE'},
+    {emoji:'🍓',word:'STRAWBERRY'},{emoji:'🍇',word:'GRAPES'},{emoji:'🍕',word:'PIZZA'},
+    {emoji:'🎂',word:'CAKE'},{emoji:'🍦',word:'ICE CREAM'},{emoji:'🥕',word:'CARROT'},
+    {emoji:'🍞',word:'BREAD'},{emoji:'🥦',word:'BROCCOLI'},{emoji:'🍉',word:'WATERMELON'},
+  ],
+  colours:[
+    {emoji:'🔴',word:'RED'},{emoji:'🔵',word:'BLUE'},{emoji:'🟢',word:'GREEN'},
+    {emoji:'🟡',word:'YELLOW'},{emoji:'🟠',word:'ORANGE'},{emoji:'🟣',word:'PURPLE'},
+    {emoji:'⚫',word:'BLACK'},{emoji:'⚪',word:'WHITE'},{emoji:'🩷',word:'PINK'},
+    {emoji:'🟫',word:'BROWN'},
+  ],
+  transport:[
+    {emoji:'🚗',word:'CAR'},{emoji:'🚌',word:'BUS'},{emoji:'🚂',word:'TRAIN'},
+    {emoji:'✈️',word:'PLANE'},{emoji:'🚲',word:'BIKE'},{emoji:'⛵',word:'BOAT'},
+    {emoji:'🚕',word:'TAXI'},{emoji:'🚁',word:'HELICOPTER'},{emoji:'🚀',word:'ROCKET'},
+    {emoji:'🚢',word:'SHIP'},
+  ],
+  clothes:[
+    {emoji:'👕',word:'SHIRT'},{emoji:'👗',word:'DRESS'},{emoji:'👖',word:'TROUSERS'},
+    {emoji:'👟',word:'SHOES'},{emoji:'🎩',word:'HAT'},{emoji:'🧥',word:'COAT'},
+    {emoji:'🧦',word:'SOCKS'},{emoji:'🧤',word:'GLOVES'},{emoji:'🧣',word:'SCARF'},
+  ],
+  body:[
+    {emoji:'👀',word:'EYES'},{emoji:'👃',word:'NOSE'},{emoji:'👄',word:'MOUTH'},
+    {emoji:'👂',word:'EARS'},{emoji:'🤚',word:'HAND'},{emoji:'💪',word:'ARM'},
+    {emoji:'🦵',word:'LEG'},{emoji:'🦶',word:'FOOT'},{emoji:'🗣️',word:'HEAD'},
+  ],
+  weather:[
+    {emoji:'☀️',word:'SUNNY'},{emoji:'☁️',word:'CLOUDY'},{emoji:'🌧️',word:'RAINY'},
+    {emoji:'💨',word:'WINDY'},{emoji:'❄️',word:'SNOWY'},{emoji:'⛈️',word:'STORMY'},
+    {emoji:'🌈',word:'RAINBOW'},{emoji:'🌫️',word:'FOGGY'},{emoji:'🌡️',word:'HOT'},
+  ],
+};
+
+// Pre-made mixed questions (odd one from a different category)
+const MIXED_QS = [
+  {items:[{e:'🐶',w:'DOG'},{e:'🐱',w:'CAT'},{e:'🍎',w:'APPLE'},{e:'🐦',w:'BIRD'}],   odd:2, reason:'An apple is food — the others are animals.'},
+  {items:[{e:'🔴',w:'RED'},{e:'🔵',w:'BLUE'},{e:'⭐',w:'STAR'},{e:'🟢',w:'GREEN'}],  odd:2, reason:'A star is a shape — the others are colours.'},
+  {items:[{e:'🚗',w:'CAR'},{e:'🚌',w:'BUS'},{e:'🐱',w:'CAT'},{e:'✈️',w:'PLANE'}],  odd:2, reason:'A cat is an animal — the others are transport.'},
+  {items:[{e:'👀',w:'EYES'},{e:'👃',w:'NOSE'},{e:'🍌',w:'BANANA'},{e:'👄',w:'MOUTH'}], odd:2, reason:'A banana is food — the others are body parts.'},
+  {items:[{e:'☀️',w:'SUNNY'},{e:'❄️',w:'SNOWY'},{e:'👗',w:'DRESS'},{e:'🌧️',w:'RAINY'}], odd:2, reason:'A dress is clothing — the others are weather.'},
+  {items:[{e:'🍕',w:'PIZZA'},{e:'🍌',w:'BANANA'},{e:'🎂',w:'CAKE'},{e:'🚂',w:'TRAIN'}], odd:3, reason:'A train is transport — the others are food.'},
+  {items:[{e:'🧦',w:'SOCKS'},{e:'👟',w:'SHOES'},{e:'👕',w:'SHIRT'},{e:'🐘',w:'ELEPHANT'}], odd:3, reason:'An elephant is an animal — the others are clothes.'},
+  {items:[{e:'🔴',w:'RED'},{e:'🍊',w:'ORANGE'},{e:'🟢',w:'GREEN'},{e:'🟡',w:'YELLOW'}], odd:1, reason:'An orange is a fruit — the others are colours. (Trick question!)'},
+  {items:[{e:'🐟',w:'FISH'},{e:'⛵',w:'BOAT'},{e:'🐋',w:'WHALE'},{e:'🐬',w:'DOLPHIN'}], odd:1, reason:'A boat is transport — the others are sea creatures.'},
+  {items:[{e:'👂',w:'EARS'},{e:'👀',w:'EYES'},{e:'🌈',w:'RAINBOW'},{e:'👃',w:'NOSE'}], odd:2, reason:'A rainbow is weather — the others are body parts.'},
+];
+
+// ── State ──
+let scoreCorrect=0, scoreTotal=0, answered=false;
+
+// ── TTS ──
+const ttsSynth = window.speechSynthesis||null;
+let ttsEnabled = localStorage.getItem('ttsEnabled')==='true';
+function ttsUpdateUI(){const b=document.getElementById('tts-toggle');if(!b)return;b.textContent=ttsEnabled?'🔊 Auto-read: ON':'🔇 Auto-read: OFF';b.className='tts-toggle'+(ttsEnabled?' on':'');}
+function ttsToggle(){ttsEnabled=!ttsEnabled;localStorage.setItem('ttsEnabled',ttsEnabled);ttsUpdateUI();if(!ttsEnabled&&ttsSynth)ttsSynth.cancel();}
+function speak(t){if(!ttsSynth||!ttsEnabled)return;ttsSynth.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.85;u.pitch=1.1;ttsSynth.speak(u);}
+
+// ── Game ──
+function newRound(){
+  answered=false;
+  const catKey=document.getElementById('sel-cat').value;
+  let items, oddIdx, reason, catLabel;
+
+  if(catKey==='mixed'){
+    const q=MIXED_QS[Math.floor(Math.random()*MIXED_QS.length)];
+    items=q.items.map(i=>({emoji:i.e,word:i.w}));
+    oddIdx=q.odd; reason=q.reason;
+    catLabel='Mixed categories';
+  } else {
+    // Pick 3 from same category + 1 intruder from another
+    const cats=Object.keys(SETS);
+    let pool, intruderPool;
+    if(catKey==='all'){
+      const chosen=cats[Math.floor(Math.random()*cats.length)];
+      pool=[...SETS[chosen]].sort(()=>Math.random()-0.5);
+      const others=cats.filter(c=>c!==chosen);
+      intruderPool=SETS[others[Math.floor(Math.random()*others.length)]];
+      catLabel=chosen.charAt(0).toUpperCase()+chosen.slice(1);
+      reason=`The odd one out doesn't belong in the ${catLabel} category.`;
+    } else {
+      pool=[...SETS[catKey]].sort(()=>Math.random()-0.5);
+      const others=cats.filter(c=>c!==catKey);
+      intruderPool=SETS[others[Math.floor(Math.random()*others.length)]];
+      catLabel=catKey.charAt(0).toUpperCase()+catKey.slice(1);
+      reason=`The others are all ${catLabel} — the odd one out is from a different group!`;
+    }
+    const three=pool.slice(0,3).map(w=>({emoji:w.emoji,word:w.word}));
+    const intruder=intruderPool[Math.floor(Math.random()*intruderPool.length)];
+    oddIdx=Math.floor(Math.random()*4);
+    items=[...three.slice(0,oddIdx),{emoji:intruder.emoji,word:intruder.word},...three.slice(oddIdx)];
+  }
+
+  renderCards(items, oddIdx, reason);
+  document.getElementById('cat-label').textContent=catKey==='all'||catKey==='mixed'?'Which one doesn\'t belong?':'Category: '+catLabel;
+  document.getElementById('cat-label').style.display='';
+  document.getElementById('empty-hint').style.display='none';
+  document.getElementById('card-grid').style.display='grid';
+  document.getElementById('controls').style.display='flex';
+  document.getElementById('score-row').style.display='flex';
+  document.getElementById('reason-box').style.display='none';
+}
+
+function renderCards(items, oddIdx, reason){
+  const grid=document.getElementById('card-grid');
+  grid.innerHTML='';
+  items.forEach((item,i)=>{
+    const card=document.createElement('div');
+    card.className='ooo-card';
+    card.innerHTML=`<div class="card-emoji">${item.emoji}</div><div class="card-label">${item.word}</div>`;
+    card.onclick=()=>handleClick(i,oddIdx,reason,items[i]);
+    grid.appendChild(card);
+    speak(item.word);
+  });
+}
+
+function handleClick(idx, oddIdx, reason, item){
+  if(answered)return;
+  answered=true;
+  scoreTotal++;
+  const cards=document.querySelectorAll('.ooo-card');
+  if(idx===oddIdx){
+    scoreCorrect++;
+    cards[idx].classList.add('correct');
+    cards.forEach((c,i)=>{if(i!==idx)c.classList.add('dim');});
+    speak('Yes! '+item.word+'!');
+  } else {
+    cards[idx].classList.add('wrong');
+    speak('Not quite!');
+    setTimeout(()=>{
+      cards[oddIdx].classList.add('correct');
+      cards.forEach((c,i)=>{if(i!==idx&&i!==oddIdx)c.classList.add('dim');});
+    },600);
+  }
+  document.getElementById('reason-text').textContent=reason;
+  document.getElementById('reason-box').style.display='block';
+  document.getElementById('score-correct').textContent=scoreCorrect;
+  document.getElementById('score-total').textContent=scoreTotal;
+}
+
+window.addEventListener('DOMContentLoaded',()=>ttsUpdateUI());
+</script>
+</body>
+</html>

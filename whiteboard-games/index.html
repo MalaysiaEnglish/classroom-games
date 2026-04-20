@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whiteboard Games 🎨</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0d14;--surface:#111520;--card:#161b2e;--border:rgba(255,255,255,0.08);
+  --text:#e8eaf0;--muted:rgba(232,234,240,0.45);
+  --accent:#f0b429;--accent2:#3ecfcf;--green:#48c774;--red:#e05c5c;
+  --purple:#a78bfa;
+  --radius:16px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:0.78rem;text-decoration:none;color:var(--muted);}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.game-title{font-size:1.1rem;font-weight:800;}
+.game-title span{color:var(--accent);}
+
+/* Game mode selector */
+.mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;max-width:900px;}
+@media(max-width:640px){.mode-grid{grid-template-columns:repeat(2,1fr);}}
+
+.mode-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--radius);
+  padding:20px 12px;text-align:center;cursor:pointer;transition:all 0.2s;
+}
+.mode-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.2);}
+.mode-card.selected{border-color:var(--accent);background:rgba(240,180,41,0.06);}
+.mode-emoji{font-size:2.5rem;margin-bottom:8px;}
+.mode-name{font-size:0.85rem;font-weight:800;letter-spacing:0.04em;margin-bottom:4px;}
+.mode-desc{font-size:0.7rem;color:var(--muted);line-height:1.4;}
+
+/* Level row */
+.setup-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;}
+select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:0.8rem;cursor:pointer;}
+.timer-btns{display:flex;gap:4px;}
+.timer-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 10px;font-size:0.75rem;cursor:pointer;font-weight:700;}
+.timer-btn.active{background:var(--accent);color:#0a0d14;border-color:var(--accent);}
+.go-btn{background:var(--accent);color:#0a0d14;border:none;border-radius:40px;padding:10px 28px;font-size:0.9rem;font-weight:800;cursor:pointer;}
+.go-btn:hover{filter:brightness(1.1);}
+
+/* Arena */
+.arena{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;gap:20px;}
+
+/* Main task card */
+.task-card{
+  background:var(--card);border:3px solid var(--border);border-radius:24px;
+  padding:36px 44px;max-width:700px;width:100%;text-align:center;
+  position:relative;overflow:hidden;transition:border-color 0.3s;
+}
+.task-card.mode-draw   {border-color:rgba(167,139,250,0.5);}
+.task-card.mode-act    {border-color:rgba(72,199,116,0.5);}
+.task-card.mode-back   {border-color:rgba(62,207,207,0.5);}
+.task-card.mode-hotseat{border-color:rgba(240,180,41,0.5);}
+
+.task-card::before{content:'';position:absolute;inset:0;opacity:0.04;pointer-events:none;}
+.task-card.mode-draw::before   {background:var(--purple);}
+.task-card.mode-act::before    {background:var(--green);}
+.task-card.mode-back::before   {background:var(--accent2);}
+.task-card.mode-hotseat::before{background:var(--accent);}
+
+.mode-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  border-radius:20px;padding:5px 14px;font-size:0.72rem;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;
+}
+.badge-draw   {background:rgba(167,139,250,0.15);color:var(--purple);border:1px solid rgba(167,139,250,0.3);}
+.badge-act    {background:rgba(72,199,116,0.12);color:var(--green);border:1px solid rgba(72,199,116,0.25);}
+.badge-back   {background:rgba(62,207,207,0.12);color:var(--accent2);border:1px solid rgba(62,207,207,0.25);}
+.badge-hotseat{background:rgba(240,180,41,0.1);color:var(--accent);border:1px solid rgba(240,180,41,0.2);}
+
+.task-word{
+  font-size:3.5rem;font-weight:900;letter-spacing:-0.02em;
+  text-transform:uppercase;line-height:1.1;margin-bottom:10px;
+}
+.task-instruction{font-size:0.85rem;color:var(--muted);line-height:1.6;margin-bottom:4px;}
+.task-hint{font-size:0.78rem;color:var(--accent2);font-style:italic;}
+
+/* Timer */
+.timer-display{
+  font-size:3rem;font-weight:900;color:var(--text);
+  font-variant-numeric:tabular-nums;letter-spacing:-0.02em;
+  transition:color 0.3s;
+}
+.timer-display.warning{color:var(--accent);}
+.timer-display.danger {color:var(--red);}
+.timer-bar{width:100%;max-width:500px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.timer-fill{height:100%;background:var(--accent2);border-radius:3px;transition:width 1s linear,background 0.3s;}
+.timer-fill.warning{background:var(--accent);}
+.timer-fill.danger {background:var(--red);}
+
+/* Controls */
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.ctrl-btn{padding:11px 24px;border:none;border-radius:40px;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.18s;}
+.btn-got{background:var(--green);color:#0a0d14;}
+.btn-got:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.btn-skip{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-skip:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+.btn-pause{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-pause:hover{background:rgba(255,255,255,0.08);}
+.btn-next-team{background:var(--accent);color:#0a0d14;}
+
+/* Teams */
+.team-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.team-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:10px 16px;text-align:center;cursor:pointer;transition:all 0.18s;min-width:80px;}
+.team-card:hover{border-color:var(--accent2);}
+.team-card.active-team{border-color:var(--accent);background:rgba(240,180,41,0.06);}
+.team-name{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:3px;}
+.team-pts{font-size:1.7rem;font-weight:900;color:var(--accent);}
+
+/* Category info */
+.cat-badge{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+
+/* Difficulty */
+.diff-dots{display:flex;gap:3px;justify-content:center;margin-top:8px;}
+.diff-dot{width:8px;height:8px;border-radius:50%;background:var(--border);}
+.diff-dot.on{background:var(--accent);}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">← Back</a>
+  <span class="game-title">Whiteboard <span>Games</span> 🎨</span>
+</div>
+
+<div class="arena" id="setup-arena">
+
+  <!-- Mode selector -->
+  <div class="mode-grid">
+    <div class="mode-card selected" id="mode-draw" onclick="selectMode('draw')">
+      <div class="mode-emoji">🎨</div>
+      <div class="mode-name">Draw It</div>
+      <div class="mode-desc">Student draws on whiteboard · class guesses</div>
+    </div>
+    <div class="mode-card" id="mode-act" onclick="selectMode('act')">
+      <div class="mode-emoji">🎭</div>
+      <div class="mode-name">Act It</div>
+      <div class="mode-desc">Student acts out · no speaking allowed</div>
+    </div>
+    <div class="mode-card" id="mode-back" onclick="selectMode('back')">
+      <div class="mode-emoji">🔤</div>
+      <div class="mode-name">Back to Board</div>
+      <div class="mode-desc">Student faces away · class gives clues</div>
+    </div>
+    <div class="mode-card" id="mode-hotseat" onclick="selectMode('hotseat')">
+      <div class="mode-emoji">🔥</div>
+      <div class="mode-name">Hot Seat</div>
+      <div class="mode-desc">Student IS the character · class interviews</div>
+    </div>
+  </div>
+
+  <!-- Setup options -->
+  <div class="setup-row">
+    <select id="sel-level">
+      <option value="all">All levels</option>
+      <optgroup label="Preschool / L1–4">
+        <option value="basic">Basic vocabulary</option>
+        <option value="actions">Actions &amp; verbs</option>
+        <option value="emotions">Emotions</option>
+      </optgroup>
+      <optgroup label="Level 5–6">
+        <option value="l56">Grammar &amp; vocabulary</option>
+        <option value="l56lit">Literary terms</option>
+      </optgroup>
+      <optgroup label="Level 7–9">
+        <option value="l79vocab">Advanced vocabulary</option>
+        <option value="l79chars">Characters &amp; themes</option>
+        <option value="l79devices">Literary devices</option>
+      </optgroup>
+    </select>
+    <div class="timer-btns">
+      <button class="timer-btn active" onclick="setTimer(60)" id="t60">60s</button>
+      <button class="timer-btn" onclick="setTimer(90)" id="t90">90s</button>
+      <button class="timer-btn" onclick="setTimer(120)" id="t120">2min</button>
+    </div>
+    <button class="go-btn" onclick="startGame()">▶ Go!</button>
+  </div>
+
+</div>
+
+<!-- Game arena (hidden until started) -->
+<div class="arena" id="game-arena" style="display:none">
+
+  <div class="task-card" id="task-card">
+    <div class="mode-badge" id="mode-badge"></div>
+    <div class="task-word" id="task-word">WORD</div>
+    <div class="cat-badge" id="cat-badge"></div>
+    <div class="diff-dots" id="diff-dots"></div>
+    <div class="task-instruction" id="task-instruction"></div>
+    <div class="task-hint" id="task-hint"></div>
+  </div>
+
+  <div>
+    <div class="timer-display" id="timer-disp">60</div>
+    <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+  </div>
+
+  <div class="controls" id="game-controls">
+    <button class="ctrl-btn btn-got" onclick="gotIt()">✅ Got it!</button>
+    <button class="ctrl-btn btn-skip" onclick="skipTask()">⏭ Skip</button>
+    <button class="ctrl-btn btn-pause" onclick="togglePause()" id="pause-btn">⏸ Pause</button>
+  </div>
+
+  <div class="team-row" id="team-row">
+    <div class="team-card active-team" id="tc-0" onclick="selectTeam(0)"><div class="team-name">Team A</div><div class="team-pts" id="tp-0">0</div></div>
+    <div class="team-card" id="tc-1" onclick="selectTeam(1)"><div class="team-name">Team B</div><div class="team-pts" id="tp-1">0</div></div>
+    <div class="team-card" id="tc-2" onclick="selectTeam(2)"><div class="team-name">Team C</div><div class="team-pts" id="tp-2">0</div></div>
+    <div class="team-card" id="tc-3" onclick="selectTeam(3)"><div class="team-name">Team D</div><div class="team-pts" id="tp-3">0</div></div>
+  </div>
+
+</div>
+
+<script>
+// ── Word banks ──
+const WORDLISTS = {
+  basic:[
+    {w:'ELEPHANT',cat:'Animals',diff:1},{w:'BUTTERFLY',cat:'Animals',diff:1},{w:'PENGUIN',cat:'Animals',diff:1},
+    {w:'PIZZA',cat:'Food',diff:1},{w:'ICE CREAM',cat:'Food',diff:1},{w:'BIRTHDAY CAKE',cat:'Food',diff:1},
+    {w:'RAINY DAY',cat:'Weather',diff:1},{w:'RAINBOW',cat:'Weather',diff:1},{w:'SNOWMAN',cat:'Weather',diff:1},
+    {w:'SWIMMING',cat:'Actions',diff:1},{w:'SLEEPING',cat:'Actions',diff:1},{w:'COOKING',cat:'Actions',diff:1},
+  ],
+  actions:[
+    {w:'DANCING',cat:'Actions',diff:1,hint:'Move your whole body'},{w:'SWIMMING',cat:'Actions',diff:1},{w:'CLIMBING',cat:'Actions',diff:1},
+    {w:'WHISPERING',cat:'Actions',diff:1},{w:'LAUGHING',cat:'Actions',diff:1},{w:'YAWNING',cat:'Actions',diff:1},
+    {w:'SNEEZING',cat:'Actions',diff:1},{w:'SKIPPING',cat:'Actions',diff:1},{w:'WAVING',cat:'Actions',diff:1},
+    {w:'THINKING HARD',cat:'Actions',diff:2},{w:'BEING SCARED',cat:'Actions',diff:1},{w:'BEING EXCITED',cat:'Actions',diff:1},
+    {w:'READING A HUGE BOOK',cat:'Actions',diff:2},{w:'CONDUCTING AN ORCHESTRA',cat:'Actions',diff:2},
+  ],
+  emotions:[
+    {w:'JEALOUS',cat:'Emotions',diff:2},{w:'OVERWHELMED',cat:'Emotions',diff:2},{w:'NOSTALGIC',cat:'Emotions',diff:3},
+    {w:'ANXIOUS',cat:'Emotions',diff:2},{w:'TRIUMPHANT',cat:'Emotions',diff:2},{w:'EMBARRASSED',cat:'Emotions',diff:1},
+    {w:'BORED',cat:'Emotions',diff:1},{w:'DISGUSTED',cat:'Emotions',diff:1},{w:'SUSPICIOUS',cat:'Emotions',diff:2},
+    {w:'MELANCHOLY',cat:'Emotions',diff:3},{w:'EUPHORIC',cat:'Emotions',diff:3},{w:'INFURIATED',cat:'Emotions',diff:2},
+  ],
+  l56:[
+    {w:'PROCRASTINATE',cat:'Vocabulary',diff:2,hint:'To keep putting something off'},{w:'PERSEVERANCE',cat:'Vocabulary',diff:2},
+    {w:'AMBIGUOUS',cat:'Vocabulary',diff:2,hint:'Could mean two things'},{w:'ELOQUENT',cat:'Vocabulary',diff:2},
+    {w:'PASSIVE VOICE',cat:'Grammar',diff:2,hint:'The cat was chased by the dog'},{w:'CONDITIONAL',cat:'Grammar',diff:2,hint:'If...then...'},
+    {w:'RELATIVE CLAUSE',cat:'Grammar',diff:2,hint:'The woman WHO lives next door...'},
+    {w:'PROTAGONIST',cat:'Literary',diff:2},{w:'ANTAGONIST',cat:'Literary',diff:2},{w:'FORESHADOWING',cat:'Literary',diff:3},
+    {w:'REPORTED SPEECH',cat:'Grammar',diff:2,hint:'She said that she was tired'},{w:'METAPHOR',cat:'Literary',diff:2},
+  ],
+  l56lit:[
+    {w:'SIMILE',cat:'Device',diff:1},{w:'METAPHOR',cat:'Device',diff:1},{w:'PERSONIFICATION',cat:'Device',diff:2},
+    {w:'ALLITERATION',cat:'Device',diff:1},{w:'ONOMATOPOEIA',cat:'Device',diff:2},{w:'HYPERBOLE',cat:'Device',diff:2},
+    {w:'OXYMORON',cat:'Device',diff:2},{w:'FORESHADOWING',cat:'Device',diff:3},{w:'IRONY',cat:'Device',diff:2},
+    {w:'FLASHBACK',cat:'Technique',diff:2},{w:'CLIFFHANGER',cat:'Technique',diff:1},{w:'PATHETIC FALLACY',cat:'Device',diff:3},
+  ],
+  l79vocab:[
+    {w:'EPHEMERAL',cat:'Vocabulary',diff:3,hint:'Lasting only a short time'},
+    {w:'SYCOPHANT',cat:'Vocabulary',diff:3,hint:'Someone who flatters to get what they want'},
+    {w:'UBIQUITOUS',cat:'Vocabulary',diff:3,hint:'Seems to be everywhere at once'},
+    {w:'ACRIMONY',cat:'Vocabulary',diff:3,hint:'Bitterness and ill feeling'},
+    {w:'PEDANTIC',cat:'Vocabulary',diff:3,hint:'Obsessed with rules and correctness'},
+    {w:'MAGNANIMOUS',cat:'Vocabulary',diff:3,hint:'Very generous and forgiving'},
+    {w:'EQUIVOCATE',cat:'Vocabulary',diff:3,hint:'To deliberately be vague or unclear'},
+    {w:'TERSE',cat:'Vocabulary',diff:2,hint:'Very brief — almost rude'},
+    {w:'CANDID',cat:'Vocabulary',diff:2,hint:'Honest and direct, even if uncomfortable'},
+    {w:'VERBOSE',cat:'Vocabulary',diff:2,hint:'Using far too many words'},
+    {w:'INSIDIOUS',cat:'Vocabulary',diff:3,hint:'Spreading harm in a slow hidden way'},
+    {w:'AMBIVALENT',cat:'Vocabulary',diff:3,hint:'Feeling two opposite things at once'},
+  ],
+  l79chars:[
+    {w:'MACBETH',cat:'Character',diff:2,hint:'Scottish king who commits murder for power'},
+    {w:'LADY MACBETH',cat:'Character',diff:2,hint:'She goads her husband into murder'},
+    {w:'HAMLET',cat:'Character',diff:2,hint:'Danish prince who can\'t make up his mind'},
+    {w:'SHERLOCK HOLMES',cat:'Character',diff:1,hint:'Victorian detective, violin, 221b Baker Street'},
+    {w:'JACK (Lord of the Flies)',cat:'Character',diff:3,hint:'The hunter — represents savagery'},
+    {w:'RALPH (Lord of the Flies)',cat:'Character',diff:3,hint:'Elected leader — represents civilisation'},
+    {w:'ATTICUS FINCH',cat:'Character',diff:2,hint:'Lawyer father in Alabama — fights for justice'},
+    {w:'THE ANCIENT MARINER',cat:'Character',diff:3,hint:'He shot the albatross'},
+    {w:'BIG BROTHER',cat:'Theme',diff:2,hint:'The all-seeing authority in 1984'},
+    {w:'DYSTOPIA',cat:'Theme',diff:2,hint:'A nightmare version of a perfect society'},
+    {w:'THE AMERICAN DREAM',cat:'Theme',diff:2,hint:'The belief that anyone can succeed through hard work'},
+    {w:'COMING OF AGE',cat:'Theme',diff:2,hint:'A story about growing up and losing innocence'},
+  ],
+  l79devices:[
+    {w:'IAMBIC PENTAMETER',cat:'Poetry',diff:3,hint:'da-DUM da-DUM da-DUM da-DUM da-DUM'},
+    {w:'ENJAMBMENT',cat:'Poetry',diff:3,hint:'The line runs on without stopping'},
+    {w:'VOLTA',cat:'Poetry',diff:3,hint:'The turning point in a sonnet'},
+    {w:'CAESURA',cat:'Poetry',diff:3,hint:'A pause in the middle of a line'},
+    {w:'CATHARSIS',cat:'Drama',diff:3,hint:'The emotional release at the end of a tragedy'},
+    {w:'SOLILOQUY',cat:'Drama',diff:2,hint:'Thinking aloud alone on stage'},
+    {w:'DRAMATIC IRONY',cat:'Drama',diff:3,hint:'Audience knows something characters don\'t'},
+    {w:'STREAM OF CONSCIOUSNESS',cat:'Narrative',diff:3,hint:'Thoughts tumbling out unfiltered'},
+    {w:'PATHETIC FALLACY',cat:'Device',diff:3,hint:'Weather matches the mood'},
+    {w:'HUBRIS',cat:'Drama',diff:3,hint:'Pride that leads to a tragic downfall'},
+    {w:'ANAPHORA',cat:'Rhetoric',diff:3,hint:'Starting each phrase with the same words'},
+    {w:'TRICOLON',cat:'Rhetoric',diff:3,hint:'Three powerful phrases in a row'},
+  ],
+};
+const ALL_WORDS = Object.values(WORDLISTS).flat();
+
+// ── Mode config ──
+const MODES = {
+  draw:   {emoji:'🎨',name:'DRAW IT',   badge:'badge-draw',   cls:'mode-draw',
+           instruction:'Draw on the whiteboard — no letters, words or sounds!',
+           hint:'Student draws · class shouts guesses · no speaking from the artist'},
+  act:    {emoji:'🎭',name:'ACT IT',    badge:'badge-act',    cls:'mode-act',
+           instruction:'Act it out — no talking, no pointing at objects in the room!',
+           hint:'Student acts · class shouts guesses · no words or sounds'},
+  back:   {emoji:'🔤',name:'BACK TO BOARD',badge:'badge-back', cls:'mode-back',
+           instruction:'Student faces away from screen. Class: give clues — don\'t say the word!',
+           hint:'Class gives verbal clues · student keeps guessing · timer pressure'},
+  hotseat:{emoji:'🔥',name:'HOT SEAT', badge:'badge-hotseat', cls:'mode-hotseat',
+           instruction:'Student IS this character or concept. Class: ask questions to guess who!',
+           hint:'Student answers as the character · class asks yes/no questions'},
+};
+
+// ── State ──
+let selectedMode='draw', timerDur=60, timerLeft=60, timerInterval=null, paused=false;
+let teamPts=[0,0,0,0], activeTeam=0, usedWords=new Set();
+
+function selectMode(m){
+  selectedMode=m;
+  Object.keys(MODES).forEach(k=>document.getElementById('mode-'+k).classList.toggle('selected',k===m));
+}
+
+function setTimer(s){
+  timerDur=s;
+  [60,90,120].forEach(v=>document.getElementById('t'+v).className='timer-btn'+(v===s?' active':''));
+}
+
+function getPool(){
+  const lv=document.getElementById('sel-level').value;
+  if(lv==='all') return ALL_WORDS;
+  return WORDLISTS[lv]||ALL_WORDS;
+}
+
+function startGame(){
+  document.getElementById('setup-arena').style.display='none';
+  document.getElementById('game-arena').style.display='flex';
+  showNextTask();
+  startTimer();
+}
+
+function showNextTask(){
+  const pool=getPool();
+  if(usedWords.size>=pool.length) usedWords.clear();
+  let idx;
+  do{idx=Math.floor(Math.random()*pool.length);}while(usedWords.has(idx));
+  usedWords.add(idx);
+  const item=pool[idx];
+
+  const mode=MODES[selectedMode];
+  const card=document.getElementById('task-card');
+  card.className='task-card mode-'+selectedMode;
+
+  document.getElementById('mode-badge').className='mode-badge '+mode.badge;
+  document.getElementById('mode-badge').textContent=mode.emoji+' '+mode.name;
+  document.getElementById('task-word').textContent=item.w;
+  document.getElementById('cat-badge').textContent=item.cat||'';
+  document.getElementById('task-instruction').textContent=mode.instruction;
+  document.getElementById('task-hint').textContent=item.hint?('💡 '+item.hint):(mode.hint);
+
+  // Difficulty dots
+  const dots=document.getElementById('diff-dots');
+  dots.innerHTML=[1,2,3].map(i=>`<div class="diff-dot${i<=(item.diff||1)?' on':''}"></div>`).join('');
+}
+
+function gotIt(){
+  teamPts[activeTeam]++;
+  document.getElementById('tp-'+activeTeam).textContent=teamPts[activeTeam];
+  showNextTask();
+  resetTimer();
+}
+
+function skipTask(){
+  showNextTask();
+  // skips don't reset timer
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  timerLeft=timerDur; paused=false;
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    if(paused) return;
+    timerLeft--;
+    updateTimerDisplay();
+    if(timerLeft<=0){clearInterval(timerInterval);timeUp();}
+  },1000);
+}
+
+function resetTimer(){
+  clearInterval(timerInterval);
+  timerLeft=timerDur;
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    if(paused) return;
+    timerLeft--;
+    updateTimerDisplay();
+    if(timerLeft<=0){clearInterval(timerInterval);timeUp();}
+  },1000);
+}
+
+function updateTimerDisplay(){
+  const pct=timerLeft/timerDur;
+  const d=document.getElementById('timer-disp');
+  const f=document.getElementById('timer-fill');
+  d.textContent=timerLeft;
+  f.style.width=(pct*100)+'%';
+  const warn=pct<0.3, danger=pct<0.15;
+  d.className='timer-display'+(danger?' danger':warn?' warning':'');
+  f.className='timer-fill'+(danger?' danger':warn?' warning':'');
+}
+
+function togglePause(){
+  paused=!paused;
+  document.getElementById('pause-btn').textContent=paused?'▶ Resume':'⏸ Pause';
+}
+
+function timeUp(){
+  document.getElementById('game-controls').innerHTML=`
+    <button class="ctrl-btn btn-next-team" onclick="nextTeam()">▶ Next Team</button>
+    <button class="ctrl-btn btn-skip" onclick="backToSetup()">⚙️ Change Mode</button>
+  `;
+  document.getElementById('task-word').textContent='⏰';
+  document.getElementById('task-instruction').textContent='TIME\'S UP!';
+  document.getElementById('task-hint').textContent='';
+}
+
+function nextTeam(){
+  selectTeam((activeTeam+1)%4);
+  document.getElementById('game-controls').innerHTML=`
+    <button class="ctrl-btn btn-got" onclick="gotIt()">✅ Got it!</button>
+    <button class="ctrl-btn btn-skip" onclick="skipTask()">⏭ Skip</button>
+    <button class="ctrl-btn btn-pause" onclick="togglePause()" id="pause-btn">⏸ Pause</button>
+  `;
+  showNextTask();
+  startTimer();
+}
+
+function backToSetup(){
+  clearInterval(timerInterval);
+  document.getElementById('game-arena').style.display='none';
+  document.getElementById('setup-arena').style.display='flex';
+}
+
+function selectTeam(t){
+  activeTeam=t;
+  document.querySelectorAll('.team-card').forEach((c,i)=>c.classList.toggle('active-team',i===t));
+}
+</script>
+</body>
+</html>

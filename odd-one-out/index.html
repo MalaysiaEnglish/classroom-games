@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odd One Out 🔎</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0d14;--surface:#111520;--card:#161b2e;--border:rgba(255,255,255,0.08);
+  --text:#e8eaf0;--muted:rgba(232,234,240,0.45);
+  --accent:#f0b429;--accent2:#3ecfcf;--green:#48c774;--red:#e05c5c;
+  --radius:14px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:0.78rem;cursor:pointer;text-decoration:none;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.game-title{font-size:1.1rem;font-weight:800;}
+.game-title span{color:var(--accent);}
+select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:0.8rem;cursor:pointer;}
+.start-btn{background:var(--accent);color:#0a0d14;border:none;border-radius:8px;padding:7px 18px;font-size:0.82rem;font-weight:800;cursor:pointer;}
+.start-btn:hover{filter:brightness(1.1);}
+.custom-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:7px 14px;font-size:0.8rem;cursor:pointer;}
+.custom-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+
+.arena{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;gap:20px;max-width:960px;margin:0 auto;width:100%;}
+
+.q-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);}
+
+/* 4-card grid */
+.card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;width:100%;}
+@media(max-width:640px){.card-grid{grid-template-columns:repeat(2,1fr);}}
+
+.ooo-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--radius);
+  padding:24px 14px;min-height:120px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-size:1.05rem;font-weight:700;line-height:1.4;
+  transition:all 0.22s;user-select:none;
+}
+.ooo-card:hover{border-color:rgba(255,255,255,0.22);transform:translateY(-2px);}
+.ooo-card.correct{background:rgba(72,199,116,0.12);border-color:var(--green);color:var(--green);}
+.ooo-card.wrong{background:rgba(224,92,92,0.1);border-color:var(--red);color:var(--red);animation:shake 0.35s ease;}
+.ooo-card.dim{opacity:0.3;cursor:default;}
+.ooo-card.dim:hover{transform:none;border-color:var(--border);}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* Answer reveal */
+.answer-box{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 28px;width:100%;display:none;
+}
+.answer-box .tag{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.answer-box .reason{font-size:0.95rem;line-height:1.6;color:var(--text);}
+.answer-box .also{font-size:0.8rem;color:var(--muted);margin-top:8px;font-style:italic;}
+
+/* Multi-answer note */
+.multi-note{font-size:0.78rem;color:var(--accent2);font-style:italic;display:none;}
+
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.ctrl-btn{padding:10px 24px;border:none;border-radius:40px;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.18s;}
+.btn-next{background:var(--accent);color:#0a0d14;}
+.btn-next:hover{filter:brightness(1.1);}
+.btn-skip{background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.btn-skip:hover{background:rgba(255,255,255,0.08);color:var(--text);}
+
+.score-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.score-pill{background:var(--surface);border:1px solid var(--border);border-radius:40px;padding:5px 14px;font-size:0.78rem;color:var(--muted);}
+.score-pill strong{color:var(--accent);}
+
+.team-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.team-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;transition:all 0.15s;display:flex;gap:6px;align-items:center;}
+.team-btn:hover{border-color:var(--accent2);}
+.team-pts{color:var(--accent2);}
+
+.custom-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;width:100%;display:none;}
+.custom-panel h3{font-size:0.82rem;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;}
+.custom-panel p{font-size:0.78rem;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+code{background:rgba(255,255,255,0.08);border-radius:4px;padding:1px 5px;font-size:0.85em;}
+textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;font-size:0.85rem;font-family:inherit;resize:vertical;min-height:100px;}
+textarea:focus{outline:none;border-color:var(--accent);}
+
+.empty-hint{text-align:center;color:var(--muted);padding:40px 20px;}
+.empty-hint .big{font-size:2.5rem;margin-bottom:10px;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="../index.html" class="back-btn">← Back</a>
+  <span class="game-title">Odd One <span>Out</span> 🔎</span>
+  <select id="sel-level" onchange="onLevelChange()">
+    <option value="all">All levels</option>
+    <optgroup label="Level 5–6">
+      <option value="l5gram">L5 · Grammar</option>
+      <option value="l5lit">L5 · Literary terms</option>
+      <option value="l6gram">L6 · Grammar</option>
+      <option value="l6vocab">L6 · Vocabulary</option>
+    </optgroup>
+    <optgroup label="Level 7–8">
+      <option value="l7lit">L7 · Literary devices</option>
+      <option value="l7vocab">L7 · Vocabulary</option>
+      <option value="l8rhet">L8 · Rhetoric &amp; persuasion</option>
+      <option value="l8vocab">L8 · Vocabulary</option>
+    </optgroup>
+    <optgroup label="Level 9">
+      <option value="l9lit">L9 · Literary analysis</option>
+      <option value="l9vocab">L9 · Advanced vocabulary</option>
+    </optgroup>
+  </select>
+  <button class="start-btn" onclick="newRound()">▶ Next</button>
+  <button class="custom-btn" onclick="toggleCustom()">+ Custom</button>
+</div>
+
+<div class="arena">
+  <div class="empty-hint" id="empty-hint">
+    <div class="big">🔎</div>
+    <p>Choose a level and press <strong>Next</strong> to begin.<br>Teams discuss, then decide — one doesn't belong!</p>
+  </div>
+
+  <div class="q-label" id="q-label" style="display:none"></div>
+
+  <div class="card-grid" id="card-grid" style="display:none"></div>
+
+  <div class="multi-note" id="multi-note">⚠️ More than one answer could work — discussion counts!</div>
+
+  <div class="answer-box" id="answer-box">
+    <div class="tag">Why?</div>
+    <div class="reason" id="answer-reason"></div>
+    <div class="also" id="answer-also"></div>
+  </div>
+
+  <div class="team-row" id="team-row" style="display:none">
+    <div class="team-btn" onclick="addPt(0)">Team A <span class="team-pts" id="pt-0">0</span> +</div>
+    <div class="team-btn" onclick="addPt(1)">Team B <span class="team-pts" id="pt-1">0</span> +</div>
+    <div class="team-btn" onclick="addPt(2)">Team C <span class="team-pts" id="pt-2">0</span> +</div>
+    <div class="team-btn" onclick="addPt(3)">Team D <span class="team-pts" id="pt-3">0</span> +</div>
+  </div>
+
+  <div class="controls" id="controls" style="display:none">
+    <button class="ctrl-btn btn-skip" onclick="skipReveal()">👁️ Reveal</button>
+    <button class="ctrl-btn btn-next" onclick="newRound()">▶ Next Question</button>
+  </div>
+
+  <div class="custom-panel" id="custom-panel">
+    <h3>📝 Add Your Own</h3>
+    <p>One question per line: <code>Word A | Word B | Word C | Word D | 1 | Reason because...</code><br>
+    The number (1–4) is the position of the odd one out.</p>
+    <textarea id="custom-input" placeholder="e.g. simile | metaphor | alliteration | adjective | 4 | An adjective is grammar — the others are literary techniques."></textarea>
+    <button class="start-btn" onclick="loadCustom()" style="margin-top:8px;">Load Questions</button>
+  </div>
+</div>
+
+<script>
+// ── Questions bank ──
+const QBANK = {
+  l5gram:[
+    {words:['WAS STOLEN','WAS WRITTEN','WAS FILMED','WRITES'],odd:3,reason:'WRITES is active voice — the others are all passive constructions.',label:'Voice'},
+    {words:['IS KNOWN','WAS TAKEN','HAS BEEN RESTORED','THEY DISCOVER'],odd:3,reason:'THEY DISCOVER is active — the others use the passive voice.',label:'Voice'},
+    {words:['WOULD DO','WOULD HAVE DONE','WOULD GO','WILL DO'],odd:1,reason:'WOULD HAVE DONE is 3rd conditional — the others are 1st or 2nd.',label:'Conditionals'},
+    {words:['IF I STUDY','IF I STUDIED','IF I HAD STUDIED','WHEN I STUDY'],odd:3,reason:'WHEN I STUDY is not a conditional — it\'s a time clause.',label:'Conditionals'},
+    {words:['CAN','COULD','MUST','BECAUSE'],odd:3,reason:'BECAUSE is a conjunction — the others are modal verbs.',label:'Modals'},
+    {words:['SIMILE','METAPHOR','ALLITERATION','PARAGRAPH'],odd:3,reason:'PARAGRAPH is a structural term — the others are literary techniques.',label:'Literary terms'},
+  ],
+  l5lit:[
+    {words:['PROTAGONIST','ANTAGONIST','NARRATOR','ADJECTIVE'],odd:3,reason:'ADJECTIVE is a grammar term — the others are narrative roles.',label:'Narrative'},
+    {words:['METAPHOR','SIMILE','PERSONIFICATION','COLON'],odd:3,reason:'COLON is punctuation — the others are figurative language techniques.',label:'Devices'},
+    {words:['GENRE','THEME','MOTIF','SUFFIX'],odd:3,reason:'SUFFIX is word-building — the others are literary concepts.',label:'Literary terms'},
+    {words:['FLASHBACK','FORESHADOWING','CLIFFHANGER','PASSIVE VOICE'],odd:3,reason:'PASSIVE VOICE is grammar — the others are narrative techniques.',label:'Narrative'},
+  ],
+  l6gram:[
+    {words:['WHO','WHICH','WHERE','BECAUSE'],odd:3,reason:'BECAUSE is a conjunction — WHO, WHICH and WHERE are relative pronouns.',label:'Relative clauses'},
+    {words:['WHO','WHOSE','WHOM','WHAT'],odd:3,reason:'WHAT does not introduce a relative clause — the others do.',label:'Relative clauses'},
+    {words:['SAID','TOLD','ASKED','SHOUTED'],odd:1,reason:'TOLD must be followed by an object (told him) — SAID, ASKED and SHOUTED don\'t have to be.',label:'Reported speech',also:'Although all are reporting verbs, TOLD behaves differently.'},
+    {words:['WAS GOING','HAD GONE','WOULD COME','WENT'],odd:3,reason:'WENT is a simple past tense — the others are the backshifted forms used in reported speech.',label:'Reported speech'},
+    {words:['GET ON WITH','LOOK UP TO','FALL OUT WITH','GO TO'],odd:3,reason:'GO TO is not a phrasal verb — the others are multi-word verbs with distinct meanings.',label:'Phrasal verbs'},
+  ],
+  l6vocab:[
+    {words:['INSIDIOUS','MALEVOLENT','BENEVOLENT','NEFARIOUS'],odd:2,reason:'BENEVOLENT means kind and well-meaning — the others all mean harmful or evil.',label:'Connotation'},
+    {words:['MELANCHOLY','EUPHORIC','DESPONDENT','MOROSE'],odd:1,reason:'EUPHORIC means intensely happy — the others all express sadness or low mood.',label:'Mood'},
+    {words:['VERBOSE','LOQUACIOUS','GARRULOUS','TACITURN'],odd:3,reason:'TACITURN means saying very little — the others all mean excessively talkative.',label:'Vocabulary'},
+    {words:['OPAQUE','TRANSLUCENT','TRANSPARENT','DIAPHANOUS'],odd:0,reason:'OPAQUE means you cannot see through it — the others all describe degrees of transparency.',label:'Vocabulary'},
+  ],
+  l7lit:[
+    {words:['IAMBIC','TROCHAIC','SPONDAIC','HEROIC'],odd:3,reason:'HEROIC describes a type of couplet, not a metrical foot — the others are all metrical patterns.',label:'Poetry'},
+    {words:['METAPHOR','SIMILE','PERSONIFICATION','SYNTAX'],odd:3,reason:'SYNTAX is a structural/grammatical term — the others are all figurative language devices.',label:'Devices'},
+    {words:['ALLITERATION','ASSONANCE','SIBILANCE','OXYMORON'],odd:3,reason:'OXYMORON is about contradiction — the others are all sound devices.',label:'Sound devices'},
+    {words:['CAESURA','ENJAMBMENT','VOLTA','PROTAGONIST'],odd:3,reason:'PROTAGONIST is a character term — the others are all features of poetry structure.',label:'Poetry structure'},
+    {words:['PATHETIC FALLACY','FORESHADOWING','MOTIF','SYNONYM'],odd:3,reason:'SYNONYM is a language/vocabulary term — the others are narrative or atmospheric techniques.',label:'Narrative'},
+    {words:['ONOMATOPOEIA','HYPERBOLE','EUPHEMISM','COMMA SPLICE'],odd:3,reason:'COMMA SPLICE is a grammatical error — the others are deliberate literary techniques.',label:'Devices'},
+  ],
+  l7vocab:[
+    {words:['TRANQUIL','SERENE','PLACID','TURBULENT'],odd:3,reason:'TURBULENT means chaotic and disturbed — the others all mean calm and peaceful.',label:'Vocabulary'},
+    {words:['AUDACIOUS','TIMID','BOLD','INTREPID'],odd:1,reason:'TIMID means fearful and shy — the others all mean brave or daring.',label:'Vocabulary'},
+    {words:['EERIE','MACABRE','SINISTER','JOVIAL'],odd:3,reason:'JOVIAL means cheerful and friendly — the others all create a dark or unsettling mood.',label:'Mood'},
+    {words:['OMNISCIENT','UNRELIABLE','FIRST-PERSON','PARENTHESIS'],odd:3,reason:'PARENTHESIS is punctuation — the others are all types of narrative voice or perspective.',label:'Narrative'},
+  ],
+  l8rhet:[
+    {words:['ANAPHORA','TRICOLON','RHETORICAL QUESTION','SEMICOLON'],odd:3,reason:'SEMICOLON is punctuation — the others are rhetorical or persuasive techniques.',label:'Rhetoric'},
+    {words:['ETHOS','PATHOS','LOGOS','SYNTAX'],odd:3,reason:'SYNTAX describes sentence structure — ETHOS, PATHOS and LOGOS are the three modes of persuasion.',label:'Rhetoric'},
+    {words:['COUNTERARGUMENT','REBUTTAL','CONCESSION','ALLITERATION'],odd:3,reason:'ALLITERATION is a sound device — the others are all features of argumentative writing.',label:'Argument'},
+    {words:['FORMAL','OBJECTIVE','DETACHED','COLLOQUIAL'],odd:3,reason:'COLLOQUIAL means informal and conversational — the others describe formal register.',label:'Register'},
+    {words:['BIAS','SELECTIVE EVIDENCE','EMOTIVE LANGUAGE','BALANCED ARGUMENT'],odd:3,reason:'BALANCED ARGUMENT presents both sides fairly — the others are all persuasive or one-sided techniques.',label:'Persuasion'},
+  ],
+  l8vocab:[
+    {words:['AMBIGUOUS','EQUIVOCAL','UNEQUIVOCAL','VAGUE'],odd:2,reason:'UNEQUIVOCAL means absolutely clear — the others all mean unclear or open to interpretation.',label:'Vocabulary'},
+    {words:['PROLIFERATE','DIMINISH','MULTIPLY','BURGEON'],odd:1,reason:'DIMINISH means to grow smaller — the others all mean to grow or increase.',label:'Vocabulary'},
+    {words:['TERSE','CONCISE','SUCCINCT','VERBOSE'],odd:3,reason:'VERBOSE means using too many words — the others all mean brief and to the point.',label:'Vocabulary'},
+    {words:['CANDID','FORTHRIGHT','DUPLICITOUS','FRANK'],odd:2,reason:'DUPLICITOUS means deceptive — the others all mean honest and open.',label:'Vocabulary'},
+  ],
+  l9lit:[
+    {words:['MACBETH','HAMLET','OTHELLO','PROSPERO'],odd:3,reason:'PROSPERO is from The Tempest — the others are all protagonists of Shakespeare\'s tragedies.',label:'Shakespeare',also:'You could argue Prospero is also tragic in some readings.'},
+    {words:['BILDUNGSROMAN','DYSTOPIA','SOLILOQUY','GOTHIC'],odd:2,reason:'SOLILOQUY is a dramatic technique (speaking alone on stage) — the others are all genres or subgenres.',label:'Genre'},
+    {words:['IAMBIC PENTAMETER','BLANK VERSE','FREE VERSE','DRAMATIC IRONY'],odd:3,reason:'DRAMATIC IRONY is a technique involving the audience knowing more than characters — the others are all metrical/structural forms.',label:'Poetry & drama'},
+    {words:['CATHARSIS','HAMARTIA','HUBRIS','ALLEGORY'],odd:3,reason:'ALLEGORY is a narrative technique — CATHARSIS, HAMARTIA and HUBRIS are all Aristotelian concepts of tragedy.',label:'Tragedy'},
+    {words:['STREAM OF CONSCIOUSNESS','UNRELIABLE NARRATOR','OMNISCIENT NARRATOR','FREE VERSE'],odd:3,reason:'FREE VERSE is a poetic form — the others are all prose narrative techniques.',label:'Narrative'},
+  ],
+  l9vocab:[
+    {words:['LAMENT','ELEGY','DIRGE','PANEGYRIC'],odd:3,reason:'PANEGYRIC is a speech of high praise — the others all express grief or mourning.',label:'Vocabulary'},
+    {words:['SYCOPHANTIC','OBSEQUIOUS','SERVILE','IMPERIOUS'],odd:3,reason:'IMPERIOUS means commanding and arrogant — the others all mean excessively flattering or submissive.',label:'Vocabulary'},
+    {words:['EPHEMERAL','TRANSIENT','FLEETING','ETERNAL'],odd:3,reason:'ETERNAL means lasting forever — the others all mean short-lived or temporary.',label:'Vocabulary'},
+    {words:['VERISIMILITUDE','VERACITY','VERITY','MENDACITY'],odd:3,reason:'MENDACITY means dishonesty — the others are all related to truth and realism.',label:'Vocabulary'},
+  ],
+};
+
+// Flatten all for 'all' mode
+const ALL_QS = Object.values(QBANK).flat();
+
+let teamPts=[0,0,0,0];
+let customQs=[];
+let currentQ=null;
+let answered=false;
+let usedIndices=new Set();
+
+function onLevelChange(){usedIndices.clear();}
+
+function getPool(){
+  const lv=document.getElementById('sel-level').value;
+  if(customQs.length) return customQs;
+  if(lv==='all') return ALL_QS;
+  return QBANK[lv]||ALL_QS;
+}
+
+function newRound(){
+  const pool=getPool();
+  if(!pool.length) return;
+  
+  // Avoid repeats until all used
+  if(usedIndices.size>=pool.length) usedIndices.clear();
+  let idx;
+  do{idx=Math.floor(Math.random()*pool.length);}while(usedIndices.has(idx));
+  usedIndices.add(idx);
+  
+  currentQ=pool[idx];
+  answered=false;
+
+  document.getElementById('empty-hint').style.display='none';
+  document.getElementById('answer-box').style.display='none';
+  document.getElementById('multi-note').style.display='none';
+  document.getElementById('q-label').style.display='';
+  document.getElementById('q-label').textContent=(currentQ.label||'Which one doesn\'t belong?')+' — which is the odd one out?';
+  document.getElementById('card-grid').style.display='grid';
+  document.getElementById('controls').style.display='flex';
+  document.getElementById('team-row').style.display='flex';
+
+  renderCards();
+}
+
+function renderCards(){
+  const grid=document.getElementById('card-grid');
+  grid.innerHTML='';
+  currentQ.words.forEach((w,i)=>{
+    const c=document.createElement('div');
+    c.className='ooo-card';
+    c.textContent=w;
+    c.onclick=()=>handleClick(i);
+    grid.appendChild(c);
+  });
+}
+
+function handleClick(idx){
+  if(answered) return;
+  answered=true;
+  const cards=document.querySelectorAll('.ooo-card');
+  const correct=currentQ.odd;
+
+  if(idx===correct){
+    cards[idx].classList.add('correct');
+    cards.forEach((c,i)=>{if(i!==idx)c.classList.add('dim');});
+  } else {
+    cards[idx].classList.add('wrong');
+    setTimeout(()=>{
+      cards[correct].classList.add('correct');
+      cards.forEach((c,i)=>{if(i!==idx&&i!==correct)c.classList.add('dim');});
+    },500);
+  }
+  showAnswer();
+}
+
+function skipReveal(){
+  if(answered) return;
+  answered=true;
+  const cards=document.querySelectorAll('.ooo-card');
+  cards[currentQ.odd].classList.add('correct');
+  cards.forEach((c,i)=>{if(i!==currentQ.odd)c.classList.add('dim');});
+  showAnswer();
+}
+
+function showAnswer(){
+  const box=document.getElementById('answer-box');
+  document.getElementById('answer-reason').textContent=currentQ.reason;
+  const also=document.getElementById('answer-also');
+  if(currentQ.also){also.textContent=currentQ.also;also.style.display='';}
+  else{also.style.display='none';}
+  box.style.display='block';
+  if(currentQ.multi) document.getElementById('multi-note').style.display='';
+}
+
+function toggleCustom(){
+  const p=document.getElementById('custom-panel');
+  p.style.display=p.style.display==='none'||!p.style.display?'block':'none';
+}
+
+function loadCustom(){
+  const raw=document.getElementById('custom-input').value.trim();
+  customQs=[];
+  raw.split('\n').forEach(line=>{
+    const parts=line.split('|').map(s=>s.trim());
+    if(parts.length>=6){
+      customQs.push({
+        words:[parts[0],parts[1],parts[2],parts[3]],
+        odd:parseInt(parts[4])-1,
+        reason:parts[5],
+        label:'Custom'
+      });
+    }
+  });
+  if(customQs.length){
+    document.getElementById('custom-panel').style.display='none';
+    usedIndices.clear();
+    newRound();
+  } else {
+    alert('Could not parse questions. Check the format: Word A | Word B | Word C | Word D | 2 | Reason...');
+  }
+}
+
+function addPt(t){teamPts[t]++;document.getElementById('pt-'+t).textContent=teamPts[t];}
+</script>
+</body>
+</html>
