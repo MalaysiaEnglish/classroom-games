@@ -323,19 +323,19 @@ function nextClue(){
   document.getElementById('clue-text').textContent=item.clue;
   document.getElementById('device-answer').style.display='none';
   document.getElementById('device-answer').textContent=item.name;
-
-  // Mark as called if not already
-  if(!calledDevices.includes(item.key)){
-    calledDevices.push(item.key);
-    updateCalledDisplay();
-    // Update sidebar
-    const el=document.getElementById('dev-'+item.key);
-    if(el) el.className='device-item called-d';
-  }
+  document.getElementById('device-answer').dataset.key=item.key;
 }
 
 function revealDevice(){
-  document.getElementById('device-answer').style.display='block';
+  const answerEl=document.getElementById('device-answer');
+  answerEl.style.display='block';
+  const key=answerEl.dataset.key;
+  if(key && !calledDevices.includes(key)){
+    calledDevices.push(key);
+    updateCalledDisplay();
+    const el=document.getElementById('dev-'+key);
+    if(el) el.className='device-item called-d';
+  }
 }
 
 function updateCalledDisplay(){
