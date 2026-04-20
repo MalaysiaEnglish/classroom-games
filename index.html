@@ -290,85 +290,6 @@
     }
     .toolkit-unit-btn:hover { background: rgba(240,180,41,0.12); color: var(--accent); }
 
-    .modal-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: #161b2e;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 480px;
-      overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
-    }
-
-    .modal-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-title {
-      font-family: 'Unbounded', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--accent);
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-size: 1.4rem;
-      cursor: pointer;
-      line-height: 1;
-      padding: 2px 6px;
-      border-radius: 6px;
-      transition: color 0.15s;
-    }
-    .modal-close:hover { color: var(--text); }
-
-    .modal-body {
-      padding: 16px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    @media (max-width: 480px) {
-      .modal-body { grid-template-columns: 1fr; }
-    }
-
-    .modal-game-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      font-size: 0.88rem;
-      font-weight: 500;
-      transition: all 0.18s;
-    }
-    .modal-game-link:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
-    .modal-game-link .mg-icon { font-size: 1.3rem; }
-    .modal-game-link .mg-text { flex: 1; }
-    .modal-game-link .mg-text small { display: block; font-size: 0.7rem; color: var(--muted); font-weight: 400; margin-top: 1px; }
 
     .editor-link {
       display: block;
@@ -401,10 +322,6 @@
 </head>
 <body>
 
-  <div class="toolkit-float">
-    <button class="toolkit-btn" onclick="openToolkit()">🧰 Toolkit</button>
-  </div>
-
   <header>
     <div class="logo-row">
       <img src="logo.png" class="logo-img" alt="Ronan O'Carroll English Academy" onerror="this.style.display='none'">
@@ -414,12 +331,13 @@
   </header>
 
   <nav class="level-nav">
+    <button class="level-tab active" onclick="showLevel('toolkit')">🧰 Toolkit</button>
     <button class="level-tab" onclick="showLevel('pre')">🌟 Preschool</button>
     <button class="level-tab" onclick="showLevel('l1')">Level 1</button>
     <button class="level-tab" onclick="showLevel('l2')">Level 2</button>
     <button class="level-tab" onclick="showLevel('l3')">Level 3</button>
     <button class="level-tab" onclick="showLevel('l4')">Level 4</button>
-    <button class="level-tab active" onclick="showLevel('l5')">Level 5</button>
+    <button class="level-tab" onclick="showLevel('l5')">Level 5</button>
     <button class="level-tab" onclick="showLevel('l6')">Level 6</button>
     <button class="level-tab" onclick="showLevel('l7')">Level 7</button>
     <button class="level-tab" onclick="showLevel('l8')">Level 8</button>
@@ -428,6 +346,234 @@
   </nav>
 
   <main>
+
+    <!-- ── TOOLKIT ── -->
+    <div class="level-panel active" id="panel-toolkit">
+      <div class="level-label">🧰 Toolkit — Generic Games for Any Lesson</div>
+      <div class="units-grid">
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">⚔️</div>
+            <div class="unit-meta">
+              <div class="unit-title">Battle Teams</div>
+              <div class="unit-grammar">Power-up grid battles</div>
+            </div>
+          </div>
+          <a href="battle-teams/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🃏</div>
+            <div class="unit-meta">
+              <div class="unit-title">Grammar Cards</div>
+              <div class="unit-grammar">Higher / Lower + sentences</div>
+            </div>
+          </div>
+          <a href="grammar-cards/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🪢</div>
+            <div class="unit-meta">
+              <div class="unit-title">Hangman</div>
+              <div class="unit-grammar">Basic · Consonant · Diceman</div>
+            </div>
+          </div>
+          <a href="hangman/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🔴</div>
+            <div class="unit-meta">
+              <div class="unit-title">Connect 4</div>
+              <div class="unit-grammar">Question-based turns</div>
+            </div>
+          </div>
+          <a href="connect4/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🟥</div>
+            <div class="unit-meta">
+              <div class="unit-title">Connect 4 — Vocab Grid</div>
+              <div class="unit-grammar">Paste word list · all cells visible</div>
+            </div>
+          </div>
+          <a href="connect4-vocab/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">⬡</div>
+            <div class="unit-meta">
+              <div class="unit-title">Blockbusters</div>
+              <div class="unit-grammar">Gold vs Blue path game</div>
+            </div>
+          </div>
+          <a href="blockbusters/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🔤</div>
+            <div class="unit-meta">
+              <div class="unit-title">Word Search</div>
+              <div class="unit-grammar">Find words · print-ready</div>
+            </div>
+          </div>
+          <a href="word-search/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎲</div>
+            <div class="unit-meta">
+              <div class="unit-title">Boardgame</div>
+              <div class="unit-grammar">Roll, move, challenge</div>
+            </div>
+          </div>
+          <a href="boardgame/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏛️</div>
+            <div class="unit-meta">
+              <div class="unit-title">Sentence Auction</div>
+              <div class="unit-grammar">Bid on true sentences</div>
+            </div>
+          </div>
+          <a href="grammar-auction/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🚢</div>
+            <div class="unit-meta">
+              <div class="unit-title">Battleships</div>
+              <div class="unit-grammar">Hunt the hidden fleet</div>
+            </div>
+          </div>
+          <a href="battleships/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">⭕</div>
+            <div class="unit-meta">
+              <div class="unit-title">Noughts &amp; Crosses</div>
+              <div class="unit-grammar">Simple or question mode</div>
+            </div>
+          </div>
+          <a href="noughts-crosses/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎡</div>
+            <div class="unit-meta">
+              <div class="unit-title">Wheel of Fortune</div>
+              <div class="unit-grammar">Spin, guess, solve</div>
+            </div>
+          </div>
+          <a href="wheel-of-fortune/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎯</div>
+            <div class="unit-meta">
+              <div class="unit-title">Passive Dice</div>
+              <div class="unit-grammar">Build passive sentences</div>
+            </div>
+          </div>
+          <a href="passive-dice/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">👂</div>
+            <div class="unit-meta">
+              <div class="unit-title">Homophones</div>
+              <div class="unit-grammar">Spot &amp; fix the wrong word</div>
+            </div>
+          </div>
+          <a href="homophones/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🎯</div>
+            <div class="unit-meta">
+              <div class="unit-title">Jeopardy</div>
+              <div class="unit-grammar">Paste in your own questions</div>
+            </div>
+          </div>
+          <a href="jeopardy-toolkit/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">✨</div>
+            <div class="unit-meta">
+              <div class="unit-title">Metaphor Machine</div>
+              <div class="unit-grammar">AI-generated metaphors · Beat the machine</div>
+            </div>
+          </div>
+          <a href="metaphor-machine/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🏭</div>
+            <div class="unit-meta">
+              <div class="unit-title">Figure Factory</div>
+              <div class="unit-grammar">9 techniques · Simile to symbolism · Beat the machine</div>
+            </div>
+          </div>
+          <a href="figure-factory/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">⭐</div>
+            <div class="unit-meta">
+              <div class="unit-title">Star Hunt</div>
+              <div class="unit-grammar">Hot or Cold · question-based · teams race to find the star</div>
+            </div>
+          </div>
+          <a href="star-hunt/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">🌟</div>
+            <div class="unit-meta">
+              <div class="unit-title">Star Hunt Jr.</div>
+              <div class="unit-grammar">Picture questions · preschool / junior · emoji categories</div>
+            </div>
+          </div>
+          <a href="star-hunt-jr/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+        <div class="unit-card">
+          <div class="unit-header">
+            <div class="unit-emoji">😈</div>
+            <div class="unit-meta">
+              <div class="unit-title">Evil</div>
+              <div class="unit-grammar">Score closest to zero · keep or give your points away</div>
+            </div>
+          </div>
+          <a href="evil/index.html" class="toolkit-unit-btn" style="display:block;text-decoration:none;text-align:center;">▶ Play</a>
+        </div>
+
+      </div>
+    </div>
 
     <!-- ── PRESCHOOL ── -->
     <div class="level-panel" id="panel-pre">
@@ -472,7 +618,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -490,7 +636,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -508,7 +654,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -526,7 +672,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -544,7 +690,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -562,7 +708,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -580,7 +726,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="7"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -598,7 +744,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="8"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -616,7 +762,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="9"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -634,7 +780,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="10"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="10"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -652,7 +798,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="11"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="11"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -670,7 +816,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="1" data-sentences-unit="12"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="1" data-questions-unit="12"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -697,7 +843,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -715,7 +861,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -733,7 +879,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -751,7 +897,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -769,7 +915,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -787,7 +933,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -805,7 +951,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="7"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -823,7 +969,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="8"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -841,7 +987,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="9"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -859,7 +1005,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="10"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="10"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -877,7 +1023,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="11"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="11"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -895,7 +1041,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="2" data-sentences-unit="12"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="2" data-questions-unit="12"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -922,7 +1068,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -940,7 +1086,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -958,7 +1104,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -976,7 +1122,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -994,7 +1140,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1012,7 +1158,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1030,7 +1176,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="7"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1048,7 +1194,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="8"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1066,7 +1212,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="9"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1084,7 +1230,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="10"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="10"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1102,7 +1248,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="11"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="11"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1120,7 +1266,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="3" data-sentences-unit="12"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="3" data-questions-unit="12"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1146,7 +1292,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1164,7 +1310,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1182,7 +1328,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1200,7 +1346,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1218,7 +1364,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1236,7 +1382,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1254,7 +1400,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="7"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1272,7 +1418,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="8"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1290,7 +1436,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="9"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1308,7 +1454,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="10"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="10"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1326,7 +1472,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="11"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="11"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1344,7 +1490,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="4" data-sentences-unit="12"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="4" data-questions-unit="12"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1352,7 +1498,7 @@
     </div>
 
     <!-- ── LEVEL 5 ── -->
-    <div class="level-panel active" id="panel-l5">
+    <div class="level-panel" id="panel-l5">
       <div class="level-label">Level 5</div>
       <div class="units-grid">
 
@@ -1392,7 +1538,7 @@
           <div class="content-loaded" data-words-level="5" data-words-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="1"></div>
           <div class="toolkit-row">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1410,7 +1556,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1431,7 +1577,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1449,7 +1595,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1467,7 +1613,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1485,7 +1631,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="5" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1509,7 +1655,7 @@
           </div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="5" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1536,7 +1682,7 @@
           <div class="content-loaded" data-sentences-level="5" data-sentences-unit="8"></div>
           <div class="content-loaded" data-questions-level="5" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1578,7 +1724,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1612,7 +1758,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1646,7 +1792,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1686,7 +1832,7 @@
           <div class="content-loaded" data-words-level="6" data-words-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1716,7 +1862,7 @@
             </a>
           </div>
           <div class="toolkit-row">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1743,7 +1889,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="6" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1760,7 +1906,7 @@
           <div class="content-loaded" data-words-level="6" data-words-unit="7"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1793,7 +1939,7 @@
           <div class="content-loaded" data-sentences-level="6" data-sentences-unit="8"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="6" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1835,7 +1981,7 @@
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1869,7 +2015,7 @@
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1903,7 +2049,7 @@
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1921,7 +2067,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="7" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="7" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1939,7 +2085,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="7" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="7" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -1980,7 +2126,7 @@
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2021,7 +2167,7 @@
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2055,7 +2201,7 @@
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2089,7 +2235,7 @@
             </a>
           </div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2131,7 +2277,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2165,7 +2311,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2192,7 +2338,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2226,7 +2372,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2260,7 +2406,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2294,7 +2440,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2328,7 +2474,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="7"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2369,7 +2515,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="8"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2403,7 +2549,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="8" data-sentences-unit="9"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="8" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2445,7 +2591,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="1"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="1"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2479,7 +2625,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="2"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="2"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2513,7 +2659,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="3"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="3"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2547,7 +2693,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="4"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="4"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2574,7 +2720,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="5"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="5"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2608,7 +2754,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="6"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="6"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2642,7 +2788,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="7"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="7"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2676,7 +2822,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="8"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="8"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2710,7 +2856,7 @@
           <div class="content-loaded" style="padding-top:4px;" data-sentences-level="9" data-sentences-unit="9"></div>
           <div class="content-loaded" style="padding-top:4px;" data-questions-level="9" data-questions-unit="9"></div>
           <div class="toolkit-row" style="margin-top:8px;">
-            <button class="toolkit-unit-btn" onclick="openToolkit()">🧰 Open Toolkit for this unit</button>
+            <button class="toolkit-unit-btn" onclick="showLevel('toolkit'); window.scrollTo(0,0);">🧰 Open Toolkit for this unit</button>
           </div>
         </div>
 
@@ -2718,100 +2864,6 @@
     </div>
 
   </main>
-
-  <!-- ── Toolkit Modal ── -->
-  <div class="modal-overlay" id="toolkitModal" onclick="closeToolkitOnOverlay(event)">
-    <div class="modal">
-      <div class="modal-header">
-        <span class="modal-title">🧰 Toolkit — All Generic Games</span>
-        <button class="modal-close" onclick="closeToolkit()">×</button>
-      </div>
-      <div class="modal-body">
-        <a href="battle-teams/index.html" class="modal-game-link">
-          <span class="mg-icon">⚔️</span>
-          <span class="mg-text">Battle Teams<small>Power-up grid battles</small></span>
-        </a>
-        <a href="grammar-cards/index.html" class="modal-game-link">
-          <span class="mg-icon">🃏</span>
-          <span class="mg-text">Grammar Cards<small>Higher / Lower + sentences</small></span>
-        </a>
-        <a href="hangman/index.html" class="modal-game-link">
-          <span class="mg-icon">🪢</span>
-          <span class="mg-text">Hangman<small>Basic · Consonant · Diceman</small></span>
-        </a>
-        <a href="connect4/index.html" class="modal-game-link">
-          <span class="mg-icon">🔴</span>
-          <span class="mg-text">Connect 4<small>Question-based turns</small></span>
-        </a>
-        <a href="connect4-vocab/index.html" class="modal-game-link">
-          <span class="mg-icon">🟥</span>
-          <span class="mg-text">Connect 4 — Vocab Grid<small>Paste word list · all cells visible</small></span>
-        </a>
-        <a href="blockbusters/index.html" class="modal-game-link">
-          <span class="mg-icon">⬡</span>
-          <span class="mg-text">Blockbusters<small>Gold vs Blue path game</small></span>
-        </a>
-        
-        <a href="word-search/index.html" class="modal-game-link">
-          <span class="mg-icon">🔤</span>
-          <span class="mg-text">Word Search<small>Find words · print-ready</small></span>
-        </a>
-        
-        <a href="boardgame/index.html" class="modal-game-link">
-          <span class="mg-icon">🎲</span>
-          <span class="mg-text">Boardgame<small>Roll, move, challenge</small></span>
-        </a>
-        <a href="grammar-auction/index.html" class="modal-game-link">
-          <span class="mg-icon">🏛️</span>
-          <span class="mg-text">Sentence Auction<small>Bid on true sentences</small></span>
-        </a>
-        <a href="battleships/index.html" class="modal-game-link">
-          <span class="mg-icon">🚢</span>
-          <span class="mg-text">Battleships<small>Hunt the hidden fleet</small></span>
-        </a>
-        <a href="noughts-crosses/index.html" class="modal-game-link">
-          <span class="mg-icon">⭕</span>
-          <span class="mg-text">Noughts &amp; Crosses<small>Simple or question mode</small></span>
-        </a>
-        <a href="wheel-of-fortune/index.html" class="modal-game-link">
-          <span class="mg-icon">🎡</span>
-          <span class="mg-text">Wheel of Fortune<small>Spin, guess, solve</small></span>
-        </a>
-        <a href="passive-dice/index.html" class="modal-game-link">
-          <span class="mg-icon">🎯</span>
-          <span class="mg-text">Passive Dice<small>Build passive sentences</small></span>
-        </a>
-        <a href="homophones/index.html" class="modal-game-link">
-          <span class="mg-icon">👂</span>
-          <span class="mg-text">Homophones<small>Spot &amp; fix the wrong word</small></span>
-        </a>
-        <a href="jeopardy-toolkit/index.html" class="modal-game-link">
-          <span class="mg-icon">🎯</span>
-          <span class="mg-text">Jeopardy<small>Paste in your own questions</small></span>
-        </a>
-        <a href="metaphor-machine/index.html" class="modal-game-link">
-          <span class="mg-icon">✨</span>
-          <span class="mg-text">Metaphor Machine<small>AI-generated metaphors · Beat the machine</small></span>
-        </a>
-        <a href="figure-factory/index.html" class="modal-game-link">
-          <span class="mg-icon">🏭</span>
-          <span class="mg-text">Figure Factory<small>9 techniques · Simile to symbolism · Beat the machine</small></span>
-        </a>
-        <a href="star-hunt/index.html" class="modal-game-link">
-          <span class="mg-icon">⭐</span>
-          <span class="mg-text">Star Hunt<small>Hot or Cold · question-based · teams race to find the star</small></span>
-        </a>
-        <a href="star-hunt-jr/index.html" class="modal-game-link">
-          <span class="mg-icon">🌟</span>
-          <span class="mg-text">Star Hunt Jr.<small>Picture questions · preschool / junior · emoji categories</small></span>
-        </a>
-        <a href="evil/index.html" class="modal-game-link">
-          <span class="mg-icon">😈</span>
-          <span class="mg-text">Evil<small>Score closest to zero · keep or give your points away</small></span>
-        </a>
-      </div>
-    </div>
-  </div>
 
   <div style="text-align:center; position:relative; z-index:1; padding-bottom: 30px;">
     <a href="content-manager.html" class="editor-link">✏️ Content Manager</a>
@@ -2826,24 +2878,6 @@
       document.getElementById('panel-' + id).classList.add('active');
       event.currentTarget.classList.add('active');
     }
-
-    function openToolkit() {
-      document.getElementById('toolkitModal').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeToolkit() {
-      document.getElementById('toolkitModal').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    function closeToolkitOnOverlay(e) {
-      if (e.target === document.getElementById('toolkitModal')) closeToolkit();
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeToolkit();
-    });
 
     function updateContentBadges() {
       if (typeof window.CUSTOM_CONTENT === 'undefined') return;
