@@ -124,6 +124,9 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .tts-btn:hover{border-color:var(--accent);color:var(--accent);}
 .tts-btn.speaking{border-color:var(--accent2);color:var(--accent2);animation:tts-pulse 0.9s ease-in-out infinite;}
 @keyframes tts-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.55;transform:scale(1.12)}}
+.tts-toggle{background:rgba(255,255,255,0.04);border:2px solid var(--border);color:var(--muted);border-radius:20px;padding:6px 14px;font-size:0.72rem;font-weight:700;cursor:pointer;transition:all 0.18s;letter-spacing:0.05em;font-family:inherit;}
+.tts-toggle:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
+.tts-toggle.on{background:rgba(62,207,207,0.12);border-color:var(--accent2);color:var(--accent2);}
 
 /* ── Memory match ── */
 .mm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
@@ -256,6 +259,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
   </div>
   <div class="tts-wrap">
     <button class="tts-btn" id="tts-btn" onclick="ttsReplay()" title="Hear the word again">🔊</button>
+    <button class="tts-toggle" id="tts-toggle" onclick="ttsToggle()" title="Toggle auto-read aloud"></button>
   </div>
   <div class="fc-dots" id="fc-dots"></div>
 </div>
@@ -324,6 +328,7 @@ let revLabel  = '';
 
 // ── Init ──────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
+  ttsUpdateUI();
   const reg = window.VOCAB_REGISTRY || [];
   const bookSel = $('sel-book');
   if (!reg.length) {
@@ -476,9 +481,29 @@ function goSetup() { sh('screen-setup'); }
 // TTS  (Web Speech API — works offline, no key needed)
 // ══════════════════════════════════════════════════════════════
 const ttsSynth = window.speechSynthesis || null;
+let ttsEnabled = localStorage.getItem('ttsEnabled') === 'true'; // default OFF
+
+function ttsUpdateUI() {
+  const btn = $('tts-toggle');
+  if (!btn) return;
+  if (ttsEnabled) {
+    btn.textContent = '🔊 Auto-read: ON';
+    btn.classList.add('on');
+  } else {
+    btn.textContent = '🔇 Auto-read: OFF';
+    btn.classList.remove('on');
+  }
+}
+
+function ttsToggle() {
+  ttsEnabled = !ttsEnabled;
+  localStorage.setItem('ttsEnabled', ttsEnabled);
+  ttsUpdateUI();
+  if (!ttsEnabled && ttsSynth) ttsSynth.cancel();
+}
 
 function speak(text) {
-  if (!ttsSynth) return;
+  if (!ttsSynth || !ttsEnabled) return;
   ttsSynth.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang  = 'en-US';
@@ -495,7 +520,16 @@ function speak(text) {
 
 function ttsReplay() {
   const v = curWords[fcIdx];
-  if (v) speak(v.hint);
+  if (v) {
+    // Replay always works even if auto-read is off — manual intent
+    if (!ttsSynth) return;
+    ttsSynth.cancel();
+    const utt = new SpeechSynthesisUtterance(v.hint);
+    utt.lang = 'en-US'; utt.rate = 0.82; utt.pitch = 1.1;
+    const btn = $('tts-btn');
+    if (btn) { btn.classList.add('speaking'); utt.onend = utt.onerror = () => btn.classList.remove('speaking'); }
+    ttsSynth.speak(utt);
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
