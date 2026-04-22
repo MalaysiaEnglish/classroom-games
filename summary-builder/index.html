@@ -1,582 +1,829 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary Builder</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Summary Builder — IGCSE English</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            background: linear-gradient(135deg, #0a0d14 0%, #0f1219 100%);
-            color: #e0e0e0;
-            font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-            padding: 20px;
-        }
+    :root {
+      --bg-dark: #0a0d14;
+      --gold: #f0b429;
+      --teal: #3ecfcf;
+      --green: #4caf50;
+      --red: #e53e3e;
+      --text-light: #ffffff;
+      --text-muted: #b0b8c1;
+      --card-bg: #131a24;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+    h1, h2, h3 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
 
-        h1 {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 2.5em;
-            color: #f0b429;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
+    h1 { font-size: 3rem; }
+    h2 { font-size: 2.2rem; }
+    h3 { font-size: 1.8rem; }
 
-        .subtitle {
-            font-size: 1.1em;
-            color: #a0a0a0;
-        }
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 3rem;
+      animation: fadeIn 0.4s ease-in-out;
+    }
 
-        /* Screens */
-        .screen {
-            display: none;
-        }
+    .screen.active {
+      display: block;
+    }
 
-        .screen.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in;
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    /* ============ PICKER SCREEN ============ */
+    .picker-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        /* Intro Screen */
-        .intro-content {
-            background: rgba(17, 21, 32, 0.8);
-            border: 1px solid rgba(240, 180, 41, 0.3);
-            border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
+    .picker-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
 
-        .intro-content h2 {
-            color: #f0b429;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            font-family: 'Unbounded', sans-serif;
-        }
+    .picker-header h1 {
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
 
-        .intro-content p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-            color: #b0b0b0;
-        }
+    .picker-header p {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+    }
 
-        .intro-content ul {
-            text-align: left;
-            display: inline-block;
-            margin: 20px 0;
-            line-height: 1.8;
-        }
+    .picker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
 
-        .intro-content li {
-            margin-bottom: 8px;
-            color: #a0a0a0;
-        }
+    .passage-card {
+      background: var(--card-bg);
+      border: 3px solid transparent;
+      border-radius: 12px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        /* Game Screen */
-        .game-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+    .passage-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(240, 180, 41, 0.15);
+    }
 
-        .passage-card {
-            background: rgba(17, 21, 32, 0.8);
-            border: 1px solid rgba(62, 207, 207, 0.3);
-            border-radius: 12px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            max-height: 300px;
-            overflow-y: auto;
-        }
+    .passage-card h3 {
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
 
-        .passage-label {
-            font-size: 0.9em;
-            color: #3ecfcf;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    .passage-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
 
-        .passage-text {
-            font-size: 1em;
-            line-height: 1.7;
-            color: #d0d0d0;
-        }
+    .difficulty-badge {
+      display: inline-block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      background: rgba(62, 207, 207, 0.2);
+      color: var(--teal);
+    }
 
-        .bullet-points {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    /* ============ INTRO SCREEN ============ */
+    .intro-container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 3rem;
+    }
 
-        .bullet-point {
-            background: rgba(17, 21, 32, 0.6);
-            border: 2px solid rgba(160, 160, 160, 0.3);
-            border-radius: 10px;
-            padding: 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
+    .intro-container h1 {
+      color: var(--gold);
+      margin-bottom: 2rem;
+    }
 
-        .bullet-point:hover {
-            background: rgba(17, 21, 32, 0.8);
-            border-color: rgba(160, 160, 160, 0.5);
-        }
+    .intro-container p {
+      font-size: 1.8rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
 
-        .bullet-point input[type="checkbox"] {
-            margin-top: 2px;
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-            accent-color: #f0b429;
-        }
+    .btn {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 1.2rem 3rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-        .bullet-point.selected {
-            background: rgba(240, 180, 41, 0.15);
-            border-color: #f0b429;
-        }
+    .btn:hover {
+      background: #ffcc00;
+      transform: scale(1.05);
+    }
 
-        .bullet-point.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+    .btn:active {
+      transform: scale(0.98);
+    }
 
-        .bullet-point.disabled:hover {
-            background: rgba(17, 21, 32, 0.6);
-            border-color: rgba(160, 160, 160, 0.3);
-        }
+    .btn-secondary {
+      background: transparent;
+      border: 3px solid var(--teal);
+      color: var(--teal);
+      margin-left: 1rem;
+    }
 
-        .bullet-text {
-            flex: 1;
-            color: #d0d0d0;
-            line-height: 1.5;
-        }
+    .btn-secondary:hover {
+      background: rgba(62, 207, 207, 0.1);
+    }
 
-        .selection-count {
-            text-align: center;
-            margin: 20px 0;
-            color: #3ecfcf;
-            font-weight: 600;
-        }
+    /* ============ GAME SCREEN ============ */
+    .game-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-        .selection-count.warn {
-            color: #f0b429;
-        }
+    .game-header {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid rgba(62, 207, 207, 0.3);
+    }
 
-        /* Buttons */
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
+    .game-header h2 {
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
 
-        button {
-            padding: 12px 30px;
-            font-size: 1em;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    .game-instruction {
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #f0b429 0%, #e8a620 100%);
-            color: #0a0d14;
-        }
+    .selected-count {
+      display: inline-block;
+      background: rgba(240, 180, 41, 0.2);
+      color: var(--gold);
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
 
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(240, 180, 41, 0.3);
-        }
+    .passage-text-section {
+      background: var(--card-bg);
+      border-left: 4px solid var(--teal);
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+      max-height: 40vh;
+      overflow-y: auto;
+    }
 
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+    .passage-text-section h3 {
+      color: var(--teal);
+      margin-bottom: 1.5rem;
+    }
 
-        .btn-secondary {
-            background: rgba(62, 207, 207, 0.2);
-            border: 2px solid #3ecfcf;
-            color: #3ecfcf;
-        }
+    .passage-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
 
-        .btn-secondary:hover {
-            background: rgba(62, 207, 207, 0.3);
-            transform: translateY(-2px);
-        }
+    .passage-text p {
+      margin-bottom: 1rem;
+    }
 
-        /* Results Screen */
-        .results-container {
-            text-align: center;
-        }
+    .bullets-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
 
-        .score-display {
-            background: rgba(17, 21, 32, 0.8);
-            border: 2px solid #f0b429;
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-        }
+    .bullet-item {
+      background: var(--card-bg);
+      border: 2px solid rgba(240, 180, 41, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
 
-        .score-text {
-            font-size: 3em;
-            color: #f0b429;
-            font-family: 'Unbounded', sans-serif;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
+    .bullet-item:hover {
+      border-color: var(--gold);
+      background: rgba(240, 180, 41, 0.08);
+    }
 
-        .score-subtext {
-            color: #a0a0a0;
-            font-size: 1.1em;
-        }
+    .bullet-item.checked {
+      border-color: var(--gold);
+      background: rgba(240, 180, 41, 0.12);
+    }
 
-        .results-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            text-align: left;
-            margin-bottom: 30px;
-        }
+    .bullet-checkbox {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: var(--gold);
+    }
 
-        .result-item {
-            background: rgba(17, 21, 32, 0.6);
-            border-left: 4px solid;
-            border-radius: 8px;
-            padding: 16px;
-        }
+    .bullet-text {
+      flex: 1;
+      font-size: 1.2rem;
+      line-height: 1.7;
+    }
 
-        .result-item.correct {
-            border-left-color: #3ecfcf;
-            background: rgba(62, 207, 207, 0.1);
-        }
+    .warning-message {
+      background: rgba(229, 62, 62, 0.15);
+      border-left: 4px solid var(--red);
+      color: #ff9999;
+      padding: 1rem 1.5rem;
+      border-radius: 6px;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      display: none;
+    }
 
-        .result-item.incorrect {
-            border-left-color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
-        }
+    .warning-message.show {
+      display: block;
+      animation: slideIn 0.3s ease-out;
+    }
 
-        .result-icon {
-            font-weight: 600;
-            margin-right: 8px;
-            font-size: 1.2em;
-        }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .result-item.correct .result-icon {
-            color: #3ecfcf;
-        }
+    .game-actions {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 2px solid rgba(62, 207, 207, 0.3);
+    }
 
-        .result-item.incorrect .result-icon {
-            color: #ff6b6b;
-        }
+    .btn-submit {
+      background: var(--teal);
+      color: #000;
+      font-weight: 700;
+      padding: 1.2rem 3rem;
+      font-size: 1.3rem;
+    }
 
-        .result-text {
-            color: #d0d0d0;
-            margin-bottom: 8px;
-        }
+    .btn-submit:hover {
+      background: #5ee5e5;
+    }
 
-        .result-explanation {
-            color: #a0a0a0;
-            font-size: 0.95em;
-            line-height: 1.5;
-            margin-left: 26px;
-        }
+    .btn-submit:disabled {
+      background: var(--text-muted);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
 
-        /* Scrollbar */
-        .passage-card::-webkit-scrollbar {
-            width: 8px;
-        }
+    /* ============ RESULTS SCREEN ============ */
+    .results-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
 
-        .passage-card::-webkit-scrollbar-track {
-            background: rgba(62, 207, 207, 0.1);
-            border-radius: 4px;
-        }
+    .results-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
 
-        .passage-card::-webkit-scrollbar-thumb {
-            background: rgba(62, 207, 207, 0.3);
-            border-radius: 4px;
-        }
+    .results-header h1 {
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
 
-        .passage-card::-webkit-scrollbar-thumb:hover {
-            background: rgba(62, 207, 207, 0.5);
-        }
+    .results-score {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
 
-            .intro-content {
-                padding: 25px;
-            }
+    .result-card {
+      background: var(--card-bg);
+      border-left: 5px solid var(--green);
+      border-radius: 8px;
+      padding: 2rem;
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
 
-            .passage-card {
-                padding: 15px;
-                max-height: 250px;
-            }
+    .result-card.incorrect {
+      border-left-color: var(--red);
+    }
 
-            .score-text {
-                font-size: 2.2em;
-            }
+    .result-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      width: 50px;
+      text-align: center;
+    }
 
-            button {
-                padding: 10px 20px;
-                font-size: 0.9em;
-            }
-        }
-    </style>
+    .result-content {
+      flex: 1;
+    }
+
+    .result-text {
+      font-size: 1.2rem;
+      line-height: 1.7;
+      margin-bottom: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .result-explanation {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 1rem;
+      background: rgba(176, 184, 193, 0.1);
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .discussion-prompt {
+      font-size: 1rem;
+      color: var(--teal);
+      padding: 1rem;
+      background: rgba(62, 207, 207, 0.1);
+      border-left: 3px solid var(--teal);
+      border-radius: 6px;
+      font-style: italic;
+      margin-top: 1rem;
+    }
+
+    .discussion-prompt-correct {
+      border-left-color: var(--green);
+      color: var(--text-muted);
+      background: rgba(76, 175, 80, 0.08);
+    }
+
+    .results-actions {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 2px solid rgba(62, 207, 207, 0.3);
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #000;
+      margin-right: 1rem;
+    }
+
+    .btn-primary:hover {
+      background: #ffcc00;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 3px solid var(--teal);
+      color: var(--teal);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(62, 207, 207, 0.1);
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+      .screen {
+        padding: 2rem;
+      }
+
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.6rem; }
+      h3 { font-size: 1.4rem; }
+
+      .picker-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-container {
+        min-height: auto;
+      }
+
+      .intro-container p {
+        font-size: 1.4rem;
+      }
+
+      .passage-text-section {
+        max-height: 50vh;
+      }
+
+      .bullet-item {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .bullet-checkbox {
+        width: 30px;
+        height: 30px;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+      }
+
+      .btn-secondary {
+        display: block;
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Summary Builder</h1>
-            <p class="subtitle">IGCSE Reading Comprehension — Extract Key Points</p>
-        </div>
 
-        <!-- Intro Screen -->
-        <div class="screen active" id="introScreen">
-            <div class="intro-content">
-                <h2>Your Task</h2>
-                <p>You will read a passage about a real event. Below it, you'll see <strong>10 bullet points</strong>.</p>
-                <p>Some are good summary points. Others are too detailed, irrelevant, or repeat information.</p>
-                <p>Your job:</p>
-                <ul>
-                    <li><strong>Select exactly 5 of the best points</strong> that summarise the passage</li>
-                    <li>A good summary is <strong>factual</strong>, <strong>concise</strong>, and <strong>avoids repetition</strong></li>
-                    <li>Avoid points that are too detailed, vague, or minor</li>
-                </ul>
-                <p style="margin-top: 25px;">When you submit, each point will be marked correct or incorrect with an explanation.</p>
-                <div class="button-group">
-                    <button class="btn-primary" onclick="startGame()">Start Game</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game Screen -->
-        <div class="screen" id="gameScreen">
-            <div class="game-container">
-                <div class="passage-card">
-                    <div class="passage-label">Reading Passage</div>
-                    <div class="passage-text" id="passageText"></div>
-                </div>
-
-                <div>
-                    <div class="passage-label">Select Your 5 Best Summary Points</div>
-                    <div class="bullet-points" id="bulletPointsContainer"></div>
-                </div>
-
-                <div class="selection-count" id="selectionCount">
-                    Select <strong>5 points</strong> exactly
-                </div>
-
-                <div class="button-group">
-                    <button class="btn-secondary" onclick="goToIntro()">Back</button>
-                    <button class="btn-primary" id="submitBtn" onclick="submitAnswers()" disabled>Submit Answers</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Screen -->
-        <div class="screen" id="resultsScreen">
-            <div class="results-container">
-                <div class="score-display">
-                    <div class="score-text" id="finalScore"></div>
-                    <div class="score-subtext">points out of 5</div>
-                </div>
-
-                <div class="results-list" id="resultsList"></div>
-
-                <div class="button-group">
-                    <button class="btn-primary" onclick="startGame()">Play Again</button>
-                </div>
-            </div>
-        </div>
+  <!-- ============ PICKER SCREEN ============ -->
+  <div id="pickerScreen" class="screen active">
+    <div class="picker-container">
+      <div class="picker-header">
+        <h1>Choose a Passage</h1>
+        <p>Select the text your class will summarise today</p>
+      </div>
+      <div class="picker-grid" id="pickerGrid">
+        <!-- Populated by JS -->
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Game Data
-        const PASSAGE = `Firefighters in Christchurch, New Zealand's second-largest city, worked through the night to bring a devastating wildfire under control after it burnt down eleven houses and forced more than one thousand people to evacuate their homes. The blaze, which spread over approximately two thousand hectares in the city's Port Hills, was described by local authorities as a state of emergency.
+  <!-- ============ INTRO SCREEN ============ -->
+  <div id="introScreen" class="screen">
+    <div class="intro-container">
+      <h1 id="introTitle"></h1>
+      <p id="introInstruction"></p>
+      <div>
+        <button class="btn" onclick="startGame()">Begin</button>
+        <button class="btn btn-secondary" onclick="switchScreen('pickerScreen')">Change Passage</button>
+      </div>
+    </div>
+  </div>
 
-John Mackie, the civil defence controller, confirmed that around 130 firefighters on the ground, assisted by more than a dozen helicopters, had successfully prevented the fire from spreading further into the residential areas of the city. Heavy rain forecast for the weekend was expected to aid the effort.
+  <!-- ============ GAME SCREEN ============ -->
+  <div id="gameScreen" class="screen">
+    <div class="game-container">
+      <div class="game-header">
+        <h2 id="gameTitle"></h2>
+        <p class="game-instruction">Select the 5 best summary points for this passage. Read carefully!</p>
+        <div class="selected-count">Selected: <span id="selectedCount">0</span>/5</div>
+      </div>
 
-Residents described terrifying scenes as flames approached their properties. Phil Claude, who fled with his family, recalled: "I could see the smoke and flames being blown right up toward our house. I just yelled — get out, get out!" Around 450 homes were officially evacuated on Thursday morning.
+      <div class="passage-text-section">
+        <h3>The Passage</h3>
+        <div class="passage-text" id="gamePassageText"></div>
+      </div>
 
-The cause of the fire remained unknown and was still under investigation by authorities. Local fire experts criticised the group of potholers who had entered the danger zone despite warnings from residents familiar with the area's conditions.`;
+      <div class="warning-message" id="warningMessage">
+        You can only select 5 bullet points. Please uncheck one before selecting another.
+      </div>
 
-        const BULLET_POINTS = [
-            { text: "A wildfire in Christchurch, New Zealand destroyed eleven houses.", correct: true, explanation: "✓ Correct — this is a key fact: the number of houses destroyed." },
-            { text: "More than one thousand people were evacuated from their homes.", correct: true, explanation: "✓ Correct — the scale of the evacuation is a key summary point." },
-            { text: "Approximately 130 firefighters and over a dozen helicopters fought the blaze.", correct: true, explanation: "✓ Correct — the resources used are a key factual point about the response." },
-            { text: "The cause of the fire was unknown and was being investigated.", correct: true, explanation: "✓ Correct — an important outcome/conclusion to summarise." },
-            { text: "Forecast rain was expected to help extinguish the remaining fire.", correct: true, explanation: "✓ Correct — a relevant forward-looking fact about how the fire would be dealt with." },
-            { text: "Phil Claude shouted 'get out, get out' as the flames approached his house.", correct: false, explanation: "✗ Too specific — this is a quotation detail, not a summary point. Summary avoids direct quotation." },
-            { text: "The fire spread over 2,000 hectares in the Port Hills area of the city.", correct: false, explanation: "✗ Too detailed — the specific hectare figure is supporting detail, not a key summary point." },
-            { text: "John Mackie was the civil defence controller for Christchurch.", correct: false, explanation: "✗ Irrelevant — the name of the official is not a key point worth including in a summary." },
-            { text: "The wildfire was a terrible event that made people very frightened.", correct: false, explanation: "✗ Too vague and evaluative — a good summary uses precise factual language, not general impressions." },
-            { text: "Local experts criticised some individuals for entering a dangerous area against advice.", correct: false, explanation: "✗ Minor point — this is background context, not one of the main summary points about the fire itself." },
-        ];
+      <div class="bullets-container" id="bulletsContainer">
+        <!-- Populated by JS -->
+      </div>
 
-        let selectedIndices = [];
+      <div class="game-actions">
+        <button class="btn btn-submit" id="submitBtn" onclick="submitAnswers()" disabled>Submit Answers</button>
+      </div>
+    </div>
+  </div>
 
-        function startGame() {
-            selectedIndices = [];
-            renderGame();
-            switchScreen('gameScreen');
+  <!-- ============ RESULTS SCREEN ============ -->
+  <div id="resultsScreen" class="screen">
+    <div class="results-container">
+      <div class="results-header">
+        <h1>Results</h1>
+        <div class="results-score" id="resultsScore"></div>
+      </div>
+
+      <div class="results-grid" id="resultsGrid">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="tryAnother()">Try Another Passage</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============ DATA ============
+    const PASSAGES = [
+      {
+        id: 'wildfire',
+        title: 'Wildfire in New Zealand',
+        description: 'A news report about the Christchurch Port Hills wildfire',
+        difficulty: 'Intermediate',
+        text: `Firefighters battled a massive wildfire in the Port Hills area of Christchurch, New Zealand, as strong winds fanned the flames across dry hillsides. Hundreds of residents were forced to evacuate their homes as the blaze spread rapidly overnight. Emergency services worked through the night to contain the fire, which destroyed several properties and threatened key infrastructure.
+
+The fire, described by local officials as one of the worst in the region's history, was fuelled by drought conditions and gusting northwesterly winds. Helicopters dropped water on the flames while ground crews worked to create firebreaks. The New Zealand Defence Force was called in to assist, deploying personnel and equipment to support overstretched fire services.
+
+Many residents described the scene as terrifying, with one evacuee saying she had only minutes to grab essentials before fleeing. Community centres were opened as emergency shelters, and donations of food and clothing poured in from across the city. Environmental groups warned that such extreme fire events were likely to become more common due to climate change.`,
+        bullets: [
+          { text: "Firefighters battled a wildfire in the Port Hills area near Christchurch, New Zealand.", correct: true, explanation: "This is the key opening fact — who, what, where.", discussion: "Ask the class: what would be missing from our summary if we left out this opening fact?" },
+          { text: "Strong winds and dry drought conditions helped the fire spread rapidly overnight.", correct: true, explanation: "The cause of the fire's spread is essential context for a summary.", discussion: "Ask the class: is the cause of an event important enough to always include in a summary?" },
+          { text: "Emergency services, helicopters, and the New Zealand Defence Force all helped fight the fire.", correct: true, explanation: "The scale of the response is a key detail.", discussion: "Ask the class: why does the variety of emergency responders matter here?" },
+          { text: "One evacuee said she had only minutes to grab her belongings before fleeing.", correct: false, explanation: "This is an illustrative quote — vivid but too specific for a summary.", discussion: "Ask the class: personal quotes add impact, but do they belong in a neutral summary?" },
+          { text: "Residents were evacuated and community centres were opened as emergency shelters.", correct: true, explanation: "The human impact and community response are important summary points.", discussion: "Ask the class: why is the community response relevant in a summary of a disaster?" },
+          { text: "Environmental groups warned that such fires may become more frequent due to climate change.", correct: true, explanation: "This is the broader significance — a good summary point.", discussion: "Ask the class: should a summary always include the wider significance of an event?" },
+          { text: "Donations of food and clothing poured in from across the city.", correct: false, explanation: "A supportive detail, but not essential — it overlaps with point 5.", discussion: "Ask the class: can two points cover the same idea? How do you choose which to keep?" },
+          { text: "The fire destroyed several properties and threatened key infrastructure.", correct: false, explanation: "True, but covered in the broader context of points 1 and 3.", discussion: "Ask the class: when a detail is already implied by another point, should it be included?" },
+          { text: "The New Zealand Defence Force deployed personnel and equipment to the fire.", correct: false, explanation: "Too specific — this is already captured by the broader response point.", discussion: "Ask the class: is it better to be specific or concise in a summary?" },
+          { text: "Officials described it as one of the worst wildfires in the region's history.", correct: false, explanation: "Dramatic but adds little extra information compared to what's already summarised.", discussion: "Ask the class: does a superlative claim ('one of the worst') strengthen a summary or weaken it?" }
+        ]
+      },
+      {
+        id: 'lighthouse',
+        title: 'The Last Lighthouse Keeper',
+        description: 'A descriptive travel piece about visiting a remote lighthouse',
+        difficulty: 'Advanced',
+        text: `The lighthouse at Dunmore Head stands alone at the edge of Ireland's most westerly point, a defiant white tower against the endless grey Atlantic. Once a beacon of hope for sailors navigating treacherous coastal waters, it has not been staffed by a human keeper since 1987, when automation quietly ended a tradition stretching back centuries.
+
+I arrived in early morning, when low cloud still clung to the clifftops and the sea below churned in shades of iron and slate. The lighthouse itself was smaller than I had imagined — perhaps twelve metres tall — but its presence commanded the landscape entirely. A rusted gate, half-open, led to a gravel path worn smooth by decades of keeper's boots.
+
+Inside the small adjacent cottage, a local heritage organisation has preserved the last keeper's living quarters exactly as they were left. His log book sits open on a scarred wooden table, the final entry dated March 14th, 1987. 'Wind: north-westerly, Force 6. Visibility: poor. Lamp: operational.' Six words to mark the end of an era.
+
+The automation of lighthouses was driven by economics — it was simply cheaper to install electronic systems than to pay and house keepers in such remote locations. But local fishermen still speak of the keepers with affection, recalling how they would wave from the clifftop when boats passed safely, a human gesture that no automated light can replicate.`,
+        bullets: [
+          { text: "Dunmore Head lighthouse is Ireland's most westerly lighthouse, and has been automated since 1987.", correct: true, explanation: "Key facts — location and historical shift to automation.", discussion: "Ask the class: why is the date 1987 significant enough to include?" },
+          { text: "The lighthouse is approximately twelve metres tall.", correct: false, explanation: "A minor descriptive detail — not important enough for a summary.", discussion: "Ask the class: does the height of the lighthouse change our understanding of the story?" },
+          { text: "The lighthouse was once used to guide sailors away from dangerous coastal waters.", correct: true, explanation: "The original purpose is essential context.", discussion: "Ask the class: how does knowing the original purpose help readers understand the loss described later?" },
+          { text: "A heritage organisation has preserved the last keeper's living quarters in the cottage.", correct: true, explanation: "Shows the cultural significance of the site — worth summarising.", discussion: "Ask the class: why might preserving the keeper's quarters matter to local people?" },
+          { text: "The keeper's final log entry on 14 March 1987 read: 'Wind: north-westerly, Force 6.'", correct: false, explanation: "Vivid but too specific — a quotation rather than a summary point.", discussion: "Ask the class: this detail is powerful in the original — why doesn't it work in a summary?" },
+          { text: "Lighthouses were automated for economic reasons — electronic systems were cheaper than employing keepers.", correct: true, explanation: "The reason for automation is a key fact.", discussion: "Ask the class: does explaining why something happened make a summary more useful?" },
+          { text: "Local fishermen remember the keepers warmly and value the human connection they provided.", correct: true, explanation: "This captures the emotional significance — the human element the article builds towards.", discussion: "Ask the class: is the human feeling described here too vague for a summary, or just right?" },
+          { text: "The writer arrived in the morning when cloud still covered the clifftops.", correct: false, explanation: "Atmospheric scene-setting, but not part of the information being summarised.", discussion: "Ask the class: descriptive writing creates atmosphere — but should atmosphere appear in a summary?" },
+          { text: "The rusted gate at the lighthouse had been worn smooth by decades of use.", correct: false, explanation: "A descriptive image, not a factual summary point.", discussion: "Ask the class: there are many vivid images in this passage — how do you decide which, if any, to include?" },
+          { text: "The lighthouse ended the practice of having human keepers on remote Irish coastlines.", correct: false, explanation: "Slightly misleading — it was the automation of this and other lighthouses collectively, not this one alone.", discussion: "Ask the class: does a summary point need to be completely accurate, or is 'close enough' acceptable?" }
+        ]
+      },
+      {
+        id: 'techclass',
+        title: 'Tech Classrooms: Promise or Problem?',
+        description: 'An opinion piece about technology in schools',
+        difficulty: 'Advanced',
+        text: `Schools across the world are racing to equip classrooms with the latest technology. Interactive whiteboards, tablets, and AI-driven learning platforms have become the hallmarks of a modern education. Yet as investment in ed-tech soars, a growing number of researchers and educators are asking whether the evidence actually supports the hype.
+
+A major review published by the Education Endowment Foundation found that simply providing technology does not improve learning outcomes. What matters, the review concluded, is how technology is used and whether teachers have received adequate training to deploy it effectively. In classrooms where teachers were confident users of digital tools, student engagement and attainment both improved. In classrooms where technology was added without proper training, outcomes were no better — and sometimes worse.
+
+Critics also point to the issue of screen time. Pupils in digitally intensive classrooms spend an average of four to five hours each day looking at screens, prompting concern from health professionals about the effects on sleep, concentration, and social development. Some schools in Sweden — long considered a model for progressive education — have recently reversed their digital-first policies, reintroducing printed textbooks after a decline in reading comprehension scores.
+
+Proponents argue that technology prepares students for a digital world and can personalise learning in ways a single teacher cannot. The debate, it seems, is not whether to use technology in schools, but how to use it wisely.`,
+        bullets: [
+          { text: "Schools worldwide are investing heavily in classroom technology such as tablets and AI platforms.", correct: true, explanation: "Sets up the context — the scale of investment is the starting point.", discussion: "Ask the class: why is it important to state the scale of something at the start of a summary?" },
+          { text: "Research shows that providing technology alone does not improve student learning outcomes.", correct: true, explanation: "The key finding from the review — central to the article's argument.", discussion: "Ask the class: does this finding surprise you? How does it change the argument?" },
+          { text: "Technology improves outcomes only when teachers are well-trained in how to use it.", correct: true, explanation: "The nuanced conclusion — what actually makes a difference.", discussion: "Ask the class: how does this point change the conclusion we should draw from the research?" },
+          { text: "The Education Endowment Foundation published its review on digital technology in schools.", correct: false, explanation: "The source is named in the article, but naming it adds nothing to a summary.", discussion: "Ask the class: should a summary name the sources of evidence, or just report the findings?" },
+          { text: "Pupils in digitally intensive classrooms spend four to five hours a day looking at screens.", correct: false, explanation: "A specific statistic that illustrates the concern but is too detailed for a summary.", discussion: "Ask the class: statistics are convincing in an argument — are they still useful in a summary?" },
+          { text: "Health professionals have raised concerns about the effects of high screen time on pupils.", correct: true, explanation: "The health concern is a distinct and important thread in the article.", discussion: "Ask the class: the original says 'sleep, concentration, and social development' — is it better to keep all three or summarise?" },
+          { text: "Some Swedish schools have returned to printed textbooks after reading scores declined.", correct: true, explanation: "A concrete example that supports the case against uncritical tech adoption.", discussion: "Ask the class: examples make arguments concrete — do examples belong in summaries?" },
+          { text: "Supporters of ed-tech say it can personalise learning in ways a teacher alone cannot.", correct: false, explanation: "Valid, but the article ends on this — it's a balancing note, not the main argument.", discussion: "Ask the class: when a passage gives both sides of an argument, which side should your summary favour?" },
+          { text: "Sweden was long considered a model for progressive education.", correct: false, explanation: "Background detail about Sweden's reputation — too minor for a summary.", discussion: "Ask the class: background context helps in an article — does it help in a summary too?" },
+          { text: "The debate is not whether to use technology in schools, but how to use it wisely.", correct: false, explanation: "This is the article's concluding line — a summary of the whole piece, not a summary point.", discussion: "Ask the class: if a sentence already summarises the whole article, is it still useful as a bullet point?" }
+        ]
+      }
+    ];
+
+    // ============ STATE ============
+    let currentPassage = null;
+    let selectedBulletIndices = [];
+
+    // ============ INITIALIZATION ============
+    function init() {
+      renderPickerScreen();
+    }
+
+    // ============ SCREEN MANAGEMENT ============
+    function switchScreen(screenId) {
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(screen => screen.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // ============ PICKER SCREEN ============
+    function renderPickerScreen() {
+      const grid = document.getElementById('pickerGrid');
+      grid.innerHTML = '';
+
+      PASSAGES.forEach((passage, index) => {
+        const card = document.createElement('div');
+        card.className = 'passage-card';
+        card.innerHTML = `
+          <h3>${passage.title}</h3>
+          <p>${passage.description}</p>
+          <div class="difficulty-badge">${passage.difficulty}</div>
+        `;
+        card.onclick = () => selectPassage(index);
+        grid.appendChild(card);
+      });
+    }
+
+    function selectPassage(index) {
+      currentPassage = PASSAGES[index];
+      selectedBulletIndices = [];
+      document.getElementById('introTitle').textContent = currentPassage.title;
+      document.getElementById('introInstruction').textContent = `You will have a few moments to read the passage. Your class must then select the 5 most important points to include in a summary. Let's begin!`;
+      switchScreen('introScreen');
+    }
+
+    // ============ GAME SCREEN ============
+    function startGame() {
+      // Render passage text
+      const passageDiv = document.getElementById('gamePassageText');
+      const paragraphs = currentPassage.text.split('\n\n').map(p => p.trim()).filter(p => p);
+      passageDiv.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+
+      // Render game title
+      document.getElementById('gameTitle').textContent = currentPassage.title;
+
+      // Render bullets
+      const bulletsContainer = document.getElementById('bulletsContainer');
+      bulletsContainer.innerHTML = '';
+
+      currentPassage.bullets.forEach((bullet, index) => {
+        const bulletDiv = document.createElement('div');
+        bulletDiv.className = 'bullet-item';
+        bulletDiv.innerHTML = `
+          <input type="checkbox" class="bullet-checkbox" data-index="${index}" onchange="handleBulletChange(${index})">
+          <div class="bullet-text">${bullet.text}</div>
+        `;
+        bulletsContainer.appendChild(bulletDiv);
+      });
+
+      switchScreen('gameScreen');
+    }
+
+    function handleBulletChange(index) {
+      const checkbox = document.querySelector(`input[data-index="${index}"]`);
+      const warning = document.getElementById('warningMessage');
+
+      if (checkbox.checked) {
+        if (selectedBulletIndices.length >= 5) {
+          checkbox.checked = false;
+          warning.classList.add('show');
+          setTimeout(() => warning.classList.remove('show'), 3000);
+          return;
+        }
+        selectedBulletIndices.push(index);
+      } else {
+        selectedBulletIndices = selectedBulletIndices.filter(i => i !== index);
+      }
+
+      updateBulletDisplay();
+    }
+
+    function updateBulletDisplay() {
+      document.getElementById('selectedCount').textContent = selectedBulletIndices.length;
+
+      const bullets = document.querySelectorAll('.bullet-item');
+      bullets.forEach((bullet, index) => {
+        if (selectedBulletIndices.includes(index)) {
+          bullet.classList.add('checked');
+        } else {
+          bullet.classList.remove('checked');
+        }
+      });
+
+      // Enable submit button when exactly 5 are selected
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = selectedBulletIndices.length !== 5;
+    }
+
+    // ============ RESULTS SCREEN ============
+    function submitAnswers() {
+      // Score the answers
+      let correctCount = 0;
+      const results = [];
+
+      currentPassage.bullets.forEach((bullet, index) => {
+        const isSelected = selectedBulletIndices.includes(index);
+        const isCorrect = bullet.correct;
+        const matchesExpectation = isSelected === isCorrect;
+
+        if (matchesExpectation) {
+          correctCount++;
         }
 
-        function goToIntro() {
-            switchScreen('introScreen');
+        results.push({
+          index,
+          bullet,
+          isSelected,
+          isCorrect,
+          matchesExpectation
+        });
+      });
+
+      // Render results screen
+      const scoresDiv = document.getElementById('resultsScore');
+      scoresDiv.textContent = `${correctCount} / 10 correct`;
+
+      const resultsGrid = document.getElementById('resultsGrid');
+      resultsGrid.innerHTML = '';
+
+      results.forEach(result => {
+        const resultCard = document.createElement('div');
+        resultCard.className = `result-card ${result.isCorrect ? 'correct' : 'incorrect'}`;
+
+        const icon = result.isCorrect ? 'Yes' : 'No';
+        const statusClass = result.isCorrect ? 'correct' : 'incorrect';
+
+        let discussionHtml = '';
+        if (result.bullet.discussion) {
+          const promptClass = result.isCorrect ? 'discussion-prompt-correct' : '';
+          discussionHtml = `<div class="discussion-prompt ${promptClass}">${result.bullet.discussion}</div>`;
         }
 
-        function renderGame() {
-            document.getElementById('passageText').textContent = PASSAGE;
+        resultCard.innerHTML = `
+          <div class="result-icon">${icon}</div>
+          <div class="result-content">
+            <div class="result-text">${result.bullet.text}</div>
+            <div class="result-explanation">${result.bullet.explanation}</div>
+            ${discussionHtml}
+          </div>
+        `;
+        resultsGrid.appendChild(resultCard);
+      });
 
-            const container = document.getElementById('bulletPointsContainer');
-            container.innerHTML = '';
+      switchScreen('resultsScreen');
+    }
 
-            BULLET_POINTS.forEach((point, index) => {
-                const div = document.createElement('div');
-                div.className = 'bullet-point';
-                div.innerHTML = `
-                    <input type="checkbox" id="bullet-${index}" data-index="${index}">
-                    <label for="bullet-${index}" class="bullet-text">${point.text}</label>
-                `;
+    // ============ RESET ============
+    function tryAnother() {
+      currentPassage = null;
+      selectedBulletIndices = [];
+      document.getElementById('warningMessage').classList.remove('show');
+      switchScreen('pickerScreen');
+    }
 
-                const input = div.querySelector('input');
-                input.addEventListener('change', (e) => togglePoint(index, e.target.checked));
-                input.addEventListener('click', (e) => e.stopPropagation());
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
 
-                div.addEventListener('click', () => {
-                    input.checked = !input.checked;
-                    togglePoint(index, input.checked);
-                });
-
-                container.appendChild(div);
-            });
-
-            updateUI();
-        }
-
-        function togglePoint(index, checked) {
-            if (checked) {
-                if (selectedIndices.length < 5) {
-                    selectedIndices.push(index);
-                } else {
-                    document.getElementById(`bullet-${index}`).checked = false;
-                    return;
-                }
-            } else {
-                selectedIndices = selectedIndices.filter(i => i !== index);
-            }
-
-            updateUI();
-        }
-
-        function updateUI() {
-            const container = document.getElementById('bulletPointsContainer');
-            const points = container.querySelectorAll('.bullet-point');
-
-            points.forEach((point, index) => {
-                const checkbox = point.querySelector('input');
-                const isSelected = selectedIndices.includes(index);
-                const isDisabled = selectedIndices.length >= 5 && !isSelected;
-
-                checkbox.checked = isSelected;
-
-                if (isSelected) {
-                    point.classList.add('selected');
-                    point.classList.remove('disabled');
-                } else if (isDisabled) {
-                    point.classList.add('disabled');
-                    point.classList.remove('selected');
-                } else {
-                    point.classList.remove('selected', 'disabled');
-                }
-            });
-
-            const countEl = document.getElementById('selectionCount');
-            const submitBtn = document.getElementById('submitBtn');
-            const remaining = 5 - selectedIndices.length;
-
-            if (selectedIndices.length === 5) {
-                countEl.innerHTML = '✓ <strong>5 points selected</strong> — ready to submit!';
-                countEl.classList.remove('warn');
-                submitBtn.disabled = false;
-            } else {
-                countEl.innerHTML = `Select <strong>${remaining} more point${remaining !== 1 ? 's' : ''}</strong>`;
-                countEl.classList.add('warn');
-                submitBtn.disabled = true;
-            }
-        }
-
-        function submitAnswers() {
-            const results = selectedIndices.map(index => ({
-                text: BULLET_POINTS[index].text,
-                correct: BULLET_POINTS[index].correct,
-                explanation: BULLET_POINTS[index].explanation,
-            }));
-
-            const score = results.filter(r => r.correct).length;
-            displayResults(score, results);
-        }
-
-        function displayResults(score, results) {
-            document.getElementById('finalScore').textContent = score;
-
-            const resultsList = document.getElementById('resultsList');
-            resultsList.innerHTML = '';
-
-            results.forEach(result => {
-                const div = document.createElement('div');
-                div.className = `result-item ${result.correct ? 'correct' : 'incorrect'}`;
-                const icon = result.correct ? '✓' : '✗';
-                div.innerHTML = `
-                    <div class="result-text">
-                        <span class="result-icon">${icon}</span> ${result.text}
-                    </div>
-                    <div class="result-explanation">${result.explanation}</div>
-                `;
-                resultsList.appendChild(div);
-            });
-
-            switchScreen('resultsScreen');
-        }
-
-        function switchScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-        }
-    </script>
 </body>
 </html>

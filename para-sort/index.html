@@ -1,637 +1,863 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para-Sort</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para-Sort — IGCSE English</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            background: linear-gradient(135deg, #0a0d14 0%, #0f1219 100%);
-            color: #e0e0e0;
-            font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-            padding: 20px;
-        }
+    :root {
+      --bg-dark: #0a0d14;
+      --gold: #f0b429;
+      --teal: #3ecfcf;
+      --green: #4caf50;
+      --red: #e53e3e;
+      --text-light: #e8ecf1;
+      --text-muted: #a0aac0;
+      --card-bg: #1a1f2e;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+    html, body {
+      height: 100%;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+    body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-        h1 {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 2.5em;
-            color: #f0b429;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+    }
 
-        .subtitle {
-            font-size: 1.1em;
-            color: #a0a0a0;
-        }
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* Screens */
-        .screen {
-            display: none;
-        }
+    /* ============================================
+       PICKER SCREEN
+       ============================================ */
 
-        .screen.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in;
-        }
+    #pickerScreen {
+      justify-content: flex-start;
+      padding: 60px 40px;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .picker-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
 
-        /* Intro Screen */
-        .intro-content {
-            background: rgba(17, 21, 32, 0.8);
-            border: 1px solid rgba(240, 180, 41, 0.3);
-            border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
+    .picker-header h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
 
-        .intro-content h2 {
-            color: #f0b429;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            font-family: 'Unbounded', sans-serif;
-        }
+    .picker-header p {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+    }
 
-        .intro-content p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-            color: #b0b0b0;
-        }
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
 
-        .intro-content ul {
-            text-align: left;
-            display: inline-block;
-            margin: 20px 0;
-            line-height: 1.8;
-        }
+    .article-card {
+      background-color: var(--card-bg);
+      border: 3px solid transparent;
+      border-radius: 8px;
+      padding: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .intro-content li {
-            margin-bottom: 8px;
-            color: #a0a0a0;
-        }
+    .article-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(240, 180, 41, 0.15);
+    }
 
-        .intro-content strong {
-            color: #3ecfcf;
-        }
+    .article-card h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+      color: var(--gold);
+    }
 
-        /* Game Screen */
-        .game-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+    .article-card p {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      margin-bottom: 24px;
+      flex: 1;
+    }
 
-        .instructions {
-            background: rgba(62, 207, 207, 0.1);
-            border: 1px solid rgba(62, 207, 207, 0.3);
-            border-radius: 10px;
-            padding: 15px 20px;
-            color: #a0a0a0;
-            font-size: 0.95em;
-        }
+    .article-type {
+      display: inline-block;
+      background-color: var(--teal);
+      color: var(--bg-dark);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-        .instructions strong {
-            color: #3ecfcf;
-        }
+    /* ============================================
+       INTRO SCREEN
+       ============================================ */
 
-        .sortable-area {
-            background: rgba(17, 21, 32, 0.5);
-            border: 2px dashed rgba(62, 207, 207, 0.3);
-            border-radius: 12px;
-            padding: 30px;
-            min-height: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    #introScreen {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
-        .sortable-area.drag-over {
-            background: rgba(62, 207, 207, 0.1);
-            border-color: rgba(62, 207, 207, 0.6);
-        }
+    .intro-content {
+      max-width: 900px;
+    }
 
-        .paragraph-card {
-            background: rgba(17, 21, 32, 0.8);
-            border: 2px solid rgba(160, 160, 160, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            cursor: move;
-            transition: all 0.2s ease;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            user-select: none;
-        }
+    .intro-content h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 40px;
+    }
 
-        .paragraph-card:hover {
-            background: rgba(17, 21, 32, 0.95);
-            border-color: rgba(160, 160, 160, 0.5);
-            transform: translateY(-2px);
-        }
+    .intro-content p {
+      font-size: 1.8rem;
+      color: var(--text-light);
+      margin-bottom: 60px;
+      line-height: 1.8;
+    }
 
-        .paragraph-card.dragging {
-            opacity: 0.5;
-            transform: scale(0.95);
-        }
+    .intro-content button {
+      background-color: var(--teal);
+      color: var(--bg-dark);
+      border: none;
+      padding: 24px 60px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-        .drag-handle {
-            color: #f0b429;
-            font-size: 1.3em;
-            font-weight: 600;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
+    .intro-content button:hover {
+      background-color: var(--gold);
+      transform: scale(1.05);
+    }
 
-        .paragraph-content {
-            flex: 1;
-        }
+    .intro-content button:active {
+      transform: scale(0.98);
+    }
 
-        .paragraph-number {
-            font-size: 0.85em;
-            color: #3ecfcf;
-            font-weight: 600;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    /* ============================================
+       GAME SCREEN
+       ============================================ */
 
-        .paragraph-text {
-            color: #d0d0d0;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
+    #gameScreen {
+      flex-direction: column;
+      padding: 40px;
+    }
 
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
+    .game-header {
+      margin-bottom: 40px;
+    }
 
-        button {
-            padding: 12px 30px;
-            font-size: 1em;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    .game-header h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 2rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #f0b429 0%, #e8a620 100%);
-            color: #0a0d14;
-        }
+    .game-header p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
 
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(240, 180, 41, 0.3);
-        }
+    .drop-zone {
+      flex: 1;
+      background-color: var(--card-bg);
+      border: 3px dashed var(--text-muted);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
 
-        .btn-secondary {
-            background: rgba(62, 207, 207, 0.2);
-            border: 2px solid #3ecfcf;
-            color: #3ecfcf;
-        }
+    .drop-zone.drag-over {
+      border-color: var(--teal);
+      background-color: rgba(62, 207, 207, 0.05);
+    }
 
-        .btn-secondary:hover {
-            background: rgba(62, 207, 207, 0.3);
-            transform: translateY(-2px);
-        }
+    .paragraph-card {
+      background-color: #252d3a;
+      border-left: 4px solid var(--gold);
+      border-radius: 6px;
+      padding: 24px;
+      cursor: move;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      user-select: none;
+      transition: all 0.2s ease;
+      touch-action: none;
+    }
 
-        /* Results Screen */
-        .results-container {
-            text-align: center;
-        }
+    .paragraph-card:hover {
+      background-color: #2d3542;
+      box-shadow: 0 4px 12px rgba(240, 180, 41, 0.1);
+    }
 
-        .score-display {
-            background: rgba(17, 21, 32, 0.8);
-            border: 2px solid #f0b429;
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-        }
+    .paragraph-card.dragging {
+      opacity: 0.5;
+      background-color: #1a1f2e;
+    }
 
-        .score-text {
-            font-size: 3em;
-            color: #f0b429;
-            font-family: 'Unbounded', sans-serif;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
+    .drag-handle {
+      color: var(--gold);
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
 
-        .score-subtext {
-            color: #a0a0a0;
-            font-size: 1.1em;
-        }
+    .paragraph-text {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      flex: 1;
+    }
 
-        .results-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            text-align: left;
-            margin-bottom: 30px;
-        }
+    .game-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
 
-        .result-card {
-            background: rgba(17, 21, 32, 0.6);
-            border-left: 4px solid;
-            border-radius: 8px;
-            padding: 20px;
-        }
+    .game-buttons button {
+      padding: 16px 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
 
-        .result-card.correct {
-            border-left-color: #3ecfcf;
-            background: rgba(62, 207, 207, 0.1);
-        }
+    #submitBtn {
+      background-color: var(--teal);
+      color: var(--bg-dark);
+    }
 
-        .result-card.incorrect {
-            border-left-color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
-        }
+    #submitBtn:hover {
+      background-color: #2dc4d4;
+      transform: scale(1.02);
+    }
 
-        .result-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
+    #submitBtn:active {
+      transform: scale(0.98);
+    }
 
-        .result-icon {
-            font-weight: 600;
-            font-size: 1.3em;
-        }
+    #shuffleBtn {
+      background-color: var(--text-muted);
+      color: var(--bg-dark);
+    }
 
-        .result-card.correct .result-icon {
-            color: #3ecfcf;
-        }
+    #shuffleBtn:hover {
+      background-color: var(--text-light);
+      transform: scale(1.02);
+    }
 
-        .result-card.incorrect .result-icon {
-            color: #ff6b6b;
-        }
+    /* ============================================
+       RESULTS SCREEN
+       ============================================ */
 
-        .result-label {
-            color: #d0d0d0;
-            font-weight: 600;
-        }
+    #resultsScreen {
+      padding: 40px;
+      flex-direction: column;
+    }
 
-        .result-text {
-            color: #d0d0d0;
-            font-size: 0.95em;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
+    .results-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
 
-        .result-explanation {
-            color: #a0a0a0;
-            font-size: 0.9em;
-            line-height: 1.5;
-            padding-left: 30px;
-            border-left: 2px solid rgba(160, 160, 160, 0.3);
-        }
+    .results-header h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
 
-        /* Color coding for results */
-        .color-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-            margin-right: 8px;
-        }
+    .results-header p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+    }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
+    .results-container {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 40px;
+    }
 
-            .intro-content {
-                padding: 25px;
-            }
+    .result-card {
+      background-color: var(--card-bg);
+      border-left: 6px solid var(--green);
+      border-radius: 6px;
+      padding: 32px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-            .sortable-area {
-                min-height: 400px;
-                padding: 15px;
-            }
+    .result-card.incorrect {
+      border-left-color: var(--red);
+    }
 
-            .paragraph-card {
-                padding: 12px;
-            }
+    .result-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-            .score-text {
-                font-size: 2.2em;
-            }
+    .result-label {
+      background-color: var(--gold);
+      color: var(--bg-dark);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      min-width: fit-content;
+    }
 
-            button {
-                padding: 10px 20px;
-                font-size: 0.9em;
-            }
+    .result-position {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
 
-            .paragraph-text {
-                font-size: 0.85em;
-            }
-        }
-    </style>
+    .result-text {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    .result-explanation {
+      background-color: rgba(62, 207, 207, 0.1);
+      border-left: 3px solid var(--teal);
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 1.05rem;
+      color: var(--text-light);
+    }
+
+    .result-discussion {
+      background-color: rgba(240, 180, 41, 0.1);
+      border-left: 3px solid var(--gold);
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 1.05rem;
+      color: var(--text-light);
+      font-style: italic;
+    }
+
+    .results-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .results-buttons button {
+      padding: 16px 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+
+    #tryAnotherBtn {
+      background-color: var(--teal);
+      color: var(--bg-dark);
+    }
+
+    #tryAnotherBtn:hover {
+      background-color: #2dc4d4;
+      transform: scale(1.02);
+    }
+
+    /* ============================================
+       SCROLLBAR STYLING
+       ============================================ */
+
+    .screen::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .screen::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    .screen::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+      border-radius: 5px;
+    }
+
+    .screen::-webkit-scrollbar-thumb:hover {
+      background: var(--gold);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Para-Sort</h1>
-            <p class="subtitle">IGCSE Reading & Writing — Sequencing & Structure</p>
-        </div>
-
-        <!-- Intro Screen -->
-        <div class="screen active" id="introScreen">
-            <div class="intro-content">
-                <h2>Understand Text Structure</h2>
-                <p>News reports, articles, and stories are <strong>organised in a specific order</strong> for a reason.</p>
-                <p>Sometimes the paragraphs get mixed up. Your job is to <strong>put them back in the correct order</strong>.</p>
-
-                <p style="margin-top: 25px;"><strong>How it works:</strong></p>
-                <ul>
-                    <li><strong>Drag</strong> each paragraph card to reorder them</li>
-                    <li>Think about the <strong>logical flow</strong> — what would come first, second, third?</li>
-                    <li>News articles typically: Opening → Background → Complications → Resolution → Response → Expert comment</li>
-                    <li>When ready, submit to check your answer</li>
-                </ul>
-
-                <p style="margin-top: 25px;">You'll get a score based on how many paragraphs are in the right position.</p>
-
-                <div class="button-group" style="margin-top: 30px;">
-                    <button class="btn-primary" onclick="startGame()">Start Game</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game Screen -->
-        <div class="screen" id="gameScreen">
-            <div class="game-container">
-                <div class="instructions">
-                    <strong>Drag the paragraph cards to put them in the correct order.</strong> Think about the logical structure of the text: what comes first, what comes next, what wraps it up?
-                </div>
-
-                <div class="sortable-area" id="sortableArea"></div>
-
-                <div class="button-group">
-                    <button class="btn-secondary" onclick="goToIntro()">Back</button>
-                    <button class="btn-primary" onclick="submitOrder()">Submit Order</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Results Screen -->
-        <div class="screen" id="resultsScreen">
-            <div class="results-container">
-                <div class="score-display">
-                    <div class="score-text" id="finalScore"></div>
-                    <div class="score-subtext">correct position(s) out of 6</div>
-                </div>
-
-                <h2 style="text-align: left; color: #f0b429; margin-bottom: 20px; font-family: 'Unbounded', sans-serif;">Correct Order:</h2>
-
-                <div class="results-list" id="resultsList"></div>
-
-                <div class="button-group">
-                    <button class="btn-primary" onclick="startGame()">Play Again</button>
-                </div>
-            </div>
-        </div>
+  <!-- PICKER SCREEN -->
+  <div id="pickerScreen" class="screen active">
+    <div class="picker-header">
+      <h1>Choose an Article</h1>
+      <p>Select the text your class will put in order today</p>
     </div>
+    <div class="articles-grid" id="articlesGrid"></div>
+  </div>
 
-    <script>
-        const PARAGRAPHS = [
-            {
-                id: 1,
-                text: "Eight Swiss potholers trapped in a cave in eastern France by rising water were found alive yesterday. Rescue teams were preparing to work through the night to bring them to the surface.",
-                label: "Opening / Summary",
-                explanation: "This is the OPENING — a news report always begins with a summary of the key facts: who, what, when. The 'Five Ws' structure means the most newsworthy fact comes first."
-            },
-            {
-                id: 2,
-                text: "The cave, known as Bief-du-Paraud, runs for 380 metres but only sits about seven metres below the surface. It is normally considered a beginner-level site for potholers. The expedition had been part of a project for the students to develop their ability to face challenges.",
-                label: "Background",
-                explanation: "This is BACKGROUND — after the opening summary, the reporter gives context about the location and why the group was there. This paragraph answers 'where?' and 'why?' in more detail."
-            },
-            {
-                id: 3,
-                text: "Inexperienced and poorly equipped, with one member of the group being partially blind, the students were initially given little chance of survival. Heavy rain in recent weeks had made the area particularly dangerous.",
-                label: "Complication",
-                explanation: "This is the COMPLICATION — the factors that made survival unlikely. News reports build the drama by explaining what made the situation so serious before revealing the outcome."
-            },
-            {
-                id: 4,
-                text: "Hope for the survival of the three women and five men was fading when they were found before midday by a diver who swam through a narrow passage to reach a chimney where they had taken refuge, crouched 70 metres into the cave above the water level.",
-                label: "Resolution",
-                explanation: "This is the RESOLUTION — the moment of rescue. The dramatic detail of the diver swimming through a narrow passage builds to the relief of finding the group alive."
-            },
-            {
-                id: 5,
-                text: "Distraught relatives who had gathered at the site gave a cheer when news of their discovery was announced. The group was expected to be brought out through a hole being drilled into the chimney where they had taken refuge.",
-                label: "Human response",
-                explanation: "This is the HUMAN RESPONSE — news reports include the emotional reaction of those affected. This paragraph provides the human dimension after the factual rescue account."
-            },
-            {
-                id: 6,
-                text: "Local potholing experts described the expedition as foolhardy, given the dangerous prevailing conditions. Rescuers were pumping water from the cave to avert further flood danger from heavy rains over the previous 24 hours.",
-                label: "Expert comment / future",
-                explanation: "This is the CLOSING — expert opinion and a look ahead. News reports often end with a quote from an expert and what happens next. This provides closure and context."
-            },
-        ];
+  <!-- INTRO SCREEN -->
+  <div id="introScreen" class="screen">
+    <div class="intro-content">
+      <h1 id="introTitle"></h1>
+      <p id="introInstruction"></p>
+      <button onclick="startGame()">Start Sorting</button>
+    </div>
+  </div>
 
-        let currentOrder = [];
-        let draggedElement = null;
+  <!-- GAME SCREEN -->
+  <div id="gameScreen" class="screen">
+    <div class="game-header">
+      <h2 id="gameTitle"></h2>
+      <p>Drag the paragraphs into the correct order, then click Submit</p>
+    </div>
+    <div class="drop-zone" id="dropZone"></div>
+    <div class="game-buttons">
+      <button id="shuffleBtn" onclick="shuffleCurrentOrder()">Shuffle</button>
+      <button id="submitBtn" onclick="submitOrder()">Submit Order</button>
+    </div>
+  </div>
 
-        function startGame() {
-            currentOrder = shuffleParagraphs([...PARAGRAPHS]);
-            renderGame();
-            switchScreen('gameScreen');
+  <!-- RESULTS SCREEN -->
+  <div id="resultsScreen" class="screen">
+    <div class="results-header">
+      <h2>Results</h2>
+      <p>Here's how the paragraphs fit together:</p>
+    </div>
+    <div class="results-container" id="resultsContainer"></div>
+    <div class="results-buttons">
+      <button id="tryAnotherBtn" onclick="reset()">Try Another Article</button>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // ARTICLES DATA
+    // ============================================
+
+    const ARTICLES = [
+      {
+        id: 0,
+        title: "Trapped Underground",
+        description: "A group of potholers are rescued from a flooded cave system",
+        type: "News Report",
+        paragraphs: [
+          {
+            id: 1,
+            text: "A group of four experienced potholers were rescued from a flooded cave system in the Yorkshire Dales yesterday after spending more than eighteen hours trapped underground. The group had become stranded when heavy rainfall caused water levels to rise unexpectedly, blocking their exit route.",
+            label: "Opening / Summary",
+            explanation: "A news report opens with who, what, where and when — the key facts in brief.",
+            discussion: "Ask the class: why do news reports put the most important information first rather than building up to it?"
+          },
+          {
+            id: 2,
+            text: "The four cavers — all members of a local potholing club — had entered the Gaping Gill cave system on Saturday morning with the intention of completing a route they had explored several times before. They were reported missing when they failed to return by early evening.",
+            label: "Background",
+            explanation: "Background gives us context about who the people are and what they were doing before the incident.",
+            discussion: "Ask the class: what would the reader be left wondering if this paragraph were removed?"
+          },
+          {
+            id: 3,
+            text: "By midnight, water had risen to chest height inside the cave's main chamber, forcing the group to retreat to a narrow ledge several metres above the flood level. One of the cavers, an experienced first-aider, treated a colleague for mild hypothermia using emergency thermal foil from their kit.",
+            label: "Complication",
+            explanation: "The complication develops the crisis — showing how bad the situation became.",
+            discussion: "Ask the class: how does the writer use specific details (chest height, narrow ledge) to build tension?"
+          },
+          {
+            id: 4,
+            text: "A specialist cave rescue team, alerted by the cavers' emergency beacon, reached the group at 6 a.m. on Sunday. Using a combination of diving equipment and ropes, the rescue team navigated the flooded passages to guide the potholers to the surface over a period of four hours.",
+            label: "Resolution",
+            explanation: "The resolution explains how the crisis was solved — essential to completing the narrative arc.",
+            discussion: "Ask the class: why does the resolution come after the complication, not before it?"
+          },
+          {
+            id: 5,
+            text: "All four cavers were taken to hospital as a precaution, where they were described as shaken but in good spirits. The group's leader told reporters: 'We never lost hope. We trusted that people would come for us.'",
+            label: "Human Response",
+            explanation: "A personal quote gives the human dimension — how the experience felt.",
+            discussion: "Ask the class: why do journalists include quotes from people involved? What do quotes add that facts cannot?"
+          },
+          {
+            id: 6,
+            text: "Cave rescue volunteers, who train year-round for such emergencies, are entirely unpaid. Senior rescue coordinator David Marsh warned that cavers venturing into systems during wet weather risked not only their own lives but those of the rescue teams sent after them.",
+            label: "Expert Comment / Wider Significance",
+            explanation: "An expert comment gives authority and broadens the story beyond the single incident.",
+            discussion: "Ask the class: why do news reports often end with an expert's wider point rather than more details about the event?"
+          }
+        ]
+      },
+      {
+        id: 1,
+        title: "In Defence of School Uniform",
+        description: "An argument for why school uniform is beneficial",
+        type: "Opinion / Argument",
+        paragraphs: [
+          {
+            id: 1,
+            text: "Every September, the debate about school uniform reignites. Parents complain about the cost. Students object to having their identity suppressed. Yet the evidence in favour of uniform — when examined carefully — remains compelling, and the arguments against it reveal more about adult anxieties than about the real experience of students.",
+            label: "Opening Hook / Thesis",
+            explanation: "An opinion piece opens with an engaging hook and immediately states the writer's position.",
+            discussion: "Ask the class: the writer addresses counterarguments straight away. What effect does this have on the reader?"
+          },
+          {
+            id: 2,
+            text: "Studies from schools in the United States, where uniform policies vary widely by state, suggest that schools with compulsory uniform see measurably lower rates of bullying related to clothing. In schools without uniform, researchers found that students from lower-income backgrounds reported feeling visibly different from wealthier peers — a source of anxiety that affected their concentration and self-esteem.",
+            label: "Point 1 with Evidence",
+            explanation: "The first main argument is supported by research evidence, giving it authority.",
+            discussion: "Ask the class: why is research evidence more persuasive than personal opinion in an argument?"
+          },
+          {
+            id: 3,
+            text: "Opponents argue that uniform stifles self-expression and that students should be free to develop their identity through their clothing choices. This is a reasonable concern — but it misunderstands where real self-expression happens. Identity is built through ideas, values, and relationships, not through branded trainers or designer labels.",
+            label: "Counterargument and Refutation",
+            explanation: "Addressing the counterargument and refuting it shows the writer has considered both sides — making the argument stronger.",
+            discussion: "Ask the class: does the writer's refutation actually answer the counterargument, or does it dodge it?"
+          },
+          {
+            id: 4,
+            text: "The cost objection, too, deserves scrutiny. Critics cite the expense of buying school-specific items from approved suppliers. But the alternative — dressing children in daily changing fashion items to keep up with peers — is demonstrably more expensive over an academic year. Research by the Children's Society found that school uniform costs families an average of £337 per year, compared to £716 for non-uniform clothing.",
+            label: "Point 2 with Evidence",
+            explanation: "A second distinct argument, again supported by specific data.",
+            discussion: "Ask the class: the writer uses specific numbers (£337 vs £716). Why are exact figures more persuasive than approximate ones?"
+          },
+          {
+            id: 5,
+            text: "None of this is to say that every uniform policy is well-designed or fairly priced. Schools have a responsibility to keep costs low, to offer affordable suppliers, and to apply policies with compassion when families face genuine hardship. The argument is not that uniform is perfect — only that it is better than the alternative.",
+            label: "Concession",
+            explanation: "A mature argument acknowledges nuance and limitations — this makes the writer appear more reasonable.",
+            discussion: "Ask the class: does making a concession weaken the writer's argument or strengthen it?"
+          },
+          {
+            id: 6,
+            text: "Clothing should be the least interesting thing about a school. When students walk through the gate in the same uniform, attention shifts — however slightly — to what they do and say rather than what they wear. In a world that increasingly judges people by their appearance, that shift, however modest, seems worth defending.",
+            label: "Conclusion / Call to Think",
+            explanation: "A strong conclusion returns to the central idea and leaves the reader with something to reflect on.",
+            discussion: "Ask the class: the writer ends with a value statement, not a summary. Why might this be more effective?"
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "Maria Montessori: The Woman Who Reinvented Childhood",
+        description: "A profile of the educational pioneer who shaped modern learning",
+        type: "Profile / Feature",
+        paragraphs: [
+          {
+            id: 1,
+            text: "In 1907, a young Italian doctor opened a school in one of Rome's most neglected slum districts. Her pupils — children aged three to six who had previously been described as 'uneducable' — were within months reading, writing, and learning with a calm focus that astonished the educational world. The doctor's name was Maria Montessori, and what she created in that single room would go on to reshape how millions of children are taught across the world.",
+            label: "Engaging Opening / Hook",
+            explanation: "A feature article often opens with a vivid scene or surprising claim to draw the reader in before naming its subject.",
+            discussion: "Ask the class: the writer withholds Montessori's name until the end of the paragraph. What effect does this have?"
+          },
+          {
+            id: 2,
+            text: "Montessori was born in 1870 in the small Italian town of Chiaravalle. From an early age, she defied the expectations placed on women of her era: she became one of the first women in Italy to qualify as a medical doctor, graduating from the University of Rome in 1896 despite significant opposition from male colleagues who refused to work alongside her.",
+            label: "Background / Early Life",
+            explanation: "After the hook, the feature steps back to provide biographical background — where the subject came from.",
+            discussion: "Ask the class: why might the writer choose to mention opposition from male colleagues rather than just stating she qualified?"
+          },
+          {
+            id: 3,
+            text: "Her method, developed through years of observation, was built on a simple principle: children are natural learners who thrive when given freedom within structure. Montessori classrooms abandoned rigid rows of desks in favour of open spaces where children could choose their own activities, work at their own pace, and learn from specially designed materials that encouraged discovery rather than instruction.",
+            label: "Core Ideas / Achievement",
+            explanation: "The heart of a profile explains what made the subject significant — their key contribution or idea.",
+            discussion: "Ask the class: the writer explains Montessori's method by contrasting it with traditional classrooms. Why is contrast an effective way to explain an idea?"
+          },
+          {
+            id: 4,
+            text: "The method spread rapidly, first through Italy and then, after Montessori's international lecture tours, across Europe and America. Presidents, politicians, and philosophers — including Thomas Edison and Alexander Graham Bell — publicly endorsed her work. By 1915, there were more than a hundred Montessori schools in the United States alone.",
+            label: "Impact / Growth",
+            explanation: "A profile traces the impact of the subject's ideas — the spread and reception of their work.",
+            discussion: "Ask the class: why do you think the writer mentions famous names who endorsed Montessori's work?"
+          },
+          {
+            id: 5,
+            text: "Not everyone was persuaded. Critics argued that the Montessori method was too permissive, that children needed firm direction from teachers, and that allowing young pupils to 'discover' knowledge independently left dangerous gaps in their understanding. In Italy under Mussolini, Montessori schools were eventually closed by government order; Montessori herself was forced into exile in the 1930s.",
+            label: "Opposition / Setback",
+            explanation: "A balanced feature acknowledges challenges and opposition — this adds depth to the profile.",
+            discussion: "Ask the class: why might a writer include a section about failures or opposition in a profile of someone celebrated?"
+          },
+          {
+            id: 6,
+            text: "Today, there are more than 20,000 Montessori schools in 110 countries. Her face appeared on the Italian 1,000-lire note before Italy adopted the euro. But perhaps the greatest tribute is simpler: in classrooms from Tokyo to Nairobi to São Paulo, children still work in the way she imagined — choosing their tasks, following their curiosity, learning at their own pace. Montessori's revolution never really ended. It just became normal.",
+            label: "Legacy / Conclusion",
+            explanation: "A profile concludes with the subject's lasting legacy — the long-term significance of their life.",
+            discussion: "Ask the class: the final sentence says her revolution 'became normal'. What does this mean, and is it a compliment?"
+          }
+        ]
+      }
+    ];
+
+    // ============================================
+    // STATE MANAGEMENT
+    // ============================================
+
+    let currentArticle = null;
+    let paragraphOrder = [];
+    let draggedElement = null;
+
+    // ============================================
+    // SCREEN NAVIGATION
+    // ============================================
+
+    function switchScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // ============================================
+    // PICKER SCREEN
+    // ============================================
+
+    function initPicker() {
+      const grid = document.getElementById('articlesGrid');
+      grid.innerHTML = '';
+      ARTICLES.forEach((article, index) => {
+        const card = document.createElement('div');
+        card.className = 'article-card';
+        card.onclick = () => selectArticle(index);
+        card.innerHTML = `
+          <h2>${article.title}</h2>
+          <p>${article.description}</p>
+          <span class="article-type">${article.type}</span>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function selectArticle(index) {
+      currentArticle = ARTICLES[index];
+      document.getElementById('introTitle').textContent = currentArticle.title;
+      document.getElementById('introInstruction').textContent = `You'll read ${currentArticle.paragraphs.length} paragraphs. Your task is to drag them into the correct order to show how the text is structured.`;
+      document.getElementById('gameTitle').textContent = currentArticle.title;
+      switchScreen('introScreen');
+    }
+
+    // ============================================
+    // GAME LOGIC
+    // ============================================
+
+    function startGame() {
+      if (!currentArticle) return;
+
+      // Shuffle paragraphs
+      paragraphOrder = currentArticle.paragraphs
+        .map(p => p.id)
+        .sort(() => Math.random() - 0.5);
+
+      renderGameScreen();
+      switchScreen('gameScreen');
+    }
+
+    function renderGameScreen() {
+      const dropZone = document.getElementById('dropZone');
+      dropZone.innerHTML = '';
+
+      paragraphOrder.forEach(id => {
+        const paragraph = currentArticle.paragraphs.find(p => p.id === id);
+        const card = document.createElement('div');
+        card.className = 'paragraph-card';
+        card.draggable = true;
+        card.dataset.id = id;
+        card.innerHTML = `
+          <div class="drag-handle">⠿</div>
+          <div class="paragraph-text">${paragraph.text}</div>
+        `;
+
+        card.addEventListener('dragstart', handleDragStart);
+        card.addEventListener('dragend', handleDragEnd);
+
+        dropZone.appendChild(card);
+      });
+
+      dropZone.addEventListener('dragover', handleDragOver);
+      dropZone.addEventListener('dragleave', handleDragLeave);
+      dropZone.addEventListener('drop', handleDrop);
+    }
+
+    function handleDragStart(e) {
+      draggedElement = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+      this.classList.remove('dragging');
+      document.getElementById('dropZone').classList.remove('drag-over');
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      this.classList.add('drag-over');
+
+      const afterElement = getDragAfterElement(this, e.clientY);
+      if (afterElement == null) {
+        this.appendChild(draggedElement);
+      } else {
+        this.insertBefore(draggedElement, afterElement);
+      }
+    }
+
+    function handleDragLeave(e) {
+      if (e.target === this) {
+        this.classList.remove('drag-over');
+      }
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      this.classList.remove('drag-over');
+      updateParagraphOrder();
+    }
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.paragraph-card:not(.dragging)')];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
         }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
 
-        function shuffleParagraphs(arr) {
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
-        }
+    function updateParagraphOrder() {
+      const cards = document.querySelectorAll('.paragraph-card');
+      paragraphOrder = Array.from(cards).map(card => parseInt(card.dataset.id));
+    }
 
-        function goToIntro() {
-            switchScreen('introScreen');
-        }
+    function shuffleCurrentOrder() {
+      paragraphOrder.sort(() => Math.random() - 0.5);
+      renderGameScreen();
+    }
 
-        function renderGame() {
-            const area = document.getElementById('sortableArea');
-            area.innerHTML = '';
+    // ============================================
+    // RESULTS LOGIC
+    // ============================================
 
-            currentOrder.forEach((para, index) => {
-                const card = document.createElement('div');
-                card.className = 'paragraph-card';
-                card.draggable = true;
-                card.dataset.index = index;
-                card.dataset.originalId = para.id;
+    function submitOrder() {
+      const correctOrder = currentArticle.paragraphs.map(p => p.id);
+      renderResults(correctOrder);
+      switchScreen('resultsScreen');
+    }
 
-                const truncatedText = para.text.substring(0, 150) + (para.text.length > 150 ? '...' : '');
+    function renderResults(correctOrder) {
+      const container = document.getElementById('resultsContainer');
+      container.innerHTML = '';
 
-                card.innerHTML = `
-                    <div class="drag-handle">⠿</div>
-                    <div class="paragraph-content">
-                        <div class="paragraph-number">Position ${index + 1}</div>
-                        <div class="paragraph-text">${truncatedText}</div>
-                    </div>
-                `;
+      correctOrder.forEach((id, index) => {
+        const paragraph = currentArticle.paragraphs.find(p => p.id === id);
+        const userPosition = paragraphOrder.indexOf(id);
+        const isCorrect = userPosition === index;
 
-                card.addEventListener('dragstart', dragStart);
-                card.addEventListener('dragend', dragEnd);
-                card.addEventListener('dragover', dragOver);
-                card.addEventListener('drop', drop);
-                card.addEventListener('dragenter', dragEnter);
-                card.addEventListener('dragleave', dragLeave);
+        const card = document.createElement('div');
+        card.className = `result-card ${isCorrect ? '' : 'incorrect'}`;
+        card.innerHTML = `
+          <div class="result-card-header">
+            <span class="result-label">${paragraph.label}</span>
+            <span class="result-position">${isCorrect ? 'Correct' : `You placed it in position ${userPosition + 1}`}</span>
+          </div>
+          <div class="result-text">${paragraph.text}</div>
+          <div class="result-explanation"><strong>Why:</strong> ${paragraph.explanation}</div>
+          <div class="result-discussion"><strong>Discuss:</strong> ${paragraph.discussion}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
 
-                area.appendChild(card);
-            });
+    // ============================================
+    // RESET
+    // ============================================
 
-            document.getElementById('sortableArea').addEventListener('dragover', dragOver);
-            document.getElementById('sortableArea').addEventListener('drop', drop);
-            document.getElementById('sortableArea').addEventListener('dragenter', dragEnter);
-            document.getElementById('sortableArea').addEventListener('dragleave', dragLeave);
-        }
+    function reset() {
+      currentArticle = null;
+      paragraphOrder = [];
+      draggedElement = null;
+      initPicker();
+      switchScreen('pickerScreen');
+    }
 
-        function dragStart(e) {
-            draggedElement = this;
-            this.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-        }
+    // ============================================
+    // INITIALIZATION
+    // ============================================
 
-        function dragEnd(e) {
-            this.classList.remove('dragging');
-            document.getElementById('sortableArea').classList.remove('drag-over');
-        }
-
-        function dragEnter(e) {
-            document.getElementById('sortableArea').classList.add('drag-over');
-        }
-
-        function dragLeave(e) {
-            if (e.target === document.getElementById('sortableArea')) {
-                document.getElementById('sortableArea').classList.remove('drag-over');
-            }
-        }
-
-        function dragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-
-            const afterElement = getDragAfterElement(document.getElementById('sortableArea'), e.clientY);
-            const area = document.getElementById('sortableArea');
-
-            if (afterElement == null) {
-                area.appendChild(draggedElement);
-            } else {
-                area.insertBefore(draggedElement, afterElement);
-            }
-        }
-
-        function drop(e) {
-            e.preventDefault();
-        }
-
-        function getDragAfterElement(container, y) {
-            const draggableElements = [...container.querySelectorAll('.paragraph-card:not(.dragging)')];
-
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
-
-        function submitOrder() {
-            const cards = document.querySelectorAll('.paragraph-card');
-            const submittedOrder = Array.from(cards).map(card => {
-                const id = parseInt(card.dataset.originalId);
-                return PARAGRAPHS.find(p => p.id === id);
-            });
-
-            const score = countCorrectPositions(submittedOrder);
-            displayResults(score, submittedOrder);
-        }
-
-        function countCorrectPositions(submittedOrder) {
-            let correct = 0;
-            submittedOrder.forEach((para, index) => {
-                if (para.id === PARAGRAPHS[index].id) {
-                    correct++;
-                }
-            });
-            return correct;
-        }
-
-        function displayResults(score, submittedOrder) {
-            document.getElementById('finalScore').textContent = score;
-
-            const resultsList = document.getElementById('resultsList');
-            resultsList.innerHTML = '';
-
-            PARAGRAPHS.forEach((correctPara, index) => {
-                const submittedPara = submittedOrder[index];
-                const isCorrect = correctPara.id === submittedPara.id;
-
-                const card = document.createElement('div');
-                card.className = `result-card ${isCorrect ? 'correct' : 'incorrect'}`;
-
-                const icon = isCorrect ? '✓' : '✗';
-                const statusText = isCorrect ? 'Correct' : `Incorrect — you placed "${submittedPara.label}" here`;
-
-                card.innerHTML = `
-                    <div class="result-header">
-                        <span class="result-icon">${icon}</span>
-                        <span class="result-label">Position ${index + 1}: ${correctPara.label}</span>
-                    </div>
-                    <div class="result-text">${correctPara.text}</div>
-                    <div class="result-explanation"><strong>${statusText}</strong><br>${correctPara.explanation}</div>
-                `;
-
-                resultsList.appendChild(card);
-            });
-
-            switchScreen('resultsScreen');
-        }
-
-        function switchScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-        }
-    </script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initPicker();
+    });
+  </script>
 </body>
 </html>
