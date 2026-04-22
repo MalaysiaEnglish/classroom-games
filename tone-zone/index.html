@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tone Zone</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0d14 0%, #1a1f2e 100%);
+            font-family: 'DM Sans', sans-serif;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Setup Screen */
+        .setup-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .setup-header {
+            text-align: center;
+        }
+
+        .setup-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #f0b429;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .setup-header p {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+        }
+
+        .team-setup {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 180, 41, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .team-count-input {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .team-count-input label {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .team-count-input input {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #3ecfcf;
+            color: #e0e0e0;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .team-count-input input:focus {
+            outline: none;
+            border-color: #f0b429;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        #teamNamesContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .team-name-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .team-name-input input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #3ecfcf;
+            color: #e0e0e0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .team-name-input input:focus {
+            outline: none;
+            border-color: #f0b429;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .team-label {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            min-width: 60px;
+        }
+
+        .setup-button {
+            background: rgba(62, 207, 207, 0.15);
+            border: 2px solid #3ecfcf;
+            color: #3ecfcf;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            align-self: center;
+        }
+
+        .setup-button:hover {
+            background: rgba(62, 207, 207, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 180, 41, 0.3);
+            border-radius: 16px;
+            padding: 20px 30px;
+        }
+
+        .progress-pips {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pip {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .pip.active {
+            background: #f0b429;
+            box-shadow: 0 0 12px rgba(240, 180, 41, 0.6);
+        }
+
+        .question-counter {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a0a0a0;
+        }
+
+        .current-team {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f0b429;
+        }
+
+        .passage-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(62, 207, 207, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .passage-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .tone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .tone-button {
+            padding: 18px 16px;
+            border: 2px solid;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .tone-button:hover:not(:disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .tone-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .melancholic {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+
+        .melancholic:hover {
+            background: rgba(96, 165, 250, 0.2);
+        }
+
+        .tense {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .tense:hover {
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .ironic {
+            border-color: #f0b429;
+            color: #f0b429;
+        }
+
+        .ironic:hover {
+            background: rgba(240, 180, 41, 0.2);
+        }
+
+        .optimistic {
+            border-color: #34d399;
+            color: #34d399;
+        }
+
+        .optimistic:hover {
+            background: rgba(52, 211, 153, 0.2);
+        }
+
+        .threatening {
+            border-color: #a78bfa;
+            color: #a78bfa;
+        }
+
+        .threatening:hover {
+            background: rgba(167, 139, 250, 0.2);
+        }
+
+        .nostalgic {
+            border-color: #f472b6;
+            color: #f472b6;
+        }
+
+        .nostalgic:hover {
+            background: rgba(244, 114, 182, 0.2);
+        }
+
+        .explanation {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .explanation.correct {
+            border-left-color: #34d399;
+            color: #34d399;
+        }
+
+        .explanation.incorrect {
+            border-left-color: #f472b6;
+            color: #f472b6;
+        }
+
+        .next-button {
+            display: none;
+            padding: 14px 40px;
+            background: rgba(62, 207, 207, 0.15);
+            border: 2px solid #3ecfcf;
+            color: #3ecfcf;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            align-self: center;
+        }
+
+        .next-button:hover {
+            background: rgba(62, 207, 207, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* End Screen */
+        .end-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            text-align: center;
+        }
+
+        .end-screen h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #f0b429;
+        }
+
+        .results-grid {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 180, 41, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .result-team {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #f0b429;
+        }
+
+        .result-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3ecfcf;
+        }
+
+        .end-message {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            max-width: 500px;
+        }
+
+        .restart-button {
+            padding: 14px 50px;
+            background: rgba(240, 180, 41, 0.15);
+            border: 2px solid #f0b429;
+            color: #f0b429;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover {
+            background: rgba(240, 180, 41, 0.25);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 700px) {
+            .setup-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .passage-text {
+                font-size: 1.1rem;
+            }
+
+            .tone-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .end-screen h2 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setupScreen">
+            <div class="setup-header">
+                <h1>Tone Zone</h1>
+                <p>Identify the tone and mood in literary extracts.</p>
+            </div>
+
+            <div class="team-setup">
+                <div class="team-count-input">
+                    <label for="teamCount">Number of Teams (2-6)</label>
+                    <input type="number" id="teamCount" min="2" max="6" value="2" onchange="updateTeamInputs()">
+                </div>
+                <div id="teamNamesContainer"></div>
+                <button class="setup-button" onclick="startGame()">Start Game</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <div class="top-bar">
+                <div class="progress-pips" id="pipsContainer"></div>
+                <div class="current-team" id="currentTeam">Team 1</div>
+                <div class="question-counter" id="questionCounter">Question 1 / 12</div>
+            </div>
+
+            <div class="passage-card">
+                <div class="passage-text" id="passageText">The stooping figure of my mother, waist-deep in the grass...</div>
+                <div class="tone-grid" id="toneGrid"></div>
+                <div class="explanation" id="explanation"></div>
+                <button class="next-button" id="nextButton" onclick="nextQuestion()">Next Question</button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div class="end-screen" id="endScreen">
+            <h2>Game Complete!</h2>
+            <div class="results-grid" id="resultsGrid"></div>
+            <div class="end-message">Great work identifying tone and mood across literary extracts!</div>
+            <button class="restart-button" onclick="location.reload()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const EXTRACTS = [
+            { text: "The stooping figure of my mother, waist-deep in the grass and caught there like a piece of sheep's wool, was the last I saw of my country home. I turned the corner and closed that part of my life for ever.", tone: "melancholic", explanation: "MELANCHOLIC — the image of a stooping mother fading from sight, the phrase 'closed that part of my life for ever', creates a tone of quiet, irreversible sorrow." },
+            { text: "He did not knock. He stood outside the door for a full minute, listening. There was nothing — no movement, no breathing, no creak of floorboard. The silence was its own kind of answer.", tone: "tense", explanation: "TENSE — the deliberate slowing of time, the list of absent sounds, and the ominous 'the silence was its own kind of answer' all generate anxiety and dread." },
+            { text: "It is, of course, perfectly reasonable to conclude that allowing sixteen-year-olds to drive vehicles capable of 45km/h on public roads poses absolutely no risk whatsoever to anyone. Perfectly reasonable.", tone: "ironic", explanation: "IRONIC — the repeated 'perfectly reasonable' used to describe something clearly unreasonable is classic irony. The writer says the opposite of what they mean." },
+            { text: "I was nineteen years old, still soft at the edges, but with a confident belief in good fortune. It was a bright Sunday morning in early June — the right time to be leaving home.", tone: "optimistic", explanation: "OPTIMISTIC — 'a confident belief in good fortune', the brightness of the morning, and 'the right time' all create a tone of hopeful anticipation." },
+            { text: "The fire had already taken eleven houses. It would take more. No fence, no wall, no prayer would stop it now. It moved as if it had decided.", tone: "threatening", explanation: "THREATENING — the fire is given a will and inevitability ('as if it had decided'), creating a menacing, unstoppable force." },
+            { text: "She found herself thinking of her grandmother's kitchen — the smell of bread, the warmth of the stove, the particular creak of the third step. She had not thought of it for years.", tone: "nostalgic", explanation: "NOSTALGIC — the specific sensory details evoke a past that is remembered with longing and warmth, creating a tone of bittersweet nostalgia." },
+            { text: "The gorillas, we are told, share 98.7% of their DNA with us. They communicate, grieve, use tools, and form lifelong bonds. But of course, we build luxury hotels on their last remaining forest. Progress!", tone: "ironic", explanation: "IRONIC — 'Progress!' at the end is dripping with sarcasm. The writer describes destroying habitat as 'progress' — the opposite of their intended meaning." },
+            { text: "The seedlings were already pushing through the soil. In another week, the field would be green. She allowed herself, for the first time, to believe that things might actually be all right.", tone: "optimistic", explanation: "OPTIMISTIC — the sprouting seedlings, the coming green, and 'might actually be all right' all signal cautious but real hope emerging." },
+            { text: "Long ago, before the valley had roads, before it had a name, a woman had made this same journey. She had felt the same wind at her back, carried the same weight, dreaded the same dark.", tone: "melancholic", explanation: "MELANCHOLIC — the repetition of 'same' suggests that suffering repeats across generations and nothing improves. The tone is sorrowful and resigned." },
+            { text: "The fog came in off the river and settled between the houses like something that had been waiting all day for dark. Inside, the lamp threw its small circle of light and made the rest of the room feel very far away.", tone: "tense", explanation: "TENSE — the fog personified as 'something that had been waiting' and the smallness of the lamp create a mood of unease and encroaching danger." },
+            { text: "If you choose not to donate today, the last breeding pair of western lowland gorillas may not exist by the time your children are old enough to care. That will be your choice.", tone: "threatening", explanation: "THREATENING — 'That will be your choice' is a chilling final sentence that places responsibility directly on the reader. The tone is dark and menacing." },
+            { text: "The market had not changed in forty years. The same stalls, the same arguments, the same smell of spices and diesel. She bought her bread from the same old man who had sold bread to her mother.", tone: "nostalgic", explanation: "NOSTALGIC — the repetition of 'same' creates a feeling of lovingly unchanged things, and the bread seller connecting mother to daughter gives warmth and bittersweetness." },
+        ];
+
+        let teams = [];
+        let scores = {};
+        let currentTeamIndex = 0;
+        let currentQuestionIndex = 0;
+        let answered = false;
+
+        function updateTeamInputs() {
+            const count = parseInt(document.getElementById('teamCount').value);
+            const container = document.getElementById('teamNamesContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= count; i++) {
+                const div = document.createElement('div');
+                div.className = 'team-name-input';
+                div.innerHTML = `
+                    <span class="team-label">Team ${i}</span>
+                    <input type="text" placeholder="Team name" value="Team ${i}">
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function startGame() {
+            const inputs = document.querySelectorAll('#teamNamesContainer input');
+            teams = Array.from(inputs).map(input => input.value || input.placeholder);
+
+            teams.forEach(team => {
+                scores[team] = 0;
+            });
+
+            shuffleArray(EXTRACTS);
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'flex';
+            renderPips();
+            showQuestion();
+        }
+
+        function renderPips() {
+            const container = document.getElementById('pipsContainer');
+            container.innerHTML = '';
+            for (let i = 0; i < EXTRACTS.length; i++) {
+                const pip = document.createElement('div');
+                pip.className = `pip ${i === currentQuestionIndex ? 'active' : ''}`;
+                container.appendChild(pip);
+            }
+        }
+
+        function showQuestion() {
+            const extract = EXTRACTS[currentQuestionIndex];
+            document.getElementById('passageText').textContent = extract.text;
+            document.getElementById('currentTeam').textContent = teams[currentTeamIndex];
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestionIndex + 1} / ${EXTRACTS.length}`;
+            document.getElementById('explanation').style.display = 'none';
+            document.getElementById('nextButton').style.display = 'none';
+            answered = false;
+            renderToneButtons();
+            updatePips();
+        }
+
+        function renderToneButtons() {
+            const grid = document.getElementById('toneGrid');
+            grid.innerHTML = '';
+            const tones = ['melancholic', 'tense', 'ironic', 'optimistic', 'threatening', 'nostalgic'];
+            const toneLabels = {
+                'melancholic': 'Melancholic',
+                'tense': 'Tense',
+                'ironic': 'Ironic',
+                'optimistic': 'Optimistic',
+                'threatening': 'Threatening',
+                'nostalgic': 'Nostalgic'
+            };
+
+            tones.forEach(tone => {
+                const btn = document.createElement('button');
+                btn.className = `tone-button ${tone}`;
+                btn.textContent = toneLabels[tone];
+                btn.onclick = () => selectTone(tone);
+                btn.disabled = answered;
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectTone(selected) {
+            if (answered) return;
+            answered = true;
+
+            const extract = EXTRACTS[currentQuestionIndex];
+            const isCorrect = selected === extract.tone;
+
+            const explanation = document.getElementById('explanation');
+            explanation.className = `explanation ${isCorrect ? 'correct' : 'incorrect'}`;
+            explanation.style.display = 'block';
+
+            if (isCorrect) {
+                scores[teams[currentTeamIndex]]++;
+                explanation.textContent = '✓ ' + extract.explanation;
+            } else {
+                explanation.textContent = '✗ ' + extract.explanation;
+            }
+
+            document.querySelectorAll('.tone-button').forEach(btn => btn.disabled = true);
+            document.getElementById('nextButton').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < EXTRACTS.length) {
+                currentTeamIndex = (currentTeamIndex + 1) % teams.length;
+                showQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function updatePips() {
+            const pips = document.querySelectorAll('.pip');
+            pips.forEach((pip, index) => {
+                pip.classList.toggle('active', index === currentQuestionIndex);
+            });
+        }
+
+        function endGame() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('endScreen').style.display = 'flex';
+
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = '';
+
+            const sortedTeams = teams.sort((a, b) => scores[b] - scores[a]);
+
+            sortedTeams.forEach((team, index) => {
+                const row = document.createElement('div');
+                row.className = 'result-row';
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+                row.innerHTML = `
+                    <div class="result-team">${medal} ${team}</div>
+                    <div class="result-score">${scores[team]} / 12</div>
+                `;
+                resultsGrid.appendChild(row);
+            });
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        updateTeamInputs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Narrative Technique Spotter — IGCSE (Team)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1a1a2e 50%, #0f172a 100%);
+      font-family: 'Barlow', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Setup Screen */
+    .setup-screen {
+      text-align: center;
+    }
+
+    .setup-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: #f0a500;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .setup-subtitle {
+      color: #cbd5e1;
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+    }
+
+    .team-setup {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .team-input-group {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(240, 165, 0, 0.3);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .team-input-group label {
+      display: block;
+      margin-bottom: 10px;
+      color: #f0a500;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .team-input-group input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(240, 165, 0, 0.5);
+      border-radius: 6px;
+      color: #fff;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+    }
+
+    .team-input-group input::placeholder {
+      color: #94a3b8;
+    }
+
+    .team-input-group input:focus {
+      outline: none;
+      border-color: #f0a500;
+      background: rgba(240, 165, 0, 0.1);
+    }
+
+    .start-btn {
+      background: #f0a500;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 40px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Barlow', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .start-btn:hover {
+      background: #fbbf24;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(240, 165, 0, 0.3);
+    }
+
+    /* Game Screen */
+    .game-screen {
+      display: none;
+    }
+
+    .game-screen.visible {
+      display: block;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: #f0a500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    /* Score Strip */
+    .score-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .team-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(240, 165, 0, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .team-card:hover {
+      background: rgba(240, 165, 0, 0.15);
+      border-color: #f0a500;
+      transform: translateY(-4px);
+    }
+
+    .team-card.active {
+      border-color: #f0a500;
+      background: rgba(240, 165, 0, 0.2);
+    }
+
+    .team-name {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .team-score {
+      font-size: 2.2rem;
+      color: #f0a500;
+      font-weight: 700;
+    }
+
+    /* Progress Pips */
+    .progress-pips {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .pip {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(240, 165, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .pip.completed {
+      background: #f0a500;
+      border-color: #f0a500;
+    }
+
+    .pip.current {
+      background: rgba(240, 165, 0, 0.5);
+      border-color: #f0a500;
+      transform: scale(1.3);
+    }
+
+    /* Passage Card */
+    .passage-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #f0a500;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .passage-number {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 15px;
+    }
+
+    .passage-text {
+      font-size: 1.2rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .explanation {
+      background: rgba(240, 165, 0, 0.1);
+      border-left: 4px solid #f0a500;
+      padding: 20px;
+      border-radius: 6px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .explanation.visible {
+      max-height: 400px;
+    }
+
+    .explanation-title {
+      color: #f0a500;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .explanation-text {
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    /* Technique Categories Grid */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .title {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .team-card {
+        padding: 12px;
+      }
+
+      .team-score {
+        font-size: 1.8rem;
+      }
+    }
+
+    .category-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+    }
+
+    .category-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+    }
+
+    .category-btn.selected {
+      box-shadow: 0 0 20px rgba(240, 165, 0, 0.5);
+    }
+
+    /* Category-specific colors */
+    .category-btn[data-category="foreshadowing"] {
+      border-color: #a78bfa;
+      color: #a78bfa;
+    }
+    .category-btn[data-category="foreshadowing"].selected {
+      background: #a78bfa;
+      color: #000;
+      border-color: #a78bfa;
+    }
+
+    .category-btn[data-category="flashback"] {
+      border-color: #60a5fa;
+      color: #60a5fa;
+    }
+    .category-btn[data-category="flashback"].selected {
+      background: #60a5fa;
+      color: #000;
+      border-color: #60a5fa;
+    }
+
+    .category-btn[data-category="tension"] {
+      border-color: #f59e0b;
+      color: #f59e0b;
+    }
+    .category-btn[data-category="tension"].selected {
+      background: #f59e0b;
+      color: #000;
+      border-color: #f59e0b;
+    }
+
+    .category-btn[data-category="atmosphere"] {
+      border-color: #34d399;
+      color: #34d399;
+    }
+    .category-btn[data-category="atmosphere"].selected {
+      background: #34d399;
+      color: #000;
+      border-color: #34d399;
+    }
+
+    .category-btn[data-category="narrative_voice"] {
+      border-color: #f472b6;
+      color: #f472b6;
+    }
+    .category-btn[data-category="narrative_voice"].selected {
+      background: #f472b6;
+      color: #000;
+      border-color: #f472b6;
+    }
+
+    .category-btn[data-category="symbolism"] {
+      border-color: #fbbf24;
+      color: #fbbf24;
+    }
+    .category-btn[data-category="symbolism"].selected {
+      background: #fbbf24;
+      color: #000;
+      border-color: #fbbf24;
+    }
+
+    .category-icon {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* Action Buttons */
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .next-btn, .award-btn, .restart-btn, .home-btn {
+      background: #f0a500;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .next-btn:hover, .award-btn:hover, .restart-btn:hover, .home-btn:hover {
+      background: #fbbf24;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(240, 165, 0, 0.3);
+    }
+
+    .next-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .award-btn {
+      background: #34d399;
+    }
+
+    .award-btn:hover {
+      background: #10b981;
+    }
+
+    /* End Screen */
+    .end-screen {
+      display: none;
+      text-align: center;
+    }
+
+    .end-screen.visible {
+      display: block;
+    }
+
+    .end-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: #f0a500;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .final-leaderboard {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 40px;
+      border: 2px solid rgba(240, 165, 0, 0.3);
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1.1rem;
+    }
+
+    .leaderboard-item:last-child {
+      border-bottom: none;
+    }
+
+    .leaderboard-rank {
+      font-weight: 700;
+      color: #f0a500;
+      font-size: 1.3rem;
+      margin-right: 20px;
+      min-width: 30px;
+    }
+
+    .leaderboard-name {
+      color: #cbd5e1;
+      flex: 1;
+    }
+
+    .leaderboard-score {
+      color: #f0a500;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Setup Screen -->
+    <div id="setupScreen" class="setup-screen">
+      <h1 class="setup-title">Narrative Technique Spotter</h1>
+      <p class="setup-subtitle">IGCSE First Language English — Team Game</p>
+      <div class="team-setup">
+        <div class="team-input-group">
+          <label for="team1">Team 1 Name</label>
+          <input type="text" id="team1" placeholder="e.g., The Readers" value="Team A">
+        </div>
+        <div class="team-input-group">
+          <label for="team2">Team 2 Name</label>
+          <input type="text" id="team2" placeholder="e.g., The Writers" value="Team B">
+        </div>
+        <div class="team-input-group">
+          <label for="team3">Team 3 Name (Optional)</label>
+          <input type="text" id="team3" placeholder="e.g., The Thinkers">
+        </div>
+      </div>
+      <button class="start-btn" id="startBtn">Start Game</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="game-screen">
+      <!-- Header -->
+      <div class="header">
+        <h1 class="title">Narrative Technique Spotter</h1>
+        <p class="subtitle">IGCSE First Language English</p>
+      </div>
+
+      <!-- Score Strip -->
+      <div class="score-strip" id="scoreStrip"></div>
+
+      <!-- Progress Pips -->
+      <div class="progress-pips" id="progressPips"></div>
+
+      <!-- Passage Card -->
+      <div class="passage-card">
+        <div class="passage-number" id="passageNumber">Passage 1</div>
+        <p class="passage-text" id="passageText"></p>
+        <div class="explanation" id="explanation">
+          <div class="explanation-title" id="explanationTitle"></div>
+          <div class="explanation-text" id="explanationText"></div>
+        </div>
+      </div>
+
+      <!-- Category Buttons -->
+      <div class="categories-grid" id="categoriesGrid"></div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button class="award-btn" id="awardBtn">Award Point to Team</button>
+        <button class="next-btn" id="nextBtn" disabled>Next Passage</button>
+      </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="endScreen" class="end-screen">
+      <h1 class="end-title">Game Complete!</h1>
+      <div class="final-leaderboard" id="finalLeaderboard"></div>
+      <div class="button-group">
+        <button class="restart-btn" id="restartBtn">Play Again</button>
+        <button class="home-btn" id="homeBtn">Home</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = [
+      { id: "foreshadowing", label: "Foreshadowing", icon: "🔮", desc: "Hint of what will come later" },
+      { id: "flashback",      label: "Flashback",      icon: "⏪", desc: "Moving backwards in narrative time" },
+      { id: "tension",        label: "Tension/Suspense", icon: "⚡", desc: "Techniques that create anxiety/uncertainty" },
+      { id: "atmosphere",     label: "Atmosphere",     icon: "🌫️", desc: "Language that creates mood/feeling in a place" },
+      { id: "narrative_voice", label: "Narrative Voice", icon: "🎤", desc: "How the narrator's personality/stance is revealed" },
+      { id: "symbolism",      label: "Symbolism",      icon: "🔑", desc: "An object/image representing something larger" },
+    ];
+
+    const PASSAGES = [
+      { text: "The stooping figure of my mother, waist-deep in the grass and caught there like a piece of sheep's wool, was the last I saw of my country home. At the bend of the road I looked back again and saw the gold light die behind her; then I turned the corner and closed that part of my life for ever.", type: "atmosphere", explanation: "ATMOSPHERE — the fading gold light, the stooping mother, the closing corner all create a mood of quiet, irreversible loss. The writer uses sensory detail (light, grass, the last glimpse) to establish an emotional landscape rather than advancing the plot." },
+      { text: "It was a bright Sunday morning in early June, the right time to be leaving home. I was nineteen years old, still soft at the edges, but with a confident belief in good fortune.", type: "narrative_voice", explanation: "NARRATIVE VOICE — 'still soft at the edges' reveals a self-aware, retrospective narrator who can judge his younger self with gentle irony. The voice is personal, reflective and distinctly individual — we hear a person, not just events." },
+      { text: "She pressed the key into his hand without looking at him. She had, he noticed, been careful not to touch his fingers. Later — much later — he would understand why.", type: "foreshadowing", explanation: "FORESHADOWING — 'Later — much later — he would understand why' signals that the small detail (avoiding touch) will become significant. The narrator hints at a revelation without delivering it, pulling the reader forward." },
+      { text: "Long ago, before the forest had roads and before the valley had a name, a woman had made this same journey. She had carried the same weight. She had felt the same cold wind at her back.", type: "flashback", explanation: "FLASHBACK — 'Long ago, before' moves us back through narrative time to a parallel moment in the past. This distant flashback creates a sense of mythic repetition — the present journey echoes an ancient one." },
+      { text: "He did not knock. He stood outside the door for a full minute, listening. There was nothing — no movement, no breathing, no creak of floorboard. The silence was its own kind of answer.", type: "tension", explanation: "TENSION/SUSPENSE — the deliberate slowing of time (a full minute), the list of absent sounds, and the ominous final line all create a sense of dread. The reader is held in uncertainty: what will he find when the door opens?" },
+      { text: "The seeds she planted that spring bloomed into flowers whose petals, though she had no way of knowing it yet, were the exact colour of the flag she would one day carry.", type: "foreshadowing", explanation: "FORESHADOWING — 'though she had no way of knowing it yet' is a classic foreshadowing marker. A small detail in the present is loaded with future significance, readable only by the narrator — or the reader, in hindsight." },
+      { text: "The bridge was made of a single stone. It looked like nothing — like something a child might step over without noticing. But every hero who had crossed it had felt it: the weight of what lay on the other side.", type: "symbolism", explanation: "SYMBOLISM — the humble bridge (easily overlooked) symbolises the threshold between two states of being. The contrast between its physical insignificance and its felt weight is the essence of symbolic writing." },
+      { text: "She found herself thinking of her grandmother's kitchen — the smell of bread, the warmth of the stove, the particular creak of the third step. She had not thought of it for years. She thought of it now because she was afraid.", type: "flashback", explanation: "FLASHBACK — the character's mind involuntarily returns to a specific childhood memory, triggered by fear. This interior flashback reveals what safety means to her, and what she feels she is losing." },
+      { text: "The fog came in off the river and settled between the houses like something that had been waiting all day for dark. Inside, the lamp threw its small circle of light and made the rest of the room feel very far away.", type: "atmosphere", explanation: "ATMOSPHERE — the fog is personified ('something that had been waiting'), and the 'small circle of light' against the pressing dark creates a mood of fragility and unease. The setting works on the reader's emotions." },
+      { text: "I am not a brave person. I should tell you that now, before you read any further and start to admire me for things I did by accident, by instinct, or because I was too frightened to run.", type: "narrative_voice", explanation: "NARRATIVE VOICE — the narrator directly addresses the reader, pre-emptively deflating any heroic reading. This creates an ironic, self-deprecating voice that is immediately distinctive — we trust this narrator precisely because they distrust themselves." },
+      { text: "The photograph had sat on the mantelpiece for thirty years. Nobody had ever mentioned it. It was only now, going through her mother's papers, that she realised the woman in the picture was not her aunt at all.", type: "tension", explanation: "TENSION — the writer builds suspense through what has been unsaid for thirty years, then releases it with a revelation that reframes everything. The ordinary object (the photograph) becomes charged with hidden meaning." },
+      { text: "The river was the only thing that had not changed. Everything else — the school, the shops, the faces in the street — had been rearranged or removed. But the river moved exactly as it always had, indifferent and exact.", type: "symbolism", explanation: "SYMBOLISM — the river, unchanged while everything else shifts, symbolises permanence, continuity, or perhaps the indifference of nature to human change. The word 'indifferent' makes the symbol explicit — the river does not mourn." },
+    ];
+
+    let teams = [];
+    let currentPassageIndex = 0;
+    let selectedCategory = null;
+    let explanationShown = false;
+
+    function setupGame() {
+      const team1 = document.getElementById('team1').value || 'Team A';
+      const team2 = document.getElementById('team2').value || 'Team B';
+      const team3 = document.getElementById('team3').value;
+
+      teams = [
+        { name: team1, score: 0 },
+        { name: team2, score: 0 },
+      ];
+
+      if (team3) {
+        teams.push({ name: team3, score: 0 });
+      }
+
+      document.getElementById('setupScreen').style.display = 'none';
+      document.getElementById('gameScreen').classList.add('visible');
+
+      renderCategories();
+      renderScoreStrip();
+      renderProgressPips();
+      loadPassage();
+    }
+
+    function renderCategories() {
+      const grid = document.getElementById('categoriesGrid');
+      grid.innerHTML = '';
+      CATEGORIES.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'category-btn';
+        btn.setAttribute('data-category', cat.id);
+        btn.innerHTML = `
+          <span class="category-icon">${cat.icon}</span>
+          <div>${cat.label}</div>
+        `;
+        btn.addEventListener('click', () => selectCategory(cat.id));
+        grid.appendChild(btn);
+      });
+    }
+
+    function renderScoreStrip() {
+      const strip = document.getElementById('scoreStrip');
+      strip.innerHTML = '';
+      teams.forEach((team, idx) => {
+        const card = document.createElement('div');
+        card.className = 'team-card';
+        card.innerHTML = `
+          <div class="team-name">${team.name}</div>
+          <div class="team-score">${team.score}</div>
+        `;
+        card.addEventListener('click', () => awardPoint(idx));
+        strip.appendChild(card);
+      });
+    }
+
+    function renderProgressPips() {
+      const pips = document.getElementById('progressPips');
+      pips.innerHTML = '';
+      for (let i = 0; i < PASSAGES.length; i++) {
+        const pip = document.createElement('div');
+        pip.className = 'pip';
+        if (i === currentPassageIndex) {
+          pip.classList.add('current');
+        }
+        if (i < currentPassageIndex) {
+          pip.classList.add('completed');
+        }
+        pips.appendChild(pip);
+      }
+    }
+
+    function loadPassage() {
+      const passage = PASSAGES[currentPassageIndex];
+      document.getElementById('passageNumber').textContent = `Passage ${currentPassageIndex + 1} of ${PASSAGES.length}`;
+      document.getElementById('passageText').textContent = passage.text;
+      document.getElementById('explanationTitle').textContent = '';
+      document.getElementById('explanationText').textContent = '';
+      document.getElementById('explanation').classList.remove('visible');
+
+      selectedCategory = null;
+      explanationShown = false;
+      clearCategorySelection();
+      document.getElementById('nextBtn').disabled = true;
+      document.getElementById('awardBtn').textContent = 'Award Point to Team';
+    }
+
+    function selectCategory(categoryId) {
+      selectedCategory = categoryId;
+      clearCategorySelection();
+      const buttons = document.querySelectorAll('.category-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-category') === categoryId) {
+          btn.classList.add('selected');
+        }
+      });
+
+      const passage = PASSAGES[currentPassageIndex];
+      if (categoryId === passage.type) {
+        // Correct answer
+        const explanation = document.getElementById('explanation');
+        document.getElementById('explanationTitle').textContent = 'Correct!';
+        document.getElementById('explanationText').innerHTML = passage.explanation;
+        explanation.classList.add('visible');
+        explanationShown = true;
+        document.getElementById('awardBtn').textContent = '✓ Award Point';
+      } else {
+        // Incorrect answer
+        const wrongCat = CATEGORIES.find(c => c.id === categoryId);
+        const correctCat = CATEGORIES.find(c => c.id === passage.type);
+        const explanation = document.getElementById('explanation');
+        document.getElementById('explanationTitle').textContent = 'Not quite right...';
+        document.getElementById('explanationText').innerHTML = `You selected ${wrongCat.label}, but this is actually <strong>${correctCat.label}</strong>.<br><br>${passage.explanation}`;
+        explanation.classList.add('visible');
+        explanationShown = true;
+        document.getElementById('awardBtn').textContent = 'Try Again';
+      }
+
+      document.getElementById('nextBtn').disabled = false;
+    }
+
+    function clearCategorySelection() {
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+    }
+
+    function awardPoint(teamIdx) {
+      if (!explanationShown) return;
+      teams[teamIdx].score++;
+      renderScoreStrip();
+    }
+
+    function nextPassage() {
+      currentPassageIndex++;
+      if (currentPassageIndex < PASSAGES.length) {
+        renderProgressPips();
+        loadPassage();
+      } else {
+        endGame();
+      }
+    }
+
+    function endGame() {
+      document.getElementById('gameScreen').classList.remove('visible');
+      document.getElementById('endScreen').classList.add('visible');
+
+      // Sort teams by score
+      const sorted = [...teams].sort((a, b) => b.score - a.score);
+
+      const leaderboard = document.getElementById('finalLeaderboard');
+      leaderboard.innerHTML = '';
+      sorted.forEach((team, idx) => {
+        const item = document.createElement('div');
+        item.className = 'leaderboard-item';
+        const rank = idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉';
+        item.innerHTML = `
+          <span class="leaderboard-rank">${rank}</span>
+          <span class="leaderboard-name">${team.name}</span>
+          <span class="leaderboard-score">${team.score} points</span>
+        `;
+        leaderboard.appendChild(item);
+      });
+    }
+
+    function restartGame() {
+      teams = [];
+      currentPassageIndex = 0;
+      selectedCategory = null;
+      explanationShown = false;
+      document.getElementById('endScreen').classList.remove('visible');
+      document.getElementById('gameScreen').classList.remove('visible');
+      document.getElementById('setupScreen').style.display = 'block';
+      document.getElementById('team1').value = 'Team A';
+      document.getElementById('team2').value = 'Team B';
+      document.getElementById('team3').value = '';
+    }
+
+    document.getElementById('startBtn').addEventListener('click', setupGame);
+    document.getElementById('nextBtn').addEventListener('click', nextPassage);
+    document.getElementById('awardBtn').addEventListener('click', () => {
+      // Find which team's card is hovered/clicked — for now, just open a simple selection
+      const teamIdx = prompt(`Award point to which team? ${teams.map((t, i) => `${i+1}. ${t.name}`).join(', ')}`);
+      if (teamIdx && teamIdx >= 1 && teamIdx <= teams.length) {
+        awardPoint(parseInt(teamIdx) - 1);
+      }
+    });
+    document.getElementById('restartBtn').addEventListener('click', restartGame);
+    document.getElementById('homeBtn').addEventListener('click', () => {
+      window.location.href = '../';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viewpoint Sorter — Driving Age Debate</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=DM+Sans:wght@400;700&display=swap');
+  :root {
+    --writerA: #007bbb;
+    --writerB: #d63031;
+    --writerA-light: #e3f2fd;
+    --writerB-light: #ffebee;
+    --text: #1a1a1a;
+    --bg: #fafafa;
+    --card: #ffffff;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); }
+
+  header {
+    text-align: center;
+    padding: 32px 20px 20px;
+    background: linear-gradient(135deg, var(--writerA) 0%, var(--writerB) 100%);
+    color: white;
+  }
+  header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  header p {
+    font-size: 0.95rem;
+    font-weight: 500;
+    opacity: 0.95;
+  }
+
+  .intro-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+  .intro-desc {
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 24px;
+  }
+
+  .writers-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 768px) {
+    .writers-preview {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .writer-card {
+    border-radius: 10px;
+    padding: 18px;
+    border: 2px solid #ddd;
+    background: white;
+  }
+  .writer-card.a {
+    border-color: var(--writerA);
+    background: var(--writerA-light);
+  }
+  .writer-card.b {
+    border-color: var(--writerB);
+    background: var(--writerB-light);
+  }
+  .writer-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .writer-card.a h3 {
+    color: var(--writerA);
+  }
+  .writer-card.b h3 {
+    color: var(--writerB);
+  }
+  .writer-card p {
+    font-size: 0.9rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: #555;
+  }
+
+  .scorebar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 16px 20px;
+    flex-wrap: wrap;
+  }
+  .score-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+  }
+  .score-item.a {
+    background: var(--writerA-light);
+    border-color: var(--writerA);
+    color: var(--writerA);
+  }
+  .score-item.b {
+    background: var(--writerB-light);
+    border-color: var(--writerB);
+    color: var(--writerB);
+  }
+
+  .progress-bar-wrap {
+    max-width: 700px;
+    margin: 0 auto 16px;
+    padding: 0 20px;
+  }
+  .progress-bar-bg {
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--writerA), var(--writerB));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .phrase-card-area {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .phrase-card {
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    padding: 32px 28px;
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    line-height: 1.7;
+    border: 2px solid #f0f0f0;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .phrase-card .card-num {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 0.8rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    color: #999;
+  }
+
+  @keyframes flashA {
+    0% { background: var(--card); }
+    40% { background: var(--writerA-light); box-shadow: 0 0 0 3px var(--writerA); }
+    100% { background: var(--card); }
+  }
+  @keyframes flashB {
+    0% { background: var(--card); }
+    40% { background: var(--writerB-light); box-shadow: 0 0 0 3px var(--writerB); }
+    100% { background: var(--card); }
+  }
+  .phrase-card.flash-a {
+    animation: flashA 0.5s ease;
+  }
+  .phrase-card.flash-b {
+    animation: flashB 0.5s ease;
+  }
+
+  .feedback-bar {
+    text-align: center;
+    min-height: 36px;
+    padding: 8px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .feedback-bar.correct {
+    color: #2e7d32;
+  }
+  .feedback-bar.wrong {
+    color: #c62828;
+  }
+
+  .btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 20px 24px;
+    flex-wrap: wrap;
+  }
+  .choice-btn {
+    flex: 1;
+    max-width: 280px;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .choice-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .choice-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .choice-btn.a {
+    background: var(--writerA);
+    color: white;
+  }
+  .choice-btn.b {
+    background: var(--writerB);
+    color: white;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 0 20px 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  @media (max-width: 768px) {
+    .results-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .result-col {
+    border-radius: 10px;
+    padding: 16px;
+    border: 2px solid #ddd;
+  }
+  .result-col.a {
+    border-color: var(--writerA);
+    background: var(--writerA-light);
+  }
+  .result-col.b {
+    border-color: var(--writerB);
+    background: var(--writerB-light);
+  }
+
+  .result-col h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid currentColor;
+  }
+  .result-col.a h3 {
+    color: var(--writerA);
+  }
+  .result-col.b h3 {
+    color: var(--writerB);
+  }
+
+  .placed-phrase {
+    background: white;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .placed-phrase .tick {
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .placed-phrase.correct .tick {
+    color: #2e7d32;
+  }
+  .placed-phrase.wrong .tick {
+    color: #c62828;
+  }
+
+  .end-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .end-screen h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .end-screen .final-score {
+    font-size: 4rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--writerA), var(--writerB));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 12px 0;
+  }
+  .end-screen p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .restart-btn {
+    background: linear-gradient(135deg, var(--writerA), var(--writerB));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 36px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .restart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Viewpoint Sorter — Driving Age Debate</h1>
+  <p>IGCSE Unit 8 — Who wrote this?</p>
+</header>
+
+<div class="intro-section">
+  <p class="intro-desc">Two writers have very different views on whether 16-year-olds should be allowed to drive. A phrase will appear — which writer wrote it?</p>
+
+  <div class="writers-preview">
+    <div class="writer-card a">
+      <h3>🚗 Writer A — Pro</h3>
+      <p>"Being surrounded by a metal box gives young drivers real protection... with the right training, 16-year-olds are perfectly capable..."</p>
+    </div>
+    <div class="writer-card b">
+      <h3>⚠️ Writer B — Anti</h3>
+      <p>"Young people already account for too many casualties... risk is highest at 16-17 because of their immaturity and inexperience..."</p>
+    </div>
+  </div>
+</div>
+
+<div class="scorebar">
+  <div class="score-item a">🚗 Writer A: <span id="score-a">0</span></div>
+  <div class="score-item b">⚠️ Writer B: <span id="score-b">0</span></div>
+  <div class="score-item" style="border-color: #999; color: #666;">✅ <span id="score-total">0</span> / <span id="score-max">0</span></div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<div class="phrase-card-area">
+  <div class="phrase-card" id="phrase-card">
+    <span class="card-num" id="card-num"></span>
+    <span id="phrase-text"></span>
+  </div>
+</div>
+
+<div class="feedback-bar" id="feedback-bar"></div>
+
+<div class="btn-row">
+  <button class="choice-btn a" id="btn-a" onclick="sortPhrase('A')">🚗 Writer A</button>
+  <button class="choice-btn b" id="btn-b" onclick="sortPhrase('B')">⚠️ Writer B</button>
+</div>
+
+<div class="results-grid">
+  <div class="result-col a">
+    <h3>🚗 Writer A</h3>
+    <div id="result-a"></div>
+  </div>
+  <div class="result-col b">
+    <h3>⚠️ Writer B</h3>
+    <div id="result-b"></div>
+  </div>
+</div>
+
+<div class="end-screen" id="end-screen">
+  <h2>Quiz Complete!</h2>
+  <div class="final-score" id="final-score-text"></div>
+  <p id="end-msg"></p>
+  <button class="restart-btn" onclick="restart()">Play Again</button>
+</div>
+
+<script>
+const Q = [
+  { p: "manufacturers argue that being surrounded by a metal box gives young drivers protection that bicycles cannot offer", w: "A", e: "This is the PRO argument — Writer A uses the safety of cars as a reason to support young drivers." },
+  { p: "with the right training and responsible supervision, sixteen-year-olds are perfectly capable of handling a vehicle", w: "A", e: "Writer A believes training resolves the age issue — a pro-driving argument." },
+  { p: "the change means youngsters will be able to throw their textbooks in the boot and pick up a friend on the way to school", w: "A", e: "This cheerful, positive image of young drivers is from Writer A — painting a picture of freedom and convenience." },
+  { p: "in many US states, teenagers have been driving safely from the age of sixteen for decades", w: "A", e: "Writer A uses international evidence to support the lower age — a pro argument." },
+  { p: "these vehicles have a top speed of 45 kilometres per hour, making them far less dangerous than conventional cars", w: "A", e: "Writer A reassures the reader about safety — a pro argument minimising the risk." },
+  { p: "young people deserve the same freedoms and responsibilities as their peers in other countries", w: "A", e: "Writer A argues for fairness and equality — a reason to support the change." },
+  { p: "the new vehicles could help reduce congestion and the burden on parents who spend hours ferrying children around", w: "A", e: "Writer A highlights practical benefits — a positive case for the change." },
+  { p: "with graduated licensing schemes, risk can be carefully managed to ensure the safety of all road users", w: "A", e: "Writer A proposes a solution rather than opposing the idea — a pro argument." },
+  { p: "young people already account for too many road casualties and reducing the age limit can only make this worse", w: "B", e: "Writer B cites safety statistics as a reason AGAINST the change." },
+  { p: "accident figures show that the younger the driver, the more likely they are to be involved in a collision", w: "B", e: "Writer B uses data to argue that youth and driving are a dangerous combination." },
+  { p: "risk is highest at ages sixteen and seventeen because of immaturity combined with driving inexperience", w: "B", e: "Writer B specifically mentions immaturity — a key anti-driving argument." },
+  { p: "when two young people are in a car together, they tend to show off because they feel invincible at that age", w: "B", e: "Writer B warns about peer pressure and recklessness — an anti argument." },
+  { p: "road safety charities are deeply concerned that this change will lead to a significant rise in the number of accidents", w: "B", e: "Writer B cites expert opinion from charities to oppose the change." },
+  { p: "the teenage brain is simply not yet wired for the kind of rapid risk assessment that safe driving demands", w: "B", e: "Writer B draws on neuroscience to argue that 16-year-olds lack the mental maturity to drive." },
+  { p: "inexperienced and poorly equipped, these young drivers were initially given little chance of survival", w: "B", e: "Writer B uses a dramatic example to underline the dangers of young, inexperienced drivers." },
+  { p: "parents should ask themselves whether they would truly trust their sixteen-year-old behind the wheel of a car", w: "B", e: "Writer B uses a direct challenge to parents — an emotional, anti-driving appeal." },
+  { p: "the most dangerous period on the road begins the moment an inexperienced teenager gets their first taste of freedom", w: "B", e: "Writer B frames new freedom as dangerous — a clear anti argument." },
+  { p: "statistics from countries that allow sixteen-year-olds to drive consistently show higher rates of fatal accidents among this age group", w: "B", e: "Writer B uses international evidence — but the OPPOSITE way to Writer A, to argue against the change." },
+  { p: "no amount of metal can compensate for the poor judgement that comes with adolescence", w: "B", e: "Writer B directly counters the pro-argument about car safety with an argument about judgement." },
+  { p: "lowering the driving age is a headline-grabbing policy that prioritises convenience over the safety of the most vulnerable road users", w: "B", e: "Writer B attacks the motivation behind the policy — a strong anti-driving conclusion." },
+];
+
+let items = [], current = 0, correctCount = 0, isLocked = false;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function init() {
+  items = shuffle([...Q]);
+  current = 0;
+  correctCount = 0;
+  isLocked = false;
+  document.getElementById('score-a').textContent = '0';
+  document.getElementById('score-b').textContent = '0';
+  document.getElementById('score-total').textContent = '0';
+  document.getElementById('score-max').textContent = items.length;
+  document.getElementById('result-a').innerHTML = '';
+  document.getElementById('result-b').innerHTML = '';
+  document.getElementById('feedback-bar').textContent = '';
+  document.getElementById('end-screen').style.display = 'none';
+  document.querySelector('.phrase-card-area').style.display = 'flex';
+  document.querySelector('.btn-row').style.display = 'flex';
+  document.querySelector('.results-grid').style.display = 'grid';
+  updateProgress();
+  showPhrase();
+}
+
+function showPhrase() {
+  if (current >= items.length) {
+    showEnd();
+    return;
+  }
+  const card = document.getElementById('phrase-card');
+  card.className = 'phrase-card';
+  document.getElementById('phrase-text').textContent = '"' + items[current].p + '"';
+  document.getElementById('card-num').textContent = (current + 1) + ' / ' + items.length;
+  document.getElementById('btn-a').disabled = false;
+  document.getElementById('btn-b').disabled = false;
+  isLocked = false;
+}
+
+function sortPhrase(choice) {
+  if (current >= items.length || isLocked) return;
+  isLocked = true;
+  document.getElementById('btn-a').disabled = true;
+  document.getElementById('btn-b').disabled = true;
+
+  const item = items[current];
+  const correct = choice === item.w;
+  const card = document.getElementById('phrase-card');
+  card.classList.add(correct ? 'flash-' + choice.toLowerCase() : 'flash-' + (choice === 'A' ? 'b' : 'a'));
+
+  const fb = document.getElementById('feedback-bar');
+  if (correct) {
+    fb.textContent = '✓ Correct!';
+    fb.className = 'feedback-bar correct';
+    correctCount++;
+  } else {
+    fb.textContent = '✗ That was Writer ' + item.w + ' — ' + item.e;
+    fb.className = 'feedback-bar wrong';
+  }
+
+  const scoreAElem = document.getElementById('score-a');
+  const scoreBElem = document.getElementById('score-b');
+  if (item.w === 'A') {
+    scoreAElem.textContent = parseInt(scoreAElem.textContent) + 1;
+  } else {
+    scoreBElem.textContent = parseInt(scoreBElem.textContent) + 1;
+  }
+  document.getElementById('score-total').textContent = current + 1;
+
+  const resultDiv = document.getElementById('result-' + item.w.toLowerCase());
+  const div = document.createElement('div');
+  div.className = 'placed-phrase ' + (correct ? 'correct' : 'wrong');
+  div.innerHTML = '<span class="tick">' + (correct ? '✓' : '✗') + '</span><span>' + item.p + '</span>';
+  resultDiv.appendChild(div);
+
+  current++;
+  updateProgress();
+  setTimeout(() => {
+    showPhrase();
+  }, correct ? 600 : 1400);
+}
+
+function updateProgress() {
+  document.getElementById('progress-fill').style.width = items.length ? (current / items.length * 100) + '%' : '0%';
+}
+
+function showEnd() {
+  document.querySelector('.phrase-card-area').style.display = 'none';
+  document.querySelector('.btn-row').style.display = 'none';
+  document.getElementById('feedback-bar').textContent = '';
+  const end = document.getElementById('end-screen');
+  end.style.display = 'block';
+  const pct = Math.round((correctCount / items.length) * 100);
+  document.getElementById('final-score-text').textContent = correctCount + ' / ' + items.length;
+  const msgs = [
+    'Keep reading — pay attention to key words that signal each writer\'s position.',
+    'Good effort! You\'re starting to recognise the writers\' arguments and evidence.',
+    'Excellent! You can clearly distinguish between pro and anti viewpoints.',
+    'Perfect score! You understand both arguments thoroughly.'
+  ];
+  document.getElementById('end-msg').textContent = msgs[pct < 50 ? 0 : pct < 75 ? 1 : pct < 100 ? 2 : 3];
+}
+
+function restart() {
+  init();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Radar</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #0a0d14 0%, #1a1f2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* Screen Classes */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Intro Screen */
+        #introScreen {
+            text-align: center;
+        }
+
+        .intro-content {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(62, 207, 207, 0.4);
+            border-radius: 20px;
+            padding: 60px 40px;
+        }
+
+        .game-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f0b429;
+            text-shadow: 0 4px 15px rgba(240, 180, 41, 0.3);
+        }
+
+        .game-subtitle {
+            font-size: 1.1rem;
+            color: #3ecfcf;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #f0b429 0%, #f0b429 100%);
+            color: #0a0d14;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 180, 41, 0.4);
+        }
+
+        /* Game Screen */
+        #gameScreen {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 30px;
+        }
+
+        .progress-pip {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(62, 207, 207, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .progress-pip.active {
+            background: #3ecfcf;
+            border-color: #3ecfcf;
+            box-shadow: 0 0 10px rgba(62, 207, 207, 0.6);
+        }
+
+        .progress-pip.completed {
+            background: #34d399;
+            border-color: #34d399;
+        }
+
+        .extract-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(62, 207, 207, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .extract-label {
+            font-size: 0.9rem;
+            color: #3ecfcf;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .extract-text {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #ffffff;
+            font-style: italic;
+        }
+
+        /* Button Grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .btn-register {
+            padding: 18px 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: 2px solid;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-register:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-register:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-formal {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+
+        .btn-formal.selected {
+            background: #60a5fa;
+            color: #0a0d14;
+        }
+
+        .btn-informal {
+            border-color: #f0b429;
+            color: #f0b429;
+        }
+
+        .btn-informal.selected {
+            background: #f0b429;
+            color: #0a0d14;
+        }
+
+        .btn-persuasive {
+            border-color: #f472b6;
+            color: #f472b6;
+        }
+
+        .btn-persuasive.selected {
+            background: #f472b6;
+            color: #0a0d14;
+        }
+
+        .btn-instructional {
+            border-color: #34d399;
+            color: #34d399;
+        }
+
+        .btn-instructional.selected {
+            background: #34d399;
+            color: #0a0d14;
+        }
+
+        .btn-descriptive {
+            border-color: #a78bfa;
+            color: #a78bfa;
+        }
+
+        .btn-descriptive.selected {
+            background: #a78bfa;
+            color: #0a0d14;
+        }
+
+        /* Feedback Panel */
+        .feedback-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(62, 207, 207, 0.4);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .feedback-panel.show {
+            display: flex;
+        }
+
+        .feedback-result {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-result.correct {
+            color: #34d399;
+        }
+
+        .feedback-result.incorrect {
+            color: #f472b6;
+        }
+
+        .feedback-hint {
+            font-size: 0.95rem;
+            color: #b0b9c3;
+            line-height: 1.6;
+        }
+
+        /* Next Button */
+        .btn-next {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #3ecfcf 0%, #3ecfcf 100%);
+            color: #0a0d14;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .btn-next.show {
+            display: block;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(62, 207, 207, 0.4);
+        }
+
+        /* End Screen */
+        #endScreen {
+            text-align: center;
+        }
+
+        .end-content {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(62, 207, 207, 0.4);
+            border-radius: 20px;
+            padding: 60px 40px;
+        }
+
+        .end-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #f0b429;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #3ecfcf;
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .score-message {
+            font-size: 1.1rem;
+            color: #b0b9c3;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .btn-play-again {
+            background: linear-gradient(135deg, #f0b429 0%, #f0b429 100%);
+            color: #0a0d14;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-play-again:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 180, 41, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .game-title {
+                font-size: 2.5rem;
+            }
+
+            .intro-content,
+            .end-content {
+                padding: 40px 25px;
+            }
+
+            .extract-card {
+                padding: 25px;
+            }
+
+            .extract-text {
+                font-size: 1rem;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-register {
+                padding: 15px;
+            }
+
+            .score-display {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Intro Screen -->
+        <div id="introScreen" class="screen active">
+            <div class="intro-content">
+                <h1 class="game-title">Register Radar 📡</h1>
+                <p class="game-subtitle">Identify the register and purpose of each extract</p>
+                <button class="btn-start" onclick="startGame()">Start Game</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="progress-container" id="progressContainer"></div>
+
+            <div class="extract-card">
+                <div class="extract-label">What is the register of this text?</div>
+                <div class="extract-text" id="extractText"></div>
+            </div>
+
+            <div class="button-grid">
+                <button class="btn-register btn-formal" onclick="selectRegister('Formal')">Formal</button>
+                <button class="btn-register btn-informal" onclick="selectRegister('Informal')">Informal</button>
+                <button class="btn-register btn-persuasive" onclick="selectRegister('Persuasive')">Persuasive</button>
+                <button class="btn-register btn-instructional" onclick="selectRegister('Instructional')">Instructional</button>
+                <button class="btn-register btn-descriptive" onclick="selectRegister('Descriptive')">Descriptive</button>
+            </div>
+
+            <div class="feedback-panel" id="feedbackPanel">
+                <div class="feedback-result" id="feedbackResult"></div>
+                <div class="feedback-hint" id="feedbackHint"></div>
+            </div>
+
+            <button class="btn-next" id="nextButton" onclick="nextQuestion()">Next Question</button>
+        </div>
+
+        <!-- End Screen -->
+        <div id="endScreen" class="screen">
+            <div class="end-content">
+                <h2 class="end-title">Game Complete!</h2>
+                <div class="score-display" id="finalScore"></div>
+                <div class="score-message" id="scoreMessage"></div>
+                <button class="btn-play-again" onclick="resetGame()">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const EXTRACTS = [
+            // Formal
+            {text:"The board of directors met on Tuesday to discuss the proposed merger. Following a thorough review of the financial projections, a decision was reached to proceed with caution.", register:"Formal", hint:"Passive constructions, technical language and an impersonal tone signal a formal register."},
+            {text:"I am writing to confirm your appointment on Thursday 24th April at 10.30 a.m. Please bring two forms of identification and arrive five minutes early.", register:"Formal", hint:"'I am writing to confirm' and precise detail mark a formal, professional register."},
+            {text:"Passengers are reminded that the use of mobile phones in designated quiet zones is strictly prohibited. Thank you for your cooperation.", register:"Formal", hint:"Passive voice, formal vocabulary ('designated', 'prohibited') and polite but firm tone are formal markers."},
+            {text:"The committee wishes to express its sincere gratitude to all members who contributed to this year's fundraising campaign. Your efforts are greatly appreciated.", register:"Formal", hint:"Third person formal address, 'sincerely' and elevated diction signal formal register."},
+
+            // Informal
+            {text:"OMG, you have to come to this party — it's going to be absolutely amazing! Everyone's going to be there and there's going to be a DJ and everything.", register:"Informal", hint:"Exclamations, colloquialisms, repetition and enthusiasm signal an informal register."},
+            {text:"So basically I didn't have a clue what was going on in the lesson, and then suddenly it all clicked. Weird, right? Anyway, hope you're good!", register:"Informal", hint:"Colloquial phrases ('basically', 'a clue'), fragmented structure and a conversational close are informal."},
+            {text:"Fancy grabbing a coffee this weekend? I've been meaning to catch up with you forever — feels like ages since we last had a proper chat.", register:"Informal", hint:"'Fancy', contractions, and casual conversational tone are marks of an informal register."},
+            {text:"You're never going to believe what I just found out. Seriously, you need to sit down for this one. Right, so you know how I said I was going to the audition?", register:"Informal", hint:"Dramatic storytelling, direct address, cliffhanger and colloquialisms are all informal features."},
+
+            // Persuasive
+            {text:"Every minute you wait, another acre of rainforest is destroyed forever. Don't let the silence of the trees become permanent. Act now — before it's too late.", register:"Persuasive", hint:"Emotive language, urgency, imperative verbs and direct address are persuasive register features."},
+            {text:"Isn't it time we stopped making excuses and started making a difference? Our school could be the first in the city to go completely plastic-free — and that change starts with you.", register:"Persuasive", hint:"Rhetorical question, inclusive 'we' and direct challenge to the reader are persuasive techniques."},
+            {text:"The evidence is clear: students who exercise regularly perform significantly better in exams. Why, then, are we cutting PE from the timetable? This is not a cost-saving measure. It is a false economy.", register:"Persuasive", hint:"Logical appeal, rhetorical question and short emphatic statements are markers of persuasive writing."},
+            {text:"For less than the price of a magazine, you could give a child in hospital a book that takes them to another world. Please give generously.", register:"Persuasive", hint:"Analogy to minimise cost, emotional appeal and imperative make this persuasive register."},
+
+            // Instructional
+            {text:"To assemble the bookshelf, first lay all components on a flat surface. Attach side panel A to base panel B using the bolts provided. Do not tighten fully until all panels are in position.", register:"Instructional", hint:"Sequential steps, imperative verbs and technical precision are hallmarks of instructional register."},
+            {text:"Preheat the oven to 180°C. Cream the butter and sugar until pale and fluffy, then beat in the eggs one at a time. Fold in the flour and pour the mixture into the prepared tin.", register:"Instructional", hint:"Imperative verbs, numbered sequence implied and precise measurements mark instructional register."},
+            {text:"In the event of a fire alarm, leave the building immediately by the nearest fire exit. Do not use the lifts. Proceed to your designated assembly point and wait for roll call.", register:"Instructional", hint:"Imperatives, prohibition ('Do not') and procedural sequence signal instructional register."},
+            {text:"To create your account, click 'Sign up' and enter your email address. Choose a strong password of at least eight characters. Verify your email by clicking the link we send you.", register:"Instructional", hint:"Step-by-step commands, technical vocabulary and imperative verbs are instructional features."},
+
+            // Descriptive
+            {text:"The valley opened before her like a vast green throat, swallowing the road whole. Mist curled around the lower slopes, and somewhere deep in the forest below, a bird called once and was silent.", register:"Descriptive", hint:"Metaphor, personification, sensory detail and atmospheric language signal descriptive register."},
+            {text:"The market was alive with noise and colour. Spices spilled from woven baskets in cascades of orange and red; vendors called out in rapid, overlapping voices; somewhere a radio was playing.", register:"Descriptive", hint:"Sensory detail, vivid imagery and 'showing not telling' techniques are descriptive register markers."},
+            {text:"He moved slowly, deliberately — a man accustomed to silence and stillness. His hands were large and weathered, the knuckles rough, as if they had spent years arguing with cold and stone.", register:"Descriptive", hint:"Close observation of physical detail and figurative language create a descriptive register."},
+            {text:"The swimming pool shimmered in the midday heat, its surface fractured into a thousand shards of light. A child's laughter drifted across the water and then vanished, as if the heat had swallowed it.", register:"Descriptive", hint:"Simile, sensory detail, atmosphere and metaphor are all markers of descriptive register."},
+        ];
+
+        let gameState = {
+            extracts: [],
+            currentIndex: 0,
+            score: 0,
+            answered: false,
+            selectedRegister: null
+        };
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function startGame() {
+            gameState = {
+                extracts: shuffleArray(EXTRACTS),
+                currentIndex: 0,
+                score: 0,
+                answered: false,
+                selectedRegister: null
+            };
+            showScreen('gameScreen');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const extract = gameState.extracts[gameState.currentIndex];
+            document.getElementById('extractText').textContent = extract.text;
+
+            // Reset UI
+            document.getElementById('feedbackPanel').classList.remove('show');
+            document.getElementById('nextButton').classList.remove('show');
+            gameState.answered = false;
+            gameState.selectedRegister = null;
+
+            // Clear button selections
+            document.querySelectorAll('.btn-register').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.disabled = false;
+            });
+
+            // Update progress
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const container = document.getElementById('progressContainer');
+            container.innerHTML = '';
+            for (let i = 0; i < 20; i++) {
+                const pip = document.createElement('div');
+                pip.className = 'progress-pip';
+                if (i < gameState.currentIndex) {
+                    pip.classList.add('completed');
+                } else if (i === gameState.currentIndex) {
+                    pip.classList.add('active');
+                }
+                container.appendChild(pip);
+            }
+        }
+
+        function selectRegister(register) {
+            if (gameState.answered) return;
+
+            gameState.answered = true;
+            gameState.selectedRegister = register;
+
+            const extract = gameState.extracts[gameState.currentIndex];
+            const isCorrect = register === extract.register;
+
+            if (isCorrect) {
+                gameState.score++;
+            }
+
+            // Show feedback
+            const feedbackPanel = document.getElementById('feedbackPanel');
+            const feedbackResult = document.getElementById('feedbackResult');
+            const feedbackHint = document.getElementById('feedbackHint');
+
+            feedbackResult.className = 'feedback-result ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackResult.innerHTML = (isCorrect ? '✓' : '✗') + ' ' + (isCorrect ? 'Correct!' : 'Incorrect');
+            feedbackHint.textContent = extract.hint;
+
+            feedbackPanel.classList.add('show');
+
+            // Disable all buttons and highlight correct answer
+            document.querySelectorAll('.btn-register').forEach(btn => {
+                btn.disabled = true;
+                if (extract.register.toLowerCase() === btn.textContent.toLowerCase()) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            // Show next button
+            document.getElementById('nextButton').classList.add('show');
+        }
+
+        function nextQuestion() {
+            gameState.currentIndex++;
+            if (gameState.currentIndex < 20) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            const percentage = Math.round((gameState.score / 20) * 100);
+            let message = '';
+
+            if (percentage === 100) {
+                message = 'Perfect! You\'re a register expert! 🌟';
+            } else if (percentage >= 90) {
+                message = 'Outstanding! Excellent understanding of register.';
+            } else if (percentage >= 75) {
+                message = 'Great work! You\'ve mastered most registers.';
+            } else if (percentage >= 60) {
+                message = 'Good effort! Keep practicing to improve.';
+            } else if (percentage >= 50) {
+                message = 'Not bad! Review the different registers and try again.';
+            } else {
+                message = 'Keep learning! Register analysis takes practice.';
+            }
+
+            document.getElementById('finalScore').textContent = `${gameState.score} / 20`;
+            document.getElementById('scoreMessage').textContent = message;
+
+            showScreen('endScreen');
+        }
+
+        function resetGame() {
+            showScreen('introScreen');
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writer's Toolkit Snap</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #0a0d14 0%, #1a1f2e 100%);
+            color: #e5e7eb;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* ===== SETUP SCREEN ===== */
+        #setupScreen {
+            text-align: center;
+        }
+
+        .setup-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid #3ecfcf;
+            border-radius: 16px;
+            padding: 60px 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #f0b429;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #9ca3af;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #3ecfcf;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(62, 207, 207, 0.3);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3ecfcf;
+            background: rgba(62, 207, 207, 0.1);
+        }
+
+        #teamInputs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .team-input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .team-input-wrapper input {
+            flex: 1;
+        }
+
+        .team-number {
+            color: #f0b429;
+            font-weight: 700;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f0b429 0%, #e6a516 100%);
+            color: #0a0d14;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(240, 180, 41, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* ===== GAME SCREEN ===== */
+        #gameScreen {
+            display: none;
+        }
+
+        .score-strip {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .team-score-item {
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(62, 207, 207, 0.3);
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .team-score-item:hover {
+            background: rgba(62, 207, 207, 0.1);
+            border-color: #3ecfcf;
+            transform: scale(1.05);
+        }
+
+        .team-score-item:active {
+            transform: scale(0.98);
+        }
+
+        .team-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #3ecfcf;
+            margin-bottom: 4px;
+        }
+
+        .team-score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f0b429;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3ecfcf 0%, #f0b429 100%);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* ===== QUOTE CARD ===== */
+        .quote-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 3px solid #f0b429;
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            font-style: italic;
+            color: #3ecfcf;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .quote-source {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== TECHNIQUES GRID ===== */
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .technique-btn {
+            padding: 20px 16px;
+            border: 2px solid;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+            color: white;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .technique-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .technique-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Technique-specific colors */
+        .simile { border-color: #60a5fa; }
+        .simile:hover { background: rgba(96, 165, 250, 0.15); }
+
+        .metaphor { border-color: #f0b429; }
+        .metaphor:hover { background: rgba(240, 180, 41, 0.15); }
+
+        .personification { border-color: #34d399; }
+        .personification:hover { background: rgba(52, 211, 153, 0.15); }
+
+        .alliteration { border-color: #f472b6; }
+        .alliteration:hover { background: rgba(244, 114, 182, 0.15); }
+
+        .rhetorical { border-color: #a78bfa; }
+        .rhetorical:hover { background: rgba(167, 139, 250, 0.15); }
+
+        .rule-of-three { border-color: #3ecfcf; }
+        .rule-of-three:hover { background: rgba(62, 207, 207, 0.15); }
+
+        .hyperbole { border-color: #e74c3c; }
+        .hyperbole:hover { background: rgba(231, 76, 60, 0.15); }
+
+        .onomatopoeia { border-color: #fb923c; }
+        .onomatopoeia:hover { background: rgba(251, 146, 60, 0.15); }
+
+        .irony { border-color: #94a3b8; }
+        .irony:hover { background: rgba(148, 163, 184, 0.15); }
+
+        /* Revealed state */
+        .technique-btn.revealed {
+            border-width: 3px;
+            box-shadow: 0 0 24px currentColor;
+            transform: scale(1.05);
+        }
+
+        /* ===== REVEAL AREA ===== */
+        .reveal-area {
+            display: none;
+            background: rgba(52, 211, 153, 0.1);
+            border: 2px solid #34d399;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .reveal-area.show {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #34d399;
+            margin-bottom: 12px;
+        }
+
+        .reveal-technique {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #3ecfcf;
+            margin-bottom: 12px;
+        }
+
+        .reveal-explanation {
+            font-size: 1rem;
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #3ecfcf;
+            color: #3ecfcf;
+            padding: 12px 28px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(62, 207, 207, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary-game {
+            background: linear-gradient(135deg, #f0b429 0%, #e6a516 100%);
+            color: #0a0d14;
+            border: none;
+            padding: 12px 28px;
+        }
+
+        .btn-primary-game:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(240, 180, 41, 0.3);
+        }
+
+        /* ===== END SCREEN ===== */
+        #endScreen {
+            display: none;
+            text-align: center;
+        }
+
+        .end-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid #f0b429;
+            border-radius: 16px;
+            padding: 60px 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .end-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #f0b429;
+            margin-bottom: 30px;
+        }
+
+        .winner-section {
+            background: rgba(240, 180, 41, 0.1);
+            border: 2px solid #f0b429;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .winner-label {
+            font-size: 0.9rem;
+            color: #f0b429;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .winner-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #34d399;
+            margin-bottom: 12px;
+        }
+
+        .winner-score {
+            font-size: 1.5rem;
+            color: #f0b429;
+        }
+
+        .leaderboard {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .leaderboard-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #3ecfcf;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 1.1rem;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-position {
+            color: #f0b429;
+            font-weight: 700;
+            min-width: 40px;
+        }
+
+        .leaderboard-name {
+            color: #e5e7eb;
+            flex: 1;
+            margin-left: 16px;
+        }
+
+        .leaderboard-score {
+            color: #34d399;
+            font-weight: 700;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .quote-text {
+                font-size: 1.4rem;
+            }
+
+            .techniques-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .technique-btn {
+                padding: 16px 12px;
+                font-size: 0.85rem;
+            }
+
+            .score-strip {
+                gap: 8px;
+            }
+
+            .team-score-item {
+                min-width: 120px;
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SETUP SCREEN -->
+        <div id="setupScreen">
+            <div class="setup-content">
+                <h1 class="title">Writer's Toolkit Snap ⚡</h1>
+                <p class="subtitle">IGCSE First Language English Literary Techniques Game</p>
+
+                <div class="form-group">
+                    <label for="teamCount">Number of Teams (2–6)</label>
+                    <input type="number" id="teamCount" min="2" max="6" value="2">
+                </div>
+
+                <div id="teamInputs"></div>
+
+                <button class="btn btn-primary" onclick="startGame()">Start Game</button>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="gameScreen">
+            <div class="score-strip" id="scoreStrip"></div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="quote-card">
+                <div class="quote-text" id="quoteText"></div>
+                <div class="quote-source" id="quoteSource"></div>
+            </div>
+
+            <div class="techniques-grid" id="techniquesGrid"></div>
+
+            <div class="reveal-area" id="revealArea">
+                <div class="reveal-title">✓ Correct Technique</div>
+                <div class="reveal-technique" id="revealTechnique"></div>
+                <div class="reveal-explanation" id="revealExplanation"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="revealAnswer()">Reveal Answer</button>
+                <button class="btn btn-primary-game" onclick="nextQuestion()">Next Question</button>
+            </div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div id="endScreen">
+            <div class="end-content">
+                <h1 class="end-title">Game Over!</h1>
+
+                <div class="winner-section">
+                    <div class="winner-label">🏆 Winner</div>
+                    <div class="winner-name" id="winnerName"></div>
+                    <div class="winner-score" id="winnerScore"></div>
+                </div>
+
+                <div class="leaderboard">
+                    <div class="leaderboard-title">Final Leaderboard</div>
+                    <div id="leaderboardList"></div>
+                </div>
+
+                <button class="btn btn-primary" onclick="location.reload()">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== QUOTES DATABASE =====
+        const QUOTES = [
+            {text: "The streets were rivers of gold in the last light of the afternoon.", technique: "Metaphor", source: "Descriptive writing", explain: "A metaphor directly compares the streets to rivers of gold — no 'like' or 'as'."},
+            {text: "She ran like the wind, her feet barely touching the ground.", technique: "Simile", source: "Narrative fiction", explain: "A simile comparing her speed to the wind using the word 'like'."},
+            {text: "The ancient trees whispered their secrets to anyone willing to listen.", technique: "Personification", source: "Travel writing", explain: "Personification gives trees the human ability to whisper and keep secrets."},
+            {text: "Silent, swift, and deadly — the hawk circled above the valley.", technique: "Rule of Three", source: "Nature writing", explain: "Three adjectives in a list (rule of three / tricolon) create emphasis and rhythm."},
+            {text: "Isn't it time we took climate change seriously?", technique: "Rhetorical Question", source: "Persuasive article", explain: "A rhetorical question — not expecting an answer, but prompting the reader to agree."},
+            {text: "The waves crashed, boomed, and hissed against the rocky shore.", technique: "Onomatopoeia", source: "Descriptive writing", explain: "Words like 'crashed', 'boomed' and 'hissed' imitate the sounds they describe — onomatopoeia."},
+            {text: "I've told you a million times — do not leave your bag in the corridor.", technique: "Hyperbole", source: "Informal speech", explain: "Hyperbole: a deliberate exaggeration ('a million times') for effect."},
+            {text: "The fog crept through the village, stealing the colour from every door.", technique: "Personification", source: "Gothic fiction", explain: "The fog is given the human action of creeping and stealing — personification."},
+            {text: "His smile was as warm as a winter sunrise.", technique: "Simile", source: "Character description", explain: "A simile using 'as...as' to compare his smile to a sunrise."},
+            {text: "The city never sleeps, never breathes, never rests.", technique: "Personification", source: "Travel writing", explain: "Three human verbs (sleeps, breathes, rests) applied to a city — personification with rule of three."},
+            {text: "Fast food: exactly what it says on the tin — fast, cheap, and utterly forgettable.", technique: "Irony", source: "Restaurant review", explain: "Irony — the writer seems to praise but subtly mocks. 'Utterly forgettable' undercuts the apparent neutrality."},
+            {text: "Peter Piper picked a peck of pickled peppers.", technique: "Alliteration", source: "Traditional rhyme", explain: "Alliteration: repetition of the 'p' sound at the start of several words."},
+            {text: "He was the bravest man, the most loyal friend, and the finest leader this town had ever seen.", technique: "Rule of Three", source: "Eulogy / formal speech", explain: "A tricolon (rule of three) used for emphasis and emotional impact."},
+            {text: "Surely the government would not leave vulnerable families without heating in the depths of winter?", technique: "Rhetorical Question", source: "Newspaper opinion piece", explain: "A rhetorical question designed to prompt outrage in the reader — no answer expected."},
+            {text: "The silence after the explosion was deafening.", technique: "Irony", source: "War memoir", explain: "A paradox bordering on irony — silence cannot literally be deafening, but the contradiction creates intense effect."},
+            {text: "Silver rain stitched the surface of the lake into a shimmering quilt.", technique: "Metaphor", source: "Literary description", explain: "The rain is compared directly to thread and the lake to a quilt — an extended metaphor."},
+            {text: "Sally sells seashells by the seashore.", technique: "Alliteration", source: "Tongue twister", explain: "Alliteration: the repeated 's' sound at the start of multiple words."},
+            {text: "The wind howled through the broken window, demanding to be let in.", technique: "Personification", source: "Gothic short story", explain: "The wind howling and demanding are human actions applied to the weather — personification."},
+        ];
+
+        // ===== GAME STATE =====
+        let gameState = {
+            teams: [],
+            currentQuestionIndex: 0,
+            revealed: false,
+            shuffledQuotes: []
+        };
+
+        const TECHNIQUE_COLORS = {
+            "Simile": "simile",
+            "Metaphor": "metaphor",
+            "Personification": "personification",
+            "Alliteration": "alliteration",
+            "Rhetorical Question": "rhetorical",
+            "Rule of Three": "rule-of-three",
+            "Hyperbole": "hyperbole",
+            "Onomatopoeia": "onomatopoeia",
+            "Irony": "irony"
+        };
+
+        const ALL_TECHNIQUES = [
+            "Simile", "Metaphor", "Personification", "Alliteration",
+            "Rhetorical Question", "Rule of Three", "Hyperbole", "Onomatopoeia", "Irony"
+        ];
+
+        // ===== SETUP SCREEN LOGIC =====
+        function updateTeamInputs() {
+            const count = parseInt(document.getElementById('teamCount').value);
+            const container = document.getElementById('teamInputs');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= count; i++) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'team-input-wrapper';
+                wrapper.innerHTML = `
+                    <div class="team-number">Team ${i}</div>
+                    <input type="text" id="team${i}" placeholder="Enter team name" value="Team ${i}">
+                `;
+                container.appendChild(wrapper);
+            }
+        }
+
+        document.getElementById('teamCount').addEventListener('change', updateTeamInputs);
+        updateTeamInputs();
+
+        function startGame() {
+            const count = parseInt(document.getElementById('teamCount').value);
+            if (count < 2 || count > 6) {
+                alert('Please select 2–6 teams.');
+                return;
+            }
+
+            gameState.teams = [];
+            for (let i = 1; i <= count; i++) {
+                const name = document.getElementById(`team${i}`).value.trim() || `Team ${i}`;
+                gameState.teams.push({ name, score: 0 });
+            }
+
+            gameState.shuffledQuotes = [...QUOTES].sort(() => Math.random() - 0.5);
+            gameState.currentQuestionIndex = 0;
+            gameState.revealed = false;
+
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            loadQuestion();
+        }
+
+        // ===== GAME SCREEN LOGIC =====
+        function loadQuestion() {
+            gameState.revealed = false;
+            document.getElementById('revealArea').classList.remove('show');
+
+            const quote = gameState.shuffledQuotes[gameState.currentQuestionIndex];
+            document.getElementById('quoteText').textContent = `"${quote.text}"`;
+            document.getElementById('quoteSource').textContent = quote.source;
+
+            renderTechniquesGrid();
+            updateScoreStrip();
+            updateProgressBar();
+        }
+
+        function updateScoreStrip() {
+            const strip = document.getElementById('scoreStrip');
+            strip.innerHTML = '';
+
+            gameState.teams.forEach((team, index) => {
+                const item = document.createElement('div');
+                item.className = 'team-score-item';
+                item.innerHTML = `
+                    <div class="team-name">${team.name}</div>
+                    <div class="team-score">${team.score}</div>
+                `;
+                item.onclick = () => awardPoint(index);
+                strip.appendChild(item);
+            });
+        }
+
+        function awardPoint(teamIndex) {
+            gameState.teams[teamIndex].score++;
+            updateScoreStrip();
+        }
+
+        function updateProgressBar() {
+            const progress = ((gameState.currentQuestionIndex + 1) / gameState.shuffledQuotes.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function renderTechniquesGrid() {
+            const grid = document.getElementById('techniquesGrid');
+            grid.innerHTML = '';
+
+            ALL_TECHNIQUES.forEach(technique => {
+                const btn = document.createElement('button');
+                btn.className = `technique-btn ${TECHNIQUE_COLORS[technique]}`;
+                btn.textContent = technique;
+                btn.onclick = () => selectTechnique(btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectTechnique(btn) {
+            // Visual feedback only — teacher manually calls winner
+            if (!gameState.revealed) {
+                // Could add visual feedback here if desired
+            }
+        }
+
+        function revealAnswer() {
+            if (gameState.revealed) return;
+            gameState.revealed = true;
+
+            const quote = gameState.shuffledQuotes[gameState.currentQuestionIndex];
+            const colorClass = TECHNIQUE_COLORS[quote.technique];
+            const correctBtn = Array.from(document.querySelectorAll('.technique-btn')).find(
+                btn => btn.textContent === quote.technique
+            );
+
+            if (correctBtn) {
+                correctBtn.classList.add('revealed');
+            }
+
+            document.getElementById('revealTechnique').textContent = quote.technique;
+            document.getElementById('revealExplanation').textContent = quote.explain;
+            document.getElementById('revealArea').classList.add('show');
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestionIndex++;
+
+            if (gameState.currentQuestionIndex >= gameState.shuffledQuotes.length) {
+                endGame();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('endScreen').style.display = 'block';
+
+            const sorted = [...gameState.teams].sort((a, b) => b.score - a.score);
+            const winner = sorted[0];
+
+            document.getElementById('winnerName').textContent = winner.name;
+            document.getElementById('winnerScore').textContent = `${winner.score} points`;
+
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '';
+
+            sorted.forEach((team, index) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                item.innerHTML = `
+                    <span class="leaderboard-position">#${index + 1}</span>
+                    <span class="leaderboard-name">${team.name}</span>
+                    <span class="leaderboard-score">${team.score}</span>
+                `;
+                leaderboardList.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>

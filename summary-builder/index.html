@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0d14 0%, #0f1219 100%);
+            color: #e0e0e0;
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 2.5em;
+            color: #f0b429;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #a0a0a0;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Intro Screen */
+        .intro-content {
+            background: rgba(17, 21, 32, 0.8);
+            border: 1px solid rgba(240, 180, 41, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .intro-content h2 {
+            color: #f0b429;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-family: 'Unbounded', sans-serif;
+        }
+
+        .intro-content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #b0b0b0;
+        }
+
+        .intro-content ul {
+            text-align: left;
+            display: inline-block;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .intro-content li {
+            margin-bottom: 8px;
+            color: #a0a0a0;
+        }
+
+        /* Game Screen */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .passage-card {
+            background: rgba(17, 21, 32, 0.8);
+            border: 1px solid rgba(62, 207, 207, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .passage-label {
+            font-size: 0.9em;
+            color: #3ecfcf;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .passage-text {
+            font-size: 1em;
+            line-height: 1.7;
+            color: #d0d0d0;
+        }
+
+        .bullet-points {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bullet-point {
+            background: rgba(17, 21, 32, 0.6);
+            border: 2px solid rgba(160, 160, 160, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .bullet-point:hover {
+            background: rgba(17, 21, 32, 0.8);
+            border-color: rgba(160, 160, 160, 0.5);
+        }
+
+        .bullet-point input[type="checkbox"] {
+            margin-top: 2px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: #f0b429;
+        }
+
+        .bullet-point.selected {
+            background: rgba(240, 180, 41, 0.15);
+            border-color: #f0b429;
+        }
+
+        .bullet-point.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .bullet-point.disabled:hover {
+            background: rgba(17, 21, 32, 0.6);
+            border-color: rgba(160, 160, 160, 0.3);
+        }
+
+        .bullet-text {
+            flex: 1;
+            color: #d0d0d0;
+            line-height: 1.5;
+        }
+
+        .selection-count {
+            text-align: center;
+            margin: 20px 0;
+            color: #3ecfcf;
+            font-weight: 600;
+        }
+
+        .selection-count.warn {
+            color: #f0b429;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f0b429 0%, #e8a620 100%);
+            color: #0a0d14;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 180, 41, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: rgba(62, 207, 207, 0.2);
+            border: 2px solid #3ecfcf;
+            color: #3ecfcf;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(62, 207, 207, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Results Screen */
+        .results-container {
+            text-align: center;
+        }
+
+        .score-display {
+            background: rgba(17, 21, 32, 0.8);
+            border: 2px solid #f0b429;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .score-text {
+            font-size: 3em;
+            color: #f0b429;
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .score-subtext {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .result-item {
+            background: rgba(17, 21, 32, 0.6);
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .result-item.correct {
+            border-left-color: #3ecfcf;
+            background: rgba(62, 207, 207, 0.1);
+        }
+
+        .result-item.incorrect {
+            border-left-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .result-icon {
+            font-weight: 600;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .result-item.correct .result-icon {
+            color: #3ecfcf;
+        }
+
+        .result-item.incorrect .result-icon {
+            color: #ff6b6b;
+        }
+
+        .result-text {
+            color: #d0d0d0;
+            margin-bottom: 8px;
+        }
+
+        .result-explanation {
+            color: #a0a0a0;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-left: 26px;
+        }
+
+        /* Scrollbar */
+        .passage-card::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .passage-card::-webkit-scrollbar-track {
+            background: rgba(62, 207, 207, 0.1);
+            border-radius: 4px;
+        }
+
+        .passage-card::-webkit-scrollbar-thumb {
+            background: rgba(62, 207, 207, 0.3);
+            border-radius: 4px;
+        }
+
+        .passage-card::-webkit-scrollbar-thumb:hover {
+            background: rgba(62, 207, 207, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .intro-content {
+                padding: 25px;
+            }
+
+            .passage-card {
+                padding: 15px;
+                max-height: 250px;
+            }
+
+            .score-text {
+                font-size: 2.2em;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Summary Builder</h1>
+            <p class="subtitle">IGCSE Reading Comprehension — Extract Key Points</p>
+        </div>
+
+        <!-- Intro Screen -->
+        <div class="screen active" id="introScreen">
+            <div class="intro-content">
+                <h2>Your Task</h2>
+                <p>You will read a passage about a real event. Below it, you'll see <strong>10 bullet points</strong>.</p>
+                <p>Some are good summary points. Others are too detailed, irrelevant, or repeat information.</p>
+                <p>Your job:</p>
+                <ul>
+                    <li><strong>Select exactly 5 of the best points</strong> that summarise the passage</li>
+                    <li>A good summary is <strong>factual</strong>, <strong>concise</strong>, and <strong>avoids repetition</strong></li>
+                    <li>Avoid points that are too detailed, vague, or minor</li>
+                </ul>
+                <p style="margin-top: 25px;">When you submit, each point will be marked correct or incorrect with an explanation.</p>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="startGame()">Start Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="gameScreen">
+            <div class="game-container">
+                <div class="passage-card">
+                    <div class="passage-label">Reading Passage</div>
+                    <div class="passage-text" id="passageText"></div>
+                </div>
+
+                <div>
+                    <div class="passage-label">Select Your 5 Best Summary Points</div>
+                    <div class="bullet-points" id="bulletPointsContainer"></div>
+                </div>
+
+                <div class="selection-count" id="selectionCount">
+                    Select <strong>5 points</strong> exactly
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToIntro()">Back</button>
+                    <button class="btn-primary" id="submitBtn" onclick="submitAnswers()" disabled>Submit Answers</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="screen" id="resultsScreen">
+            <div class="results-container">
+                <div class="score-display">
+                    <div class="score-text" id="finalScore"></div>
+                    <div class="score-subtext">points out of 5</div>
+                </div>
+
+                <div class="results-list" id="resultsList"></div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="startGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game Data
+        const PASSAGE = `Firefighters in Christchurch, New Zealand's second-largest city, worked through the night to bring a devastating wildfire under control after it burnt down eleven houses and forced more than one thousand people to evacuate their homes. The blaze, which spread over approximately two thousand hectares in the city's Port Hills, was described by local authorities as a state of emergency.
+
+John Mackie, the civil defence controller, confirmed that around 130 firefighters on the ground, assisted by more than a dozen helicopters, had successfully prevented the fire from spreading further into the residential areas of the city. Heavy rain forecast for the weekend was expected to aid the effort.
+
+Residents described terrifying scenes as flames approached their properties. Phil Claude, who fled with his family, recalled: "I could see the smoke and flames being blown right up toward our house. I just yelled — get out, get out!" Around 450 homes were officially evacuated on Thursday morning.
+
+The cause of the fire remained unknown and was still under investigation by authorities. Local fire experts criticised the group of potholers who had entered the danger zone despite warnings from residents familiar with the area's conditions.`;
+
+        const BULLET_POINTS = [
+            { text: "A wildfire in Christchurch, New Zealand destroyed eleven houses.", correct: true, explanation: "✓ Correct — this is a key fact: the number of houses destroyed." },
+            { text: "More than one thousand people were evacuated from their homes.", correct: true, explanation: "✓ Correct — the scale of the evacuation is a key summary point." },
+            { text: "Approximately 130 firefighters and over a dozen helicopters fought the blaze.", correct: true, explanation: "✓ Correct — the resources used are a key factual point about the response." },
+            { text: "The cause of the fire was unknown and was being investigated.", correct: true, explanation: "✓ Correct — an important outcome/conclusion to summarise." },
+            { text: "Forecast rain was expected to help extinguish the remaining fire.", correct: true, explanation: "✓ Correct — a relevant forward-looking fact about how the fire would be dealt with." },
+            { text: "Phil Claude shouted 'get out, get out' as the flames approached his house.", correct: false, explanation: "✗ Too specific — this is a quotation detail, not a summary point. Summary avoids direct quotation." },
+            { text: "The fire spread over 2,000 hectares in the Port Hills area of the city.", correct: false, explanation: "✗ Too detailed — the specific hectare figure is supporting detail, not a key summary point." },
+            { text: "John Mackie was the civil defence controller for Christchurch.", correct: false, explanation: "✗ Irrelevant — the name of the official is not a key point worth including in a summary." },
+            { text: "The wildfire was a terrible event that made people very frightened.", correct: false, explanation: "✗ Too vague and evaluative — a good summary uses precise factual language, not general impressions." },
+            { text: "Local experts criticised some individuals for entering a dangerous area against advice.", correct: false, explanation: "✗ Minor point — this is background context, not one of the main summary points about the fire itself." },
+        ];
+
+        let selectedIndices = [];
+
+        function startGame() {
+            selectedIndices = [];
+            renderGame();
+            switchScreen('gameScreen');
+        }
+
+        function goToIntro() {
+            switchScreen('introScreen');
+        }
+
+        function renderGame() {
+            document.getElementById('passageText').textContent = PASSAGE;
+
+            const container = document.getElementById('bulletPointsContainer');
+            container.innerHTML = '';
+
+            BULLET_POINTS.forEach((point, index) => {
+                const div = document.createElement('div');
+                div.className = 'bullet-point';
+                div.innerHTML = `
+                    <input type="checkbox" id="bullet-${index}" data-index="${index}">
+                    <label for="bullet-${index}" class="bullet-text">${point.text}</label>
+                `;
+
+                const input = div.querySelector('input');
+                input.addEventListener('change', (e) => togglePoint(index, e.target.checked));
+                input.addEventListener('click', (e) => e.stopPropagation());
+
+                div.addEventListener('click', () => {
+                    input.checked = !input.checked;
+                    togglePoint(index, input.checked);
+                });
+
+                container.appendChild(div);
+            });
+
+            updateUI();
+        }
+
+        function togglePoint(index, checked) {
+            if (checked) {
+                if (selectedIndices.length < 5) {
+                    selectedIndices.push(index);
+                } else {
+                    document.getElementById(`bullet-${index}`).checked = false;
+                    return;
+                }
+            } else {
+                selectedIndices = selectedIndices.filter(i => i !== index);
+            }
+
+            updateUI();
+        }
+
+        function updateUI() {
+            const container = document.getElementById('bulletPointsContainer');
+            const points = container.querySelectorAll('.bullet-point');
+
+            points.forEach((point, index) => {
+                const checkbox = point.querySelector('input');
+                const isSelected = selectedIndices.includes(index);
+                const isDisabled = selectedIndices.length >= 5 && !isSelected;
+
+                checkbox.checked = isSelected;
+
+                if (isSelected) {
+                    point.classList.add('selected');
+                    point.classList.remove('disabled');
+                } else if (isDisabled) {
+                    point.classList.add('disabled');
+                    point.classList.remove('selected');
+                } else {
+                    point.classList.remove('selected', 'disabled');
+                }
+            });
+
+            const countEl = document.getElementById('selectionCount');
+            const submitBtn = document.getElementById('submitBtn');
+            const remaining = 5 - selectedIndices.length;
+
+            if (selectedIndices.length === 5) {
+                countEl.innerHTML = '✓ <strong>5 points selected</strong> — ready to submit!';
+                countEl.classList.remove('warn');
+                submitBtn.disabled = false;
+            } else {
+                countEl.innerHTML = `Select <strong>${remaining} more point${remaining !== 1 ? 's' : ''}</strong>`;
+                countEl.classList.add('warn');
+                submitBtn.disabled = true;
+            }
+        }
+
+        function submitAnswers() {
+            const results = selectedIndices.map(index => ({
+                text: BULLET_POINTS[index].text,
+                correct: BULLET_POINTS[index].correct,
+                explanation: BULLET_POINTS[index].explanation,
+            }));
+
+            const score = results.filter(r => r.correct).length;
+            displayResults(score, results);
+        }
+
+        function displayResults(score, results) {
+            document.getElementById('finalScore').textContent = score;
+
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `result-item ${result.correct ? 'correct' : 'incorrect'}`;
+                const icon = result.correct ? '✓' : '✗';
+                div.innerHTML = `
+                    <div class="result-text">
+                        <span class="result-icon">${icon}</span> ${result.text}
+                    </div>
+                    <div class="result-explanation">${result.explanation}</div>
+                `;
+                resultsList.appendChild(div);
+            });
+
+            switchScreen('resultsScreen');
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

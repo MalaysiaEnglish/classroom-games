@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Sorter — IGCSE Register</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@400;600&display=swap');
+  :root {
+    --formal-col: #1a3a5c; --formal-light: #d6e8f7; --formal-mid: #2e6da4;
+    --informal-col: #8b1a00; --informal-light: #fde8d8; --informal-mid: #d44f1e;
+    --bg: #f5f0e8; --card-bg: #fffdf8; --text: #1a1a1a;
+    --shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Serif 4', Georgia, serif; background: var(--bg); min-height: 100vh; color: var(--text); }
+  header { text-align: center; padding: 28px 20px 16px; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 900; }
+  header h1 span.formal { color: var(--formal-mid); }
+  header h1 span.informal { color: var(--informal-mid); }
+  header p { margin-top: 6px; font-size: 0.95rem; color: #555; font-style: italic; }
+  .scorebar { display: flex; justify-content: center; gap: 24px; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; flex-wrap: wrap; }
+  .score-pill { padding: 5px 16px; border-radius: 20px; font-family: 'Playfair Display', serif; font-size: 1rem; }
+  .score-pill.f { background: var(--formal-light); color: var(--formal-col); border: 2px solid var(--formal-mid); }
+  .score-pill.i { background: var(--informal-light); color: var(--informal-col); border: 2px solid var(--informal-mid); }
+  .score-pill.total { background: #eee; color: #333; border: 2px solid #999; }
+  .progress-bar-wrap { max-width: 720px; margin: 0 auto 10px; padding: 0 20px; }
+  .progress-bar-bg { height: 6px; background: #ddd; border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--formal-mid), var(--informal-mid)); border-radius: 3px; transition: width 0.4s ease; }
+  .card-area { display: flex; justify-content: center; padding: 10px 20px 16px; }
+  .sentence-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); padding: 28px 36px; max-width: 720px; width: 100%; text-align: center; font-size: clamp(1rem, 2.2vw, 1.25rem); line-height: 1.6; font-style: italic; border: 2px solid #e0d8c8; min-height: 120px; display: flex; align-items: center; justify-content: center; position: relative; }
+  .sentence-card .card-num { position: absolute; top: 10px; right: 14px; font-size: 0.75rem; font-style: normal; color: #aaa; font-family: 'Playfair Display', serif; }
+  @keyframes flashGreen { 0%{background:var(--card-bg)}40%{background:#d4f7dc;box-shadow:0 0 0 3px #3a9e5f}100%{background:var(--card-bg)} }
+  @keyframes flashRed { 0%{background:var(--card-bg)}40%{background:#fde0dc;box-shadow:0 0 0 3px #c0392b}100%{background:var(--card-bg)} }
+  .sentence-card.flash-correct { animation: flashGreen 0.5s ease; }
+  .sentence-card.flash-wrong   { animation: flashRed 0.5s ease; }
+  .feedback-bar { text-align: center; min-height: 32px; padding: 4px 20px 8px; font-size: 1rem; font-weight: 600; }
+  .feedback-bar.correct { color: #2a7a4f; }
+  .feedback-bar.wrong { color: #c0392b; }
+  .btn-row { display: flex; justify-content: center; gap: 20px; padding: 0 20px 20px; flex-wrap: wrap; }
+  .sort-btn { flex: 1; max-width: 280px; padding: 18px 24px; border: none; border-radius: 10px; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .sort-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+  .sort-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .sort-btn.formal-btn { background: var(--formal-col); color: #fff; }
+  .sort-btn.informal-btn { background: var(--informal-col); color: #fff; }
+  .columns { display: flex; gap: 16px; padding: 0 20px 30px; max-width: 960px; margin: 0 auto; flex-wrap: wrap; }
+  .col { flex: 1; min-width: 260px; border-radius: 12px; padding: 14px; min-height: 120px; }
+  .col.formal-col { background: var(--formal-light); border: 2px solid var(--formal-mid); }
+  .col.informal-col { background: var(--informal-light); border: 2px solid var(--informal-mid); }
+  .col-header { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid currentColor; }
+  .col.formal-col .col-header { color: var(--formal-col); }
+  .col.informal-col .col-header { color: var(--informal-col); }
+  .placed-item { background: white; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 0.85rem; font-style: italic; line-height: 1.4; display: flex; align-items: flex-start; gap: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  .placed-item .tick { font-style: normal; font-size: 1rem; flex-shrink: 0; }
+  .placed-item.correct-place { border-left: 4px solid #3a9e5f; }
+  .placed-item.wrong-place { border-left: 4px solid #c0392b; }
+  .end-screen { display: none; text-align: center; padding: 40px 20px; max-width: 600px; margin: 0 auto; }
+  .end-screen h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 12px; }
+  .end-screen .final-score { font-size: 3rem; font-family: 'Playfair Display', serif; font-weight: 900; color: var(--formal-mid); margin: 10px 0; }
+  .end-screen p { color: #555; margin-bottom: 24px; }
+  .restart-btn { background: var(--formal-col); color: white; border: none; border-radius: 8px; padding: 14px 36px; font-family: 'Playfair Display', serif; font-size: 1.1rem; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .restart-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Text Sorter — <span class="formal">Formal</span> vs <span class="informal">Informal</span></h1>
+  <p>Cambridge IGCSE texts — two very different registers. Sort each sentence.</p>
+</header>
+<div class="scorebar">
+  <div class="score-pill f">📰 Formal: <span id="score-f">0</span></div>
+  <div class="score-pill i">✏️ Informal: <span id="score-i">0</span></div>
+  <div class="score-pill total">✅ <span id="score-total">0</span> / <span id="score-max">0</span></div>
+</div>
+<div class="progress-bar-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+<div class="card-area">
+  <div class="sentence-card" id="sentence-card">
+    <span class="card-num" id="card-num"></span>
+    <span id="sentence-text"></span>
+  </div>
+</div>
+<div class="feedback-bar" id="feedback-bar"></div>
+<div class="btn-row">
+  <button class="sort-btn formal-btn" id="btn-formal" onclick="sortCard('formal')">📰 Formal</button>
+  <button class="sort-btn informal-btn" id="btn-informal" onclick="sortCard('informal')">✏️ Informal</button>
+</div>
+<div class="columns">
+  <div class="col formal-col">
+    <div class="col-header">📰 Formal</div>
+    <div id="formal-list"></div>
+  </div>
+  <div class="col informal-col">
+    <div class="col-header">✏️ Informal</div>
+    <div id="informal-list"></div>
+  </div>
+</div>
+<div class="end-screen" id="end-screen">
+  <h2>All sorted! 📰</h2>
+  <div class="final-score" id="final-score-text"></div>
+  <p id="end-msg"></p>
+  <button class="restart-btn" onclick="restart()">🔄 Play Again</button>
+</div>
+<script>
+const SENTENCES = [
+  // FORMAL sentences
+  { text: "Situated on the unspoilt southern coast of the beautiful Pacific island of Tamara, the Paloma hotel complex is the ideal location for an exotic holiday.", type: "formal", hint: "hotel brochure — complex noun phrases, passive construction" },
+  { text: "Firefighters in New Zealand's second-largest city have halted a wildfire after it burnt down eleven houses and forced more than one thousand people to evacuate.", type: "formal", hint: "news report — third person, precise facts, no personal opinion" },
+  { text: "The excavation revealed a series of wooden platforms at regular intervals, suggesting deliberate construction over an extended period.", type: "formal", hint: "encyclopaedia — technical vocabulary, passive voice" },
+  { text: "Research indicates that teenagers who spend more than four hours a day on screens score significantly lower in reading comprehension assessments.", type: "formal", hint: "formal report — impersonal, hedged, evidence-based" },
+  { text: "It is widely acknowledged that the global appeal of football transcends cultural and geographical boundaries.", type: "formal", hint: "academic essay — impersonal 'it is', formal verbs" },
+  { text: "The charity respectfully requests your urgent financial support to protect the remaining habitat of the western lowland gorilla.", type: "formal", hint: "charity appeal letter — polite imperative, formal register" },
+  { text: "Local potholing experts described the expedition as foolhardy, given the dangerous prevailing conditions at the time.", type: "formal", hint: "news report — reported speech, third person, no colloquial language" },
+  { text: "In addition to the two private sandy beaches, there is a fabulous landscaped tropical garden, two swimming pools, a sauna and a casino.", type: "formal", hint: "brochure — list structure, positive adjectives but formal syntax" },
+  // INFORMAL sentences
+  { text: "So get this — we finally made it to Luxor at 5am and I literally could not contain my excitement. Absolutely UNREAL.", type: "informal", hint: "travel diary — conversational opener, capitals for emphasis, first person" },
+  { text: "The hotel was amazing — four floors, sea views, the LOT. Honestly couldn't believe how nice it was for the price!", type: "informal", hint: "personal letter/blog — exclamations, contractions, 'the lot'" },
+  { text: "Everyone reckons there's some sneaky booby trap that floods the whole shaft if you get too close — genius or what?!", type: "informal", hint: "magazine — colloquial verb 'reckons', rhetorical question, slang" },
+  { text: "Mum was gobsmacked when I told her how far we'd walked. I mean, it was properly exhausting but SO worth it.", type: "informal", hint: "personal letter — colloquial 'gobsmacked', filler 'I mean', capitals" },
+  { text: "Would you really let your 16-year-old get behind the wheel? That's the question everyone's asking right now.", type: "informal", hint: "magazine article — direct address, colloquial phrasing, informal question" },
+  { text: "The thing about football is — everyone gets it, no matter where you're from. It's just this brilliant universal language, isn't it?", type: "informal", hint: "blog — conversational 'the thing about', rhetorical tag question" },
+  { text: "Day 56: Got to Egypt at last. Pete (my guide) is about 80 if he's a day, but honestly the most interesting person I've ever met.", type: "informal", hint: "travel diary — diary date format, brackets, exaggeration, personal" },
+  { text: "The gorillas are basically us — 98% the same DNA. Mind-blowing when you think about it, right?", type: "informal", hint: "informal article — 'basically', rhetorical question, hyphenated emphasis" },
+];
+
+let items = [], current = 0, correctCount = 0, isLocked = false;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function init() {
+  items = shuffle([...SENTENCES]);
+  current = 0;
+  correctCount = 0;
+  isLocked = false;
+  document.getElementById('score-f').textContent = '0';
+  document.getElementById('score-i').textContent = '0';
+  document.getElementById('score-total').textContent = '0';
+  document.getElementById('score-max').textContent = items.length;
+  document.getElementById('formal-list').innerHTML = '';
+  document.getElementById('informal-list').innerHTML = '';
+  document.getElementById('feedback-bar').textContent = '';
+  document.getElementById('end-screen').style.display = 'none';
+  document.querySelector('.card-area').style.display = 'flex';
+  document.querySelector('.btn-row').style.display = 'flex';
+  updateProgress();
+  showCard();
+}
+
+function showCard() {
+  if (current >= items.length) {
+    showEnd();
+    return;
+  }
+  const card = document.getElementById('sentence-card');
+  card.className = 'sentence-card';
+  document.getElementById('sentence-text').textContent = '"' + items[current].text + '"';
+  document.getElementById('card-num').textContent = (current + 1) + ' / ' + items.length;
+  document.getElementById('btn-formal').disabled = false;
+  document.getElementById('btn-informal').disabled = false;
+  isLocked = false;
+}
+
+function sortCard(choice) {
+  if (current >= items.length || isLocked) return;
+  isLocked = true;
+  document.getElementById('btn-formal').disabled = true;
+  document.getElementById('btn-informal').disabled = true;
+
+  const item = items[current];
+  const correct = choice === item.type;
+  const card = document.getElementById('sentence-card');
+  card.classList.add(correct ? 'flash-correct' : 'flash-wrong');
+
+  const fb = document.getElementById('feedback-bar');
+  if (correct) {
+    fb.textContent = '✓ Correct!';
+    fb.className = 'feedback-bar correct';
+    correctCount++;
+  } else {
+    fb.textContent = '✗ That one is ' + item.type + ' — ' + item.hint + '.';
+    fb.className = 'feedback-bar wrong';
+  }
+
+  const fScore = parseInt(document.getElementById('score-f').textContent);
+  const iScore = parseInt(document.getElementById('score-i').textContent);
+  if (item.type === 'formal') {
+    document.getElementById('score-f').textContent = fScore + 1;
+  } else {
+    document.getElementById('score-i').textContent = iScore + 1;
+  }
+  document.getElementById('score-total').textContent = current + 1;
+
+  const list = document.getElementById(item.type === 'formal' ? 'formal-list' : 'informal-list');
+  const div = document.createElement('div');
+  div.className = 'placed-item ' + (correct ? 'correct-place' : 'wrong-place');
+  div.innerHTML = '<span class="tick">' + (correct ? '✓' : '✗') + '</span><span>' + item.text + '</span>';
+  list.appendChild(div);
+
+  current++;
+  updateProgress();
+  setTimeout(() => {
+    showCard();
+  }, correct ? 600 : 1400);
+}
+
+function updateProgress() {
+  document.getElementById('progress-fill').style.width = items.length ? (current / items.length * 100) + '%' : '0%';
+}
+
+function showEnd() {
+  document.querySelector('.card-area').style.display = 'none';
+  document.querySelector('.btn-row').style.display = 'none';
+  document.getElementById('feedback-bar').textContent = '';
+  const end = document.getElementById('end-screen');
+  end.style.display = 'block';
+  const pct = Math.round((correctCount / items.length) * 100);
+  document.getElementById('final-score-text').textContent = correctCount + ' / ' + items.length;
+  const msgs = [
+    'Keep practising — look for vocabulary, punctuation and sentence structure as clues.',
+    'Good effort. Review the vocabulary and grammar clues in the ones you missed.',
+    'Great work — you can clearly spot the difference between formal and informal registers.',
+    'Perfect! You have a sharp eye for register and style.'
+  ];
+  document.getElementById('end-msg').textContent = msgs[pct < 50 ? 0 : pct < 75 ? 1 : pct < 100 ? 2 : 3];
+}
+
+function restart() {
+  init();
+}
+
+init();
+</script>
+</body>
+</html>

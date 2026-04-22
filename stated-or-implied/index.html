@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stated or Implied?</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0d14 0%, #0f1219 100%);
+            color: #e0e0e0;
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 2.5em;
+            color: #f0b429;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #a0a0a0;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Intro Screen */
+        .intro-content {
+            background: rgba(17, 21, 32, 0.8);
+            border: 1px solid rgba(240, 180, 41, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .intro-content h2 {
+            color: #f0b429;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-family: 'Unbounded', sans-serif;
+        }
+
+        .intro-content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #b0b0b0;
+        }
+
+        .intro-content ul {
+            text-align: left;
+            display: inline-block;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .intro-content li {
+            margin-bottom: 8px;
+            color: #a0a0a0;
+        }
+
+        .intro-content strong {
+            color: #3ecfcf;
+        }
+
+        .definitions {
+            background: rgba(62, 207, 207, 0.1);
+            border: 1px solid rgba(62, 207, 207, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .definition {
+            margin-bottom: 15px;
+        }
+
+        .definition:last-child {
+            margin-bottom: 0;
+        }
+
+        .definition-term {
+            color: #3ecfcf;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .definition-text {
+            color: #a0a0a0;
+            line-height: 1.5;
+        }
+
+        /* Game Screen */
+        .game-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .passage-sidebar {
+            background: rgba(17, 21, 32, 0.8);
+            border: 1px solid rgba(62, 207, 207, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            max-height: 600px;
+            overflow-y: auto;
+            position: sticky;
+            top: 20px;
+        }
+
+        .passage-label {
+            font-size: 0.9em;
+            color: #3ecfcf;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .passage-text {
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #d0d0d0;
+        }
+
+        .passage-toggle {
+            display: none;
+            background: rgba(62, 207, 207, 0.2);
+            border: 2px solid #3ecfcf;
+            color: #3ecfcf;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .passage-toggle:hover {
+            background: rgba(62, 207, 207, 0.3);
+        }
+
+        .statement-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .statement-card {
+            background: rgba(17, 21, 32, 0.8);
+            border: 1px solid rgba(160, 160, 160, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .statement-number {
+            font-size: 0.85em;
+            color: #3ecfcf;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .statement-text {
+            font-size: 1.15em;
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+        }
+
+        .btn-stated {
+            background: linear-gradient(135deg, #f0b429 0%, #e8a620 100%);
+            color: #0a0d14;
+        }
+
+        .btn-stated:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 180, 41, 0.3);
+        }
+
+        .btn-implied {
+            background: linear-gradient(135deg, #3ecfcf 0%, #2cb9b9 100%);
+            color: #0a0d14;
+        }
+
+        .btn-implied:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(62, 207, 207, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(160, 160, 160, 0.1);
+            border: 2px solid rgba(160, 160, 160, 0.3);
+            color: #d0d0d0;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(160, 160, 160, 0.2);
+            border-color: rgba(160, 160, 160, 0.5);
+        }
+
+        /* Feedback */
+        .feedback {
+            background: rgba(62, 207, 207, 0.1);
+            border: 2px solid rgba(62, 207, 207, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease-in;
+        }
+
+        .feedback.correct {
+            background: rgba(62, 207, 207, 0.15);
+            border-color: #3ecfcf;
+        }
+
+        .feedback.incorrect {
+            background: rgba(255, 107, 107, 0.15);
+            border-color: #ff6b6b;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-text {
+            color: #d0d0d0;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .feedback-icon {
+            font-weight: 600;
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct .feedback-icon {
+            color: #3ecfcf;
+        }
+
+        .feedback.incorrect .feedback-icon {
+            color: #ff6b6b;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: rgba(160, 160, 160, 0.2);
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #3ecfcf 0%, #f0b429 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        /* Results Screen */
+        .results-container {
+            text-align: center;
+        }
+
+        .score-display {
+            background: rgba(17, 21, 32, 0.8);
+            border: 2px solid #f0b429;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .score-text {
+            font-size: 3em;
+            color: #f0b429;
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .score-subtext {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .result-item {
+            background: rgba(17, 21, 32, 0.6);
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .result-item.correct {
+            border-left-color: #3ecfcf;
+            background: rgba(62, 207, 207, 0.1);
+        }
+
+        .result-item.incorrect {
+            border-left-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .result-icon {
+            font-weight: 600;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .result-item.correct .result-icon {
+            color: #3ecfcf;
+        }
+
+        .result-item.incorrect .result-icon {
+            color: #ff6b6b;
+        }
+
+        .result-statement {
+            color: #d0d0d0;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-explanation {
+            color: #a0a0a0;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-left: 26px;
+        }
+
+        /* Scrollbar */
+        .passage-sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .passage-sidebar::-webkit-scrollbar-track {
+            background: rgba(62, 207, 207, 0.1);
+            border-radius: 4px;
+        }
+
+        .passage-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(62, 207, 207, 0.3);
+            border-radius: 4px;
+        }
+
+        .passage-sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(62, 207, 207, 0.5);
+        }
+
+        @media (max-width: 1024px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .passage-sidebar {
+                position: static;
+                max-height: none;
+            }
+
+            .passage-toggle {
+                display: block;
+            }
+
+            .passage-sidebar.collapsed {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .intro-content {
+                padding: 25px;
+            }
+
+            .score-text {
+                font-size: 2.2em;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .statement-text {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Stated or Implied?</h1>
+            <p class="subtitle">IGCSE Reading Comprehension — Inference Training</p>
+        </div>
+
+        <!-- Intro Screen -->
+        <div class="screen active" id="introScreen">
+            <div class="intro-content">
+                <h2>Learn to Read Carefully</h2>
+                <p>In IGCSE English, you need to understand not just what a text <strong>says</strong>, but also what it <strong>suggests</strong>.</p>
+                <p>This game teaches you the difference.</p>
+
+                <div class="definitions">
+                    <div class="definition">
+                        <div class="definition-term">STATED</div>
+                        <div class="definition-text">The text says this directly. You don't need to work it out — it's right there in the words.</div>
+                    </div>
+                    <div class="definition">
+                        <div class="definition-term">IMPLIED</div>
+                        <div class="definition-text">The text doesn't say this directly, but you can safely work it out from clues in the text. It's a logical inference.</div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 25px;">You'll read a short passage, then statements will appear one at a time. For each, decide: is it <strong>stated</strong> or <strong>implied</strong>?</p>
+
+                <div class="button-group" style="margin-top: 30px;">
+                    <button class="btn-stated" onclick="startGame()">Start Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="gameScreen">
+            <div class="game-layout">
+                <!-- Passage Sidebar -->
+                <div class="passage-sidebar" id="passageSidebar">
+                    <div class="passage-label">Passage to Read</div>
+                    <div class="passage-text" id="passageText"></div>
+                    <button class="passage-toggle" id="passageToggleBtn" onclick="togglePassage()">Hide Passage</button>
+                </div>
+
+                <!-- Main Game Area -->
+                <div class="statement-container">
+                    <div class="statement-card">
+                        <div class="statement-number" id="statementNum"></div>
+                        <div class="statement-text" id="statementText"></div>
+                        <div class="button-group">
+                            <button class="btn-stated" onclick="answer('stated')">Stated</button>
+                            <button class="btn-implied" onclick="answer('implied')">Implied</button>
+                        </div>
+                        <div class="feedback" id="feedback">
+                            <div class="feedback-text">
+                                <span class="feedback-icon" id="feedbackIcon"></span><span id="feedbackText"></span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-secondary" onclick="goToIntro()">Back to Intro</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="screen" id="resultsScreen">
+            <div class="results-container">
+                <div class="score-display">
+                    <div class="score-text" id="finalScore"></div>
+                    <div class="score-subtext">out of 14</div>
+                </div>
+
+                <div class="results-list" id="resultsList"></div>
+
+                <div class="button-group">
+                    <button class="btn-stated" onclick="startGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PASSAGE = `From a travel journal — Day 56, Luxor:
+
+At 5.35 in the morning the train pulls into Luxor, 420 miles south of Cairo, in Upper Egypt. I cannot control my excitement at being here for the first time in my life.
+
+Luxor Station is tastefully monumental in decoration, with gilded details on the doors, eagle heads and a hieroglyphic design evoking power, history and ancient mystery. Figures materialise from the pre-dawn gloom to offer us taxi rides. You will never stand on your own for long here.
+
+My guide is a tall, straight, aristocratic man whose name is Tadorus, but who asks me to call him Peter. He is 80 years old, and as a boy of 14 was present when the archaeologist Howard Carter pushed open the door of Tutankhamun's tomb.
+
+Peter takes me across on the Nile ferry to the West Bank. We drive past fields of sugar cane and alongside an irrigation canal. The greenery ends abruptly as we climb a winding road up into the rubble-strewn desert. Then we are into the Valley of the Kings, which resembles a gigantic quarry littered with rock debris, bleached white by the sun.`;
+
+        const STATEMENTS = [
+            { text: "The writer arrives in Luxor very early in the morning.", answer: "stated", explanation: "STATED — '5.35 in the morning' directly tells us the time of arrival. Nothing is inferred." },
+            { text: "The writer has never been to Luxor before.", answer: "stated", explanation: "STATED — 'for the first time in my life' is an explicit statement. We do not need to infer it." },
+            { text: "The writer finds the station impressive.", answer: "implied", explanation: "IMPLIED — the writer describes 'tastefully monumental' decoration with gilded details. The admiration is strongly suggested but never directly stated." },
+            { text: "Luxor is a busy, touristy place.", answer: "implied", explanation: "IMPLIED — 'You will never stand on your own for long here' implies constant attention from people offering services, suggesting a tourist-heavy environment." },
+            { text: "Tadorus prefers to use a Western name with tourists.", answer: "implied", explanation: "IMPLIED — he 'asks me to call him Peter' rather than Tadorus. We can infer he adapts his name for foreign visitors, but the text never states his reason." },
+            { text: "Tadorus is approximately 80 years old.", answer: "stated", explanation: "STATED — 'He is 80 years old' is directly given. No inference required." },
+            { text: "The discovery of Tutankhamun's tomb was historically significant.", answer: "implied", explanation: "IMPLIED — the text does not say the discovery was significant. We infer this from the detail that Tadorus (as a boy of 14) was present — it is treated as a remarkable connection." },
+            { text: "Peter uses the Western name because he is embarrassed by his real name.", answer: "implied", explanation: "NEITHER stated NOR safely implied — the text does not tell us why he uses Peter. We cannot safely infer embarrassment. This is a guess, not an inference. The correct answer treats this as if the safest inference is 'implied', but note: this could be debated." },
+            { text: "The writer travels from the station to the West Bank by boat.", answer: "implied", explanation: "IMPLIED — 'the Nile ferry' implies a river crossing by boat. 'Ferry' is a type of boat, so this is a safe inference from the text." },
+            { text: "The Valley of the Kings is in a desert landscape.", answer: "stated", explanation: "STATED — 'rubble-strewn desert' is directly described. The Valley of the Kings is explicitly placed in desert terrain." },
+            { text: "The Valley of the Kings is beautiful.", answer: "implied", explanation: "IMPLIED — the writer describes it as resembling 'a gigantic quarry littered with rock debris, bleached white by the sun'. This is not a flattering description — if anything, it implies a harsh, austere landscape rather than beauty." },
+            { text: "The writer was excited about the journey.", answer: "stated", explanation: "STATED — 'I cannot control my excitement' directly tells us the writer's emotional state." },
+            { text: "The writer respects his guide.", answer: "implied", explanation: "IMPLIED — the writer notes Tadorus's distinguished bearing, age, and extraordinary personal history. The tone is admiring, though the word 'respect' is never used." },
+            { text: "The journey from the station to the Valley of the Kings takes place in the early morning.", answer: "implied", explanation: "IMPLIED — the train arrives at 5.35am, and the journey begins shortly after. Although the arrival time is stated, the journey's timing must be inferred." },
+        ];
+
+        let currentIndex = 0;
+        let results = [];
+        let answered = false;
+
+        function startGame() {
+            currentIndex = 0;
+            results = [];
+            answered = false;
+            renderStatement();
+            switchScreen('gameScreen');
+        }
+
+        function goToIntro() {
+            switchScreen('introScreen');
+        }
+
+        function renderStatement() {
+            document.getElementById('passageText').textContent = PASSAGE;
+            const stmt = STATEMENTS[currentIndex];
+            document.getElementById('statementNum').textContent = `Statement ${currentIndex + 1} of ${STATEMENTS.length}`;
+            document.getElementById('statementText').textContent = stmt.text;
+            document.getElementById('feedback').classList.remove('show', 'correct', 'incorrect');
+            answered = false;
+            updateProgress();
+        }
+
+        function answer(choice) {
+            if (answered) return;
+
+            answered = true;
+            const stmt = STATEMENTS[currentIndex];
+            const isCorrect = choice === stmt.answer;
+
+            results.push({
+                text: stmt.text,
+                userAnswer: choice,
+                correct: isCorrect,
+                explanation: stmt.explanation,
+            });
+
+            const feedbackEl = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+
+            feedbackEl.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+            feedbackIcon.textContent = isCorrect ? '✓' : '✗';
+            feedbackText.textContent = stmt.explanation;
+
+            setTimeout(() => {
+                if (currentIndex < STATEMENTS.length - 1) {
+                    currentIndex++;
+                    renderStatement();
+                } else {
+                    displayResults();
+                }
+            }, 2000);
+        }
+
+        function updateProgress() {
+            const progress = ((currentIndex) / STATEMENTS.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function displayResults() {
+            const score = results.filter(r => r.correct).length;
+            document.getElementById('finalScore').textContent = score;
+
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+
+            results.forEach((result, idx) => {
+                const div = document.createElement('div');
+                div.className = `result-item ${result.correct ? 'correct' : 'incorrect'}`;
+                const icon = result.correct ? '✓' : '✗';
+                const answerLabel = result.userAnswer.charAt(0).toUpperCase() + result.userAnswer.slice(1);
+                div.innerHTML = `
+                    <div class="result-statement">
+                        <span class="result-icon">${icon}</span> ${result.text}
+                    </div>
+                    <div class="result-explanation"><strong>You said:</strong> ${answerLabel} — ${result.explanation}</div>
+                `;
+                resultsList.appendChild(div);
+            });
+
+            switchScreen('resultsScreen');
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function togglePassage() {
+            const sidebar = document.getElementById('passageSidebar');
+            const btn = document.getElementById('passageToggleBtn');
+            sidebar.classList.toggle('collapsed');
+            btn.textContent = sidebar.classList.contains('collapsed') ? 'Show Passage' : 'Hide Passage';
+        }
+    </script>
+</body>
+</html>

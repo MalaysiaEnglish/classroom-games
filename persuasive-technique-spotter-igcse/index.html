@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persuasive Technique Spotter — IGCSE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1a1a2e 50%, #0f172a 100%);
+      font-family: 'Barlow', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      color: #f0a500;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .progress-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 30px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f0a500, #fbbf24);
+      transition: width 0.3s ease;
+    }
+
+    .score-info {
+      font-size: 1rem;
+      color: #f0a500;
+      font-weight: 600;
+    }
+
+    .sentence-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #f0a500;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .sentence-text {
+      font-size: 1.4rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: #e2e8f0;
+    }
+
+    .sentence-number {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 15px;
+    }
+
+    .definitions-toggle {
+      background: #f0a500;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .definitions-toggle:hover {
+      background: #fbbf24;
+      transform: translateY(-2px);
+    }
+
+    .definitions-toggle.active {
+      background: #f0a500;
+    }
+
+    .definitions-panel {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .definitions-panel.visible {
+      max-height: 800px;
+    }
+
+    .definitions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .definition-item {
+      background: rgba(240, 165, 0, 0.1);
+      border-left: 4px solid #f0a500;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    .definition-label {
+      font-weight: 600;
+      color: #f0a500;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .definition-text {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    .techniques-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .techniques-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .title {
+        font-size: 2.5rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+
+    .technique-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(240, 165, 0, 0.3);
+      border-radius: 8px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      color: #e2e8f0;
+      font-size: 1rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+    }
+
+    .technique-btn:hover {
+      border-color: #f0a500;
+      background: rgba(240, 165, 0, 0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(240, 165, 0, 0.2);
+    }
+
+    .technique-btn.selected {
+      background: #f0a500;
+      border-color: #f0a500;
+      color: #000;
+      box-shadow: 0 0 20px rgba(240, 165, 0, 0.5);
+    }
+
+    .technique-icon {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .technique-label {
+      font-size: 0.9rem;
+      line-height: 1.3;
+    }
+
+    .feedback {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      min-height: 60px;
+      text-align: center;
+      border-left: 4px solid #f0a500;
+    }
+
+    .feedback.hidden {
+      display: none;
+    }
+
+    .feedback-title {
+      font-weight: 600;
+      color: #f0a500;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .feedback-text {
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .feedback.correct .feedback-title {
+      color: #34d399;
+    }
+
+    .feedback.correct {
+      border-left-color: #34d399;
+    }
+
+    .feedback.incorrect .feedback-title {
+      color: #ff6b6b;
+    }
+
+    .feedback.incorrect {
+      border-left-color: #ff6b6b;
+    }
+
+    .next-btn, .restart-btn, .home-btn {
+      background: #f0a500;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .next-btn:hover, .restart-btn:hover, .home-btn:hover {
+      background: #fbbf24;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(240, 165, 0, 0.3);
+    }
+
+    .next-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* End Screen */
+    .end-screen {
+      display: none;
+      text-align: center;
+    }
+
+    .end-screen.visible {
+      display: block;
+    }
+
+    .end-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: #f0a500;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .final-score {
+      font-size: 3rem;
+      color: #34d399;
+      font-weight: 700;
+      margin: 30px 0;
+    }
+
+    .final-score-label {
+      color: #cbd5e1;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+    .score-message {
+      color: #cbd5e1;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Game Screen -->
+    <div id="gameScreen" class="game-screen">
+      <!-- Header -->
+      <div class="header">
+        <h1 class="title">Persuasive Technique Spotter</h1>
+        <p class="subtitle">IGCSE First Language English</p>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-info">
+          <span>Progress: <span id="currentQuestion">1</span> / <span id="totalQuestions">18</span></span>
+          <span class="score-info">Score: <span id="score">0</span> | Streak: <span id="streak">0</span></span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- Sentence Card -->
+      <div class="sentence-card">
+        <div class="sentence-number" id="sentenceNumber">Sentence 1</div>
+        <p class="sentence-text" id="sentenceText"></p>
+        <button class="definitions-toggle" id="definitionsToggle">Show Definitions</button>
+      </div>
+
+      <!-- Definitions Panel -->
+      <div class="definitions-panel" id="definitionsPanel">
+        <div class="definitions-grid" id="definitionsGrid"></div>
+      </div>
+
+      <!-- Techniques Grid -->
+      <div class="techniques-grid" id="techniquesGrid"></div>
+
+      <!-- Feedback -->
+      <div class="feedback hidden" id="feedback">
+        <div class="feedback-title" id="feedbackTitle">Correct!</div>
+        <div class="feedback-text" id="feedbackText"></div>
+      </div>
+
+      <!-- Next Button -->
+      <div class="button-group">
+        <button class="next-btn" id="nextBtn" disabled>Next</button>
+      </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="endScreen" class="end-screen">
+      <div class="end-title">Quiz Complete!</div>
+      <div class="final-score-label">Your Score</div>
+      <div class="final-score" id="finalScore">0</div>
+      <div class="final-score-label">out of 18</div>
+      <p class="score-message" id="scoreMessage"></p>
+      <div class="button-group">
+        <button class="restart-btn" id="restartBtn">Play Again</button>
+        <button class="home-btn" id="homeBtn">Home</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const TECHNIQUES = [
+      { id: "rhetorical", label: "Rhetorical Question", icon: "❓", def: "A question asked for effect — not expecting a real answer" },
+      { id: "triple",     label: "Rule of Three",       icon: "3️⃣", def: "Three words or phrases used together for rhythm and impact" },
+      { id: "emotive",    label: "Emotive Language",    icon: "💔", def: "Words chosen specifically to trigger an emotional response" },
+      { id: "direct",     label: "Direct Address",      icon: "👉", def: "Speaking directly to the reader using 'you'" },
+      { id: "imperative", label: "Imperative Verb",     icon: "📣", def: "A command — telling the reader what to do (no subject)" },
+      { id: "statistic",  label: "Statistic",           icon: "📊", def: "A number or fact used to make the argument seem credible" },
+      { id: "hyperbole",  label: "Hyperbole",           icon: "🔥", def: "Deliberate exaggeration for dramatic or comic effect" },
+      { id: "counterarg", label: "Counter-argument",    icon: "⚖️", def: "Acknowledging the other side before dismissing it" },
+    ];
+
+    const SENTENCES = [
+      { text: "Would you really want your sixteen-year-old to take the wheel on a busy motorway?", technique: "rhetorical", explain: "This question doesn't expect a real answer — it is designed to make parents feel anxious and say no." },
+      { text: "Protect our rivers. Save our wildlife. Act before it is too late.", technique: "imperative", explain: "All three are commands in the imperative form — no subject, just an instruction to act." },
+      { text: "Imagine the terrified parents of the young potholers, waiting in the rain for news of their children.", technique: "emotive", explain: "'Terrified' and the image of waiting parents in the rain trigger sympathy and anxiety in the reader." },
+      { text: "You have the power to save a life — and you can do it for less than the cost of a cup of coffee.", technique: "direct", explain: "'You' speaks directly to the reader, creating a personal obligation and making the appeal feel immediate." },
+      { text: "The damage is real. The harm is proven. The time to act is now.", technique: "triple", explain: "Three short parallel sentences — a rule of three that builds momentum and urgency." },
+      { text: "Over sixty percent of fatal road accidents involving teenagers occur within the first six months of passing their test.", technique: "statistic", explain: "A specific percentage makes the argument appear scientifically credible and difficult to argue with." },
+      { text: "Social media has turned an entire generation into hollow, screen-obsessed, communication-illiterate zombies.", technique: "hyperbole", explain: "'Zombies' is a wild exaggeration — deliberately over the top for shock value and rhetorical impact." },
+      { text: "Admittedly, technology has brought genuine benefits to education — however, the damage to mental health cannot be dismissed.", technique: "counterarg", explain: "The writer concedes a point ('admittedly') before pivoting back to the main argument with 'however'." },
+      { text: "Is it really too much to ask that we protect the last remaining habitat of the western lowland gorilla?", technique: "rhetorical", explain: "The question implies the answer is obviously 'no' — designed to shame the reader into agreement." },
+      { text: "For the sake of the animals, the forests, and the future of our planet — give today.", technique: "triple", explain: "Three noun phrases ('the animals, the forests, the future') used as a persuasive, emotive list." },
+      { text: "Vulnerable young children are being exploited, manipulated, and endangered by social media companies.", technique: "emotive", explain: "'Vulnerable', 'exploited' and 'endangered' are all loaded words designed to trigger a protective emotional response." },
+      { text: "Stop scrolling. Start living.", technique: "imperative", explain: "Two sharp imperative commands — short, punchy, and direct. No subject, just instructions." },
+      { text: "Ask yourself: when did you last read a book from cover to cover without checking your phone?", technique: "direct", explain: "The writer uses 'you' and 'yourself' to make the challenge feel personal and unavoidable." },
+      { text: "More than ninety percent of centenarians report good health well into their early nineties — the evidence is clear.", technique: "statistic", explain: "The percentage lends the argument scientific authority and credibility." },
+      { text: "We are drowning in a tidal wave of misinformation, fake news, and digital poison.", technique: "hyperbole", explain: "'Drowning' and 'tidal wave' are extreme exaggerations — used for dramatic, persuasive effect." },
+      { text: "Some argue that the internet is simply a tool — but a knife is simply a tool too, and we still regulate it carefully.", technique: "counterarg", explain: "The writer acknowledges the opposing view ('some argue') before undermining it with a sharp comparison." },
+      { text: "Think of the gorilla mothers watching their habitat destroyed — their fear, their bewilderment, their grief.", technique: "emotive", explain: "Attributing human emotions ('fear, bewilderment, grief') to animals creates powerful emotional impact." },
+      { text: "You can make a difference — and you must, because nobody else will.", technique: "direct", explain: "'You' creates personal responsibility. The urgency of 'you must' reinforces the direct address." },
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let answered = false;
+
+    function init() {
+      renderTechniques();
+      renderDefinitions();
+      loadQuestion();
+    }
+
+    function renderTechniques() {
+      const grid = document.getElementById('techniquesGrid');
+      grid.innerHTML = '';
+      TECHNIQUES.forEach(tech => {
+        const btn = document.createElement('button');
+        btn.className = 'technique-btn';
+        btn.innerHTML = `
+          <span class="technique-icon">${tech.icon}</span>
+          <span class="technique-label">${tech.label}</span>
+        `;
+        btn.addEventListener('click', () => selectTechnique(tech.id));
+        grid.appendChild(btn);
+      });
+    }
+
+    function renderDefinitions() {
+      const grid = document.getElementById('definitionsGrid');
+      grid.innerHTML = '';
+      TECHNIQUES.forEach(tech => {
+        const item = document.createElement('div');
+        item.className = 'definition-item';
+        item.innerHTML = `
+          <div class="definition-label">${tech.icon} ${tech.label}</div>
+          <div class="definition-text">${tech.def}</div>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const sentence = SENTENCES[currentQuestionIndex];
+      document.getElementById('sentenceNumber').textContent = `Sentence ${currentQuestionIndex + 1}`;
+      document.getElementById('sentenceText').textContent = sentence.text;
+      document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+      document.getElementById('totalQuestions').textContent = SENTENCES.length;
+
+      const progress = ((currentQuestionIndex) / SENTENCES.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+
+      clearSelection();
+      hideFeedback();
+      document.getElementById('nextBtn').disabled = true;
+      document.getElementById('definitionsPanel').classList.remove('visible');
+      document.getElementById('definitionsToggle').textContent = 'Show Definitions';
+    }
+
+    function selectTechnique(techniqueId) {
+      if (answered) return;
+
+      answered = true;
+      const sentence = SENTENCES[currentQuestionIndex];
+      const isCorrect = techniqueId === sentence.technique;
+
+      clearSelection();
+      const buttons = document.querySelectorAll('.technique-btn');
+      buttons.forEach(btn => {
+        const label = btn.querySelector('.technique-label').textContent;
+        const tech = TECHNIQUES.find(t => t.label === label);
+        if (tech && tech.id === techniqueId) {
+          btn.classList.add('selected');
+        }
+      });
+
+      if (isCorrect) {
+        score++;
+        streak++;
+        showFeedback(true, sentence.explain);
+      } else {
+        streak = 0;
+        const correctTech = TECHNIQUES.find(t => t.id === sentence.technique);
+        showFeedback(false, `The correct answer is <strong>${correctTech.label}</strong>. ${sentence.explain}`);
+      }
+
+      document.getElementById('score').textContent = score;
+      document.getElementById('streak').textContent = streak;
+      document.getElementById('nextBtn').disabled = false;
+    }
+
+    function showFeedback(isCorrect, text) {
+      const feedback = document.getElementById('feedback');
+      feedback.classList.remove('hidden');
+      feedback.classList.toggle('correct', isCorrect);
+      feedback.classList.toggle('incorrect', !isCorrect);
+      document.getElementById('feedbackTitle').textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect';
+      document.getElementById('feedbackText').innerHTML = text;
+    }
+
+    function hideFeedback() {
+      document.getElementById('feedback').classList.add('hidden');
+    }
+
+    function clearSelection() {
+      document.querySelectorAll('.technique-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < SENTENCES.length) {
+        loadQuestion();
+      } else {
+        endGame();
+      }
+    }
+
+    function endGame() {
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('endScreen').classList.add('visible');
+      document.getElementById('finalScore').textContent = score;
+
+      const percentage = Math.round((score / SENTENCES.length) * 100);
+      let message = '';
+      if (percentage === 100) {
+        message = 'Perfect score! You\'re a persuasive technique master!';
+      } else if (percentage >= 80) {
+        message = 'Excellent work! You have a strong grasp of persuasive techniques.';
+      } else if (percentage >= 60) {
+        message = 'Good effort! Keep practising to improve your technique recognition.';
+      } else {
+        message = 'Keep going! Review the techniques and try again.';
+      }
+      document.getElementById('scoreMessage').textContent = message;
+    }
+
+    function restartGame() {
+      currentQuestionIndex = 0;
+      score = 0;
+      streak = 0;
+      answered = false;
+      document.getElementById('endScreen').classList.remove('visible');
+      document.getElementById('gameScreen').style.display = 'block';
+      loadQuestion();
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+    document.getElementById('restartBtn').addEventListener('click', restartGame);
+    document.getElementById('homeBtn').addEventListener('click', () => {
+      window.location.href = '../';
+    });
+
+    document.getElementById('definitionsToggle').addEventListener('click', function() {
+      const panel = document.getElementById('definitionsPanel');
+      panel.classList.toggle('visible');
+      this.textContent = panel.classList.contains('visible') ? 'Hide Definitions' : 'Show Definitions';
+    });
+
+    init();
+  </script>
+</body>
+</html>

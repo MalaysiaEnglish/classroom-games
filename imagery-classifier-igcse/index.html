@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Imagery Classifier — IGCSE</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: rgba(255,255,255,0.08);
+      --text: #e6edf3;
+      --muted: rgba(230,237,243,0.45);
+      --simile: #60a5fa;
+      --metaphor: #f59e0b;
+      --personification: #34d399;
+      --onomatopoeia: #f472b6;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 15% 20%, rgba(96,165,250,.06) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 35% at 85% 80%, rgba(52,211,153,.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1000px;
+      padding: 28px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .home-btn {
+      padding: 8px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .85rem;
+      transition: all .2s;
+    }
+
+    .home-btn:hover {
+      color: var(--text);
+      border-color: var(--simile);
+    }
+
+    .hdr-c {
+      text-align: center;
+    }
+
+    .hdr-c h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      color: var(--text);
+    }
+
+    .hdr-c p {
+      font-size: .75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-top: 2px;
+    }
+
+    .score-badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 8px 14px;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--simile);
+      min-width: 70px;
+      text-align: center;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1000px;
+      padding: 28px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    #intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+    }
+
+    .intro-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1.1;
+    }
+
+    .intro-title em {
+      font-style: italic;
+      color: var(--simile);
+    }
+
+    .intro-desc {
+      max-width: 560px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: .95rem;
+    }
+
+    .start-btn {
+      padding: 15px 44px;
+      background: var(--simile);
+      border: none;
+      border-radius: 40px;
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all .2s;
+      box-shadow: 0 4px 20px rgba(96,165,250,.25);
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(96,165,250,.4);
+    }
+
+    .progress-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 4px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--simile);
+      border-radius: 4px;
+      transition: width .4s;
+    }
+
+    .progress-label {
+      font-size: .8rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .phrase-card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 36px;
+      text-align: center;
+    }
+
+    .phrase-instruction {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .phrase-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .category-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media(max-width: 700px) {
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .cat-btn {
+      padding: 18px 12px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all .18s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+    }
+
+    .cat-btn .cbi {
+      font-size: 1.8rem;
+    }
+
+    .cat-btn .cbl {
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .cat-btn.simile:not([disabled]):hover {
+      border-color: var(--simile);
+      background: rgba(96,165,250,.1);
+    }
+
+    .cat-btn.metaphor:not([disabled]):hover {
+      border-color: var(--metaphor);
+      background: rgba(245,158,11,.1);
+    }
+
+    .cat-btn.personification:not([disabled]):hover {
+      border-color: var(--personification);
+      background: rgba(52,211,153,.1);
+    }
+
+    .cat-btn.onomatopoeia:not([disabled]):hover {
+      border-color: var(--onomatopoeia);
+      background: rgba(244,114,182,.1);
+    }
+
+    .cat-btn.correct.simile {
+      border-color: var(--simile);
+      background: rgba(96,165,250,.18);
+      color: var(--simile);
+    }
+
+    .cat-btn.correct.metaphor {
+      border-color: var(--metaphor);
+      background: rgba(245,158,11,.18);
+      color: var(--metaphor);
+    }
+
+    .cat-btn.correct.personification {
+      border-color: var(--personification);
+      background: rgba(52,211,153,.18);
+      color: var(--personification);
+    }
+
+    .cat-btn.correct.onomatopoeia {
+      border-color: var(--onomatopoeia);
+      background: rgba(244,114,182,.18);
+      color: var(--onomatopoeia);
+    }
+
+    .cat-btn.wrong {
+      border-color: #e85d5d;
+      background: rgba(232,93,93,.1);
+      opacity: .6;
+    }
+
+    .cat-btn[disabled] {
+      cursor: default;
+    }
+
+    .feedback {
+      width: 100%;
+      padding: 14px 22px;
+      border-radius: var(--radius);
+      font-size: .92rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.ok {
+      background: rgba(52,211,153,.08);
+      border: 1px solid rgba(52,211,153,.25);
+      color: #7ee787;
+    }
+
+    .feedback.bad {
+      background: rgba(232,93,93,.08);
+      border: 1px solid rgba(232,93,93,.2);
+      color: #f08080;
+    }
+
+    .next-btn {
+      align-self: flex-end;
+      padding: 11px 28px;
+      background: var(--simile);
+      border: none;
+      border-radius: 40px;
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all .2s;
+      display: none;
+    }
+
+    .next-btn.show {
+      display: block;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    #end {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      text-align: center;
+    }
+
+    .end-icon {
+      font-size: 5rem;
+    }
+
+    .end-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+
+    .end-score {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--simile);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .end-sub {
+      color: var(--muted);
+    }
+
+    .end-stats {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat-pill {
+      padding: 9px 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      font-size: .88rem;
+    }
+
+    .stat-pill span {
+      color: var(--simile);
+      font-weight: 700;
+    }
+
+    .end-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .replay-btn {
+      padding: 13px 32px;
+      background: var(--simile);
+      border: none;
+      border-radius: 40px;
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .replay-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .replay-btn.secondary {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    #game {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a href="../index.html" class="home-btn">← Home</a>
+  <div class="hdr-c"><h1>Imagery Classifier</h1><p>IGCSE Y10/11 · Writers' Effects</p></div>
+  <div class="score-badge" id="scoreBadge">0/0</div>
+</header>
+<main>
+  <div id="intro">
+    <div class="intro-title">IDENTIFY THE<br><em>TECHNIQUE</em></div>
+    <p class="intro-desc">Phrases from IGCSE literature and creative writing will appear. Classify each phrase by the literary technique used: Simile, Metaphor, Personification, or Onomatopoeia. Understanding these techniques is essential for writers' effects questions!</p>
+    <button class="start-btn" id="startBtn">START</button>
+  </div>
+  <div id="game">
+    <div class="progress-row"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel">1/18</div></div>
+    <div class="phrase-card"><div class="phrase-instruction">Which technique is used in this phrase?</div><div class="phrase-text" id="phraseText"></div></div>
+    <div class="category-grid">
+      <button class="cat-btn simile" data-t="simile" onclick="pick('simile')"><span class="cbi">🔗</span><span class="cbl" style="color:var(--simile)">Simile</span></button>
+      <button class="cat-btn metaphor" data-t="metaphor" onclick="pick('metaphor')"><span class="cbi">≈</span><span class="cbl" style="color:var(--metaphor)">Metaphor</span></button>
+      <button class="cat-btn personification" data-t="personification" onclick="pick('personification')"><span class="cbi">👤</span><span class="cbl" style="color:var(--personification)">Person.</span></button>
+      <button class="cat-btn onomatopoeia" data-t="onomatopoeia" onclick="pick('onomatopoeia')"><span class="cbi">🔊</span><span class="cbl" style="color:var(--onomatopoeia)">Onomatopoeia</span></button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">NEXT →</button>
+  </div>
+  <div id="end">
+    <div class="end-icon" id="endIcon">📖</div><div class="end-title" id="endTitle">OUTSTANDING!</div>
+    <div class="end-score" id="endScore">0/0</div><div class="end-sub" id="endSub"></div>
+    <div class="end-stats" id="endStats"></div>
+    <div class="end-btns"><button class="replay-btn" id="replayBtn">PLAY AGAIN</button><a href="../index.html" class="replay-btn secondary">HOME</a></div>
+  </div>
+</main>
+<script>
+const PHRASES = [
+  {text:"It was autumn and the trees were all aflame.",type:"metaphor",explanation:"METAPHOR — 'aflame' says the trees ARE fire, without using 'like' or 'as'. A direct implied comparison."},
+  {text:"The old man's face was like a withered apple.",type:"simile",explanation:"SIMILE — 'like a withered apple' is a stated comparison using 'like'. We can picture the lined, shrunken face."},
+  {text:"Her laugh tinkled like ice in a glass.",type:"simile",explanation:"SIMILE — 'like ice in a glass' uses 'like' to make a stated comparison, evoking a clear, bright sound."},
+  {text:"The waiting passengers stormed the train.",type:"metaphor",explanation:"METAPHOR — 'stormed' compares the passengers to an invading army. No 'like' or 'as' — it is direct."},
+  {text:"The rain drummed on the roof.",type:"onomatopoeia",explanation:"ONOMATOPOEIA — 'drummed' sounds like what it describes: the rhythmic beat of rain on a surface."},
+  {text:"The hail stung the windows.",type:"personification",explanation:"PERSONIFICATION — 'stung' gives hail the action of a creature that bites or stings. Windows cannot actually be stung."},
+  {text:"The sun stalked across the fields, as stealthily as a tiger.",type:"simile",explanation:"SIMILE — 'as stealthily as a tiger' is a stated comparison using 'as'. (The personification of 'stalked' makes it rich, but the key device to spot here is the simile.)"},
+  {text:"The hillside bloomed with scarlet men marching.",type:"metaphor",explanation:"METAPHOR — 'bloomed' compares the soldiers appearing on the hillside to flowers opening. Direct, no 'like/as'."},
+  {text:"Life's but a walking shadow.",type:"metaphor",explanation:"METAPHOR — life is directly called 'a walking shadow'. No comparison word — it states the equivalence."},
+  {text:"The sea is like a giant, grey, hungry dog.",type:"simile",explanation:"SIMILE — 'like a giant, grey, hungry dog' is an explicit stated comparison using 'like'."},
+  {text:"The wind howled through the empty corridors.",type:"personification",explanation:"PERSONIFICATION — wind cannot truly 'howl' (that is something animals do). Human/animal qualities are given to the wind."},
+  {text:"The river slithered through the valley like a silver thread.",type:"simile",explanation:"SIMILE — 'like a silver thread' is a stated comparison using 'like'. Note: 'slithered' is personification too, but the primary classifiable device is the simile."},
+  {text:"The city's lungs wheezed with pollution.",type:"metaphor",explanation:"METAPHOR — the city is given 'lungs' (a human organ). The comparison is implied, not stated with 'like'."},
+  {text:"The leaves whispered secrets in the summer breeze.",type:"personification",explanation:"PERSONIFICATION — leaves cannot whisper or keep secrets. These are human actions and abilities."},
+  {text:"The crack of breaking ice echoed across the lake.",type:"onomatopoeia",explanation:"ONOMATOPOEIA — 'crack' sounds like the sharp sound it describes. The word itself imitates the noise."},
+  {text:"Her words were arrows, each one finding its mark.",type:"metaphor",explanation:"METAPHOR — words are directly called 'arrows'. No 'like' or 'as' — a direct implied comparison."},
+  {text:"The market buzzed with colour and noise.",type:"onomatopoeia",explanation:"ONOMATOPOEIA — 'buzzed' imitates the low, continuous sound of a busy place. The word sounds like its meaning."},
+  {text:"The ancient oak tree stretched its arms to shelter the children below.",type:"personification",explanation:"PERSONIFICATION — the tree is given 'arms' (a human body part) and the intention to 'shelter'. It behaves like a caring person."}
+];
+
+let phrases = [], cur = 0, sc = 0, ans = false;
+
+function shuf(a) {
+  const b = [...a];
+  for (let i = b.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+}
+
+function show(id) {
+  ['intro', 'game', 'end'].forEach(s => document.getElementById(s).style.display = s === id ? 'flex' : 'none');
+}
+
+function upd() {
+  document.getElementById('scoreBadge').textContent = sc + '/' + (phrases.length || 0);
+}
+
+function start() {
+  phrases = shuf(PHRASES);
+  cur = 0;
+  sc = 0;
+  upd();
+  show('game');
+  render();
+}
+
+function render() {
+  ans = false;
+  const p = phrases[cur];
+  document.getElementById('progressFill').style.width = (cur / phrases.length * 100) + '%';
+  document.getElementById('progressLabel').textContent = (cur + 1) + '/' + phrases.length;
+  document.getElementById('phraseText').textContent = '"' + p.text + '"';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').className = 'next-btn';
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.className = 'cat-btn ' + b.dataset.t;
+    b.disabled = false;
+  });
+}
+
+function pick(chosen) {
+  if (ans) return;
+  ans = true;
+  const p = phrases[cur];
+  document.querySelectorAll('.cat-btn').forEach(b => b.disabled = true);
+  const isCorrect = chosen === p.type;
+  document.querySelector('.cat-btn[data-t="' + p.type + '"]').classList.add('correct');
+  if (!isCorrect) {
+    document.querySelector('.cat-btn[data-t="' + chosen + '"]').classList.add('wrong');
+  }
+  if (isCorrect) sc++;
+  upd();
+  const fb = document.getElementById('feedback');
+  if (isCorrect) {
+    fb.textContent = '✓ Correct! ' + p.explanation;
+    fb.className = 'feedback ok show';
+  } else {
+    fb.textContent = '✗ ' + p.explanation;
+    fb.className = 'feedback bad show';
+  }
+  const nb = document.getElementById('nextBtn');
+  nb.textContent = cur + 1 < phrases.length ? 'NEXT →' : 'SEE RESULTS';
+  nb.className = 'next-btn show';
+}
+
+function endGame() {
+  show('end');
+  const t = phrases.length, p = Math.round(sc / t * 100);
+  let ic = '📖', ti = 'OUTSTANDING!', su = 'You have excellent technique recognition!';
+  if (p < 50) {
+    ic = '📝';
+    ti = 'KEEP TRYING';
+    su = 'Review the techniques and practice identifying the key features of each one.';
+  } else if (p < 70) {
+    ic = '👍';
+    ti = 'GOOD EFFORT!';
+    su = 'Getting there — a few tricky ones! Keep practising.';
+  } else if (p < 90) {
+    ic = '⭐';
+    ti = 'WELL DONE!';
+    su = 'Excellent technique spotting! Ready for writers\' effects questions?';
+  }
+  document.getElementById('endIcon').textContent = ic;
+  document.getElementById('endTitle').textContent = ti;
+  document.getElementById('endScore').textContent = sc + '/' + t;
+  document.getElementById('endSub').textContent = su;
+  document.getElementById('endStats').innerHTML = '<div class="stat-pill">Correct: <span>' + sc + '</span></div><div class="stat-pill">Wrong: <span>' + (t - sc) + '</span></div><div class="stat-pill">Score: <span>' + p + '%</span></div>';
+}
+
+document.getElementById('startBtn').addEventListener('click', start);
+document.getElementById('nextBtn').addEventListener('click', () => {
+  cur++;
+  cur >= phrases.length ? endGame() : render();
+});
+document.getElementById('replayBtn').addEventListener('click', () => show('intro'));
+
+show('intro');
+</script>
+</body>
+</html>

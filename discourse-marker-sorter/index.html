@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discourse Marker Sorter</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0d14 0%, #1a1f2e 100%);
+            font-family: 'DM Sans', sans-serif;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* Setup Screen */
+        .setup-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            text-align: center;
+        }
+
+        .setup-screen h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #f0b429;
+            letter-spacing: -1px;
+        }
+
+        .setup-screen p {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            max-width: 600px;
+        }
+
+        .glass-button {
+            background: rgba(240, 180, 41, 0.15);
+            border: 2px solid #f0b429;
+            color: #f0b429;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .glass-button:hover {
+            background: rgba(240, 180, 41, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .score-bar {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 180, 41, 0.3);
+            border-radius: 16px;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a0a0a0;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f0b429;
+        }
+
+        .marker-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(62, 207, 207, 0.4);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .marker-card h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .marker-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: #3ecfcf;
+            font-weight: 700;
+            word-wrap: break-word;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .category-button {
+            padding: 16px 20px;
+            border: 2px solid;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .category-button:hover:not(:disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .addition {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+
+        .addition:hover {
+            background: rgba(96, 165, 250, 0.2);
+        }
+
+        .contrast {
+            border-color: #f472b6;
+            color: #f472b6;
+        }
+
+        .contrast:hover {
+            background: rgba(244, 114, 182, 0.2);
+        }
+
+        .cause_effect {
+            border-color: #34d399;
+            color: #34d399;
+        }
+
+        .cause_effect:hover {
+            background: rgba(52, 211, 153, 0.2);
+        }
+
+        .emphasis {
+            border-color: #f0b429;
+            color: #f0b429;
+        }
+
+        .emphasis:hover {
+            background: rgba(240, 180, 41, 0.2);
+        }
+
+        .example {
+            border-color: #a78bfa;
+            color: #a78bfa;
+        }
+
+        .example:hover {
+            background: rgba(167, 139, 250, 0.2);
+        }
+
+        .feedback {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .feedback.correct {
+            border-left-color: #34d399;
+            color: #34d399;
+        }
+
+        .feedback.incorrect {
+            border-left-color: #f472b6;
+            color: #f472b6;
+        }
+
+        .feedback-text {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .next-button {
+            display: none;
+            margin-top: 30px;
+            padding: 14px 40px;
+            background: rgba(62, 207, 207, 0.15);
+            border: 2px solid #3ecfcf;
+            color: #3ecfcf;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            align-self: center;
+        }
+
+        .next-button:hover {
+            background: rgba(62, 207, 207, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* End Screen */
+        .end-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            text-align: center;
+        }
+
+        .end-screen h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #f0b429;
+        }
+
+        .final-score {
+            font-size: 5rem;
+            font-weight: 700;
+            color: #3ecfcf;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .end-message {
+            font-size: 1.3rem;
+            color: #a0a0a0;
+            max-width: 500px;
+            line-height: 1.8;
+        }
+
+        .restart-button {
+            padding: 16px 50px;
+            background: rgba(240, 180, 41, 0.15);
+            border: 2px solid #f0b429;
+            color: #f0b429;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover {
+            background: rgba(240, 180, 41, 0.25);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .setup-screen h1 {
+                font-size: 2.5rem;
+            }
+
+            .marker-text {
+                font-size: 2.5rem;
+            }
+
+            .button-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .final-score {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setupScreen">
+            <div>
+                <h1>Discourse Marker Sorter</h1>
+                <p>Identify the function of linking words and phrases in argument structure.</p>
+            </div>
+            <button class="glass-button" onclick="startGame()">Start Game</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
+            <div class="score-bar">
+                <span class="score-label">Score</span>
+                <span class="score-value"><span id="currentScore">0</span> / 22</span>
+            </div>
+
+            <div class="marker-card">
+                <h2>What function does this marker serve?</h2>
+                <div class="marker-text" id="markerText">furthermore</div>
+            </div>
+
+            <div class="button-grid" id="buttonGrid"></div>
+
+            <div class="feedback" id="feedback">
+                <div class="feedback-text" id="feedbackText"></div>
+            </div>
+
+            <button class="next-button" id="nextButton" onclick="nextQuestion()">Next Question</button>
+        </div>
+
+        <!-- End Screen -->
+        <div class="end-screen" id="endScreen">
+            <h2>Game Complete!</h2>
+            <div class="final-score" id="finalScore">22/22</div>
+            <div class="end-message" id="endMessage">Excellent! You've mastered discourse markers and their functions in argument structure.</div>
+            <button class="restart-button" onclick="location.reload()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const MARKERS = [
+            {m:"furthermore",cat:"addition",e:"'Furthermore' means 'in addition to this' — it adds another supporting point."},
+            {m:"however",cat:"contrast",e:"'However' introduces a contrasting idea or a counterpoint. It signals that a 'but' is coming."},
+            {m:"therefore",cat:"cause_effect",e:"'Therefore' introduces a result or conclusion — it follows logically from what came before."},
+            {m:"above all",cat:"emphasis",e:"'Above all' stresses that what follows is the most important point in the argument."},
+            {m:"for instance",cat:"example",e:"'For instance' introduces a specific illustration or case to support the general point."},
+            {m:"in addition",cat:"addition",e:"'In addition' signals that another point is being added to the list of arguments."},
+            {m:"nevertheless",cat:"contrast",e:"'Nevertheless' means 'despite this' — it concedes a point but then continues with the argument."},
+            {m:"as a result",cat:"cause_effect",e:"'As a result' shows a consequence — what happened because of what was described before."},
+            {m:"indeed",cat:"emphasis",e:"'Indeed' strengthens and affirms the point just made — it says 'yes, and more strongly'."},
+            {m:"for example",cat:"example",e:"'For example' introduces a specific case that illustrates the general claim."},
+            {m:"moreover",cat:"addition",e:"'Moreover' adds a point that is even stronger or more significant than the previous one."},
+            {m:"on the other hand",cat:"contrast",e:"'On the other hand' introduces the opposite perspective or a counterargument."},
+            {m:"consequently",cat:"cause_effect",e:"'Consequently' shows a logical consequence — 'this led to that'."},
+            {m:"crucially",cat:"emphasis",e:"'Crucially' signals that what follows is the most significant or deciding point."},
+            {m:"such as",cat:"example",e:"'Such as' introduces specific examples within a general category."},
+            {m:"in contrast",cat:"contrast",e:"'In contrast' directly compares two things by showing how they differ."},
+            {m:"as a consequence",cat:"cause_effect",e:"'As a consequence' introduces a result — the effect of the cause just mentioned."},
+            {m:"most importantly",cat:"emphasis",e:"'Most importantly' ranks what follows as the top priority in the argument."},
+            {m:"to illustrate",cat:"example",e:"'To illustrate' signals an example is coming to make an abstract point concrete."},
+            {m:"similarly",cat:"addition",e:"'Similarly' adds a parallel point — another thing that is alike in the same way."},
+            {m:"although",cat:"contrast",e:"'Although' introduces a concession or contrasting clause — 'even though this, still that'."},
+            {m:"in particular",cat:"example",e:"'In particular' highlights a specific example or case within a broader category."},
+        ];
+
+        let score = 0;
+        let currentIndex = 0;
+        let answered = false;
+
+        function startGame() {
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'flex';
+            shuffleArray(MARKERS);
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const current = MARKERS[currentIndex];
+            document.getElementById('markerText').textContent = current.m;
+            document.getElementById('currentScore').textContent = score;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('nextButton').style.display = 'none';
+            answered = false;
+            renderButtons();
+        }
+
+        function renderButtons() {
+            const grid = document.getElementById('buttonGrid');
+            grid.innerHTML = '';
+            const categories = ['addition', 'contrast', 'cause_effect', 'emphasis', 'example'];
+            const categoryLabels = {
+                'addition': 'Addition',
+                'contrast': 'Contrast',
+                'cause_effect': 'Cause & Effect',
+                'emphasis': 'Emphasis',
+                'example': 'Example'
+            };
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `category-button ${cat}`;
+                btn.textContent = categoryLabels[cat];
+                btn.onclick = () => selectCategory(cat);
+                btn.disabled = answered;
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectCategory(selected) {
+            if (answered) return;
+            answered = true;
+
+            const current = MARKERS[currentIndex];
+            const isCorrect = selected === current.cat;
+
+            const feedback = document.getElementById('feedback');
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.style.display = 'block';
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('feedbackText').textContent = '✓ Correct! ' + current.e;
+            } else {
+                document.getElementById('feedbackText').textContent = '✗ Incorrect. ' + current.e;
+            }
+
+            // Disable all buttons
+            document.querySelectorAll('.category-button').forEach(btn => btn.disabled = true);
+            document.getElementById('nextButton').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < MARKERS.length) {
+                showQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('endScreen').style.display = 'flex';
+            document.getElementById('finalScore').textContent = `${score}/22`;
+
+            let message = '';
+            if (score === 22) {
+                message = 'Perfect score! You\'ve completely mastered discourse markers and their functions in argument structure.';
+            } else if (score >= 19) {
+                message = 'Excellent! You have a strong grasp of discourse markers and how they structure arguments.';
+            } else if (score >= 15) {
+                message = 'Good work! You understand most discourse marker functions. Review the ones you missed.';
+            } else if (score >= 11) {
+                message = 'You\'re making progress! Keep practicing to solidify your understanding of linking words.';
+            } else {
+                message = 'Keep practicing! Discourse markers are essential to IGCSE writing. Try again.';
+            }
+
+            document.getElementById('endMessage').textContent = message;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+    </script>
+</body>
+</html>

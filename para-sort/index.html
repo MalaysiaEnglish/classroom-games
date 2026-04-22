@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para-Sort</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0d14 0%, #0f1219 100%);
+            color: #e0e0e0;
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 2.5em;
+            color: #f0b429;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #a0a0a0;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Intro Screen */
+        .intro-content {
+            background: rgba(17, 21, 32, 0.8);
+            border: 1px solid rgba(240, 180, 41, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .intro-content h2 {
+            color: #f0b429;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-family: 'Unbounded', sans-serif;
+        }
+
+        .intro-content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #b0b0b0;
+        }
+
+        .intro-content ul {
+            text-align: left;
+            display: inline-block;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .intro-content li {
+            margin-bottom: 8px;
+            color: #a0a0a0;
+        }
+
+        .intro-content strong {
+            color: #3ecfcf;
+        }
+
+        /* Game Screen */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .instructions {
+            background: rgba(62, 207, 207, 0.1);
+            border: 1px solid rgba(62, 207, 207, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            color: #a0a0a0;
+            font-size: 0.95em;
+        }
+
+        .instructions strong {
+            color: #3ecfcf;
+        }
+
+        .sortable-area {
+            background: rgba(17, 21, 32, 0.5);
+            border: 2px dashed rgba(62, 207, 207, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sortable-area.drag-over {
+            background: rgba(62, 207, 207, 0.1);
+            border-color: rgba(62, 207, 207, 0.6);
+        }
+
+        .paragraph-card {
+            background: rgba(17, 21, 32, 0.8);
+            border: 2px solid rgba(160, 160, 160, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: move;
+            transition: all 0.2s ease;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            user-select: none;
+        }
+
+        .paragraph-card:hover {
+            background: rgba(17, 21, 32, 0.95);
+            border-color: rgba(160, 160, 160, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .paragraph-card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .drag-handle {
+            color: #f0b429;
+            font-size: 1.3em;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .paragraph-content {
+            flex: 1;
+        }
+
+        .paragraph-number {
+            font-size: 0.85em;
+            color: #3ecfcf;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .paragraph-text {
+            color: #d0d0d0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f0b429 0%, #e8a620 100%);
+            color: #0a0d14;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 180, 41, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(62, 207, 207, 0.2);
+            border: 2px solid #3ecfcf;
+            color: #3ecfcf;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(62, 207, 207, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Results Screen */
+        .results-container {
+            text-align: center;
+        }
+
+        .score-display {
+            background: rgba(17, 21, 32, 0.8);
+            border: 2px solid #f0b429;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .score-text {
+            font-size: 3em;
+            color: #f0b429;
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .score-subtext {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: rgba(17, 21, 32, 0.6);
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .result-card.correct {
+            border-left-color: #3ecfcf;
+            background: rgba(62, 207, 207, 0.1);
+        }
+
+        .result-card.incorrect {
+            border-left-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .result-icon {
+            font-weight: 600;
+            font-size: 1.3em;
+        }
+
+        .result-card.correct .result-icon {
+            color: #3ecfcf;
+        }
+
+        .result-card.incorrect .result-icon {
+            color: #ff6b6b;
+        }
+
+        .result-label {
+            color: #d0d0d0;
+            font-weight: 600;
+        }
+
+        .result-text {
+            color: #d0d0d0;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .result-explanation {
+            color: #a0a0a0;
+            font-size: 0.9em;
+            line-height: 1.5;
+            padding-left: 30px;
+            border-left: 2px solid rgba(160, 160, 160, 0.3);
+        }
+
+        /* Color coding for results */
+        .color-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .intro-content {
+                padding: 25px;
+            }
+
+            .sortable-area {
+                min-height: 400px;
+                padding: 15px;
+            }
+
+            .paragraph-card {
+                padding: 12px;
+            }
+
+            .score-text {
+                font-size: 2.2em;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .paragraph-text {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Para-Sort</h1>
+            <p class="subtitle">IGCSE Reading & Writing — Sequencing & Structure</p>
+        </div>
+
+        <!-- Intro Screen -->
+        <div class="screen active" id="introScreen">
+            <div class="intro-content">
+                <h2>Understand Text Structure</h2>
+                <p>News reports, articles, and stories are <strong>organised in a specific order</strong> for a reason.</p>
+                <p>Sometimes the paragraphs get mixed up. Your job is to <strong>put them back in the correct order</strong>.</p>
+
+                <p style="margin-top: 25px;"><strong>How it works:</strong></p>
+                <ul>
+                    <li><strong>Drag</strong> each paragraph card to reorder them</li>
+                    <li>Think about the <strong>logical flow</strong> — what would come first, second, third?</li>
+                    <li>News articles typically: Opening → Background → Complications → Resolution → Response → Expert comment</li>
+                    <li>When ready, submit to check your answer</li>
+                </ul>
+
+                <p style="margin-top: 25px;">You'll get a score based on how many paragraphs are in the right position.</p>
+
+                <div class="button-group" style="margin-top: 30px;">
+                    <button class="btn-primary" onclick="startGame()">Start Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen" id="gameScreen">
+            <div class="game-container">
+                <div class="instructions">
+                    <strong>Drag the paragraph cards to put them in the correct order.</strong> Think about the logical structure of the text: what comes first, what comes next, what wraps it up?
+                </div>
+
+                <div class="sortable-area" id="sortableArea"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToIntro()">Back</button>
+                    <button class="btn-primary" onclick="submitOrder()">Submit Order</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="screen" id="resultsScreen">
+            <div class="results-container">
+                <div class="score-display">
+                    <div class="score-text" id="finalScore"></div>
+                    <div class="score-subtext">correct position(s) out of 6</div>
+                </div>
+
+                <h2 style="text-align: left; color: #f0b429; margin-bottom: 20px; font-family: 'Unbounded', sans-serif;">Correct Order:</h2>
+
+                <div class="results-list" id="resultsList"></div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="startGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PARAGRAPHS = [
+            {
+                id: 1,
+                text: "Eight Swiss potholers trapped in a cave in eastern France by rising water were found alive yesterday. Rescue teams were preparing to work through the night to bring them to the surface.",
+                label: "Opening / Summary",
+                explanation: "This is the OPENING — a news report always begins with a summary of the key facts: who, what, when. The 'Five Ws' structure means the most newsworthy fact comes first."
+            },
+            {
+                id: 2,
+                text: "The cave, known as Bief-du-Paraud, runs for 380 metres but only sits about seven metres below the surface. It is normally considered a beginner-level site for potholers. The expedition had been part of a project for the students to develop their ability to face challenges.",
+                label: "Background",
+                explanation: "This is BACKGROUND — after the opening summary, the reporter gives context about the location and why the group was there. This paragraph answers 'where?' and 'why?' in more detail."
+            },
+            {
+                id: 3,
+                text: "Inexperienced and poorly equipped, with one member of the group being partially blind, the students were initially given little chance of survival. Heavy rain in recent weeks had made the area particularly dangerous.",
+                label: "Complication",
+                explanation: "This is the COMPLICATION — the factors that made survival unlikely. News reports build the drama by explaining what made the situation so serious before revealing the outcome."
+            },
+            {
+                id: 4,
+                text: "Hope for the survival of the three women and five men was fading when they were found before midday by a diver who swam through a narrow passage to reach a chimney where they had taken refuge, crouched 70 metres into the cave above the water level.",
+                label: "Resolution",
+                explanation: "This is the RESOLUTION — the moment of rescue. The dramatic detail of the diver swimming through a narrow passage builds to the relief of finding the group alive."
+            },
+            {
+                id: 5,
+                text: "Distraught relatives who had gathered at the site gave a cheer when news of their discovery was announced. The group was expected to be brought out through a hole being drilled into the chimney where they had taken refuge.",
+                label: "Human response",
+                explanation: "This is the HUMAN RESPONSE — news reports include the emotional reaction of those affected. This paragraph provides the human dimension after the factual rescue account."
+            },
+            {
+                id: 6,
+                text: "Local potholing experts described the expedition as foolhardy, given the dangerous prevailing conditions. Rescuers were pumping water from the cave to avert further flood danger from heavy rains over the previous 24 hours.",
+                label: "Expert comment / future",
+                explanation: "This is the CLOSING — expert opinion and a look ahead. News reports often end with a quote from an expert and what happens next. This provides closure and context."
+            },
+        ];
+
+        let currentOrder = [];
+        let draggedElement = null;
+
+        function startGame() {
+            currentOrder = shuffleParagraphs([...PARAGRAPHS]);
+            renderGame();
+            switchScreen('gameScreen');
+        }
+
+        function shuffleParagraphs(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function goToIntro() {
+            switchScreen('introScreen');
+        }
+
+        function renderGame() {
+            const area = document.getElementById('sortableArea');
+            area.innerHTML = '';
+
+            currentOrder.forEach((para, index) => {
+                const card = document.createElement('div');
+                card.className = 'paragraph-card';
+                card.draggable = true;
+                card.dataset.index = index;
+                card.dataset.originalId = para.id;
+
+                const truncatedText = para.text.substring(0, 150) + (para.text.length > 150 ? '...' : '');
+
+                card.innerHTML = `
+                    <div class="drag-handle">⠿</div>
+                    <div class="paragraph-content">
+                        <div class="paragraph-number">Position ${index + 1}</div>
+                        <div class="paragraph-text">${truncatedText}</div>
+                    </div>
+                `;
+
+                card.addEventListener('dragstart', dragStart);
+                card.addEventListener('dragend', dragEnd);
+                card.addEventListener('dragover', dragOver);
+                card.addEventListener('drop', drop);
+                card.addEventListener('dragenter', dragEnter);
+                card.addEventListener('dragleave', dragLeave);
+
+                area.appendChild(card);
+            });
+
+            document.getElementById('sortableArea').addEventListener('dragover', dragOver);
+            document.getElementById('sortableArea').addEventListener('drop', drop);
+            document.getElementById('sortableArea').addEventListener('dragenter', dragEnter);
+            document.getElementById('sortableArea').addEventListener('dragleave', dragLeave);
+        }
+
+        function dragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function dragEnd(e) {
+            this.classList.remove('dragging');
+            document.getElementById('sortableArea').classList.remove('drag-over');
+        }
+
+        function dragEnter(e) {
+            document.getElementById('sortableArea').classList.add('drag-over');
+        }
+
+        function dragLeave(e) {
+            if (e.target === document.getElementById('sortableArea')) {
+                document.getElementById('sortableArea').classList.remove('drag-over');
+            }
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const afterElement = getDragAfterElement(document.getElementById('sortableArea'), e.clientY);
+            const area = document.getElementById('sortableArea');
+
+            if (afterElement == null) {
+                area.appendChild(draggedElement);
+            } else {
+                area.insertBefore(draggedElement, afterElement);
+            }
+        }
+
+        function drop(e) {
+            e.preventDefault();
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.paragraph-card:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function submitOrder() {
+            const cards = document.querySelectorAll('.paragraph-card');
+            const submittedOrder = Array.from(cards).map(card => {
+                const id = parseInt(card.dataset.originalId);
+                return PARAGRAPHS.find(p => p.id === id);
+            });
+
+            const score = countCorrectPositions(submittedOrder);
+            displayResults(score, submittedOrder);
+        }
+
+        function countCorrectPositions(submittedOrder) {
+            let correct = 0;
+            submittedOrder.forEach((para, index) => {
+                if (para.id === PARAGRAPHS[index].id) {
+                    correct++;
+                }
+            });
+            return correct;
+        }
+
+        function displayResults(score, submittedOrder) {
+            document.getElementById('finalScore').textContent = score;
+
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+
+            PARAGRAPHS.forEach((correctPara, index) => {
+                const submittedPara = submittedOrder[index];
+                const isCorrect = correctPara.id === submittedPara.id;
+
+                const card = document.createElement('div');
+                card.className = `result-card ${isCorrect ? 'correct' : 'incorrect'}`;
+
+                const icon = isCorrect ? '✓' : '✗';
+                const statusText = isCorrect ? 'Correct' : `Incorrect — you placed "${submittedPara.label}" here`;
+
+                card.innerHTML = `
+                    <div class="result-header">
+                        <span class="result-icon">${icon}</span>
+                        <span class="result-label">Position ${index + 1}: ${correctPara.label}</span>
+                    </div>
+                    <div class="result-text">${correctPara.text}</div>
+                    <div class="result-explanation"><strong>${statusText}</strong><br>${correctPara.explanation}</div>
+                `;
+
+                resultsList.appendChild(card);
+            });
+
+            switchScreen('resultsScreen');
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

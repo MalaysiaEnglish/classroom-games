@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argument Structure Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #0a0d14 0%, #1a1f2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(26, 31, 46, 0.6);
+            border: 1px solid rgba(62, 207, 207, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #f0b429;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            font-size: 1rem;
+        }
+
+        /* Intro Screen */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .intro-content {
+            text-align: center;
+        }
+
+        .intro-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .instructions {
+            background: rgba(62, 207, 207, 0.1);
+            border: 1px solid rgba(62, 207, 207, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #3ecfcf;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Game Screen */
+        .topic-header {
+            font-size: 1.3rem;
+            color: #3ecfcf;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(62, 207, 207, 0.3);
+        }
+
+        .round-info {
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #f0b429;
+        }
+
+        .sentence-bank {
+            margin-bottom: 40px;
+        }
+
+        .bank-label {
+            font-size: 0.9rem;
+            color: #f0b429;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            min-height: 60px;
+            align-content: flex-start;
+        }
+
+        .sentence-chip {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid #3ecfcf;
+            border-radius: 8px;
+            padding: 12px 16px;
+            cursor: grab;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            white-space: normal;
+            max-width: 300px;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .sentence-chip:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #f0b429;
+        }
+
+        .sentence-chip.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .drop-zones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .drop-zone-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .zone-label {
+            font-size: 0.8rem;
+            color: #f0b429;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .drop-zone {
+            border: 2px dashed rgba(240, 180, 41, 0.4);
+            border-radius: 12px;
+            min-height: 80px;
+            padding: 10px;
+            background: rgba(62, 207, 207, 0.05);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drop-zone.hover {
+            border-color: #3ecfcf;
+            background: rgba(62, 207, 207, 0.15);
+        }
+
+        .drop-zone.filled {
+            border: 2px solid rgba(240, 180, 41, 0.6);
+        }
+
+        .dropped-sentence {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid #3ecfcf;
+            border-radius: 8px;
+            padding: 12px 16px;
+            cursor: grab;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            user-select: none;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .dropped-sentence:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .drop-zone.correct {
+            border: 2px solid #34d399;
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .drop-zone.incorrect {
+            border: 2px solid #f472b6;
+            background: rgba(244, 114, 182, 0.1);
+        }
+
+        .correction-label {
+            font-size: 0.8rem;
+            color: #f472b6;
+            margin-top: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f0b429 0%, #ffc857 100%);
+            color: #0a0d14;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(240, 180, 41, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(62, 207, 207, 0.2);
+            color: #3ecfcf;
+            border: 2px solid #3ecfcf;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(62, 207, 207, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Score Screen */
+        .score-screen {
+            text-align: center;
+        }
+
+        .score-display {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #f0b429;
+            margin: 30px 0;
+        }
+
+        .score-message {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .total-score {
+            background: rgba(62, 207, 207, 0.1);
+            border: 1px solid rgba(62, 207, 207, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .total-score h2 {
+            font-size: 1.2rem;
+            color: #3ecfcf;
+            margin-bottom: 15px;
+        }
+
+        .total-score-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #f0b429;
+        }
+
+        /* End Screen */
+        .end-message {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .medal {
+            font-size: 3rem;
+            margin: 20px 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- INTRO SCREEN -->
+        <div id="introScreen" class="screen active">
+            <h1>Argument Structure Builder</h1>
+            <p class="subtitle">Master the Structure of a Formal Argument</p>
+            <div class="intro-content">
+                <p>In this game, you'll build three arguments from scratch. Each argument has a specific structure that makes it persuasive and effective.</p>
+                <div class="instructions">
+                    <h3>How to Play</h3>
+                    <ol>
+                        <li><strong>Read the scrambled sentences</strong> at the top of each round</li>
+                        <li><strong>Drag each sentence</strong> to the position where it belongs in the argument</li>
+                        <li><strong>Think about structure:</strong> What makes a strong opening? How do you build your case? When should you address the other side?</li>
+                        <li><strong>Click "Check My Answer"</strong> to see which sentences are in the right place</li>
+                        <li><strong>Learn and progress</strong> through 3 different arguments</li>
+                    </ol>
+                </div>
+                <p style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.7); margin-top: 20px;">You can drag sentences back to the bank or to different slots to reorganise your answer.</p>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="startGame()">Start Game</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="gameScreen" class="screen">
+            <div class="round-info" id="roundInfo"></div>
+            <h1>Argument Structure Builder</h1>
+            <div class="topic-header" id="topicHeader"></div>
+
+            <div class="sentence-bank">
+                <div class="bank-label">↓ Drag sentences to the correct position ↓</div>
+                <div class="chips-container" id="sentenceBank"></div>
+            </div>
+
+            <div class="drop-zones" id="dropZones"></div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="checkAnswer()">Check My Answer</button>
+                <button class="btn-secondary hidden" id="nextRoundBtn" onclick="nextRound()">Next Round</button>
+            </div>
+        </div>
+
+        <!-- SCORE SCREEN -->
+        <div id="scoreScreen" class="screen">
+            <h1>Round Complete</h1>
+            <p class="score-message">Great work! Let's see how you did:</p>
+            <div class="score-display" id="scoreDisplay"></div>
+            <div class="button-group">
+                <button class="btn-primary" id="nextRoundBtnScore" onclick="nextRound()">Next Round</button>
+            </div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div id="endScreen" class="screen">
+            <h1>Game Complete!</h1>
+            <div class="total-score">
+                <h2>Your Final Score</h2>
+                <div class="total-score-value" id="totalScore"></div>
+            </div>
+            <div id="endMedal" class="medal"></div>
+            <p class="end-message" id="endMessage"></p>
+            <div class="button-group">
+                <button class="btn-primary" onclick="resetGame()">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game Data
+        const argumentData = [
+            {
+                topic: "Argument: School Uniform Should Be Compulsory",
+                sentences: [
+                    {text: "Every morning, thousands of students waste precious time — and their parents' money — on choosing what to wear.", slot: "Hook / Opening Claim"},
+                    {text: "Uniform creates a sense of belonging and removes visible markers of social inequality between students.", slot: "Point 1"},
+                    {text: "Research consistently shows that schools with uniform policies report higher levels of student focus and lower rates of bullying.", slot: "Point 2"},
+                    {text: "Critics argue that uniform stifles individual expression and student identity.", slot: "Counter-argument"},
+                    {text: "However, schools provide ample opportunity for self-expression through art, sport and extracurricular activities — uniform simply removes one unnecessary distraction.", slot: "Refutation"},
+                    {text: "A uniform policy is not about control; it is about creating a focused, fair environment where every student can succeed.", slot: "Strong Close"}
+                ]
+            },
+            {
+                topic: "Argument: The Minimum Age for Social Media Should Be 16",
+                sentences: [
+                    {text: "A twelve-year-old with a smartphone and an unmonitored social media account is not free — they are exposed.", slot: "Hook / Opening Claim"},
+                    {text: "Unrestricted access to social media at a young age has been directly linked to rising levels of anxiety, depression and poor sleep among teenagers.", slot: "Point 1"},
+                    {text: "A higher minimum age would give children the time to develop the critical thinking skills needed to navigate online environments safely.", slot: "Point 2"},
+                    {text: "Some argue that restricting social media is an infringement of young people's right to connect and communicate.", slot: "Counter-argument"},
+                    {text: "Yet no one argues that children should have unrestricted access to other adult spaces. The internet is no different — it requires appropriate safeguarding.", slot: "Refutation"},
+                    {text: "Raising the minimum age is not about silencing young voices. It is about ensuring that when they speak, they are protected.", slot: "Strong Close"}
+                ]
+            },
+            {
+                topic: "Argument: Public Transport Should Be Free for Under-18s",
+                sentences: [
+                    {text: "A teenager who cannot afford the bus fare is a teenager who cannot get to school, to work, or to opportunity.", slot: "Hook / Opening Claim"},
+                    {text: "Free transport for young people reduces inequality, ensuring that where you live does not determine what you can access.", slot: "Point 1"},
+                    {text: "Cities that have trialled free youth transport have seen measurable improvements in school attendance and reductions in car usage.", slot: "Point 2"},
+                    {text: "Opponents claim that free transport is too expensive and will drain public resources.", slot: "Counter-argument"},
+                    {text: "However, the long-term cost of young people excluded from education and employment far outweighs the investment in affordable, accessible transport.", slot: "Refutation"},
+                    {text: "A society that invests in the movement of its young people is a society that invests in its own future.", slot: "Strong Close"}
+                ]
+            }
+        ];
+
+        const slotOrder = ["Hook / Opening Claim", "Point 1", "Point 2", "Counter-argument", "Refutation", "Strong Close"];
+
+        // Game State
+        let currentRound = 0;
+        let totalScore = 0;
+        let draggedElement = null;
+        let checkedRound = false;
+
+        // Shuffle function
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Initialize game
+        function startGame() {
+            currentRound = 0;
+            totalScore = 0;
+            checkedRound = false;
+            showScreen('gameScreen');
+            renderRound();
+        }
+
+        // Render current round
+        function renderRound() {
+            checkedRound = false;
+            const data = argumentData[currentRound];
+            const shuffled = shuffle(data.sentences);
+
+            // Update header
+            document.getElementById('roundInfo').textContent = `Round ${currentRound + 1} of 3`;
+            document.getElementById('topicHeader').textContent = data.topic;
+
+            // Render sentence bank
+            const bankContainer = document.getElementById('sentenceBank');
+            bankContainer.innerHTML = '';
+            shuffled.forEach((sentence, index) => {
+                const chip = document.createElement('div');
+                chip.className = 'sentence-chip';
+                chip.draggable = true;
+                chip.textContent = sentence.text;
+                chip.dataset.correctSlot = sentence.slot;
+                chip.dataset.index = index;
+
+                chip.addEventListener('dragstart', (e) => {
+                    draggedElement = chip;
+                    chip.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                chip.addEventListener('dragend', () => {
+                    chip.classList.remove('dragging');
+                    draggedElement = null;
+                });
+
+                bankContainer.appendChild(chip);
+            });
+
+            // Render drop zones
+            const zonesContainer = document.getElementById('dropZones');
+            zonesContainer.innerHTML = '';
+            slotOrder.forEach(slot => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'drop-zone-wrapper';
+
+                const label = document.createElement('div');
+                label.className = 'zone-label';
+                label.textContent = slot;
+
+                const zone = document.createElement('div');
+                zone.className = 'drop-zone';
+                zone.dataset.slot = slot;
+
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    zone.classList.add('hover');
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.classList.remove('hover');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('hover');
+
+                    if (draggedElement) {
+                        // Remove from previous zone
+                        const prevZone = draggedElement.closest('.drop-zone');
+                        if (prevZone) {
+                            prevZone.innerHTML = '';
+                            prevZone.classList.remove('filled');
+                        }
+
+                        // Add to new zone
+                        zone.innerHTML = '';
+                        const dropped = document.createElement('div');
+                        dropped.className = 'dropped-sentence';
+                        dropped.textContent = draggedElement.textContent;
+                        dropped.draggable = true;
+                        dropped.dataset.correctSlot = draggedElement.dataset.correctSlot;
+
+                        dropped.addEventListener('dragstart', (e) => {
+                            draggedElement = dropped;
+                            dropped.classList.add('dragging');
+                            e.dataTransfer.effectAllowed = 'move';
+                        });
+
+                        dropped.addEventListener('dragend', () => {
+                            dropped.classList.remove('dragging');
+                            draggedElement = null;
+                        });
+
+                        zone.appendChild(dropped);
+                        zone.classList.add('filled');
+
+                        // Remove from bank
+                        draggedElement.remove();
+                    }
+                });
+
+                wrapper.appendChild(label);
+                wrapper.appendChild(zone);
+                zonesContainer.appendChild(wrapper);
+            });
+
+            document.getElementById('nextRoundBtn').classList.add('hidden');
+        }
+
+        // Check answer
+        function checkAnswer() {
+            if (checkedRound) return;
+            checkedRound = true;
+
+            let correct = 0;
+            const zones = document.querySelectorAll('.drop-zone');
+
+            zones.forEach(zone => {
+                const slot = zone.dataset.slot;
+                const dropped = zone.querySelector('.dropped-sentence');
+
+                if (dropped && dropped.dataset.correctSlot === slot) {
+                    zone.classList.add('correct');
+                    zone.classList.remove('incorrect');
+                    correct++;
+                } else if (dropped) {
+                    zone.classList.add('incorrect');
+                    zone.classList.remove('correct');
+                    const correction = document.createElement('div');
+                    correction.className = 'correction-label';
+                    correction.textContent = `This belongs in: ${dropped.dataset.correctSlot}`;
+                    zone.appendChild(correction);
+                } else {
+                    zone.classList.add('incorrect');
+                    zone.classList.remove('correct');
+                }
+            });
+
+            // Show next round button
+            document.getElementById('nextRoundBtn').classList.remove('hidden');
+
+            // Store score and show score screen
+            totalScore += correct;
+            setTimeout(() => {
+                showScoreScreen(correct);
+            }, 500);
+        }
+
+        // Show score screen
+        function showScoreScreen(roundScore) {
+            showScreen('scoreScreen');
+            document.getElementById('scoreDisplay').innerHTML = `<span style="color: #34d399;">${roundScore}</span> / 6`;
+        }
+
+        // Next round
+        function nextRound() {
+            currentRound++;
+            if (currentRound < 3) {
+                showScreen('gameScreen');
+                renderRound();
+            } else {
+                showEndScreen();
+            }
+        }
+
+        // Show end screen
+        function showEndScreen() {
+            showScreen('endScreen');
+            document.getElementById('totalScore').textContent = `${totalScore} / 18`;
+
+            let medal = '';
+            let message = '';
+
+            if (totalScore === 18) {
+                medal = '🏆';
+                message = 'Perfect score! You have mastered the structure of a formal argument. You understand exactly how to hook a reader, build your case, and clinch your argument with a powerful close.';
+            } else if (totalScore >= 15) {
+                medal = '🥇';
+                message = 'Excellent work! You have a strong grasp of argument structure and know how to build a persuasive case.';
+            } else if (totalScore >= 12) {
+                medal = '🥈';
+                message = 'Good effort! You understand the key elements of argument structure. Review the patterns and try again to improve.';
+            } else if (totalScore >= 9) {
+                medal = '🥉';
+                message = 'You\'re getting there! Argument structure takes practice. Each element serves a purpose — keep working on recognizing where each part fits.';
+            } else {
+                medal = '📚';
+                message = 'Keep practising! Understanding argument structure is essential for strong writing. Play again and focus on how each sentence moves the argument forward.';
+            }
+
+            document.getElementById('endMedal').textContent = medal;
+            document.getElementById('endMessage').textContent = message;
+        }
+
+        // Reset game
+        function resetGame() {
+            currentRound = 0;
+            totalScore = 0;
+            checkedRound = false;
+            showScreen('introScreen');
+        }
+
+        // Show screen
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
