@@ -1303,8 +1303,8 @@ window.CUSTOM_CONTENT = {
     { text: "An epilogue is an introduction placed before the first chapter that gives the reader background information about the setting and characters.", correct: false, topic: "L8/U9/L6 Learning things", level: 8, unit: 9, lesson: 6 },
 
     // ── S9/U1 ──
-    { text: "The exclamation mark in 'Welcome to your new life!' conveys excitement and a sense of dramatic announcement.",                                           correct: true,  topic: "L9/U1/L2 Punctuation for Effect", level: 9, unit: 1, lesson: 2 },
-    { text: "The exclamation mark in 'Welcome to your new life!' shows that the speaker is asking a question.",                                                      correct: false, topic: "L9/U1/L2 Punctuation for Effect", level: 9, unit: 1, lesson: 2 },
+    { text: "The exclamation mark in 'Welcome to . . . The Test!' conveys excitement and a sense of dramatic announcement.",                                          correct: true,  topic: "L9/U1/L2 Punctuation for Effect", level: 9, unit: 1, lesson: 2 },
+    { text: "The exclamation mark in 'Welcome to . . . The Test!' shows that the speaker is asking a question.",                                                     correct: false, topic: "L9/U1/L2 Punctuation for Effect", level: 9, unit: 1, lesson: 2 },
     { text: "The ellipsis in 'There was a split second of inaction, and then . . .' creates suspense by pausing before a dramatic moment.",                          correct: true,  topic: "L9/U1/L2 Punctuation for Effect", level: 9, unit: 1, lesson: 2 },
     { text: "The ellipsis in 'There was a split second of inaction, and then . . .' shows that the writer forgot how to finish the sentence.",                       correct: false, topic: "L9/U1/L2 Punctuation for Effect", level: 9, unit: 1, lesson: 2 },
     { text: "The question mark in 'You do know there is no going back, don't you, Louis?' makes The Doorkeeper sound threatening and in control.",                   correct: true,  topic: "L9/U1/L2 Punctuation for Effect", level: 9, unit: 1, lesson: 2 },
