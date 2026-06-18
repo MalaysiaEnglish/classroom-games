@@ -507,7 +507,13 @@
 
 <script>
 // ─── CASE DATA ────────────────────────────────────────────────────────────────
-const CASES = [
+// Select pack via URL parameter ?pack=L6U1 | L9U2 | L9U3  (defaults to L6U1)
+const _packParam = new URLSearchParams(window.location.search).get('pack') || 'L6U1';
+
+const CASE_PACKS = {
+
+// ── L6/U1 — Unsolved Mysteries ────────────────────────────────────────────────
+L6U1: [
   {
     id: "phoenix",
     emoji: "🛸",
@@ -620,7 +626,75 @@ const CASES = [
     ],
     answer: "The case remains <strong>officially unsolved</strong>. The most plausible modern theory is that the captain misread water levels due to a faulty sounding rod, panicked, and ordered everyone into the lifeboat — which then became separated from the ship in rough seas. The seaquake theory is also widely considered. No bodies, no lifeboat and no definitive evidence were ever found."
   }
-];
+], // end L6U1
+
+// ── L9/U2 — Law and Order: The Case of the Missing Masterpiece ────────────────
+L9U2: [
+  {
+    id: "masterpiece",
+    emoji: "🖼️",
+    name: "The Missing Masterpiece",
+    subtitle: "Old Park House Museum",
+    theories: [
+      "The large, unnamed man seen near the painting",
+      "The small, nervous unnamed man — an inside accomplice",
+      "Sir Jasper Ryde himself — an insurance fraud",
+      "A gang of tourists who used the visit as cover",
+      "A museum employee who knew the building's layout"
+    ],
+    clues: [
+      "A valuable painting — a masterpiece — has been stolen from Old Park House museum. The owner, Sir Jasper Ryde, reported the theft to police immediately.",
+      "Sir Jasper was found with a plaster across his balding forehead when the young detectives Dan Robinson, Jeff, Liz and Mickey arrived to investigate.",
+      "Dan plans to use the same methods as Sherlock Holmes — observing small details that others overlook — to work out what happened.",
+      "Sir Jasper told the investigators the thieves wore dark clothes and masks. He could not identify them by appearance alone.",
+      "One of the thieves was very concerned about his hat — a woollen cap sailors sometimes wear. He kept fiddling with it, pulling it down to meet his mask.",
+      "Sir Jasper said the man's voice was 'just ordinary' — no unusual accent or distinctive tone that might identify him.",
+      "'There was something about his hands,' Sir Jasper added — but he struggled to remember exactly what. Dan made a careful note of this.",
+      "A group of tourists had been inside Old Park House at the time of the theft. None were detained or questioned thoroughly at the scene.",
+      "The painting was removed cleanly — no broken glass, no damage to the wall. Whoever took it knew how to handle valuable artwork without leaving obvious signs.",
+      "Dan noticed that the thief who helped Sir Jasper seemed to know the layout of the building — he moved confidently through a corridor that visitors do not normally use.",
+      "Further investigation revealed that the 'small, nervous man' had asked a staff member earlier that day which room the masterpiece was displayed in — claiming to be a journalist.",
+      "Dan deduced the key clue: the sailor's cap, the hands, and the inside knowledge all pointed to one suspect. Using Holmes's method of elimination, he presented his conclusion."
+    ],
+    answer: "<strong>The small, nervous man was the inside accomplice.</strong> He posed as a journalist to locate the painting, then passed the information to his partner — the large man who wore the sailor's cap. The cap clue was key: Sir Jasper noticed the thief fiddling with it to hide a distinctive feature of his face or hair. Dan's Holmesian deductions — following small details others dismissed — cracked the case."
+  }
+], // end L9U2
+
+// ── L9/U3 — The Red-Headed League (Sherlock Holmes) ──────────────────────────
+L9U3: [
+  {
+    id: "redheaded",
+    emoji: "🔴",
+    name: "The Red-Headed League",
+    subtitle: "London, 1890 — Sherlock Holmes",
+    theories: [
+      "It was a genuine charity that simply ran out of money",
+      "The League was created to steal Wilson's savings from his shop",
+      "Vincent Spaulding set it up to keep Wilson away while digging a tunnel to rob the bank",
+      "Duncan Ross was acting alone — a personal obsession with red-haired people",
+      "A rival businessman set it up to ruin Wilson's pawnbroking trade"
+    ],
+    clues: [
+      "Jabez Wilson — a pawnbroker with unusually bright red hair — visited Sherlock Holmes in a state of confusion. He had been paid £4 a week to copy out the Encyclopaedia Britannica, and now the job had suddenly vanished.",
+      "Wilson's assistant, Vincent Spaulding, had spotted the advertisement for the Red-Headed League in a newspaper and enthusiastically encouraged Wilson to apply for the position.",
+      "The League's office was managed by a man called Duncan Ross — himself red-headed — who appeared at the interview along with dozens of other red-haired applicants.",
+      "Wilson worked at the League's office every day from 10am to 2pm for eight weeks. He was told strictly never to leave during those hours, for any reason.",
+      "One morning, Wilson arrived to find the office locked and a small notice pinned to the door: 'The Red-Headed League is dissolved. October 9, 1890.'",
+      "When Holmes visited Wilson's pawn shop, he spent time outside on the pavement — tapping it with his walking stick and examining it carefully before saying a single word.",
+      "Holmes also noticed that Vincent Spaulding spent a great deal of time in the cellar of the shop — supposedly developing photographs. Yet there was no photographic equipment to be seen.",
+      "Holmes investigated further and discovered that the City and Suburban Bank stood directly behind Wilson's pawn shop — separated only by a back yard.",
+      "Scotland Yard confirmed that 'Vincent Spaulding' was in fact John Clay — one of the most dangerous criminals in England, wanted for murder, robbery and fraud.",
+      "Holmes, Watson, Inspector Lestrade and the bank's director Mr Merryweather positioned themselves inside the bank vault after dark to wait.",
+      "At exactly 1:15am, a stone in the vault floor was pushed aside. A hand appeared, then a man pulled himself up through a tunnel into the bank.",
+      "The tunnel ran 50 feet from the cellar of Wilson's pawn shop directly into the bank vault. Clay and his accomplice Archie had spent eight weeks digging it — exactly the length of time the Red-Headed League kept Wilson occupied and away from his shop."
+    ],
+    answer: "<strong>Vincent Spaulding (John Clay) invented the Red-Headed League to keep Jabez Wilson out of his own shop.</strong> While Wilson copied the encyclopaedia each morning, Clay and his accomplice were digging a tunnel from Wilson's cellar into the City and Suburban Bank vault. Holmes deduced this from three clues: Spaulding's suspicious enthusiasm, his unexplained time in the cellar, and the bank directly behind the shop. Holmes set a trap and caught Clay as he emerged through the vault floor. The case demonstrates Holmes's method: 'When you have eliminated the impossible, whatever remains, however improbable, must be the truth.'"
+  }
+] // end L9U3
+
+}; // end CASE_PACKS
+
+const CASES = CASE_PACKS[_packParam] || CASE_PACKS['L6U1'];
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let selectedCaseId = null;
