@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Future Board Game</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+  /* ================================================================
+     GAME-SPECIFIC STYLES — Future Board Game
+     ================================================================ */
+
+  body { padding: 0; }
+
+  /* ── Controls bar ─────────────────────────────── */
+  .controls { border-radius: 0; margin-bottom: 0; }
+
+  /* ── Setup screen ─────────────────────────────── */
+  #setup-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 12px 40px;
+    gap: 20px;
+    min-height: 100vh;
+  }
+
+  .setup-box {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+  }
+
+  .setup-box h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 900;
+    background: linear-gradient(90deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .setup-box .subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    margin-bottom: 20px;
+  }
+
+  .setup-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* Player count buttons */
+  .count-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .count-btn {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-hi);
+    color: var(--text-dim);
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    min-width: unset; padding: 0;
+    transition: all 0.15s;
+  }
+  .count-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    transform: scale(1.1);
+  }
+
+  /* Player name inputs */
+  .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .p-input-row {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border); border-radius: 10px;
+    padding: 8px 12px; transition: border-color 0.2s;
+  }
+  .p-input-row:focus-within { border-color: var(--accent); }
+  .p-dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; }
+  .p-input-row input {
+    border: none; background: transparent;
+    font-size: 0.95rem; color: var(--text); width: 100%; outline: none;
+    font-family: inherit;
+  }
+  .p-input-row input::placeholder { color: var(--text-dim); }
+
+  /* Rules box */
+  .rules-box {
+    background: rgba(0,201,167,0.06);
+    border: 1px solid rgba(0,201,167,0.2);
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 0.85rem; color: var(--text-dim); line-height: 1.75;
+    margin-bottom: 16px;
+  }
+  .rules-box strong { color: var(--accent); }
+
+  /* Exact finish toggle */
+  .option-toggle {
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; user-select: none;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--glass-border); border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .option-toggle:hover { border-color: var(--accent); }
+  .option-toggle input { display: none; }
+  .tog-track {
+    width: 36px; height: 20px; border-radius: 10px;
+    background: var(--glass-hi); border: 1px solid var(--glass-border);
+    position: relative; flex-shrink: 0; transition: background 0.25s;
+  }
+  .tog-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--text-dim); position: absolute; top: 2px; left: 2px;
+    transition: transform 0.25s, background 0.25s;
+  }
+  .option-toggle input:checked ~ .tog-track { background: var(--accent); border-color: var(--accent); }
+  .option-toggle input:checked ~ .tog-track .tog-thumb { transform: translateX(16px); background: #000; }
+  .tog-label { font-size: 0.9rem; color: var(--text); line-height: 1.3; }
+  .tog-label span { display: block; font-size: 0.72rem; color: var(--text-dim); margin-top: 2px; }
+
+  /* Editable questions accordion */
+  .q-edit-header {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; padding: 10px 14px;
+    background: rgba(247,183,49,0.07);
+    border: 1px solid rgba(247,183,49,0.2); border-radius: 10px;
+    margin-bottom: 0; transition: background 0.2s;
+    user-select: none;
+  }
+  .q-edit-header:hover { background: rgba(247,183,49,0.12); }
+  .q-edit-header span { font-size: 0.88rem; font-weight: 700; color: var(--accent2); }
+  .q-edit-chevron { font-size: 0.8rem; color: var(--text-dim); transition: transform 0.25s; }
+  .q-edit-chevron.open { transform: rotate(180deg); }
+
+  .q-edit-body {
+    display: none;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border); border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 12px; margin-bottom: 16px;
+    max-height: 320px; overflow-y: auto;
+  }
+  .q-edit-body.open { display: block; }
+  .q-edit-note {
+    font-size: 0.72rem; color: var(--text-dim); margin-bottom: 10px;
+    font-style: italic;
+  }
+  .q-field {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  }
+  .q-num {
+    font-size: 0.65rem; font-weight: 700; color: var(--text-dim);
+    width: 20px; text-align: right; flex-shrink: 0;
+  }
+  .q-field input {
+    flex: 1; background: rgba(255,255,255,0.06);
+    border: 1px solid var(--glass-border); border-radius: 6px;
+    color: var(--text); font-size: 0.82rem; padding: 5px 8px;
+    outline: none; font-family: inherit; transition: border-color 0.15s;
+  }
+  .q-field input:focus { border-color: var(--accent2); }
+
+  .setup-start {
+    width: 100%; padding: 14px;
+    background: var(--accent); color: #000;
+    border: none; border-radius: 40px;
+    font-size: 1.1rem; font-weight: 900; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(0,201,167,0.4);
+    min-width: unset; letter-spacing: 0.04em;
+    transition: filter 0.2s, transform 0.1s;
+  }
+  .setup-start:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+  /* ================================================================
+     GAME SCREEN
+     ================================================================ */
+  #game-screen {
+    display: none;
+    width: 100%;
+    min-height: calc(100vh - 56px);
+    padding: 10px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+  @media (min-width: 940px) {
+    #game-screen { flex-direction: row; align-items: flex-start; justify-content: center; }
+  }
+
+  /* ── Board ────────────────────────────────────── */
+  .board-wrap { flex: 1; max-width: 640px; width: 100%; }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 4px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: var(--shadow);
+    aspect-ratio: 1;
+  }
+
+  .sq {
+    border-radius: 8px; padding: 3px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: space-between;
+    position: relative; overflow: hidden;
+    min-height: 0; transition: box-shadow 0.2s;
+  }
+  .sq-num {
+    font-size: clamp(0.38rem, 0.75vw, 0.52rem);
+    opacity: 0.35; align-self: flex-start; line-height: 1;
+    color: var(--text-dim);
+  }
+  .sq-text {
+    font-size: clamp(0.38rem, 0.85vw, 0.56rem);
+    font-weight: 600; text-align: center; line-height: 1.2;
+    flex: 1; display: flex; align-items: center;
+    justify-content: center; padding: 1px;
+    color: var(--text);
+  }
+  .sq-tokens {
+    display: flex; flex-wrap: wrap; gap: 2px;
+    justify-content: center; min-height: 24px;
+  }
+
+  /* Square themes */
+  .sq-start    { background: rgba(0,201,167,0.15);  border: 1px solid rgba(0,201,167,0.5); }
+  .sq-finish   { background: rgba(247,183,49,0.2);  border: 1px solid rgba(247,183,49,0.7); }
+  .sq-question { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); }
+  .sq-forward  { background: rgba(34,197,94,0.18);  border: 1px solid rgba(34,197,94,0.5); }
+  .sq-back     { background: rgba(239,68,68,0.18);  border: 1px solid rgba(239,68,68,0.5); }
+  .sq-miss     { background: rgba(247,183,49,0.15);  border: 1px solid rgba(247,183,49,0.4); }
+  .sq-wildcard { background: rgba(162,155,254,0.2); border: 1px solid rgba(162,155,254,0.6); }
+
+  .sq-start .sq-text    { color: var(--accent); font-weight: 800; }
+  .sq-finish .sq-text   { color: var(--accent2); font-weight: 800; }
+  .sq-forward .sq-text  { color: #4ade80; }
+  .sq-back .sq-text     { color: #f87171; }
+  .sq-miss .sq-text     { color: var(--accent2); }
+  .sq-wildcard .sq-text { color: #c4b5fd; }
+
+  /* Active highlight */
+  .sq-highlight {
+    box-shadow: 0 0 0 2px var(--accent), 0 0 14px rgba(0,201,167,0.6) !important;
+    animation: pulse-sq 1.3s ease-in-out infinite;
+  }
+  @keyframes pulse-sq {
+    0%,100% { box-shadow: 0 0 0 2px var(--accent), 0 0 10px rgba(0,201,167,0.5); }
+    50%      { box-shadow: 0 0 0 3px var(--accent), 0 0 22px rgba(0,201,167,0.8); }
+  }
+
+  /* Tokens */
+  .token {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(0.52rem, 1vw, 0.7rem);
+    font-weight: 800; color: #000;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+  }
+
+  /* ── Side panel ───────────────────────────────── */
+  .panel { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+
+  .pcard {
+    background: var(--glass);
+    border: 1px solid var(--glass-border); border-radius: 14px;
+    padding: 14px; box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+  }
+  .pcard h3 {
+    font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.15em; color: var(--accent);
+    font-weight: 700; margin-bottom: 10px;
+  }
+
+  /* Current player */
+  .cp-row { display: flex; align-items: center; gap: 10px; }
+  .cp-token {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 800; color: #000;
+    flex-shrink: 0; border: 2px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  .cp-name { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+  .cp-pos  { font-size: 0.7rem; color: var(--text-dim); margin-top: 2px; }
+
+  /* Status */
+  .status {
+    font-size: 0.88rem; color: var(--text-dim);
+    text-align: center; padding: 9px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px; border: 1px solid var(--glass-border);
+    min-height: 42px; display: flex; align-items: center; justify-content: center;
+    line-height: 1.35;
+  }
+
+  /* Dice */
+  .dice-area { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .dice {
+    width: 74px; height: 74px;
+    background: white; border: 2px solid var(--accent);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.6rem; cursor: pointer; user-select: none;
+    box-shadow: 0 0 16px rgba(0,201,167,0.4);
+    transition: transform 0.1s, box-shadow 0.2s; color: #111;
+  }
+  .dice:hover:not(.off) { transform: scale(1.08); box-shadow: 0 0 24px rgba(0,201,167,0.65); }
+  .dice:active:not(.off) { transform: scale(0.93); }
+  .dice.off { opacity: 0.22; cursor: not-allowed; box-shadow: none; }
+  .dice.spin { animation: dice-spin 0.5s ease-in-out; }
+  @keyframes dice-spin {
+    0%   { transform: rotate(0)   scale(1); }
+    20%  { transform: rotate(18deg) scale(1.1); }
+    50%  { transform: rotate(-12deg) scale(0.95); }
+    80%  { transform: rotate(6deg) scale(1.05); }
+    100% { transform: rotate(0)   scale(1); }
+  }
+
+  .roll-btn {
+    width: 100%; padding: 9px 0;
+    background: var(--accent); color: #000;
+    border: none; border-radius: 30px;
+    font-size: 0.95rem; font-weight: 900; cursor: pointer;
+    min-width: unset;
+    box-shadow: 0 4px 16px rgba(0,201,167,0.35);
+    transition: filter 0.15s, transform 0.1s;
+  }
+  .roll-btn:hover:not(:disabled) { filter: brightness(1.1); transform: scale(1.02); }
+  .roll-btn:disabled { opacity: 0.22; cursor: not-allowed; box-shadow: none; }
+
+  /* Player list */
+  .pl-list { display: flex; flex-direction: column; gap: 4px; }
+  .pl-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 8px; border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid transparent; transition: all 0.2s;
+  }
+  .pl-row.active { background: rgba(0,201,167,0.12); border-color: rgba(0,201,167,0.35); }
+  .pl-row.skipped { opacity: 0.4; }
+  .pl-tok {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 800; color: #000; flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .pl-name { flex: 1; font-size: 0.88rem; color: var(--text); }
+  .pl-sq   { font-size: 0.65rem; color: var(--text-dim); }
+  .skip-badge {
+    font-size: 0.6rem; background: var(--accent2); color: #000;
+    border-radius: 4px; padding: 1px 5px; font-weight: 700;
+  }
+
+  /* Back to setup */
+  .back-btn {
+    width: 100%; padding: 8px 0;
+    background: transparent; border: 1px solid var(--glass-border);
+    color: var(--text-dim); border-radius: 8px;
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; min-width: unset; transition: all 0.2s;
+  }
+  .back-btn:hover { border-color: var(--danger); color: #f87171; }
+
+  /* ================================================================
+     QUESTION MODAL
+     ================================================================ */
+  #q-modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); z-index: 200;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .q-card {
+    background: rgba(11,20,30,0.98);
+    border: 1px solid var(--glass-border); border-radius: 20px;
+    padding: 32px 28px; max-width: 480px; width: 92%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,201,167,0.15);
+    animation: q-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes q-pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .q-who {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 4px 14px; margin-bottom: 16px;
+  }
+  .q-who-dot { width: 14px; height: 14px; border-radius: 50%; }
+  .q-who-txt { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); letter-spacing: 0.08em; }
+  .q-text {
+    font-size: clamp(1.2rem, 3vw, 1.65rem);
+    font-weight: 800; color: var(--text); line-height: 1.25; margin-bottom: 8px;
+  }
+  .q-hint { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.06em; margin-bottom: 18px; }
+
+  /* Timer */
+  .timer-wrap { position: relative; width: 68px; height: 68px; margin: 0 auto 18px; }
+  .timer-wrap svg { transform: rotate(-90deg); }
+  .timer-bg  { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 5; }
+  .timer-arc { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round;
+               transition: stroke-dashoffset 1s linear, stroke 0.4s; }
+  .timer-num {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; font-weight: 900; color: var(--accent);
+  }
+
+  .judge-btns { display: flex; gap: 10px; }
+  .btn-ok {
+    flex: 1; padding: 12px;
+    background: var(--safe); color: #000; border: none; border-radius: 12px;
+    font-size: 0.95rem; font-weight: 800; cursor: pointer; min-width: unset;
+    transition: filter 0.15s, transform 0.1s;
+  }
+  .btn-ok:hover { filter: brightness(1.12); transform: scale(1.02); }
+  .btn-no {
+    flex: 1; padding: 12px;
+    background: var(--danger); color: #fff; border: none; border-radius: 12px;
+    font-size: 0.95rem; font-weight: 800; cursor: pointer; min-width: unset;
+    transition: filter 0.15s, transform 0.1s;
+  }
+  .btn-no:hover { filter: brightness(1.12); transform: scale(1.02); }
+
+  /* Wildcard */
+  #wildcard-picker { display: none; }
+  .wc-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5px;
+    max-height: 220px; overflow-y: auto; margin-bottom: 14px; text-align: left;
+  }
+  .wc-opt {
+    padding: 6px 9px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+    border-radius: 8px; font-size: 0.78rem; color: var(--text-dim);
+    cursor: pointer; transition: all 0.15s; line-height: 1.3;
+  }
+  .wc-opt:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(247,183,49,0.08); }
+
+  /* ================================================================
+     SPECIAL FLASH
+     ================================================================ */
+  #special-flash {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65); z-index: 150;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(5px);
+  }
+  .flash-card {
+    background: rgba(11,20,30,0.98); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 38px 44px; text-align: center;
+    box-shadow: var(--shadow);
+    animation: q-pop 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .flash-icon  { font-size: 3.5rem; margin-bottom: 10px; }
+  .flash-title { font-size: 1.7rem; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+  .flash-sub   { font-size: 0.95rem; color: var(--text-dim); }
+
+  /* ================================================================
+     WIN SCREEN
+     ================================================================ */
+  #win-screen {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 300;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+  .win-card {
+    background: rgba(11,20,30,0.99);
+    border: 2px solid var(--accent); border-radius: 24px;
+    padding: 52px 44px; text-align: center; max-width: 400px; width: 90%;
+    box-shadow: 0 0 40px rgba(0,201,167,0.4), 0 24px 70px rgba(0,0,0,0.9);
+    animation: win-in 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes win-in {
+    from { transform: scale(0.55) rotate(-5deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .win-trophy { font-size: 4rem; margin-bottom: 14px; }
+  .win-head {
+    font-size: 2.4rem; font-weight: 900; color: var(--accent);
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .win-name { font-size: 1.8rem; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+  .win-sub  { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 28px; }
+  .win-again {
+    background: var(--accent); color: #000; border: none; border-radius: 30px;
+    padding: 12px 36px; font-size: 1rem; font-weight: 900; cursor: pointer;
+    min-width: unset; transition: filter 0.2s, transform 0.1s;
+    box-shadow: 0 4px 20px rgba(0,201,167,0.4);
+  }
+  .win-again:hover { filter: brightness(1.1); transform: scale(1.04); }
+
+  /* Confetti */
+  .conf {
+    position: fixed; top: -12px; border-radius: 2px;
+    animation: conf-fall linear forwards; z-index: 400; pointer-events: none;
+  }
+  @keyframes conf-fall {
+    to { transform: translateY(110vh) rotate(900deg); opacity: 0; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- ===== CONTROLS BAR ===== -->
+<div class="controls">
+  <button id="fullscreen" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+  <button id="home" onclick="location.href='../index.html'">🏠 Home</button>
+  <button id="newGame" onclick="location.reload()">↩ New Game</button>
+</div>
+
+<!-- ===== SETUP SCREEN ===== -->
+<div id="setup-screen">
+  <div class="setup-box">
+    <h2>🚀 Future Board Game</h2>
+    <p class="subtitle">Roll · Move · Talk for 30 seconds</p>
+
+    <span class="setup-label">How many players? (2–8)</span>
+    <div class="count-row" id="count-row"></div>
+
+    <span class="setup-label">Enter player names:</span>
+    <div class="player-grid" id="player-grid"></div>
+
+    <div class="rules-box">
+      🎲 <strong>Roll</strong> the dice and move your token.<br>
+      🗣️ <strong>Answer</strong> the question in 30 seconds!<br>
+      ✅ <strong>Correct</strong> → stay &nbsp;|&nbsp; ❌ <strong>Wrong</strong> → go back 2 spaces.<br>
+      ⭐ Move forward 2 &nbsp;|&nbsp; ⬅️ Go back 3 &nbsp;|&nbsp; 😴 Miss a turn<br>
+      🏆 First to reach <strong>FINISH</strong> wins!
+    </div>
+
+    <label class="option-toggle">
+      <input type="checkbox" id="exact-finish-cb">
+      <div class="tog-track"><div class="tog-thumb"></div></div>
+      <div class="tog-label">
+        🎯 Exact finish required
+        <span>Overshoot = bounce back · 2 from end + roll 6 → back 4</span>
+      </div>
+    </label>
+
+    <!-- Editable questions accordion -->
+    <div class="q-edit-header" onclick="toggleQEdit()" id="q-edit-header">
+      <span>✏️ Customize board questions</span>
+      <span class="q-edit-chevron" id="q-edit-chevron">▼</span>
+    </div>
+    <div class="q-edit-body" id="q-edit-body">
+      <p class="q-edit-note">Edit any question prompt before you start. Leave blank to keep the default.</p>
+      <div id="q-fields"></div>
+    </div>
+
+    <br>
+    <button class="setup-start" onclick="startGame()">▶ Let's Play!</button>
+  </div>
+</div>
+
+<!-- ===== GAME SCREEN ===== -->
+<div id="game-screen">
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="panel">
+    <div class="pcard">
+      <h3>Current Player</h3>
+      <div class="cp-row">
+        <div class="cp-token" id="cp-tok"></div>
+        <div>
+          <div class="cp-name" id="cp-name">—</div>
+          <div class="cp-pos"  id="cp-pos">Square 0 · Start</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="status" id="status">Press Roll to begin</div>
+    </div>
+
+    <div class="pcard">
+      <h3>Roll the Dice</h3>
+      <div class="dice-area">
+        <div class="dice" id="dice" onclick="onDiceClick()">⚀</div>
+        <button class="roll-btn" id="roll-btn" onclick="onDiceClick()">Roll Dice</button>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <h3>Players</h3>
+      <div class="pl-list" id="pl-list"></div>
+    </div>
+
+    <div class="pcard">
+      <button class="back-btn" onclick="location.reload()">↩ Back to Setup</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUESTION MODAL ===== -->
+<div id="q-modal">
+  <div class="q-card">
+    <div class="q-who">
+      <div class="q-who-dot" id="q-dot"></div>
+      <span class="q-who-txt" id="q-who"></span>
+    </div>
+    <div class="q-text" id="q-text"></div>
+    <div class="q-hint" id="q-hint">Talk for 30 seconds — teacher judges</div>
+
+    <div class="timer-wrap" id="timer-wrap">
+      <svg viewBox="0 0 68 68" width="68" height="68">
+        <circle class="timer-bg"  cx="34" cy="34" r="28"/>
+        <circle class="timer-arc" id="timer-arc" cx="34" cy="34" r="28"
+          stroke-dasharray="175.9" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-num" id="timer-num">30</div>
+    </div>
+
+    <div class="judge-btns" id="judge-btns">
+      <button class="btn-ok" onclick="judge(true)">✓ Correct</button>
+      <button class="btn-no" onclick="judge(false)">✗ Wrong −2</button>
+    </div>
+
+    <div id="wildcard-picker">
+      <div class="wc-grid" id="wc-grid"></div>
+      <div class="judge-btns">
+        <button class="btn-ok" onclick="judge(true)">✓ Correct</button>
+        <button class="btn-no" onclick="judge(false)">✗ Wrong −2</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SPECIAL FLASH ===== -->
+<div id="special-flash">
+  <div class="flash-card">
+    <div class="flash-icon"  id="fl-icon"></div>
+    <div class="flash-title" id="fl-title"></div>
+    <div class="flash-sub"   id="fl-sub"></div>
+  </div>
+</div>
+
+<!-- ===== WIN SCREEN ===== -->
+<div id="win-screen">
+  <div class="win-card">
+    <div class="win-trophy">🏆</div>
+    <div class="win-head">Winner!</div>
+    <div class="win-name" id="win-name"></div>
+    <div class="win-sub">First to reach Finish</div>
+    <button class="win-again" onclick="location.reload()">↩ Play Again</button>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   DATA
+   ================================================================ */
+
+const P_COLORS = [
+  '#00c9a7','#f7b731','#ef4444','#a29bfe',
+  '#fd79a8','#74b9ff','#51cf66','#ff8c42'
+];
+
+const DICE_FACES = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+
+/* Default board squares — questions can be edited in setup */
+const DEFAULT_SQUARES = [
+  { id: 0,  type:'start',    text:'🚀 START' },
+  { id: 1,  type:'question', text:'When you are going to get your next haircut' },
+  { id: 2,  type:'question', text:'What you are doing after this class' },
+  { id: 3,  type:'question', text:'What you are going to have for your next meal' },
+  { id: 4,  type:'question', text:'Your ambitions for the future' },
+  { id: 5,  type:'question', text:'Plans you have to improve your health' },
+  { id: 6,  type:'question', text:'The next time you are meeting a relative' },
+  { id: 7,  type:'question', text:'What you are looking forward to the most' },
+  { id: 8,  type:'question', text:'What you are going to do after this course' },
+  { id: 9,  type:'question', text:'How you are going to get better at English' },
+  { id: 10, type:'question', text:'Your career plans' },
+  { id: 11, type:'question', text:'What you are doing this weekend' },
+  { id: 12, type:'forward',  text:'⭐ Move forward 2!' },
+  { id: 13, type:'question', text:'TV shows you are watching at the moment' },
+  { id: 14, type:'miss',     text:'😴 Miss a turn!' },
+  { id: 15, type:'question', text:'When you are going to give up your bad habits' },
+  { id: 16, type:'question', text:'Your next holiday' },
+  { id: 17, type:'question', text:'Who you are going to text or email today' },
+  { id: 18, type:'question', text:'Your next appointment' },
+  { id: 19, type:'question', text:'What you are doing tomorrow' },
+  { id: 20, type:'question', text:'Your next big purchase' },
+  { id: 21, type:'question', text:'Something that worries you about the future' },
+  { id: 22, type:'question', text:'Your next journey' },
+  { id: 23, type:'question', text:'What phone you are going to buy next' },
+  { id: 24, type:'back',     text:'⬅️ Go back 3 spaces!' },
+  { id: 25, type:'question', text:'The next clothes you plan to buy' },
+  { id: 26, type:'question', text:'Where in the world you are going to travel' },
+  { id: 27, type:'question', text:'The next time you are meeting your best friend' },
+  { id: 28, type:'question', text:'How you are going to celebrate your next birthday' },
+  { id: 29, type:'miss',     text:'😴 Miss a turn!' },
+  { id: 30, type:'question', text:'Your next planned sport or physical activity' },
+  { id: 31, type:'question', text:'When you are going to stop studying English' },
+  { id: 32, type:'question', text:'How much money you are going to spend tomorrow' },
+  { id: 33, type:'question', text:'Your plans to improve your English outside class' },
+  { id: 34, type:'wildcard', text:'🃏 Wildcard — any topic!' },
+  { id: 35, type:'finish',   text:'🏆 FINISH!' },
+];
+
+const GRID = [
+  [35,34,33,32,31,30],
+  [24,25,26,27,28,29],
+  [23,22,21,20,19,18],
+  [12,13,14,15,16,17],
+  [11,10, 9, 8, 7, 6],
+  [ 0, 1, 2, 3, 4, 5],
+];
+
+/* Live squares — may be edited by teacher */
+let SQUARES = DEFAULT_SQUARES.map(s => ({...s}));
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let players      = [];
+let cur          = 0;
+let phase        = 'roll';
+let timer        = null;
+let timerSecs    = 30;
+let numP         = 4;
+let exactFinish  = false;
+
+/* ================================================================
+   SETUP UI
+   ================================================================ */
+(function initSetup() {
+  const cr = document.getElementById('count-row');
+  for (let n = 2; n <= 8; n++) {
+    const b = document.createElement('button');
+    b.className = 'count-btn' + (n === 4 ? ' active' : '');
+    b.textContent = n;
+    b.onclick = () => setCount(n);
+    cr.appendChild(b);
+  }
+  renderInputs();
+  buildQFields();
+})();
+
+function setCount(n) {
+  numP = n;
+  document.querySelectorAll('.count-btn').forEach((b, i) => b.classList.toggle('active', i + 2 === n));
+  renderInputs();
+}
+
+function renderInputs() {
+  const g = document.getElementById('player-grid');
+  g.innerHTML = '';
+  for (let i = 0; i < numP; i++) {
+    const row = document.createElement('div');
+    row.className = 'p-input-row';
+    row.innerHTML = `
+      <div class="p-dot" style="background:${P_COLORS[i]}"></div>
+      <input type="text" id="pn${i}" placeholder="Player ${i+1}" maxlength="14">
+    `;
+    g.appendChild(row);
+  }
+}
+
+function buildQFields() {
+  const container = document.getElementById('q-fields');
+  container.innerHTML = '';
+  let qNum = 0;
+  SQUARES.forEach(sq => {
+    if (sq.type !== 'question') return;
+    qNum++;
+    const row = document.createElement('div');
+    row.className = 'q-field';
+    row.innerHTML = `
+      <span class="q-num">${qNum}</span>
+      <input type="text" id="qedit${sq.id}" value="${sq.text}" placeholder="${sq.text}">
+    `;
+    container.appendChild(row);
+  });
+}
+
+function toggleQEdit() {
+  const body    = document.getElementById('q-edit-body');
+  const chevron = document.getElementById('q-edit-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+/* ================================================================
+   START
+   ================================================================ */
+function startGame() {
+  exactFinish = document.getElementById('exact-finish-cb').checked;
+
+  /* Apply any edited questions */
+  SQUARES.forEach(sq => {
+    if (sq.type !== 'question') return;
+    const inp = document.getElementById('qedit' + sq.id);
+    if (inp && inp.value.trim()) sq.text = inp.value.trim();
+  });
+
+  players = [];
+  for (let i = 0; i < numP; i++) {
+    const inp  = document.getElementById('pn' + i);
+    const name = inp ? (inp.value.trim() || 'Player ' + (i+1)) : 'Player ' + (i+1);
+    players.push({ name, color: P_COLORS[i], initial: name[0].toUpperCase(), pos: 0, skip: false });
+  }
+
+  document.getElementById('setup-screen').style.display = 'none';
+  const gs = document.getElementById('game-screen');
+  gs.style.display = 'flex';
+
+  buildBoard();
+  updateUI();
+  setStatus(players[0].name + "'s turn — roll the dice");
+}
+
+/* ================================================================
+   BOARD
+   ================================================================ */
+function buildBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  for (let r = 0; r < 6; r++) {
+    for (let c = 0; c < 6; c++) {
+      const id = GRID[r][c];
+      const sq = SQUARES[id];
+      const el = document.createElement('div');
+      el.className = 'sq sq-' + sq.type;
+      el.id = 'sq' + id;
+      el.innerHTML = `
+        <div class="sq-num">${id}</div>
+        <div class="sq-text">${sq.text}</div>
+        <div class="sq-tokens" id="tok${id}"></div>
+      `;
+      board.appendChild(el);
+    }
+  }
+  placeTokens();
+}
+
+function placeTokens() {
+  document.querySelectorAll('.sq-tokens').forEach(el => el.innerHTML = '');
+  players.forEach(p => {
+    const c = document.getElementById('tok' + p.pos);
+    if (!c) return;
+    const t = document.createElement('div');
+    t.className = 'token';
+    t.style.background = p.color;
+    t.textContent = p.initial;
+    t.title = p.name;
+    c.appendChild(t);
+  });
+}
+
+/* ================================================================
+   UI
+   ================================================================ */
+function updateUI() {
+  const p = players[cur];
+  const tok = document.getElementById('cp-tok');
+  tok.style.background = p.color;
+  tok.textContent = p.initial;
+  document.getElementById('cp-name').textContent = p.name;
+  document.getElementById('cp-pos').textContent =
+    'sq ' + p.pos + ' · ' + SQUARES[p.pos].text.replace(/^[\W_]+/, '').substring(0, 28);
+
+  const list = document.getElementById('pl-list');
+  list.innerHTML = '';
+  players.forEach((pl, i) => {
+    const row = document.createElement('div');
+    row.className = 'pl-row' + (i === cur ? ' active' : '') + (pl.skip ? ' skipped' : '');
+    row.innerHTML = `
+      <div class="pl-tok" style="background:${pl.color}">${pl.initial}</div>
+      <div class="pl-name">${pl.name}</div>
+      <div class="pl-sq">#${pl.pos}</div>
+      ${pl.skip ? '<span class="skip-badge">skip</span>' : ''}
+    `;
+    list.appendChild(row);
+  });
+
+  const can = (phase === 'roll');
+  document.getElementById('roll-btn').disabled = !can;
+  document.getElementById('dice').classList.toggle('off', !can);
+
+  document.querySelectorAll('.sq-highlight').forEach(el => el.classList.remove('sq-highlight'));
+  const sqEl = document.getElementById('sq' + p.pos);
+  if (sqEl) sqEl.classList.add('sq-highlight');
+}
+
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+/* ================================================================
+   DICE + MOVEMENT
+   ================================================================ */
+function onDiceClick() {
+  if (phase !== 'roll') return;
+  const p = players[cur];
+
+  if (p.skip) {
+    p.skip = false;
+    setStatus(p.name + ' misses this turn 😴');
+    updateUI();
+    setTimeout(nextPlayer, 1800);
+    return;
+  }
+
+  phase = 'animating';
+  updateUI();
+
+  const diceEl = document.getElementById('dice');
+  diceEl.classList.add('spin');
+  let ticks = 0;
+  const anim = setInterval(() => {
+    diceEl.textContent = DICE_FACES[Math.floor(Math.random() * 6)];
+    if (++ticks >= 10) {
+      clearInterval(anim);
+      diceEl.classList.remove('spin');
+      const roll = Math.floor(Math.random() * 6) + 1;
+      diceEl.textContent = DICE_FACES[roll - 1];
+      setStatus(p.name + ' rolled a ' + roll + '!');
+      setTimeout(() => doMove(roll), 400);
+    }
+  }, 70);
+}
+
+function doMove(steps) {
+  const p = players[cur];
+  const target = p.pos + steps;
+
+  if (exactFinish && target > 35) {
+    const overshoot = target - 35;
+    const bounced   = 35 - overshoot;
+    p.pos = 35;
+    placeTokens(); updateUI();
+    setTimeout(() => {
+      p.pos = bounced;
+      placeTokens(); updateUI();
+      showFlash('↩️', 'Overshot by ' + overshoot + '!',
+        p.name + ' bounces back to square ' + bounced,
+        () => landOn(bounced));
+    }, 350);
+  } else {
+    p.pos = Math.min(target, 35);
+    placeTokens(); updateUI();
+    setTimeout(() => landOn(p.pos), 400);
+  }
+}
+
+function landOn(pos) {
+  if (pos === 35) { showWin(); return; }
+  const sq = SQUARES[pos];
+  switch (sq.type) {
+    case 'forward':
+      showFlash('⭐', 'Move Forward 2!', players[cur].name + ' gets a bonus!', () => {
+        players[cur].pos = Math.min(players[cur].pos + 2, 35);
+        placeTokens(); updateUI();
+        setTimeout(() => { if (players[cur].pos === 35) { showWin(); return; } nextPlayer(); }, 500);
+      });
+      break;
+    case 'back':
+      showFlash('⬅️', 'Go Back 3 Spaces!', players[cur].name + ' steps back!', () => {
+        players[cur].pos = Math.max(players[cur].pos - 3, 0);
+        placeTokens(); updateUI();
+        setTimeout(nextPlayer, 500);
+      });
+      break;
+    case 'miss':
+      showFlash('😴', 'Miss a Turn!', players[cur].name + ' skips next turn!', () => {
+        players[cur].skip = true; updateUI(); nextPlayer();
+      });
+      break;
+    case 'wildcard': showWildcard(); break;
+    case 'start':    nextPlayer();   break;
+    default:         showQuestion(sq);
+  }
+}
+
+/* ================================================================
+   FLASH
+   ================================================================ */
+function showFlash(icon, title, sub, cb) {
+  document.getElementById('fl-icon').textContent  = icon;
+  document.getElementById('fl-title').textContent = title;
+  document.getElementById('fl-sub').textContent   = sub;
+  const el = document.getElementById('special-flash');
+  el.style.display = 'flex';
+  setTimeout(() => { el.style.display = 'none'; cb(); }, 2000);
+}
+
+/* ================================================================
+   QUESTION MODAL
+   ================================================================ */
+function showQuestion(sq) {
+  const p = players[cur]; phase = 'question';
+  document.getElementById('q-dot').style.background  = p.color;
+  document.getElementById('q-who').textContent        = p.name + "'s turn";
+  document.getElementById('q-text').textContent       = sq.text;
+  document.getElementById('q-hint').textContent       = 'Talk for 30 seconds — teacher judges';
+  document.getElementById('judge-btns').style.display = 'flex';
+  document.getElementById('wildcard-picker').style.display = 'none';
+  document.getElementById('timer-wrap').style.display = 'block';
+  document.getElementById('q-modal').style.display    = 'flex';
+  startTimer();
+}
+
+function showWildcard() {
+  const p = players[cur]; phase = 'question';
+  document.getElementById('q-dot').style.background  = p.color;
+  document.getElementById('q-who').textContent        = p.name + "'s turn";
+  document.getElementById('q-text').textContent       = '🃏 Wildcard — choose your topic:';
+  document.getElementById('q-hint').textContent       = 'Pick any question, then talk for 30 seconds';
+  document.getElementById('judge-btns').style.display = 'none';
+  document.getElementById('timer-wrap').style.display = 'none';
+  document.getElementById('wildcard-picker').style.display = 'block';
+
+  const grid = document.getElementById('wc-grid');
+  grid.innerHTML = '';
+  SQUARES.filter(s => s.type === 'question').forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'wc-opt'; d.textContent = s.text;
+    d.onclick = () => {
+      document.getElementById('q-text').textContent = s.text;
+      document.getElementById('q-hint').textContent = 'Talk for 30 seconds — teacher judges';
+      document.getElementById('wildcard-picker').style.display = 'none';
+      document.getElementById('judge-btns').style.display = 'flex';
+      document.getElementById('timer-wrap').style.display = 'block';
+      startTimer();
+    };
+    grid.appendChild(d);
+  });
+  document.getElementById('q-modal').style.display = 'flex';
+}
+
+/* ================================================================
+   TIMER
+   ================================================================ */
+function startTimer() {
+  stopTimer(); timerSecs = 30; renderTimer();
+  timer = setInterval(() => {
+    timerSecs--;
+    renderTimer();
+    if (timerSecs <= 0) {
+      stopTimer();
+      document.getElementById('timer-num').textContent = '⏰';
+      document.getElementById('q-hint').textContent = "Time's up — correct or wrong?";
+    }
+  }, 1000);
+}
+function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+function renderTimer() {
+  const circ = 175.9, offset = circ * (1 - timerSecs / 30);
+  const arc = document.getElementById('timer-arc');
+  arc.style.strokeDashoffset = offset;
+  arc.style.stroke = timerSecs > 15 ? '#00c9a7' : timerSecs > 7 ? '#f7b731' : '#ef4444';
+  document.getElementById('timer-num').textContent = timerSecs;
+}
+
+/* ================================================================
+   JUDGING
+   ================================================================ */
+function judge(correct) {
+  stopTimer();
+  document.getElementById('q-modal').style.display = 'none';
+  const p = players[cur];
+  if (correct) {
+    setStatus('✓ ' + p.name + ' stays on square ' + p.pos);
+    setTimeout(nextPlayer, 1400);
+  } else {
+    setStatus('✗ ' + p.name + ' goes back 2 spaces');
+    setTimeout(() => {
+      p.pos = Math.max(p.pos - 2, 0);
+      placeTokens(); updateUI();
+      setTimeout(nextPlayer, 1000);
+    }, 700);
+  }
+}
+
+/* ================================================================
+   NEXT PLAYER
+   ================================================================ */
+function nextPlayer() {
+  cur = (cur + 1) % players.length;
+  phase = 'roll';
+  setStatus(players[cur].name + "'s turn — roll the dice");
+  updateUI();
+}
+
+/* ================================================================
+   WIN
+   ================================================================ */
+function showWin() {
+  phase = 'done';
+  document.getElementById('win-name').textContent = players[cur].name;
+  document.getElementById('win-screen').style.display = 'flex';
+  launchConfetti();
+}
+function launchConfetti() {
+  const cols = ['#00c9a7','#f7b731','#ef4444','#a29bfe','#51cf66','#74b9ff','#fd79a8'];
+  for (let i = 0; i < 90; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'conf';
+      const size = 5 + Math.random() * 9;
+      el.style.cssText = `left:${Math.random()*100}vw;width:${size}px;height:${size}px;` +
+        `background:${cols[Math.floor(Math.random()*cols.length)]};` +
+        `border-radius:${Math.random()>.5?'50%':'2px'};` +
+        `animation-duration:${1.8+Math.random()*2.2}s;` +
+        `animation-delay:${Math.random()*.7}s;` +
+        `transform:rotate(${Math.random()*360}deg);`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }, i * 28);
+  }
+}
+
+/* ================================================================
+   FULLSCREEN
+   ================================================================ */
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+</script>
+</body>
+</html>
