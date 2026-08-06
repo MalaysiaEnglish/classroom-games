@@ -82,6 +82,7 @@ The `index.html` has:
 | `quote-sorter` | Quote sorting |
 | `road-not-taken` | Class adventure (dragons, gnomes, chaos) |
 | `picture-games` | Picture-based games toolkit |
+| `revision-showdown` | L9U3 revision — team quiz (vocab, close reading, imagery, story openings) |
 
 ### Admin / Editor Tools
 | File | Purpose |
@@ -111,6 +112,7 @@ Every game page typically has:
 - **April 2026**: Project connected to Cowork. Full inventory taken. 47 game folders documented.
 - **April 2026**: Added Star Hunt (toolkit text version) and Star Hunt Jr. (preschool picture version). Both added to toolkit modal in index.html.
 - **April 2026**: TTS added to Picture Games flashcards. Bug fixes across Battleships, Blockbusters, Noughts-Crosses, Battle Teams. Evil game created and added to toolkit.
+- **August 2026**: Added `revision-showdown` (L9U3 team quiz — vocab blitz, close-reading practice on Extract 1, Extract 5 structure/imagery recap, story-opening lab) and linked it in the L9 Unit 3 card in `index.html`. Self-contained, same detective-noir style as `silver-swan`/`crack-the-case` (Georgia serif, `#1a1a2e` navy, `#f0c040` gold) rather than the shared teal glass-card `style.css` — matches the existing Unit 3 mystery-game sub-theme.
 
 ## Star Hunt — design notes
 - **Mechanics**: 7×7 grid, hidden star. Teams click cells to reveal hot/warm/cold hints. Each click costs 1 point (starts at 40). Finding the star scores remaining points.

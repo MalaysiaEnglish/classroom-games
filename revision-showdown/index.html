@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 3 Revision Showdown — The Red-Headed League</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, serif; background: #1a1a2e; color: #eee; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; }
+  h1 { font-size: 2rem; color: #f0c040; margin-bottom: 0.25rem; letter-spacing: 1px; text-align:center; }
+  .subtitle { font-size: 0.95rem; color: #aaa; margin-bottom: 0.4rem; text-align: center; }
+  .rules { font-size: 0.82rem; color: #888; margin-bottom: 1.5rem; max-width: 900px; text-align: center; line-height: 1.7; }
+  .rules strong { color: #f0c040; }
+
+  .team-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; width: 100%; max-width: 900px; margin-bottom: 1.5rem; }
+  .team-card { background: #16213e; border: 1px solid #2a2a5a; border-radius: 10px; padding: 0.6rem 0.7rem; text-align: center; }
+  .team-name-input { background: transparent; border: none; color: #aaa; font-size: 0.78rem; text-align: center; width: 100%; font-family: Georgia, serif; margin-bottom: 4px; }
+  .team-name-input:focus { outline: none; color: #fff; }
+  .team-score { font-size: 1.6rem; font-weight: bold; color: #f0c040; }
+  .team-btns { display: flex; gap: 6px; justify-content: center; margin-top: 6px; }
+  .team-btns button { background: #0f3460; color: #f0c040; border: 1px solid #2a2a5a; border-radius: 6px; width: 30px; height: 26px; cursor: pointer; font-family: Georgia, serif; font-size: 0.85rem; }
+  .team-btns button:hover { background: #16213e; border-color: #f0c040; }
+
+  .round-nav { display: flex; gap: 10px; margin-bottom: 1.2rem; flex-wrap: wrap; justify-content: center; }
+  .round-tab { background: #16213e; border: 1px solid #2a2a5a; border-radius: 20px; padding: 0.45rem 1.1rem; font-size: 0.85rem; color: #aaa; cursor: pointer; }
+  .round-tab.active { background: #f0c040; color: #1a1a2e; font-weight: bold; border-color: #f0c040; }
+
+  .stage { background: #16213e; border: 1px solid #2a2a5a; border-radius: 14px; padding: 1.6rem 2rem; width: 100%; max-width: 900px; margin-bottom: 1.2rem; }
+  .round-title { font-size: 1.2rem; color: #f0c040; margin-bottom: 0.3rem; }
+  .round-desc { font-size: 0.85rem; color: #999; margin-bottom: 1.1rem; line-height: 1.5; }
+
+  .item-nav { display:flex; justify-content: space-between; align-items:center; margin-bottom: 0.8rem; }
+  .item-count { font-size: 0.8rem; color: #888; }
+  .pts-badge { background: #1a0a3a; border: 1px solid #7f77dd; border-radius: 8px; padding: 0.25rem 0.7rem; font-size: 0.8rem; color: #afa9ec; }
+
+  .q-text { font-size: 1.25rem; line-height: 1.55; color: #fff; margin-bottom: 1rem; }
+  .q-extract { background: #0f1730; border-left: 4px solid #f0c040; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.95rem; color: #ddd; line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+  .options { display: grid; gap: 8px; margin-bottom: 1rem; }
+  .option { background: #0f3460; border: 1px solid #2a2a5a; border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.95rem; color: #ddd; }
+
+  .answer-box { background: #1a3a2a; border: 1px solid #6fcf97; border-radius: 10px; padding: 1rem 1.2rem; margin-top: 0.6rem; display:none; }
+  .answer-box.show { display:block; }
+  .answer-box h3 { color: #6fcf97; font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .answer-box p { font-size: 0.92rem; color: #ddd; line-height: 1.55; }
+
+  .btn { background: #f0c040; color: #1a1a2e; border: none; border-radius: 8px; padding: 0.7rem 1.6rem; font-size: 0.95rem; font-weight: bold; cursor: pointer; font-family: Georgia, serif; }
+  .btn:hover { background: #ffd060; }
+  .btn-outline { background: transparent; color: #f0c040; border: 1px solid #f0c040; }
+  .btn-outline:hover { background: #f0c04022; }
+  .btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 1.3rem; flex-wrap: wrap; }
+
+  .footer-note { font-size: 0.75rem; color: #666; text-align: center; margin-top: 1rem; max-width: 700px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<a href="../index.html" style="position:fixed;top:12px;left:14px;color:#f0c040;text-decoration:none;font-size:0.85rem;border:1px solid #2a2a5a;border-radius:8px;padding:6px 12px;background:#16213e;">⌂ Home</a>
+<h1>🕵️ Unit 3 Revision Showdown</h1>
+<p class="subtitle">'The Red-Headed League' — four rounds to sharpen your detective skills before the test</p>
+<p class="rules">
+  Award points to teams using the <strong>+ / −</strong> buttons as you go. Click <strong>Reveal Answer</strong> after
+  teams have answered. Use the round tabs to jump between rounds — play them in any order, or skip any you're short on time for.
+</p>
+
+<div class="team-bar" id="team-bar"></div>
+
+<div class="round-nav" id="round-nav"></div>
+
+<div class="stage" id="stage"></div>
+
+<p class="footer-note">Rounds 2 and 4 use practice material NOT taken word-for-word from the end-of-unit test, so they build the skill without giving away test answers. Round 3 recaps content from Extract 5 (studied in Lesson 12) as direct revision.</p>
+
+<script>
+const ROUNDS = [
+  {
+    name: "Vocabulary Blitz",
+    desc: "Flip each card and see who can define it fastest. 1 point per correct definition.",
+    type: "vocab",
+    items: [
+      { q: "napoleons", a: "French gold coins (the 2,000 napoleons stored in the bank cellar)." },
+      { q: "conducted", a: "Led / guided (Merryweather 'conducted' them down the passage)." },
+      { q: "denouement", a: "The final part of a story where the mystery is explained and solved." },
+      { q: "hauling", a: "Pulling or dragging something with force." },
+      { q: "fancy", a: "To imagine (used when John Clay says 'I fancy that my pal is all right')." },
+      { q: "confirming", a: "Working out / making sure of something (Holmes 'confirming' the tunnel's direction)." },
+      { q: "magnifying lens", a: "A piece of glass used for enlarging small details — one of Holmes's typical tools." },
+      { q: "lantern", a: "A portable lamp with a handle and shade — the light Holmes has Merryweather cover." },
+    ],
+  },
+  {
+    name: "Detective's Eye",
+    desc: "Close-reading practice using Extract 1 (the deduction scene) — the same SKILLS the test will ask for, on different material.",
+    type: "qa",
+    items: [
+      {
+        extract: "“There was nothing remarkable about the man save his blazing red head... Your right hand is larger than your left and the muscles are more developed.”",
+        q: "Give one word from the wider extract that means 'heavily built'.",
+        pts: 1,
+        a: "'stout' — used to describe Jabez Wilson.",
+      },
+      {
+        extract: "Holmes deduces manual labour, time in China, and recent writing — all from small physical clues before Wilson says a word.",
+        q: "Suggest two ways Conan Doyle makes Holmes seem impressive as a detective here. Give an example for each.",
+        pts: 2,
+        a: "• Uses precise physical evidence (the muscular right hand, the shiny cuff, the tattoo). • Speaks with total confidence and certainty ('I can deduce nothing else'). • Draws surprising conclusions from tiny details other people would miss.",
+      },
+      {
+        extract: "'How did you know that I did manual labour?' Mr Jabez Wilson started up in his chair.",
+        q: "What does Wilson's reaction ('started up in his chair') suggest about his feelings in this moment?",
+        pts: 1,
+        a: "Shock / surprise — he can't believe Holmes has worked so much out about him from so little.",
+      },
+      {
+        extract: "'Beyond the obvious facts that he has done manual labour, that he has been in China, and that he has done a considerable amount of writing lately, I can deduce nothing else.'",
+        q: "Tick one box — why does Holmes explain his deductions to Wilson? (a) to show off (b) to prove his methods work (c) to embarrass Wilson (d) to warn Wilson",
+        pts: 1,
+        a: "(b) to prove his methods work — Holmes is demonstrating his skill as a detective to earn Wilson's (and the reader's) confidence.",
+      },
+      {
+        extract: "Holmes shook his head with a smile as he listed his deductions, one after another, from a single glance at Wilson.",
+        q: "Give two impressions of Holmes's character created by this extract. Support each with a short quotation.",
+        pts: 2,
+        a: "• Confident — 'I can deduce nothing else.' • Observant/perceptive — notices the tattoo, the muscles, the shiny cuff that others would miss.",
+      },
+    ],
+  },
+  {
+    name: "Structure & Technique Relay",
+    desc: "Quickfire recall of Extract 5 (the dark cellar) and the story's shape — direct revision for the test's reading extract.",
+    type: "qa",
+    items: [
+      { q: "Put the story's structure in order: (a) rising tension (b) new mysterious setting (c) villain introduced (d) detective & victim introduced (e) investigation of the mystery", pts: 2, a: "d → e → c → b → a  (detective/victim → investigation → villain → new setting → rising tension)" },
+      { q: "Name one TACTILE image from Extract 5.", pts: 1, a: "'the cold dank air of the vault' — or the stiffness/weariness in Watson's limbs from staying still." },
+      { q: "Give an adjective-noun combination from Extract 5 that builds tension.", pts: 1, a: "'absolute darkness' (also accept 'pitch darkness')." },
+      { q: "'My nerves were worked up to the highest pitch of tension' — what technique is this, and what does it suggest?", pts: 2, a: "A musical metaphor — like a string tuned tighter and tighter, suggesting Watson feels close to breaking point." },
+      { q: "True or False: Holmes has Merryweather cover the lantern so they can hide in complete darkness.", pts: 1, a: "True." },
+      { q: "True or False: there are three ways out of the cellar.", pts: 1, a: "False — Holmes says 'they have but one retreat', back through the house." },
+      { q: "Who are the two police officers waiting outside for, and where?", pts: 1, a: "Jones has two officers waiting at the front door, ready to catch the criminals." },
+      { q: "In the denouement, what is revealed about John Clay?", pts: 1, a: "John Clay and Vincent Spaulding (Wilson's assistant) are the same person." },
+    ],
+  },
+  {
+    name: "Opening Lines Lab",
+    desc: "Warm-up for Section B of the test (write the opening of a detective story). Rate these openings, then teams write their own in 2 minutes.",
+    type: "qa",
+    items: [
+      {
+        extract: "“It was raining. Detective Marsh had a coffee and looked at some papers on his desk.”",
+        q: "Rate this opening 1–5 for how well it hooks a reader. What's missing?",
+        pts: 0,
+        a: "Weak — no mystery, no intrigue, nothing has happened yet. A strong opening needs a hook: a strange event, an unusual character, or an unanswered question.",
+      },
+      {
+        extract: "“The letter arrived at midnight, addressed to a man who had been dead for ten years.”",
+        q: "Rate this opening 1–5. What makes it effective?",
+        pts: 0,
+        a: "Strong — an immediate mystery (how? why?), creates intrigue in a single line, makes the reader ask a question they need answered.",
+      },
+      {
+        extract: "“Detective Priya Anand had solved every case she'd ever taken — until the morning she found her own name on the suspect list.”",
+        q: "Rate this opening 1–5. What technique is being used?",
+        pts: 0,
+        a: "Strong — introduces the detective AND a personal stake/twist in one sentence; makes us want to know what happens next.",
+      },
+      {
+        extract: "TEAM CHALLENGE — 2 minutes: write ONE opening sentence for a new detective story. Try to include a hint of mystery, an interesting detective, or an unanswered question.",
+        q: "Share your team's opening line. Class votes for the one that hooks them most.",
+        pts: 3,
+        a: "Award 3 points to the team whose opening gets the most votes. Look for: an unresolved question, an intriguing detail, or a striking first image — exactly what SB 3B p.81's Section B task rewards.",
+      },
+    ],
+  },
+];
+
+let teams = [
+  { name: "Team 1", score: 0 },
+  { name: "Team 2", score: 0 },
+  { name: "Team 3", score: 0 },
+  { name: "Team 4", score: 0 },
+];
+let currentRound = 0;
+let currentItem = 0;
+
+function renderTeams() {
+  const bar = document.getElementById("team-bar");
+  bar.innerHTML = "";
+  teams.forEach((t, i) => {
+    const card = document.createElement("div");
+    card.className = "team-card";
+    card.innerHTML = `
+      <input class="team-name-input" value="${t.name}" data-idx="${i}" />
+      <div class="team-score">${t.score}</div>
+      <div class="team-btns">
+        <button data-idx="${i}" data-delta="-1">−1</button>
+        <button data-idx="${i}" data-delta="1">+1</button>
+        <button data-idx="${i}" data-delta="2">+2</button>
+        <button data-idx="${i}" data-delta="3">+3</button>
+      </div>`;
+    bar.appendChild(card);
+  });
+  bar.querySelectorAll(".team-btns button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = +btn.dataset.idx;
+      teams[idx].score += +btn.dataset.delta;
+      renderTeams();
+    });
+  });
+  bar.querySelectorAll(".team-name-input").forEach((inp) => {
+    inp.addEventListener("input", () => {
+      teams[+inp.dataset.idx].name = inp.value;
+    });
+  });
+}
+
+function renderRoundNav() {
+  const nav = document.getElementById("round-nav");
+  nav.innerHTML = "";
+  ROUNDS.forEach((r, i) => {
+    const tab = document.createElement("div");
+    tab.className = "round-tab" + (i === currentRound ? " active" : "");
+    tab.textContent = `Round ${i + 1}: ${r.name}`;
+    tab.addEventListener("click", () => {
+      currentRound = i;
+      currentItem = 0;
+      renderRoundNav();
+      renderStage();
+    });
+    nav.appendChild(tab);
+  });
+}
+
+function renderStage() {
+  const stage = document.getElementById("stage");
+  const round = ROUNDS[currentRound];
+  const item = round.items[currentItem];
+  let html = `<div class="round-title">Round ${currentRound + 1}: ${round.name}</div>`;
+  html += `<div class="round-desc">${round.desc}</div>`;
+  html += `<div class="item-nav"><span class="item-count">Item ${currentItem + 1} of ${round.items.length}</span>`;
+  if (item.pts !== undefined) html += `<span class="pts-badge">${item.pts} pt${item.pts === 1 ? "" : "s"}</span>`;
+  html += `</div>`;
+
+  if (round.type === "vocab") {
+    html += `<div class="q-text">${item.q}</div>`;
+    html += `<div class="answer-box" id="answer-box"><h3>Definition</h3><p>${item.a}</p></div>`;
+  } else {
+    if (item.extract) html += `<div class="q-extract">${item.extract}</div>`;
+    html += `<div class="q-text">${item.q}</div>`;
+    html += `<div class="answer-box" id="answer-box"><h3>Model Answer</h3><p>${item.a}</p></div>`;
+  }
+
+  html += `<div class="btn-row">
+      <button class="btn btn-outline" id="prev-btn">◀ Previous</button>
+      <button class="btn" id="reveal-btn">Reveal Answer</button>
+      <button class="btn btn-outline" id="next-btn">Next ▶</button>
+    </div>`;
+
+  stage.innerHTML = html;
+
+  document.getElementById("reveal-btn").addEventListener("click", () => {
+    document.getElementById("answer-box").classList.toggle("show");
+  });
+  document.getElementById("prev-btn").addEventListener("click", () => {
+    if (currentItem > 0) { currentItem--; renderStage(); }
+    else if (currentRound > 0) { currentRound--; currentItem = ROUNDS[currentRound].items.length - 1; renderRoundNav(); renderStage(); }
+  });
+  document.getElementById("next-btn").addEventListener("click", () => {
+    if (currentItem < round.items.length - 1) { currentItem++; renderStage(); }
+    else if (currentRound < ROUNDS.length - 1) { currentRound++; currentItem = 0; renderRoundNav(); renderStage(); }
+  });
+}
+
+renderTeams();
+renderRoundNav();
+renderStage();
+</script>
+
+</body>
+</html>
