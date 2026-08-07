@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chain Reaction — speaking game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1330;
+  --ink-2:#1B2350;
+  --paper:#F2F0FF;
+  --amber:#FFB627;
+  --mint:#4FE0B0;
+  --rose:#FF5D8F;
+  --dim:rgba(242,240,255,.55);
+  --line:rgba(242,240,255,.16);
+  --display:'Bricolage Grotesque','Arial Black',Impact,sans-serif;
+  --body:'Space Grotesk','Trebuchet MS',Verdana,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{
+  margin:0;background:
+    radial-gradient(120% 90% at 50% -10%, #26306B 0%, var(--ink) 55%, #080B1E 100%);
+  color:var(--paper);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+}
+button,input{font-family:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+.wrap{height:100%;display:flex;flex-direction:column}
+
+/* ---------- top bar ---------- */
+.bar{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 20px;border-bottom:1px solid var(--line);flex:0 0 auto;
+}
+.brand{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:18px}
+.brand span{color:var(--amber)}
+.bar .spacer{flex:1}
+.chip{
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 12px;border:1px solid var(--line);border-radius:999px;color:var(--dim);
+}
+.bar button{
+  font-size:13px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);color:var(--dim);
+}
+.bar button:hover{color:var(--paper);border-color:var(--paper)}
+
+/* ---------- setup ---------- */
+.screen{flex:1;overflow-y:auto;padding:26px 20px 40px}
+.screen.stage{overflow:hidden;display:flex;flex-direction:column;padding:0}
+.setup{max-width:900px;margin:0 auto}
+h1{
+  font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.92;
+  font-size:clamp(34px,6vw,62px);margin:6px 0 6px;
+}
+h1 em{font-style:normal;color:var(--amber)}
+.sub{color:var(--dim);margin:0 0 26px;max-width:52ch;line-height:1.5}
+.lbl{
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
+  margin:26px 0 10px;display:block;
+}
+.counter{display:flex;align-items:center;gap:16px}
+.counter button{
+  width:46px;height:46px;border-radius:14px;border:1px solid var(--line);
+  font-size:24px;font-weight:700;line-height:1;
+}
+.counter button:hover{background:var(--ink-2)}
+.counter output{font-family:var(--display);font-size:44px;font-weight:800;min-width:64px;text-align:center}
+.counter small{color:var(--dim)}
+.names{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.names input{
+  width:100%;padding:13px 14px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px solid var(--line);font-size:16px;
+}
+.names input:focus{outline:2px solid var(--amber);outline-offset:1px;background:rgba(255,255,255,.09)}
+.modes{display:flex;flex-wrap:wrap;gap:10px}
+.mode{
+  display:flex;gap:10px;align-items:flex-start;padding:13px 16px;border-radius:14px;
+  border:1px solid var(--line);cursor:pointer;max-width:270px;
+}
+.mode input{accent-color:var(--amber);margin-top:3px;width:17px;height:17px}
+.mode b{display:block;font-size:15px}
+.mode span{color:var(--dim);font-size:12.5px;line-height:1.4}
+.mode:has(input:checked){border-color:var(--amber);background:rgba(255,182,39,.08)}
+.go{
+  margin-top:30px;font-family:var(--display);font-weight:800;font-size:22px;
+  background:var(--amber);color:#141024;padding:16px 34px;border-radius:16px;letter-spacing:-.01em;
+}
+.go:hover{transform:translateY(-2px)}
+.warn{color:var(--rose);font-size:14px;margin-top:12px;min-height:18px}
+
+/* ---------- stage ---------- */
+.spot{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:20px 24px;gap:18px;position:relative;
+}
+.spot::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(58% 46% at 50% 34%, rgba(255,182,39,.16), transparent 70%);
+  opacity:0;transition:opacity .5s ease;
+}
+.spot.lit::before{opacity:1}
+.turn{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.turn.chained{color:var(--mint)}
+.who{
+  font-family:var(--display);font-weight:800;letter-spacing:-.035em;line-height:.9;
+  font-size:clamp(42px,10vw,148px);color:var(--amber);
+}
+.who.rolling{color:var(--paper);opacity:.5}
+.q{
+  font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:1.12;
+  font-size:clamp(24px,4.4vw,64px);max-width:22ch;
+}
+.blank{
+  display:inline-block;min-width:5.5ch;border-bottom:.09em solid var(--mint);
+  margin:0 .12em;vertical-align:baseline;
+}
+.hint{color:var(--dim);font-size:clamp(13px,1.5vw,18px);max-width:46ch}
+.hint b{color:var(--mint);font-weight:500}
+
+/* controls */
+.controls{
+  flex:0 0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+  padding:16px 20px 22px;border-top:1px solid var(--line);
+}
+.controls button{
+  padding:15px 26px;border-radius:14px;font-size:16px;font-weight:700;
+  border:1px solid var(--line);
+}
+.controls .primary{background:var(--amber);color:#141024;border-color:var(--amber);font-size:19px}
+.controls .chain{border-color:var(--mint);color:var(--mint)}
+.controls button:hover{transform:translateY(-2px)}
+.keys{width:100%;text-align:center;color:var(--dim);font-size:11.5px;letter-spacing:.08em}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}
+ .controls button:hover,.go:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <div class="brand">Chain<span>Reaction</span></div>
+    <div class="spacer"></div>
+    <div class="chip" id="classChip" hidden></div>
+    <button id="backBtn" hidden>Setup</button>
+    <button id="fsBtn">Full screen</button>
+    <a href="../index.html" style="font-size:13px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);color:var(--dim);text-decoration:none">Home</a>
+  </div>
+
+  <!-- SETUP -->
+  <div class="screen" id="setupScreen">
+    <div class="setup">
+      <h1>Who's talking <em>next?</em></h1>
+      <p class="sub">Pick your class, pick your question types, then let the board choose. Answers can be serious or completely daft — as long as they're in English.</p>
+
+      <span class="lbl">How many students?</span>
+      <div class="counter">
+        <button id="minus" aria-label="Fewer students">&minus;</button>
+        <output id="count">6</output>
+        <button id="plus" aria-label="More students">+</button>
+        <small>1&ndash;12</small>
+      </div>
+
+      <span class="lbl">Names</span>
+      <div class="names" id="names"></div>
+
+      <span class="lbl">Question types</span>
+      <div class="modes" id="modes">
+        <label class="mode"><input type="checkbox" value="ice" checked><span><b>Ice-breakers</b><span>Warm-ups. One-word answers allowed, then push for why.</span></span></label>
+        <label class="mode"><input type="checkbox" value="first"><span><b>First conditional</b><span>If it rains, what <i>will</i> you do? Real situations.</span></span></label>
+        <label class="mode"><input type="checkbox" value="second"><span><b>Second conditional</b><span>If you <i>could</i> fly&hellip; Imaginary situations.</span></span></label>
+        <label class="mode"><input type="checkbox" value="detective"><span><b>Detective</b><span>Explain the evidence with <i>must have</i> / <i>might have</i>.</span></span></label>
+      </div>
+
+      <span class="lbl">Turn order</span>
+      <div class="modes">
+        <label class="mode"><input type="checkbox" id="fair" checked><span><b>Everyone before repeats</b><span>Nobody gets picked twice until the whole class has had a go.</span></span></label>
+      </div>
+
+      <button class="go" id="startBtn">Start the game</button>
+      <p class="warn" id="warn"></p>
+    </div>
+  </div>
+
+  <!-- STAGE -->
+  <div class="screen stage" id="stageScreen" hidden>
+    <div class="spot" id="spot">
+      <div class="turn" id="turnLbl">Ready</div>
+      <div class="who" id="who">&mdash;</div>
+      <div class="q" id="q">Press <em>Next turn</em> to begin</div>
+      <div class="hint" id="hint"></div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="nextBtn">Next turn</button>
+      <button class="chain" id="chainBtn">Chain it &mdash; If ___</button>
+      <button id="skipBtn">New question, same student</button>
+      <button id="styleBtn">Stems: mixed</button>
+      <button id="modalBtn">will</button>
+      <div class="keys">SPACE next turn &middot; C chain &middot; S stem style &middot; W will/would &middot; ESC setup</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- question banks ---------------- */
+const BANK = {
+ice:[
+ "What's the best thing that's happened to you this week?",
+ "If today was a film, what would the title be?",
+ "What are you good at that nobody knows about?",
+ "What did you believe when you were little that was completely wrong?",
+ "What's the strangest thing you've ever eaten?",
+ "Describe your weekend in three words.",
+ "Rate your morning out of ten — and explain the number.",
+ "What's in your bag right now that you don't need?",
+ "What's the most overrated food?",
+ "Which school rule would you delete, and why?",
+ "Cats or dogs? Defend your answer.",
+ "Invent a new school subject. Who teaches it?",
+ "What's one thing adults get wrong about people your age?",
+ "You can rename one animal. Which one, and what's its new name?",
+ "What was the last thing that made you laugh?",
+ "Design the perfect ice cream flavour and sell it to me.",
+ "Who would you swap lives with for one day?",
+ "What would you put in a time capsule for 100 years' time?",
+ "Your life is a video game — what's your special power?",
+ "What's a job you'd never do, no matter the money?"
+],
+first:[
+ "If it rains tomorrow, what will you do?",
+ "If you find fifty ringgit in the street, what will you do?",
+ "If your alarm doesn't ring tomorrow, what will happen?",
+ "If you eat all the biscuits, what will you tell your mum?",
+ "If the school wifi breaks, what will everyone do?",
+ "If your pet learns to talk tonight, what will you ask it?",
+ "If you're late tomorrow, what excuse will you use?",
+ "If there's no electricity tonight, what will you do?",
+ "If your best friend copies your homework, what will you do?",
+ "If a monkey takes your bag, what will you do?",
+ "If you see your teacher at the mall, what will you do?",
+ "If you drop your phone down the drain, what will happen?",
+ "If the teacher falls asleep in class, what will you all do?",
+ "If you burn the rice, what will you eat instead?",
+ "If your little brother breaks your game, what will you say?",
+ "If nobody comes to your party, what will you do?",
+ "If you win the school race, what will you do first?",
+ "If the lift stops with you inside, what will you do?"
+],
+second:[
+ "If you could be invisible for a day, where would you go?",
+ "If you had a time machine, when would you go?",
+ "If you were the headteacher, which rule would you delete?",
+ "If animals could vote, which animal would win?",
+ "If you woke up as your teacher, what would you do first?",
+ "If you could delete one food from the world, what would it be?",
+ "If you had a robot twin, what would you make it do?",
+ "If money didn't exist, what would people trade instead?",
+ "If you could talk to fish, what would you ask them?",
+ "If you lived on the moon, what would you miss most?",
+ "If your dog could drive, where would it take you?",
+ "If gravity stopped for one minute, what would you do?",
+ "If you found a secret door in your bedroom wall, would you open it?",
+ "If you could only eat one meal for the rest of your life, what would it be?",
+ "If your phone could read your thoughts, what would it say about you?",
+ "If school started at 3pm, how would your life change?",
+ "If you could swap lives with a footballer for a week, who would it be?"
+],
+detective:[
+ "The classroom window is broken and there's a football outside. What happened?",
+ "All the biscuits are gone and the dog is asleep with crumbs on its nose. Explain.",
+ "Your teacher arrives wearing one blue sock and one red sock. Why?",
+ "There are wet footprints leading from the toilet to the head's office. Explain.",
+ "A man walks into school at midnight with a ladder and a chicken. Why?",
+ "Your friend comes to school in pyjamas and looks very calm. What's the story?",
+ "The lights go out, and when they come back on the whiteboard says SORRY. Who wrote it?",
+ "Everyone's homework is wet, but it didn't rain. What happened?",
+ "The class hamster is missing and the window is open. Where is it?",
+ "Your neighbour has bought forty umbrellas. Why?",
+ "A car is parked on the school roof. How did it get there?",
+ "The canteen has run out of rice for the first time ever. What happened?",
+ "Someone left one shoe in the middle of the field. Explain.",
+ "Your phone has 47 missed calls from an unknown number. Who is it?",
+ "The head teacher is hiding behind the door with a cake. Why?",
+ "Every clock in the building says a different time. What's going on?"
+]
+};
+const HINTS = {
+ detective:"Use <b>must have</b>, <b>might have</b>, <b>can't have</b> — and give a reason.",
+ first:"Answer with <b>I'll…</b> then say why.",
+ second:"Answer with <b>I'd…</b> then say why.",
+ ice:""
+};
+
+/* chain tails — the board shows "If ____, " + tail; the teacher speaks the blank */
+const TAILS_SENSIBLE=[
+ "what will you do next?",
+ "who will you tell?",
+ "how will you feel?",
+ "what will happen then?",
+ "where will you go afterwards?",
+ "what will your best friend say?",
+ "what will you need?",
+ "what will go wrong?",
+ "what will your mum say?",
+ "how will you fix it?",
+ "when will you stop?",
+ "what will you do the day after?"
+];
+const TAILS_SILLY=[
+ "what will the neighbour's cat think?",
+ "how will you explain it to the police?",
+ "which animal will help you?",
+ "what will you smell like afterwards?",
+ "what will the newspaper headline say?",
+ "how will you do the same thing in space?",
+ "what will you name your new pet dinosaur?",
+ "what will the ghost in the toilet say?",
+ "how much durian will you need?",
+ "what will go wrong at three in the morning?",
+ "who will you blame?",
+ "what will you wear?",
+ "how will you escape?",
+ "what will the monkeys do about it?",
+ "what will your future self say to you?",
+ "what noise will it make?",
+ "what will you find under the bed?",
+ "how will you do it with no hands?",
+ "which superhero will you phone first?",
+ "what will the teacher write on your report card?",
+ "what will you feed the crocodile?",
+ "how will you keep it a secret from your grandmother?"
+];
+const STYLES=["mixed","sensible","silly"];
+const STYLE_LBL={mixed:"Stems: mixed",sensible:"Stems: sensible",silly:"Stems: silly"};
+let stemStyle="mixed", modal="will";
+
+/* ---------------- state ---------------- */
+let students=[], modes=["ice"], pool=[], used=[], usedTails=[], bag=[], last=-1,
+    fair=true, chainLen=0, current={name:"",q:"",type:""};
+
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------------- setup UI ---------------- */
+let n=6;
+function drawNames(){
+  const box=$("names"), old=[...box.querySelectorAll("input")].map(i=>i.value);
+  box.innerHTML="";
+  for(let i=0;i<n;i++){
+    const inp=document.createElement("input");
+    inp.placeholder="Student "+(i+1);
+    inp.value=old[i]||"";
+    inp.setAttribute("aria-label","Student "+(i+1)+" name");
+    box.appendChild(inp);
+  }
+}
+drawNames();
+$("plus").onclick=()=>{if(n<12){n++;$("count").textContent=n;drawNames();}};
+$("minus").onclick=()=>{if(n>1){n--;$("count").textContent=n;drawNames();}};
+
+$("startBtn").onclick=()=>{
+  students=[...$("names").querySelectorAll("input")].map((inp,i)=>inp.value.trim()||"Student "+(i+1));
+  modes=[...$("modes").querySelectorAll("input:checked")].map(c=>c.value);
+  fair=$("fair").checked;
+  if(!modes.length){$("warn").textContent="Pick at least one question type.";return;}
+  $("warn").textContent="";
+  pool=modes.flatMap(m=>BANK[m].map(text=>({text,type:m})));
+  used=[];usedTails=[];bag=[];last=-1;chainLen=0;
+  $("setupScreen").hidden=true;$("stageScreen").hidden=false;
+  $("backBtn").hidden=false;
+  $("classChip").hidden=false;$("classChip").textContent=students.length+" students";
+  $("who").textContent="—";$("q").innerHTML="Press <em>Next turn</em> to begin";$("hint").innerHTML="";
+  $("turnLbl").textContent="Ready";$("turnLbl").classList.remove("chained");
+};
+$("backBtn").onclick=goSetup;
+function goSetup(){
+  $("stageScreen").hidden=true;$("setupScreen").hidden=false;
+  $("backBtn").hidden=true;$("classChip").hidden=true;
+}
+$("fsBtn").onclick=()=>{
+  if(!document.fullscreenElement){document.documentElement.requestFullscreen?.();}
+  else{document.exitFullscreen?.();}
+};
+
+/* ---------------- picking ---------------- */
+function pickStudent(){
+  if(students.length===1)return 0;
+  if(fair){
+    if(!bag.length)bag=students.map((_,i)=>i).filter(i=>i!==last);
+    const k=Math.floor(Math.random()*bag.length);
+    return bag.splice(k,1)[0];
+  }
+  let i;do{i=Math.floor(Math.random()*students.length);}while(i===last);
+  return i;
+}
+function pickQuestion(){
+  if(used.length>=pool.length)used=[];
+  const cand=pool.filter(q=>!used.includes(q.text));
+  const q=cand[Math.floor(Math.random()*cand.length)];
+  used.push(q.text);
+  return q;
+}
+function pickTail(){
+  let list;
+  if(stemStyle==="sensible")list=TAILS_SENSIBLE;
+  else if(stemStyle==="silly")list=TAILS_SILLY;
+  else list=TAILS_SENSIBLE.concat(TAILS_SILLY);
+  let cand=list.filter(t=>!usedTails.includes(t));
+  if(!cand.length){usedTails=[];cand=list;}
+  const t=cand[Math.floor(Math.random()*cand.length)];
+  usedTails.push(t);
+  return t;
+}
+
+/* ---------------- display ---------------- */
+function reveal(name,roll,then){
+  const who=$("who"),spot=$("spot");
+  spot.classList.remove("lit");
+  if(roll&&students.length>1&&!window.matchMedia("(prefers-reduced-motion:reduce)").matches){
+    who.classList.add("rolling");
+    let ticks=0;
+    const iv=setInterval(()=>{
+      who.textContent=students[Math.floor(Math.random()*students.length)];
+      if(++ticks>10){clearInterval(iv);who.classList.remove("rolling");who.textContent=name;spot.classList.add("lit");}
+    },70);
+  }else{
+    who.classList.remove("rolling");who.textContent=name;
+    requestAnimationFrame(()=>spot.classList.add("lit"));
+  }
+}
+function showQuestion(name,question,type,roll){
+  current={name,q:question,type};chainLen=0;
+  $("turnLbl").textContent="Your turn";$("turnLbl").classList.remove("chained");
+  $("q").textContent=question;
+  $("hint").innerHTML=HINTS[type]||"";
+  reveal(name,roll);
+}
+function showChain(name,tail){
+  current={name,q:tail,type:current.type};
+  chainLen++;
+  $("turnLbl").textContent="Chain link "+chainLen;
+  $("turnLbl").classList.add("chained");
+  $("q").innerHTML='If <span class="blank"></span>, '+esc(tail);
+  $("hint").innerHTML="Teacher: read the blank as the last answer.";
+  reveal(name,true);
+}
+
+/* ---------------- turns ---------------- */
+function nextTurn(){
+  const i=pickStudent();last=i;
+  const q=pickQuestion();
+  showQuestion(students[i],q.text,q.type,true);
+  setModal(q.type==="second"?"would":"will");
+}
+function sameStudentNewQuestion(){
+  const q=pickQuestion();
+  showQuestion(current.name||students[Math.max(last,0)],q.text,q.type,false);
+  setModal(q.type==="second"?"would":"will");
+}
+function chainIt(){
+  if(!current.name){nextTurn();return;}
+  const i=pickStudent();last=i;
+  let tail=pickTail();
+  if(modal==="would")tail=tail.replace(/\bwill\b/g,"would");
+  showChain(students[i],tail);
+}
+$("nextBtn").onclick=nextTurn;
+$("skipBtn").onclick=sameStudentNewQuestion;
+$("chainBtn").onclick=chainIt;
+
+$("styleBtn").onclick=()=>{
+  stemStyle=STYLES[(STYLES.indexOf(stemStyle)+1)%STYLES.length];
+  usedTails=[];
+  $("styleBtn").textContent=STYLE_LBL[stemStyle];
+  $("styleBtn").style.borderColor=(stemStyle==="silly")?"var(--rose)":"var(--line)";
+  $("styleBtn").style.color=(stemStyle==="silly")?"var(--rose)":"var(--paper)";
+};
+function setModal(m){
+  modal=m;
+  $("modalBtn").textContent=m;
+  $("modalBtn").style.borderColor="var(--mint)";
+  $("modalBtn").style.color="var(--mint)";
+}
+$("modalBtn").onclick=()=>setModal(modal==="will"?"would":"will");
+
+/* ---------------- keys ---------------- */
+document.addEventListener("keydown",e=>{
+  if($("stageScreen").hidden)return;
+  if(e.key==="Escape"){goSetup();return;}
+  if(document.activeElement&&document.activeElement.tagName==="INPUT")return;
+  if(e.code==="Space"||e.key==="Enter"){e.preventDefault();nextTurn();}
+  const k=e.key.toLowerCase();
+  if(k==="c"){chainIt();}
+  if(k==="s"){$("styleBtn").click();}
+  if(k==="w"){$("modalBtn").click();}
+});
+</script>
+</body>
+</html>

@@ -50,6 +50,7 @@ The `index.html` has:
 | `star-hunt` | Hot/Cold star hunt — text questions from questions.js, level filter |
 | `star-hunt-jr` | Hot/Cold star hunt — picture/emoji questions, preschool categories |
 | `evil` | Score closest to zero — keep or give your points away (3–6 teams) |
+| `chain-reaction` | Speaking game — random student picker (1–12 names), question banks: ice-breakers, first/second conditional, detective. Self-contained, own dark-violet theme. |
 
 ### Unit-based / Topic Games (linked from unit cards)
 | Folder | Topic |
