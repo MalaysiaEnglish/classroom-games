@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentence Auction — IGCSE Accuracy</title>
+<style>
+:root {
+  --bg-a: #0f2027; --bg-b: #203a43; --bg-c: #2c5364;
+  --accent: #00c9a7; --accent2: #f7b731;
+  --danger: #ef4444; --safe: #22c55e;
+  --text: #ffffff; --text-dim: rgba(255,255,255,0.65);
+  --glass: rgba(255,255,255,0.09); --glass-hi: rgba(255,255,255,0.16);
+  --glass-border: rgba(255,255,255,0.18);
+  --shadow: 0 8px 32px rgba(0,0,0,0.45);
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body {
+  background: linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 50%, var(--bg-c) 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+  min-height: 100vh;
+  padding: 10px 10px 60px;
+  overflow-x: hidden;
+}
+h1 {
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 900;
+  text-align: center;
+  margin: 4px 0 4px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  background: linear-gradient(90deg, #fff 0%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.subtitle { text-align:center; color:var(--text-dim); font-size:0.95rem; margin-bottom:14px; }
+.controls {
+  display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+  margin: 0 auto 16px; max-width: 95vw;
+  background: var(--glass); backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border); border-radius: 14px;
+  padding: 10px 12px; box-shadow: var(--shadow);
+}
+button {
+  padding: 9px 18px; border: 1px solid var(--glass-border); border-radius: 10px;
+  font-weight: 700; font-size: clamp(0.85rem, 2vw, 1rem); cursor: pointer;
+  min-width: 100px; transition: filter 0.15s, transform 0.1s;
+  background: var(--glass-hi); color: var(--text);
+}
+button:hover  { filter: brightness(1.18); transform: translateY(-1px); }
+button:active { transform: translateY(0); filter: brightness(0.95); }
+button:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+#fullscreen { background: #1d4ed8; border-color: #3b82f6; }
+#restart    { background: #7c3aed; border-color: #a78bfa; }
+.card {
+  max-width: 900px; margin: 0 auto 16px; background: var(--glass);
+  backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
+  border-radius: 16px; padding: 20px; box-shadow: var(--shadow);
+}
+.screen { display:none; }
+.screen.active { display:block; }
+input[type=text], input[type=number] {
+  padding: 8px 12px; border-radius: 8px; border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.10); color:white; font-size:1rem; font-weight:600;
+  width: 100%;
+}
+select { background:#1a2a38; color:white; padding:8px 12px; border-radius:8px; border:1px solid var(--glass-border); font-weight:600; }
+label { font-weight:600; color:var(--text-dim); display:block; margin-bottom:4px; font-size:0.85rem; }
+.setup-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:18px; }
+.setup-field { min-width:160px; }
+#teamNameGrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-bottom:18px; }
+.team-name-box { display:flex; align-items:center; gap:8px; }
+.team-swatch { width:18px; height:18px; border-radius:50%; flex-shrink:0; }
+.big-btn { display:block; margin:20px auto 0; padding:14px 40px; font-size:1.2rem; background:var(--accent); color:#00251c; border-color:var(--accent); }
+
+#progress { text-align:center; color:var(--text-dim); font-weight:700; margin-bottom:8px; letter-spacing:0.5px; }
+#sentenceCard {
+  background: rgba(255,255,255,0.06); border:1px solid var(--glass-border); border-radius:14px;
+  padding: 26px 22px; text-align:center; margin-bottom:18px; min-height:90px;
+  display:flex; align-items:center; justify-content:center;
+}
+#sentenceText { font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight:700; line-height:1.4; }
+
+#bidGrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-bottom:18px; }
+.bid-card {
+  background: rgba(255,255,255,0.07); border:2px solid var(--glass-border); border-radius:14px;
+  padding: 14px; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.bid-card .tname { font-weight:800; font-size:1.05rem; margin-bottom:2px; display:flex; align-items:center; gap:8px; }
+.bid-card .budget { color:var(--text-dim); font-size:0.85rem; margin-bottom:10px; }
+.bid-row { display:flex; align-items:center; gap:6px; }
+.bid-row button { min-width:auto; padding:6px 10px; font-size:1rem; }
+.bid-row input { text-align:center; font-size:1.1rem; }
+.bid-card.locked { opacity:0.55; }
+.bid-card.correct-win { border-color: var(--safe); box-shadow: 0 0 18px rgba(34,197,94,0.5); }
+.bid-card.wrong-lose { border-color: var(--danger); box-shadow: 0 0 18px rgba(239,68,68,0.5); }
+
+#verdictBanner {
+  display:none; text-align:center; font-weight:900; font-size:clamp(1.3rem,4vw,2rem);
+  padding: 14px; border-radius:12px; margin-bottom:14px;
+}
+#verdictBanner.show-correct { display:block; background:rgba(34,197,94,0.18); border:2px solid var(--safe); color:#86efac; }
+#verdictBanner.show-wrong { display:block; background:rgba(239,68,68,0.18); border:2px solid var(--danger); color:#fca5a5; }
+#correctionText { text-align:center; color:var(--text-dim); font-size:1rem; margin-bottom:10px; font-style:italic; }
+#explanationText { text-align:center; color:var(--accent2); font-size:0.95rem; margin-bottom:14px; }
+
+#scoreboard { max-width:900px; margin:0 auto 16px; }
+.score-row { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.06); border-radius:10px; padding:8px 14px; margin-bottom:6px; }
+.score-row .rank { font-weight:900; width:28px; text-align:center; }
+.score-row .name { font-weight:700; flex:1; }
+.score-row .amt { font-weight:800; font-variant-numeric: tabular-nums; }
+
+#finalTable { max-width:600px; margin:0 auto; }
+.final-row { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.08); border-radius:12px; padding:14px 18px; margin-bottom:10px; font-size:1.1rem; }
+.final-row .medal { font-size:1.6rem; width:40px; text-align:center; }
+.final-row .fname { font-weight:800; flex:1; }
+.final-row .famt { font-weight:900; font-variant-numeric: tabular-nums; color:var(--accent2); }
+
+.rules-box { max-width:900px; margin:0 auto 18px; background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); border-radius:12px; padding:14px 18px; font-size:0.9rem; color:var(--text-dim); line-height:1.6; }
+.rules-box b { color:var(--text); }
+</style>
+</head>
+<body>
+
+<h1>💰 Sentence Auction</h1>
+<div class="subtitle">IGCSE English · Grammar &amp; Accuracy · Y10 Term 2</div>
+
+<div class="controls">
+  <button id="fullscreen" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+  <button id="restart" onclick="goToSetup()">🔁 New Game</button>
+</div>
+
+<!-- SETUP SCREEN -->
+<div class="screen active" id="screen-setup">
+  <div class="card">
+    <div class="rules-box">
+      <b>How to play:</b> Each team gets a budget of play-money. For every sentence shown, teams secretly decide (on paper or by whispering) how much of their budget they want to bid that the sentence is <b>grammatically correct</b>. The teacher enters each team's bid, then hits Reveal. If the sentence <b>was</b> correct, every team that bid on it doubles their bid (bid × 2 added to their budget). If it was <b>incorrect</b>, every team that bid on it loses that amount. Teams can also bid <b>0</b> to sit a round out safely. Richest team after all sentences wins!
+    </div>
+    <div class="setup-row">
+      <div class="setup-field">
+        <label>Number of teams</label>
+        <select id="numTeams" onchange="buildTeamNameGrid()">
+          <option value="2">2 teams</option>
+          <option value="3" selected>3 teams</option>
+          <option value="4">4 teams</option>
+          <option value="5">5 teams</option>
+          <option value="6">6 teams</option>
+        </select>
+      </div>
+      <div class="setup-field">
+        <label>Starting budget</label>
+        <select id="startBudget">
+          <option value="500">$500</option>
+          <option value="1000" selected>$1000</option>
+          <option value="2000">$2000</option>
+        </select>
+      </div>
+      <div class="setup-field">
+        <label>Number of sentences</label>
+        <select id="numSentences">
+          <option value="10">10 (quick round)</option>
+          <option value="15">15</option>
+          <option value="22" selected>22 (all)</option>
+        </select>
+      </div>
+    </div>
+    <div id="teamNameGrid"></div>
+    <button class="big-btn" onclick="startGame()">Start Auction ▶</button>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="screen-game">
+  <div id="progress"></div>
+  <div id="sentenceCard"><div id="sentenceText"></div></div>
+
+  <div id="verdictBanner"></div>
+  <div id="correctionText"></div>
+  <div id="explanationText"></div>
+
+  <div id="bidGrid"></div>
+
+  <div style="text-align:center;">
+    <button id="lockBtn" class="big-btn" onclick="revealSentence()">🔨 Lock In Bids &amp; Reveal</button>
+    <button id="nextBtn" class="big-btn" style="display:none; background:var(--accent2); border-color:var(--accent2); color:#332200;" onclick="nextSentence()">Next Sentence ▶</button>
+  </div>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="screen" id="screen-final">
+  <div class="card">
+    <h1 style="margin-bottom:18px;">🏆 Final Results</h1>
+    <div id="finalTable"></div>
+    <button class="big-btn" onclick="goToSetup()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const TEAM_COLORS = ['#00c9a7','#f7b731','#e94560','#a78bfa','#4ade80','#4FC3F7'];
+
+// 22 sentences: mix of correct and grammatically flawed, IGCSE Y10 accuracy level.
+// Each has a single clearly identifiable error type when incorrect.
+const ALL_SENTENCES = [
+  { text: "Although the storm had passed, the streets were still flooded.", correct: true },
+  { text: "The team of scientists were studying the effects of climate change.", correct: false,
+    fix: "The team of scientists was studying the effects of climate change.",
+    why: "Subject–verb agreement: 'team' is a singular collective noun, so it takes 'was', not 'were'." },
+  { text: "Its a shame that the match was cancelled due to the weather.", correct: false,
+    fix: "It's a shame that the match was cancelled due to the weather.",
+    why: "Missing apostrophe: 'It's' (it is) is needed, not the possessive 'Its'." },
+  { text: "Despite the rain, we're going to walk to the beach; it's not far.", correct: true },
+  { text: "The dog who's collar was missing ran straight into the road.", correct: false,
+    fix: "The dog whose collar was missing ran straight into the road.",
+    why: "'Who's' means 'who is'. The possessive form needed here is 'whose'." },
+  { text: "Running late for the bus, my umbrella was left behind.", correct: false,
+    fix: "Running late for the bus, I left my umbrella behind.",
+    why: "Dangling modifier: as written, the umbrella is running late for the bus, not 'I'." },
+  { text: "The manager said that she would email the report by Friday.", correct: true },
+  { text: "Neither of the answers were correct, so we asked the teacher again.", correct: false,
+    fix: "Neither of the answers was correct, so we asked the teacher again.",
+    why: "'Neither' is singular, so it takes 'was', not 'were'." },
+  { text: "Because I was tired.", correct: false,
+    fix: "Because I was tired, I went to bed early.",
+    why: "Sentence fragment: a subordinate clause on its own is not a complete sentence." },
+  { text: "The committee has decided to postpone it's decision until next week.", correct: false,
+    fix: "The committee has decided to postpone its decision until next week.",
+    why: "'Its' (possessive) is needed here, not the contraction 'it's' (it is)." },
+  { text: "Whenever the wind picks up, the old gate creaks loudly.", correct: true },
+  { text: "The results, which surprised everyone, were published in the local paper.", correct: true },
+  { text: "Me and him went to the exhibition on Saturday morning.", correct: false,
+    fix: "He and I went to the exhibition on Saturday morning.",
+    why: "Subject pronouns are needed: 'He and I', not 'Me and him'." },
+  { text: "She said, \"I can't believe we won the competition!\"", correct: true },
+  { text: "The recipe requires: flour, sugar, and two eggs.", correct: false,
+    fix: "The recipe requires flour, sugar, and two eggs.",
+    why: "A colon shouldn't directly follow a verb like 'requires' — the list completes the sentence on its own." },
+  { text: "By the time we arrived, the film had already started.", correct: true },
+  { text: "There going to announce the winners tomorrow morning.", correct: false,
+    fix: "They're going to announce the winners tomorrow morning.",
+    why: "'There' (place) is used where 'They're' (they are) is needed." },
+  { text: "Having finished the exam early, the classroom felt very quiet to Sam.", correct: false,
+    fix: "Having finished the exam early, Sam felt the classroom was very quiet.",
+    why: "Dangling modifier: the classroom didn't finish the exam — Sam did." },
+  { text: "The charity has raised over £10,000 this year, it hopes to double that by December.", correct: false,
+    fix: "The charity has raised over £10,000 this year; it hopes to double that by December.",
+    why: "Comma splice: two independent clauses need a semicolon, full stop, or conjunction — not just a comma." },
+  { text: "Although the bridge looked unstable, engineers confirmed it was completely safe.", correct: true },
+  { text: "The exhausted hikers, who had walked for six hours, finally reached the summit.", correct: true },
+  { text: "If the weather stays fine, we'll hold the sports day outside.", correct: true }
+];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let teams = [];        // {name, color, budget}
+let sentences = [];    // shuffled subset for this game
+let currentIdx = 0;
+let bids = [];         // per team, this round
+let revealed = false;
+
+function buildTeamNameGrid() {
+  const n = parseInt(document.getElementById('numTeams').value);
+  const grid = document.getElementById('teamNameGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const div = document.createElement('div');
+    div.className = 'team-name-box';
+    div.innerHTML = `<span class="team-swatch" style="background:${TEAM_COLORS[i]}"></span>
+      <input type="text" id="teamName${i}" placeholder="Team ${i+1}" value="Team ${i+1}">`;
+    grid.appendChild(div);
+  }
+}
+buildTeamNameGrid();
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToSetup() { showScreen('screen-setup'); }
+
+function startGame() {
+  const n = parseInt(document.getElementById('numTeams').value);
+  const budget = parseInt(document.getElementById('startBudget').value);
+  const numSent = parseInt(document.getElementById('numSentences').value);
+
+  teams = [];
+  for (let i = 0; i < n; i++) {
+    const nameInput = document.getElementById('teamName' + i);
+    teams.push({
+      name: (nameInput.value.trim() || ('Team ' + (i+1))),
+      color: TEAM_COLORS[i],
+      budget: budget
+    });
+  }
+  sentences = shuffle(ALL_SENTENCES).slice(0, numSent);
+  currentIdx = 0;
+  showScreen('screen-game');
+  loadSentence();
+}
+
+function loadSentence() {
+  revealed = false;
+  const s = sentences[currentIdx];
+  document.getElementById('progress').textContent = `Sentence ${currentIdx + 1} of ${sentences.length}`;
+  document.getElementById('sentenceText').textContent = '“' + s.text + '”';
+  document.getElementById('verdictBanner').className = '';
+  document.getElementById('verdictBanner').textContent = '';
+  document.getElementById('correctionText').textContent = '';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('lockBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  bids = teams.map(() => 0);
+  renderBidGrid();
+}
+
+function renderBidGrid() {
+  const grid = document.getElementById('bidGrid');
+  grid.innerHTML = '';
+  teams.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = 'bid-card';
+    div.id = 'bidcard' + i;
+    div.innerHTML = `
+      <div class="tname"><span class="team-swatch" style="background:${t.color}"></span>${t.name}</div>
+      <div class="budget">Budget: $${t.budget}</div>
+      <div class="bid-row">
+        <button onclick="adjustBid(${i}, -50)">−50</button>
+        <input type="number" id="bidinput${i}" value="0" min="0" max="${t.budget}" step="10"
+          oninput="clampBid(${i})">
+        <button onclick="adjustBid(${i}, 50)">+50</button>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function clampBid(i) {
+  const input = document.getElementById('bidinput' + i);
+  let v = parseInt(input.value) || 0;
+  if (v < 0) v = 0;
+  if (v > teams[i].budget) v = teams[i].budget;
+  input.value = v;
+  bids[i] = v;
+}
+
+function adjustBid(i, delta) {
+  const input = document.getElementById('bidinput' + i);
+  let v = (parseInt(input.value) || 0) + delta;
+  if (v < 0) v = 0;
+  if (v > teams[i].budget) v = teams[i].budget;
+  input.value = v;
+  bids[i] = v;
+}
+
+function revealSentence() {
+  if (revealed) return;
+  revealed = true;
+  // sync any un-fired input changes
+  teams.forEach((t, i) => clampBid(i));
+
+  const s = sentences[currentIdx];
+  const banner = document.getElementById('verdictBanner');
+  if (s.correct) {
+    banner.className = 'show-correct';
+    banner.textContent = '✅ CORRECT — grammatically accurate as written!';
+    document.getElementById('correctionText').textContent = '';
+    document.getElementById('explanationText').textContent = '';
+  } else {
+    banner.className = 'show-wrong';
+    banner.textContent = '❌ INCORRECT — there was an error!';
+    document.getElementById('correctionText').textContent = 'Correction: ' + s.fix;
+    document.getElementById('explanationText').textContent = s.why;
+  }
+
+  teams.forEach((t, i) => {
+    const bid = bids[i];
+    const card = document.getElementById('bidcard' + i);
+    card.classList.add('locked');
+    if (bid > 0) {
+      if (s.correct) {
+        t.budget += bid;
+        card.classList.add('correct-win');
+      } else {
+        t.budget -= bid;
+        card.classList.add('wrong-lose');
+      }
+    }
+    card.querySelector('.budget').textContent = 'Budget: $' + t.budget + (bid > 0 ? (s.correct ? `  (+${bid})` : `  (−${bid})`) : '');
+  });
+
+  document.getElementById('lockBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (currentIdx === sentences.length - 1) ? 'See Final Results 🏆' : 'Next Sentence ▶';
+}
+
+function nextSentence() {
+  currentIdx++;
+  if (currentIdx >= sentences.length) {
+    showFinal();
+  } else {
+    loadSentence();
+  }
+}
+
+function showFinal() {
+  showScreen('screen-final');
+  const ranked = [...teams].sort((a, b) => b.budget - a.budget);
+  const medals = ['🥇','🥈','🥉'];
+  const table = document.getElementById('finalTable');
+  table.innerHTML = '';
+  ranked.forEach((t, i) => {
+    const row = document.createElement('div');
+    row.className = 'final-row';
+    row.innerHTML = `<span class="medal">${medals[i] || '🏅'}</span>
+      <span class="team-swatch" style="background:${t.color}"></span>
+      <span class="fname">${t.name}</span>
+      <span class="famt">$${t.budget}</span>`;
+    table.appendChild(row);
+  });
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+</script>
+</body>
+</html>
