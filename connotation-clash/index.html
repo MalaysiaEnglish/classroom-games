@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connotation Clash</title>
+<style>
+:root {
+  --bg-a: #0f2027; --bg-b: #203a43; --bg-c: #2c5364;
+  --accent: #00c9a7; --accent2: #f7b731;
+  --danger: #ef4444; --safe: #22c55e;
+  --text: #ffffff; --text-dim: rgba(255,255,255,0.65);
+  --glass: rgba(255,255,255,0.09); --glass-hi: rgba(255,255,255,0.16);
+  --glass-border: rgba(255,255,255,0.18);
+  --shadow: 0 8px 32px rgba(0,0,0,0.45);
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body {
+  background: linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 50%, var(--bg-c) 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+  min-height: 100vh;
+  padding: 10px 10px 60px;
+  overflow-x: hidden;
+}
+h1 {
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  font-weight: 900;
+  text-align: center;
+  margin: 4px 0 4px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  background: linear-gradient(90deg, #fff 0%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.subtitle { text-align:center; color:var(--text-dim); font-size:0.95rem; margin-bottom:14px; }
+.controls {
+  display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+  margin: 0 auto 16px; max-width: 95vw;
+  background: var(--glass); backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border); border-radius: 14px;
+  padding: 10px 12px; box-shadow: var(--shadow);
+}
+button {
+  padding: 9px 18px; border: 1px solid var(--glass-border); border-radius: 10px;
+  font-weight: 700; font-size: clamp(0.85rem, 2vw, 1rem); cursor: pointer;
+  min-width: 100px; transition: filter 0.15s, transform 0.1s;
+  background: var(--glass-hi); color: var(--text);
+}
+button:hover  { filter: brightness(1.18); transform: translateY(-1px); }
+button:active { transform: translateY(0); filter: brightness(0.95); }
+button:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+#fullscreenBtn { background: #1d4ed8; border-color: #3b82f6; }
+#homeBtn       { background: #7c3aed; border-color: #a78bfa; }
+#newGameBtn    { background: var(--accent2); border-color: var(--accent2); color:#332200; }
+.card {
+  max-width: 900px; margin: 0 auto 16px; background: var(--glass);
+  backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
+  border-radius: 16px; padding: 20px; box-shadow: var(--shadow);
+}
+.screen { display:none; }
+.screen.active { display:block; }
+input[type=text], input[type=number] {
+  padding: 8px 12px; border-radius: 8px; border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.10); color:white; font-size:1rem; font-weight:600;
+  width: 100%;
+}
+select { background:#1a2a38; color:white; padding:8px 12px; border-radius:8px; border:1px solid var(--glass-border); font-weight:600; }
+label { font-weight:600; color:var(--text-dim); display:block; margin-bottom:4px; font-size:0.85rem; }
+.setup-row { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:10px; }
+.setup-field { min-width:160px; }
+.team-name-box { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.team-swatch { width:18px; height:18px; border-radius:50%; flex-shrink:0; }
+.btn-remove { background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:1.1rem; padding:0 4px; }
+.big-btn { display:block; margin:20px auto 0; padding:14px 40px; font-size:1.2rem; background:var(--accent); color:#00251c; border-color:var(--accent); }
+.rules-box { max-width:900px; margin:0 auto 18px; background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); border-radius:12px; padding:14px 18px; font-size:0.9rem; color:var(--text-dim); line-height:1.6; }
+.rules-box b { color:var(--text); }
+
+#progress { text-align:center; color:var(--text-dim); font-weight:700; margin-bottom:8px; letter-spacing:0.5px; }
+.scoreboard { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:14px; }
+.team-chip { padding:8px 16px; border-radius:30px; background:rgba(255,255,255,0.06); border:2px solid transparent; font-weight:700; font-size:0.9rem; transition: all 0.2s; }
+.team-chip.active { border-color:var(--accent2); box-shadow:0 0 16px rgba(247,183,49,0.4); transform:scale(1.06); }
+.team-chip .score { margin-left:6px; opacity:0.8; }
+
+#turnBanner { text-align:center; font-size:1.2rem; font-weight:800; margin-bottom:14px; padding:10px; background:rgba(255,255,255,0.05); border-radius:10px; border:1px solid var(--glass-border); }
+
+#promptCard {
+  background: rgba(255,255,255,0.06); border:1px solid var(--glass-border); border-radius:14px;
+  padding: 24px 22px; text-align:center; margin-bottom:18px; min-height:70px;
+}
+#promptLabel { color: var(--accent2); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+#promptText { font-size: clamp(1.05rem, 2.8vw, 1.4rem); font-weight:700; line-height:1.5; }
+
+#optionsGrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:18px; }
+.opt-btn {
+  background: rgba(255,255,255,0.07); border:2px solid var(--glass-border); border-radius:12px;
+  padding: 16px; font-size:0.95rem; font-weight:700; text-align:left; line-height:1.4;
+  color: var(--text); min-width:0;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--accent2); background: rgba(255,255,255,0.11); }
+.opt-btn.correct-pick { border-color: var(--safe); background: rgba(34,197,94,0.18); box-shadow:0 0 18px rgba(34,197,94,0.4); }
+.opt-btn.wrong-pick { border-color: var(--danger); background: rgba(239,68,68,0.18); box-shadow:0 0 18px rgba(239,68,68,0.4); }
+.opt-btn.reveal-correct { border-color: var(--safe); background: rgba(34,197,94,0.1); }
+
+#whyBox { display:none; background:rgba(247,183,49,0.1); border:1px solid rgba(247,183,49,0.3); border-radius:10px; padding:14px 16px; margin-bottom:14px; font-size:0.92rem; color:var(--text-dim); line-height:1.5; }
+#whyBox.show { display:block; }
+#whyBox b { color: var(--accent2); }
+
+#finalTable { max-width:600px; margin:0 auto; }
+.final-row { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.08); border-radius:12px; padding:14px 18px; margin-bottom:10px; font-size:1.1rem; }
+.final-row .medal { font-size:1.6rem; width:40px; text-align:center; }
+.final-row .fname { font-weight:800; flex:1; }
+.final-row .famt { font-weight:900; font-variant-numeric: tabular-nums; color:var(--accent2); }
+</style>
+</head>
+<body>
+
+<h1>⚔️ Connotation Clash</h1>
+<div class="subtitle">IGCSE English · Word Choice &amp; Effect · Unit 4 Language Analysis</div>
+
+<div class="controls">
+  <button id="fullscreenBtn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+  <button id="homeBtn" onclick="location.href='../index.html'">🏠 Home</button>
+  <button id="newGameBtn" onclick="goToSetup()">🔁 New Game</button>
+</div>
+
+<!-- SETUP SCREEN -->
+<div class="screen active" id="screen-setup">
+  <div class="card">
+    <div class="rules-box">
+      <b>How to play:</b> A word-in-context is shown. On this team’s turn, decide together whether the highlighted word carries a <b>Positive</b>, <b>Negative</b>, or <b>Neutral</b> connotation, then click your answer. Correct = 10 points, and the explanation shows exactly why the writer’s word choice creates that effect. Turns rotate round-robin.
+    </div>
+    <div class="setup-row">
+      <div class="setup-field">
+        <label>Number of teams</label>
+        <select id="numTeams" onchange="buildTeamNameGrid()">
+          <option value="2">2 teams</option>
+          <option value="3" selected>3 teams</option>
+          <option value="4">4 teams</option>
+          <option value="5">5 teams</option>
+          <option value="6">6 teams</option>
+        </select>
+      </div>
+      <div class="setup-field">
+        <label>Number of questions</label>
+        <select id="numQuestions"></select>
+      </div>
+    </div>
+    <div id="teamNameGrid"></div>
+    <button class="big-btn" onclick="startGame()">Start Game ▶</button>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="screen-game">
+  <div id="progress"></div>
+  <div class="scoreboard" id="scoreboard"></div>
+  <div id="turnBanner"></div>
+
+  <div id="promptCard">
+    <div id="promptLabel">Word in context</div>
+    <div id="promptText"></div>
+  </div>
+
+  <div id="optionsGrid"></div>
+  <div id="whyBox"></div>
+
+  <div style="text-align:center;">
+    <button id="nextBtn" class="big-btn" style="display:none; background:var(--accent2); border-color:var(--accent2); color:#332200;" onclick="nextQuestion()">Next Question ▶</button>
+  </div>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="screen" id="screen-final">
+  <div class="card">
+    <h1 style="margin-bottom:18px;">🏆 Final Results</h1>
+    <div id="finalTable"></div>
+    <button class="big-btn" onclick="goToSetup()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const TEAM_COLORS = ['#00c9a7','#f7b731','#e94560','#a78bfa','#4ade80','#4FC3F7'];
+const POINTS_PER_CORRECT = 10;
+
+const ALL_ITEMS = [{"prompt": "“The detective moved through the crowded room.” — what connotation does ‘moved’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 2, "why": "‘Moved’ is a plain, factual verb — it describes the action without suggesting any particular feeling."}, {"prompt": "“The detective slunk through the crowded room.” — what connotation does ‘slunk’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Slunk’ suggests slyness or guilt — the character seems to be avoiding attention, which feels suspicious."}, {"prompt": "“She glided across the dance floor.” — what connotation does ‘glided’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Glided’ suggests grace and effortless elegance — an admiring way to describe movement."}, {"prompt": "“He trudged home after the long shift.” — what connotation does ‘trudged’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Trudged’ suggests heaviness, exhaustion and reluctance — a tiring, joyless walk."}, {"prompt": "“The old house stood on the hill.” — what connotation does ‘stood’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 2, "why": "‘Stood’ is a plain, factual verb with no emotional colouring."}, {"prompt": "“The old house loomed on the hill.” — what connotation does ‘loomed’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Loomed’ suggests something looming over you threateningly — an ominous, unsettling image."}, {"prompt": "“She was curious about the strange noise.” — what connotation does ‘curious’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Curious’ suggests healthy, engaged interest — generally an admirable trait."}, {"prompt": "“She was nosy about the neighbours’ business.” — what connotation does ‘nosy’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Nosy’ suggests unwelcome intrusion into other people’s privacy — a critical word choice."}, {"prompt": "“He is a confident public speaker.” — what connotation does ‘confident’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Confident’ suggests self-assurance and competence — an admiring description."}, {"prompt": "“He is an arrogant public speaker.” — what connotation does ‘arrogant’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Arrogant’ suggests excessive pride and looking down on others — clearly critical."}, {"prompt": "“The children were slender and quick.” — what connotation does ‘slender’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Slender’ suggests an attractive, graceful thinness — a flattering word choice."}, {"prompt": "“The children were skinny and pale.” — what connotation does ‘skinny’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Skinny’, especially paired with ‘pale’, suggests an unhealthy or unfortunate thinness."}, {"prompt": "“The elderly man walked slowly.” — what connotation does ‘elderly’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Elderly’ is a respectful, formal term for an older person — slightly more positive than a plain synonym."}, {"prompt": "“The ambitious young manager impressed the board.” — what connotation does ‘ambitious’ carry here?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "Paired with ‘impressed the board’, ‘ambitious’ reads as admirable drive and determination."}, {"prompt": "“The crowd gathered outside the stadium.” — what connotation does ‘crowd’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 2, "why": "‘Crowd’ is a plain, neutral collective noun for a group of people."}, {"prompt": "“The mob gathered outside the stadium.” — what connotation does ‘mob’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Mob’ suggests a group capable of disorder or violence — a threatening image."}, {"prompt": "“She whispered the news to her friend.” — what connotation does ‘whispered’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Whispered’ suggests quiet, careful, perhaps intimate communication — a gentle image."}, {"prompt": "“She hissed the news to her friend.” — what connotation does ‘hissed’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Hissed’ suggests anger or menace — like a threatening animal sound."}, {"prompt": "“The thrifty family saved carefully.” — what connotation does ‘thrifty’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Thrifty’ suggests sensible, careful money management — an admiring description."}, {"prompt": "“The stingy family saved carefully.” — what connotation does ‘stingy’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 1, "why": "‘Stingy’ suggests an unpleasant, excessive unwillingness to spend — clearly critical."}, {"prompt": "“The unique design caught everyone’s eye.” — what connotation does ‘unique’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 0, "why": "‘Unique’ suggests something special and one-of-a-kind — generally an admiring word."}, {"prompt": "“The old man walked slowly to the shop.” — what connotation does ‘old’ carry?", "options": ["Positive", "Negative", "Neutral"], "correct": 2, "why": "‘Old’ on its own is a plain, factual descriptor with no built-in judgement."}];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let teams = [];
+let items = [];
+let currentIdx = 0;
+let currentTeamIdx = 0;
+let answered = false;
+
+function buildTeamNameGrid() {
+  const n = parseInt(document.getElementById('numTeams').value);
+  const grid = document.getElementById('teamNameGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const div = document.createElement('div');
+    div.className = 'team-name-box';
+    div.innerHTML = `<span class="team-swatch" style="background:${TEAM_COLORS[i]}"></span>
+      <input type="text" id="teamName${i}" placeholder="Team ${i+1}" value="Team ${i+1}">`;
+    grid.appendChild(div);
+  }
+}
+buildTeamNameGrid();
+
+function buildNumQuestionsOptions() {
+  const sel = document.getElementById('numQuestions');
+  const max = ALL_ITEMS.length;
+  const opts = [Math.min(8, max), Math.min(12, max), max].filter((v,i,a)=>a.indexOf(v)===i && v>0);
+  sel.innerHTML = opts.map(v => `<option value="${v}" ${v===max?'selected':''}>${v}${v===max?' (all)':''}</option>`).join('');
+}
+buildNumQuestionsOptions();
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function goToSetup() { showScreen('screen-setup'); }
+
+function startGame() {
+  const n = parseInt(document.getElementById('numTeams').value);
+  const numQ = parseInt(document.getElementById('numQuestions').value);
+  teams = [];
+  for (let i = 0; i < n; i++) {
+    const nameInput = document.getElementById('teamName' + i);
+    teams.push({ name: (nameInput.value.trim() || ('Team ' + (i+1))), color: TEAM_COLORS[i], score: 0 });
+  }
+  items = shuffle(ALL_ITEMS).slice(0, numQ);
+  currentIdx = 0;
+  currentTeamIdx = 0;
+  showScreen('screen-game');
+  renderScoreboard();
+  loadQuestion();
+}
+
+function renderScoreboard() {
+  const sb = document.getElementById('scoreboard');
+  sb.innerHTML = '';
+  teams.forEach((t, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'team-chip';
+    chip.id = 'chip' + i;
+    chip.innerHTML = `${t.name}<span class="score">${t.score}</span>`;
+    sb.appendChild(chip);
+  });
+  updateActiveChip();
+}
+
+function updateActiveChip() {
+  teams.forEach((t, i) => {
+    const chip = document.getElementById('chip' + i);
+    chip.classList.toggle('active', i === currentTeamIdx);
+    chip.style.borderColor = i === currentTeamIdx ? t.color : 'transparent';
+    chip.querySelector('.score').textContent = t.score;
+  });
+}
+
+function loadQuestion() {
+  answered = false;
+  const it = items[currentIdx];
+  document.getElementById('progress').textContent = `Question ${currentIdx + 1} of ${items.length}`;
+  document.getElementById('promptText').textContent = it.prompt;
+  document.getElementById('turnBanner').textContent = `${teams[currentTeamIdx].name}'s turn`;
+  document.getElementById('turnBanner').style.color = teams[currentTeamIdx].color;
+  document.getElementById('whyBox').className = '';
+  document.getElementById('whyBox').innerHTML = '';
+  document.getElementById('nextBtn').style.display = 'none';
+  updateActiveChip();
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  it.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.onclick = () => pick(i);
+    grid.appendChild(btn);
+  });
+}
+
+function pick(i) {
+  if (answered) return;
+  answered = true;
+  const it = items[currentIdx];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+  const correct = i === it.correct;
+  btns[i].classList.add(correct ? 'correct-pick' : 'wrong-pick');
+  if (!correct) btns[it.correct].classList.add('reveal-correct');
+
+  if (correct) {
+    teams[currentTeamIdx].score += POINTS_PER_CORRECT;
+  }
+  updateActiveChip();
+
+  const whyBox = document.getElementById('whyBox');
+  whyBox.innerHTML = `<b>${correct ? '✓ Correct!' : '✗ Not quite.'}</b> ${it.why}`;
+  whyBox.className = 'show';
+
+  document.getElementById('nextBtn').style.display = 'inline-block';
+  document.getElementById('nextBtn').textContent = (currentIdx === items.length - 1) ? 'See Final Results 🏆' : 'Next Question ▶';
+}
+
+function nextQuestion() {
+  currentIdx++;
+  currentTeamIdx = (currentTeamIdx + 1) % teams.length;
+  if (currentIdx >= items.length) {
+    showFinal();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showFinal() {
+  showScreen('screen-final');
+  const ranked = [...teams].sort((a, b) => b.score - a.score);
+  const medals = ['🥇','🥈','🥉'];
+  const table = document.getElementById('finalTable');
+  table.innerHTML = '';
+  ranked.forEach((t, i) => {
+    const row = document.createElement('div');
+    row.className = 'final-row';
+    row.innerHTML = `<span class="medal">${medals[i] || '🏅'}</span>
+      <span class="team-swatch" style="background:${t.color}"></span>
+      <span class="fname">${t.name}</span>
+      <span class="famt">${t.score} pts</span>`;
+    table.appendChild(row);
+  });
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+</script>
+</body>
+</html>
