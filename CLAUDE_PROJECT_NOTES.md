@@ -84,6 +84,7 @@ The `index.html` has:
 | `road-not-taken` | Class adventure (dragons, gnomes, chaos) |
 | `picture-games` | Picture-based games toolkit |
 | `revision-showdown` | L9U3 revision — team quiz (vocab, close reading, imagery, story openings) |
+| `word-class-auction-igcse` | IGCSE Y10 Unit 4 (L16–L17) — sentence-auction format, bid TRUE/FALSE on verb/adjective/adverb ID + word-choice effect. Has a companion `Word_Class_Auction_IGCSE_Answer_Key.docx`. |
 
 ### Admin / Editor Tools
 | File | Purpose |
@@ -114,6 +115,7 @@ Every game page typically has:
 - **April 2026**: Added Star Hunt (toolkit text version) and Star Hunt Jr. (preschool picture version). Both added to toolkit modal in index.html.
 - **April 2026**: TTS added to Picture Games flashcards. Bug fixes across Battleships, Blockbusters, Noughts-Crosses, Battle Teams. Evil game created and added to toolkit.
 - **August 2026**: Added `revision-showdown` (L9U3 team quiz — vocab blitz, close-reading practice on Extract 1, Extract 5 structure/imagery recap, story-opening lab) and linked it in the L9 Unit 3 card in `index.html`. Self-contained, same detective-noir style as `silver-swan`/`crack-the-case` (Georgia serif, `#1a1a2e` navy, `#f0c040` gold) rather than the shared teal glass-card `style.css` — matches the existing Unit 3 mystery-game sub-theme.
+- **September 2026**: Added `word-class-auction-igcse` (24-statement sentence-auction game for IGCSE Y10 Unit 4, L16–L17 — Table 4.2 word-class preview + Language Focus/Activities 7–9 word-choice-and-effect recap). Same visual template/mechanic as `sentence-auction-igcse` (fixed self-contained sentence bank, not the shared `content.js`/cascade-picker system that generic `grammar-auction` uses), but teams bid TRUE/FALSE on a claim about one word's class or effect rather than on whether a whole sentence is grammatically correct. Ships with `Word_Class_Auction_IGCSE_Answer_Key.docx` (same style as the Sentence Auction one). Linked in the Unit 4 card in `index.html`, after Quotation Quest.
 
 ## Star Hunt — design notes
 - **Mechanics**: 7×7 grid, hidden star. Teams click cells to reveal hot/warm/cold hints. Each click costs 1 point (starts at 40). Finding the star scores remaining points.
