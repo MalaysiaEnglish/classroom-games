@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pronoun Panic</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .pp-sentence {
+      font-size: clamp(1.15rem, 3.2vw, 1.7rem);
+      font-weight: 700;
+      text-align: center;
+      max-width: 780px;
+      margin: 8px auto 4px;
+      padding: 18px 22px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      line-height: 1.4;
+    }
+    .pp-blank {
+      display: inline-block;
+      min-width: 90px;
+      border-bottom: 4px dashed var(--accent2);
+      color: var(--accent2);
+    }
+    .pp-choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      gap: 12px;
+      max-width: 620px;
+      width: 100%;
+      margin: 14px auto;
+    }
+    .pp-choices button {
+      min-width: unset;
+      width: 100%;
+      padding: 16px 10px;
+      font-size: clamp(1rem, 2.6vw, 1.25rem);
+      font-weight: 800;
+      border-radius: 14px;
+    }
+    .pp-choices button.correct-flash { background: var(--safe) !important; color: #000 !important; }
+    .pp-choices button.wrong-flash   { background: var(--danger) !important; color: #fff !important; }
+    .pp-choices button:disabled { opacity: 0.55; cursor: default; }
+    .pp-hint {
+      max-width: 620px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      min-height: 1.4em;
+    }
+    .pp-progress {
+      text-align: center;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>👻 Pronoun Panic</h1>
+
+  <div class="controls">
+    <button id="newGame">New Round</button>
+    <button id="fullscreen">Fullscreen</button>
+    <button id="home">Home</button>
+  </div>
+
+  <div class="game-wrapper" id="gameWrapper">
+
+    <!-- SETUP SCREEN -->
+    <div class="setup-screen" id="setupScreen">
+      <h2>How many teams?</h2>
+      <div class="team-picker" id="teamPicker">
+        <button data-n="2">2</button>
+        <button data-n="3">3</button>
+        <button data-n="4" class="selected">4</button>
+        <button data-n="5">5</button>
+        <button data-n="6">6</button>
+      </div>
+      <button class="start-btn" id="startBtn">▶ Start Panicking</button>
+    </div>
+
+    <!-- GAME AREA -->
+    <div id="gameArea" style="display:none; width:100%; flex-direction:column; align-items:center;">
+      <div id="currentTurn">Get ready...</div>
+      <div class="pp-sentence" id="sentenceBox">Loading...</div>
+      <div class="pp-choices" id="choicesBox"></div>
+      <div class="pp-hint" id="hintBox">&nbsp;</div>
+      <div class="pp-progress" id="progressBox"></div>
+      <div class="scoreboard" id="scoreboard"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // ---------- Question bank ----------
+    // Each group's 4 members double as the multiple-choice options,
+    // so kids see all four side by side every time and learn the contrast.
+    const GROUPS = {
+      person: ['someone', 'anyone', 'everyone', 'no one'],
+      thing:  ['something', 'anything', 'everything', 'nothing'],
+      place:  ['somewhere', 'anywhere', 'everywhere', 'nowhere']
+    };
+    const HINTS = {
+      person: '👤 talking about people — some- (yes), any- (question/not), every- (all), no- (zero)',
+      thing:  '📦 talking about things — some- (yes), any- (question/not), every- (all), no- (zero)',
+      place:  '📍 talking about places — some- (yes), any- (question/not), every- (all), no- (zero)'
+    };
+
+    const BANK = [
+      { g:'person', a:'someone', s:'"____ ate the last slice of pizza," said Dad, staring at me.' },
+      { g:'person', a:'anyone',  s:"Is there ____ in this cupboard? I heard breathing." },
+      { g:'person', a:'everyone', s:'____ in class screamed when the spider walked across the desk.' },
+      { g:'person', a:'no one',  s:'____ wanted to sit next to the smelly gym bag.' },
+      { g:'person', a:'someone', s:'____ left a banana peel on the teacher\'s chair. It wasn\'t me.' },
+      { g:'person', a:'anyone',  s:"I don't think ____ can eat ten burgers in one go... can they?" },
+      { g:'person', a:'everyone', s:'The dog barked at ____ who walked past the gate.' },
+      { g:'person', a:'no one',  s:'____ believed the cat had actually done its own homework.' },
+      { g:'person', a:'someone', s:'____ keeps stealing my pencils and I have my suspicions.' },
+      { g:'person', a:'anyone',  s:'Can ____ hear that weird noise coming from the fridge?' },
+      { g:'person', a:'everyone', s:'____ laughed except the teacher, who had heard that joke 400 times.' },
+      { g:'person', a:'no one',  s:'____ else in the whole school has hair as blue as mine.' },
+      { g:'person', a:'someone', s:'____ is knocking on the door dressed as a giant taco.' },
+      { g:'person', a:'anyone',  s:"If ____ finds my missing sock, there's a reward." },
+
+      { g:'thing', a:'something', s:'____ smells like burnt toast and regret in this kitchen.' },
+      { g:'thing', a:'anything',  s:"Is there ____ in the fridge that isn't three months old?" },
+      { g:'thing', a:'everything', s:'____ in my bag is covered in glitter. Even my snacks.' },
+      { g:'thing', a:'nothing',  s:"____ could stop the toddler from reaching the cake." },
+      { g:'thing', a:'something', s:'____ is making that squeaky noise every time I sit down.' },
+      { g:'thing', a:'anything',  s:"I'd give ____ for a nap right now." },
+      { g:'thing', a:'everything', s:'The dog chewed ____ in the living room except its own toys.' },
+      { g:'thing', a:'nothing',  s:'____ was left in the biscuit tin after the sleepover.' },
+      { g:'thing', a:'something', s:'____ under my bed keeps stealing single socks.' },
+      { g:'thing', a:'anything',  s:'Do you have ____ that isn\'t covered in cat hair?' },
+      { g:'thing', a:'everything', s:'____ on this menu has extra cheese, which is dangerous for me.' },
+      { g:'thing', a:'nothing',  s:'"____ to see here," said the cat, sitting next to the broken vase.' },
+      { g:'thing', a:'something', s:'____ green and wobbly just fell out of the science cupboard.' },
+
+      { g:'place', a:'somewhere', s:'My homework is ____ under a pile of dirty laundry.' },
+      { g:'place', a:'anywhere',  s:"You can sit ____ except the chair that squeaks like a dinosaur." },
+      { g:'place', a:'everywhere', s:'Glitter is ____ after art class — even on the ceiling.' },
+      { g:'place', a:'nowhere',  s:"The remote control is ____ to be found, again." },
+      { g:'place', a:'somewhere', s:'The cat has hidden ____ that only it knows about.' },
+      { g:'place', a:'anywhere',  s:"I would live ____ that has pizza delivery and no homework." },
+      { g:'place', a:'everywhere', s:'That song is playing ____ this week, even in my dreams.' },
+      { g:'place', a:'nowhere',  s:'We searched but there was ____ left to hide the surprise cake.' },
+      { g:'place', a:'somewhere', s:'The class hamster escaped ____ during break time.' },
+      { g:'place', a:'anywhere',  s:'Is there ____ quiet in this house right now? Anywhere at all?' },
+      { g:'place', a:'everywhere', s:'Crumbs from that cookie ended up ____ on the new carpet.' },
+      { g:'place', a:'nowhere',  s:'When the fire alarm went off, there was ____ to run except outside.' }
+    ];
+
+    const ROUND_LENGTH = 15;
+
+    let numTeams = 4, teamScores = [], currentTeam = 0, selectedTeams = 4;
+    let deck = [], askedThisRound = 0, locked = false;
+
+    const setupScreen = document.getElementById('setupScreen');
+    const gameArea     = document.getElementById('gameArea');
+    const currentTurnEl = document.getElementById('currentTurn');
+    const sentenceBox  = document.getElementById('sentenceBox');
+    const choicesBox   = document.getElementById('choicesBox');
+    const hintBox      = document.getElementById('hintBox');
+    const progressBox  = document.getElementById('progressBox');
+    const scoreboard   = document.getElementById('scoreboard');
+
+    document.querySelectorAll('#teamPicker button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#teamPicker button').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedTeams = parseInt(btn.dataset.n);
+      });
+    });
+
+    document.getElementById('startBtn').onclick = () => startGame(selectedTeams);
+    document.getElementById('newGame').onclick   = () => {
+      setupScreen.style.display = 'flex';
+      gameArea.style.display    = 'none';
+    };
+    document.getElementById('fullscreen').onclick = () => document.documentElement.requestFullscreen?.();
+    document.getElementById('home').onclick       = () => window.location.href = '../index.html';
+
+    function shuffle(a) { return a.slice().sort(() => Math.random() - 0.5); }
+
+    function buildDeck() { return shuffle(BANK); }
+
+    function startGame(n) {
+      numTeams    = n;
+      teamScores  = new Array(n).fill(0);
+      currentTeam = 0;
+      deck        = buildDeck();
+      askedThisRound = 0;
+      setupScreen.style.display = 'none';
+      gameArea.style.display    = 'flex';
+      updateStats();
+      nextQuestion();
+    }
+
+    function updateStats() {
+      scoreboard.innerHTML = '';
+      teamScores.forEach((s, i) => {
+        const div = document.createElement('div');
+        div.className = 'team-score' + (i === currentTeam ? ' active' : '');
+        div.innerHTML = `Team ${i + 1}<br>${s}`;
+        scoreboard.appendChild(div);
+      });
+    }
+
+    function nextQuestion() {
+      if (deck.length === 0) deck = buildDeck();
+      if (askedThisRound >= ROUND_LENGTH) {
+        currentTurnEl.textContent = `🎉 Round complete! Team ${currentTeam + 1} gets +20 bonus!`;
+        teamScores[currentTeam] += 20;
+        currentTeam = (currentTeam + 1) % numTeams;
+        updateStats();
+        askedThisRound = 0;
+        deck = buildDeck();
+        setTimeout(nextQuestion, 2500);
+        return;
+      }
+      const q = deck.pop();
+      askedThisRound++;
+      locked = false;
+      currentTurnEl.textContent = `Team ${currentTeam + 1} — fill the gap!`;
+      sentenceBox.innerHTML = q.s.replace('____', '<span class="pp-blank">____</span>');
+      hintBox.textContent = HINTS[q.g];
+      progressBox.textContent = `Question ${askedThisRound} of ${ROUND_LENGTH}`;
+
+      const choices = shuffle(GROUPS[q.g]);
+      choicesBox.innerHTML = '';
+      choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.textContent = choice;
+        btn.onclick = () => handleAnswer(btn, choice, q.a);
+        choicesBox.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(btn, chosen, correctAnswer) {
+      if (locked) return;
+      locked = true;
+      Array.from(choicesBox.children).forEach(b => b.disabled = true);
+
+      if (chosen === correctAnswer) {
+        btn.classList.add('correct-flash');
+        teamScores[currentTeam] += 10;
+        currentTurnEl.textContent = `✅ Correct! Team ${currentTeam + 1} +10`;
+        updateStats();
+        setTimeout(nextQuestion, 1100);
+      } else {
+        btn.classList.add('wrong-flash');
+        Array.from(choicesBox.children).forEach(b => {
+          if (b.textContent === correctAnswer) b.classList.add('correct-flash');
+        });
+        currentTeam = (currentTeam + 1) % numTeams;
+        currentTurnEl.textContent = `❌ Not quite — the answer was "${correctAnswer}". Passing to Team ${currentTeam + 1}!`;
+        updateStats();
+        setTimeout(nextQuestion, 1600);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Haunted House Case File · STRoberts Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0e1a12;
+      --file: #d8d0a8;
+      --file-dark: #b7ab78;
+      --stamp: #9c1c1c;
+      --stamp-bright: #c73a3a;
+      --evidence: #3fae72;
+      --brass: #a6863f;
+      --night: #3d3524;
+      --void: rgba(216, 208, 168, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #07100a;
+      font-family: 'Crimson Text', serif;
+      color: var(--file);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background — a dead flashlight beam and creeping fog */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 35% at 50% 0%, #12321f 0%, transparent 65%),
+        radial-gradient(ellipse 35% 25% at 15% 90%, #0a1a10 0%, transparent 60%),
+        radial-gradient(ellipse 35% 25% at 85% 92%, #0a1a10 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Drifting dust / spectral motes */
+    .motes { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+    .mote {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--evidence);
+      box-shadow: 0 0 7px 2px rgba(63,174,114,0.55);
+      animation: drift linear infinite;
+      opacity: 0;
+    }
+    @keyframes drift {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      12%  { opacity: 0.9; }
+      85%  { opacity: 0.4; }
+      100% { transform: translateY(-110vh) translateX(var(--sway)); opacity: 0; }
+    }
+
+    .container {
+      position: relative; z-index: 2;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    header { text-align: center; margin-bottom: 40px; }
+
+    .brand-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 10px;
+    }
+
+    .seasonal-badge {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stamp-bright);
+      background: rgba(156, 28, 28, 0.14);
+      border: 1px solid var(--stamp-bright);
+      border-radius: 20px;
+      padding: 4px 16px;
+      margin-bottom: 16px;
+    }
+
+    .attribution {
+      position: fixed;
+      bottom: 14px; right: 16px;
+      z-index: 5;
+      opacity: 0.35;
+      transition: opacity 0.3s;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--file);
+      letter-spacing: 0.1em;
+    }
+    .attribution:hover { opacity: 0.75; }
+    @media print { .attribution { display: none; } }
+
+    .title-main {
+      font-family: 'Special Elite', 'DM Mono', monospace;
+      font-size: clamp(2rem, 6.4vw, 3.6rem);
+      color: var(--file);
+      text-shadow: 0 0 22px rgba(63,174,114,0.35), 2px 2px 0 #000;
+      letter-spacing: 1px;
+      line-height: 1.08;
+    }
+
+    .title-sub {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--file-dark);
+      margin-top: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--evidence), transparent);
+    }
+    .divider-icon { color: var(--evidence); font-size: 1.1rem; }
+
+    /* Stage cards */
+    .stage {
+      background: linear-gradient(135deg, rgba(14,26,18,0.92), rgba(20,34,24,0.88));
+      border: 1px solid rgba(166,134,63,0.28);
+      border-radius: 4px;
+      padding: 24px 28px;
+      margin-bottom: 22px;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(166,134,63,0.1), 0 4px 20px rgba(0,0,0,0.5);
+      transition: border-color 0.3s;
+    }
+    .stage:hover { border-color: rgba(166,134,63,0.45); }
+
+    .stage::before {
+      content: attr(data-tag);
+      position: absolute; top: 10px; right: 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      color: rgba(63,174,114,0.45);
+      border: 1px solid rgba(63,174,114,0.3);
+      padding: 2px 7px;
+      border-radius: 2px;
+    }
+
+    .stage-number {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.8rem;
+      color: var(--stamp-bright);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .stage h2 {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+      color: var(--file);
+      margin-bottom: 14px;
+      font-weight: normal;
+    }
+
+    .stage p.prompt {
+      font-style: italic;
+      color: var(--file-dark);
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+
+    .choice-btn {
+      background: rgba(63,174,114,0.1);
+      border: 1px solid rgba(63,174,114,0.35);
+      color: var(--file);
+      padding: 7px 16px;
+      border-radius: 2px;
+      font-family: 'Crimson Text', serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .choice-btn:hover {
+      background: rgba(63,174,114,0.28);
+      border-color: var(--evidence);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(63,174,114,0.25);
+    }
+    .choice-btn.selected {
+      background: rgba(63,174,114,0.45);
+      border-color: var(--evidence);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(63,174,114,0.4);
+    }
+
+    .case-input {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(166,134,63,0.28);
+      border-radius: 2px;
+      color: var(--file);
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .case-input:focus { border-color: var(--brass); }
+    .case-input::placeholder { color: rgba(216,208,168,0.3); font-style: italic; }
+
+    .custom-select { position: relative; width: 100%; user-select: none; }
+    .custom-select-trigger {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(166,134,63,0.28);
+      border-radius: 2px;
+      color: var(--file);
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
+      padding: 10px 36px 10px 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: border-color 0.2s;
+      min-height: 44px;
+    }
+    .custom-select-trigger:hover, .custom-select.open .custom-select-trigger { border-color: var(--brass); }
+    .custom-select-trigger .placeholder { color: rgba(216,208,168,0.3); font-style: italic; }
+    .custom-select-arrow { flex-shrink: 0; margin-left: 8px; transition: transform 0.2s; color: var(--brass); font-size: 0.75rem; }
+    .custom-select.open .custom-select-arrow { transform: rotate(180deg); }
+    .custom-select-options {
+      display: none;
+      position: absolute; top: calc(100% + 2px); left: 0; right: 0;
+      background: #0b1610;
+      border: 1px solid rgba(166,134,63,0.4);
+      border-radius: 2px;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .custom-select.open .custom-select-options { display: block; }
+    .custom-select-option {
+      padding: 9px 14px;
+      font-family: 'Crimson Text', serif;
+      font-size: 0.98rem;
+      color: var(--file);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .custom-select-option:hover { background: rgba(166,134,63,0.15); }
+    .custom-select-option.selected { color: #fff; background: rgba(63,174,114,0.4); }
+
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 500px) { .input-row { grid-template-columns: 1fr; } }
+
+    label.field-label {
+      display: block; font-size: 0.85rem; color: var(--file-dark);
+      margin-bottom: 5px; letter-spacing: 1px; font-style: italic;
+    }
+    .field-group { margin-bottom: 10px; }
+
+    #file-section { display: none; margin-top: 30px; }
+
+    .file-wrap {
+      background: linear-gradient(160deg, #b7ab78 0%, #a6863f 40%, #b7ab78 70%, #8f7530 100%);
+      border-radius: 6px;
+      padding: 4px;
+      box-shadow: 0 0 40px rgba(166,134,63,0.28), 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .file-inner {
+      background: linear-gradient(160deg, #ece3c2 0%, #e2d7ac 50%, #e6dbb2 100%);
+      border-radius: 4px;
+      padding: 36px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .file-inner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(139,110,20,0.04) 29px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .stamp-corner {
+      position: absolute; top: 22px; right: -6px;
+      transform: rotate(8deg);
+      border: 3px solid var(--stamp);
+      color: var(--stamp);
+      font-family: 'Special Elite', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      padding: 5px 12px;
+      opacity: 0.75;
+    }
+
+    .file-title {
+      font-family: 'Special Elite', monospace;
+      font-size: clamp(1.35rem, 3.6vw, 2rem);
+      color: var(--night);
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .file-subtitle {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #5a4d2e;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    #story-output {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--night);
+      line-height: 1.85;
+      position: relative;
+      z-index: 1;
+    }
+    #story-output p { margin-bottom: 1.1em; }
+    #story-output .highlight { color: var(--stamp); font-weight: 600; }
+    #story-output .clue-note {
+      background: rgba(63,174,114,0.1);
+      border-left: 3px solid var(--evidence);
+      padding: 10px 14px;
+      margin: 14px 0;
+      font-style: italic;
+      font-size: 0.95em;
+      border-radius: 0 4px 4px 0;
+    }
+    #story-output .clue-note strong { font-style: normal; color: #1a5c37; }
+
+    .writing-section { margin-top: 28px; padding-top: 22px; border-top: 1px dashed rgba(139,110,20,0.4); }
+    .writing-section h3 { font-family: 'IM Fell English', serif; font-size: 1.15rem; color: var(--night); margin-bottom: 12px; }
+
+    .sentence-frame {
+      background: rgba(63,174,114,0.06);
+      border: 1px solid rgba(63,174,114,0.18);
+      border-radius: 3px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+    .sentence-frame .frame-label {
+      font-size: 0.8rem; color: var(--stamp); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .sentence-frame .frame-text { font-style: italic; color: #4a3f26; line-height: 1.6; }
+    .sentence-frame .blank {
+      display: inline-block; min-width: 120px; border-bottom: 1px solid var(--stamp); color: var(--stamp); font-style: normal;
+    }
+
+    /* Write-in answer lines — reserve real handwriting room above the line,
+       instead of relying on underscore characters (which doubled up with
+       the border and looked like a cramped double-underline). */
+    .sentence-frame .blank-write {
+      min-height: 28px;
+      vertical-align: bottom;
+    }
+
+    .btn-summon {
+      display: block; width: 100%; margin: 28px 0 0; padding: 16px;
+      background: linear-gradient(135deg, #14371f, #1f5c31, #14371f);
+      border: 1px solid var(--evidence);
+      color: var(--file);
+      font-family: 'Special Elite', monospace;
+      font-size: 1.2rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.3s;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-summon::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .btn-summon:hover::before { transform: translateX(100%); }
+    .btn-summon:hover {
+      background: linear-gradient(135deg, #1f5c31, #2f8a49, #1f5c31);
+      box-shadow: 0 0 30px rgba(63,174,114,0.45), 0 0 60px rgba(63,174,114,0.18);
+      transform: translateY(-2px);
+    }
+
+    .btn-reset {
+      display: inline-block; margin-top: 16px; padding: 8px 20px;
+      background: transparent; border: 1px solid rgba(166,134,63,0.4);
+      color: var(--file-dark);
+      font-family: 'Crimson Text', serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover { border-color: var(--brass); color: var(--file); }
+
+    .print-btn {
+      display: inline-block; margin-top: 10px; margin-left: 10px; padding: 8px 20px;
+      background: transparent; border: 1px solid rgba(63,174,114,0.4);
+      color: var(--evidence);
+      font-family: 'Crimson Text', serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .print-btn:hover { border-color: var(--evidence); background: rgba(63,174,114,0.1); }
+
+    .progress-bar { display: flex; gap: 6px; margin-bottom: 30px; justify-content: center; }
+    .progress-pip { width: 28px; height: 4px; background: rgba(166,134,63,0.2); border-radius: 2px; transition: background 0.4s; }
+    .progress-pip.done { background: var(--evidence); }
+    .progress-pip.active { background: var(--brass); }
+
+    @media print {
+      @page { size: A4; margin: 18mm 18mm 20mm 18mm; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+      body { background: #fff !important; color: #14371f !important; font-family: 'IM Fell English', serif; font-size: 11pt; line-height: 1.7; }
+      body::before, .motes, header, .stage, .btn-summon, .btn-reset, .print-btn, .progress-bar { display: none !important; }
+      .container { max-width: 100%; padding: 0; margin: 0; }
+      #file-section { display: block !important; margin: 0; }
+      .file-wrap { background: none !important; padding: 0 !important; box-shadow: none !important; border: none !important; }
+      .file-inner { background: #fff !important; border: 2px solid #9c1c1c; border-radius: 4px; padding: 24pt 28pt !important; position: relative; }
+      .file-inner::before { display: none; }
+      .stamp-corner { border-color: #9c1c1c !important; color: #9c1c1c !important; }
+      .file-title { font-size: 20pt; color: #14371f !important; text-align: center; margin-bottom: 4pt; }
+      .file-subtitle { font-size: 10pt; color: #3d3524 !important; text-align: center; font-style: italic; margin-bottom: 16pt; letter-spacing: 1px; }
+      .divider { margin: 8pt 0 14pt !important; }
+      .divider::before, .divider::after { background: linear-gradient(to right, transparent, #14371f, transparent) !important; }
+      #story-output { color: #14371f !important; font-size: 11pt; }
+      #story-output p { margin-bottom: 9pt; orphans: 3; widows: 3; }
+      #story-output .highlight { color: #9c1c1c !important; font-weight: 700; }
+      #story-output .clue-note { background: #f5fbf7 !important; border-left: 3px solid #3fae72 !important; padding: 8pt 12pt !important; margin: 10pt 0 !important; color: #14371f !important; font-style: italic; font-size: 10pt; page-break-inside: avoid; border-radius: 0 3px 3px 0; }
+      #story-output .clue-note strong { color: #1a5c37 !important; font-style: normal; font-weight: 700; display: block; margin-bottom: 3pt; }
+      .writing-section { margin-top: 20pt !important; padding-top: 14pt !important; border-top: 1.5pt dashed #9c1c1c !important; page-break-before: auto; }
+      .writing-section h3 { font-family: 'IM Fell English', serif; font-size: 13pt; color: #14371f !important; margin-bottom: 10pt; }
+      .writing-section p { color: #3d3524 !important; font-size: 10pt; margin-bottom: 10pt; }
+      .sentence-frame { background: #f5fbf7 !important; border: 1px solid #b7ab78 !important; border-radius: 3px; padding: 10pt 14pt !important; margin-bottom: 9pt !important; page-break-inside: avoid; }
+      .sentence-frame .frame-label { font-size: 8pt !important; color: #9c1c1c !important; font-weight: 700; text-transform: uppercase; letter-spacing: 1pt; margin-bottom: 5pt !important; font-style: normal; }
+      .sentence-frame .frame-text { color: #14371f !important; font-style: italic; font-size: 11pt; line-height: 2.4; }
+      .sentence-frame .blank { display: inline-block; min-width: 140px; border-bottom: 1.2pt solid #9c1c1c !important; color: #9c1c1c !important; font-style: normal; font-weight: 600; }
+      .sentence-frame .blank-write { min-height: 22pt; vertical-align: bottom; }
+      .sentence-frame .blank[style*="min-width:90%"], .sentence-frame .blank[style*="min-width: 90%"] {
+        display: block !important; min-width: 100% !important; min-height: 32pt; border-bottom: 1.2pt solid #9c1c1c !important; margin-top: 6pt;
+      }
+      #file-section::after {
+        content: 'STRoberts Games  ·  stroberts.uk  ·  The Haunted House Case File  ·  Modal Verbs of Deduction';
+        display: block; margin-top: 18pt; text-align: center; font-size: 8pt; color: #7a6b48 !important; letter-spacing: 1pt;
+        font-family: 'Crimson Text', serif; font-style: italic;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="motes" id="motes"></div>
+<div class="attribution">STRoberts Games · stroberts.uk</div>
+
+<div class="container">
+  <header>
+    <div class="brand-eyebrow">STRoberts Games</div>
+    <div class="seasonal-badge">🎃 Halloween Ghost Story</div>
+    <div class="title-main">The Haunted House Case File</div>
+    <div class="title-sub">A Detective Report — Modal Verbs of Deduction</div>
+    <div class="divider"><span class="divider-icon">🔦</span></div>
+    <p style="font-style:italic; color:var(--file-dark); font-size:1rem; max-width:560px; margin:0 auto; line-height:1.6;">
+      Something happened in that house — the neighbors say a ghost. Build the case this Halloween, then write up what must, might, and can't have happened.
+    </p>
+  </header>
+
+  <div class="progress-bar" id="progress-bar">
+    <div class="progress-pip active"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+    <div class="progress-pip"></div>
+  </div>
+
+  <!-- STAGE 1: The Location -->
+  <div class="stage" data-tag="CASE FILE" id="stage-1">
+    <div class="stage-number">Part I</div>
+    <h2>The Location — Where, and on what kind of night?</h2>
+    <p class="prompt">Every case starts with a place and a night nobody involved has forgotten. Choose yours.</p>
+    <div class="input-row">
+      <div class="field-group">
+        <label class="field-label">Location</label>
+        <div class="custom-select" id="house-select">
+          <div class="custom-select-trigger" onclick="toggleSelect('house-select')">
+            <span class="placeholder" id="house-label">— Choose a location —</span>
+            <span class="custom-select-arrow">▼</span>
+          </div>
+          <div class="custom-select-options">
+            <div class="custom-select-option" data-value="the boarded-up manor on Gallows Hill" data-title="Gallows Hill Manor">The boarded-up manor on Gallows Hill</div>
+            <div class="custom-select-option" data-value="the abandoned asylum outside town" data-title="The Asylum">The abandoned asylum outside town</div>
+            <div class="custom-select-option" data-value="the lighthouse keeper's cottage" data-title="The Lighthouse Cottage">The lighthouse keeper's cottage</div>
+            <div class="custom-select-option" data-value="the old schoolhouse behind the cemetery" data-title="The Old Schoolhouse">The old schoolhouse behind the cemetery</div>
+            <div class="custom-select-option" data-value="the crumbling plantation house on the county road" data-title="The Plantation House">The crumbling plantation house on the county road</div>
+            <div class="custom-select-option" data-value="the carnival funhouse, closed for thirty years" data-title="The Funhouse">The carnival funhouse, closed for thirty years</div>
+            <div class="custom-select-option" data-value="the attic apartment above the town's oldest bookshop" data-title="The Bookshop Attic">The attic apartment above the town's oldest bookshop</div>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">The Night</label>
+        <div class="custom-select" id="night-select">
+          <div class="custom-select-trigger" onclick="toggleSelect('night-select')">
+            <span class="placeholder" id="night-label">— Choose a night —</span>
+            <span class="custom-select-arrow">▼</span>
+          </div>
+          <div class="custom-select-options">
+            <div class="custom-select-option" data-value="a night with no moon at all">A night with no moon at all</div>
+            <div class="custom-select-option" data-value="a night thick with fog rolling in off the marsh">A night thick with fog off the marsh</div>
+            <div class="custom-select-option" data-value="a night every dog on the street started howling at once, for no reason anyone could find">A night every dog on the street started howling at once</div>
+            <div class="custom-select-option" data-value="a night the power failed across the whole block">A night the power failed across the block</div>
+            <div class="custom-select-option" data-value="a night colder than the forecast had promised">A night colder than the forecast promised</div>
+            <div class="custom-select-option" data-value="the night before Halloween">The night before Halloween</div>
+            <div class="custom-select-option" data-value="a night the church bell rang thirteen times, though it hadn't worked in years">A night the church bell rang thirteen times</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2: Witness + Clue 1 (Sound) -->
+  <div class="stage" data-tag="EVIDENCE" id="stage-2">
+    <div class="stage-number">Part II</div>
+    <h2>The Witness &amp; the First Clue</h2>
+    <p class="prompt">Who called it in — and what did they hear?</p>
+    <div class="field-group">
+      <label class="field-label">It was reported by…</label>
+      <div class="choices" id="witness-choices">
+        <button class="choice-btn" data-group="witness" data-value="the paperboy, who swore afterward he'd never take that route again">the paperboy</button>
+        <button class="choice-btn" data-group="witness" data-value="a retired police sergeant who said he'd seen everything — until this">a retired sergeant</button>
+        <button class="choice-btn" data-group="witness" data-value="two teenagers who had gone in on a dare">two teenagers on a dare</button>
+        <button class="choice-btn" data-group="witness" data-value="the new caretaker, alone in the building for the first time">the new caretaker</button>
+        <button class="choice-btn" data-group="witness" data-value="a team of ghost-hunters with three cameras and a lot of expensive equipment">a team of ghost-hunters</button>
+        <button class="choice-btn" data-group="witness" data-value="an elderly neighbour who had lived across the street for sixty years">an elderly neighbour</button>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:10px;">
+      <label class="field-label">Clue 1 — The Sound</label>
+      <div class="choices" id="sound-choices">
+        <button class="choice-btn" data-group="sound" data-value="A slow, deliberate dragging sound crossed the ceiling directly above them — though the floor up there had been sealed off for a decade.">a dragging sound overhead</button>
+        <button class="choice-btn" data-group="sound" data-value="Someone whispered a name, twice, from somewhere inside the walls.">a whisper inside the walls</button>
+        <button class="choice-btn" data-group="sound" data-value="Piano music drifted from an empty room. There has never been a piano in that room.">piano music from an empty room</button>
+        <button class="choice-btn" data-group="sound" data-value="Footsteps climbed a staircase that had collapsed years before any of them were born.">footsteps on a collapsed staircase</button>
+        <button class="choice-btn" data-group="sound" data-value="A child laughed once, close and clear, from a floor confirmed empty by every search.">a child's laugh, floor confirmed empty</button>
+        <button class="choice-btn" data-group="sound" data-value="Chains dragged slowly across the cellar floor, back and forth, long after anyone had gone down there.">chains dragging in the cellar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: Clue 2 (Object) + Clue 3 (Sighting) -->
+  <div class="stage" data-tag="EVIDENCE" id="stage-3">
+    <div class="stage-number">Part III</div>
+    <h2>Clue 2 &amp; Clue 3 — What They Found, What They Saw</h2>
+    <p class="prompt">Two more pieces of evidence went into the file.</p>
+    <div class="field-group">
+      <label class="field-label">Clue 2 — The Object</label>
+      <div class="choices" id="object-choices">
+        <button class="choice-btn" data-group="object" data-value="A small handprint appeared on the inside of a window that had been painted shut since before any of the witnesses were born.">a handprint on a painted-shut window</button>
+        <button class="choice-btn" data-group="object" data-value="Every clock in the building had stopped at exactly the same minute — including ones in different rooms, on different batteries.">every clock stopped at the same minute</button>
+        <button class="choice-btn" data-group="object" data-value="In an old photograph, one face had slowly faded to nothing over the course of a single week.">a face fading from a photograph</button>
+        <button class="choice-btn" data-group="object" data-value="Fresh flowers lay on a grave whose visitor log hadn't been signed in eleven years.">fresh flowers on an unvisited grave</button>
+        <button class="choice-btn" data-group="object" data-value="A door that had been locked and bolted for a decade was found standing wide open, with no sign of forced entry.">a decade-locked door standing open</button>
+        <button class="choice-btn" data-group="object" data-value="A set of initials, freshly carved, turned up in wood that had been sealed under plaster since the house was built.">initials carved under sealed plaster</button>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:10px;">
+      <label class="field-label">Clue 3 — The Sighting</label>
+      <div class="choices" id="sighting-choices">
+        <button class="choice-btn" data-group="sighting" data-value="A figure in old-fashioned dress stood at the top of the stairs — and was gone the instant a torch beam found it.">a figure at the top of the stairs</button>
+        <button class="choice-btn" data-group="sighting" data-value="A shape passed every window of the house in the same second, as if it were outside all four walls at once.">a shape passing every window at once</button>
+        <button class="choice-btn" data-group="sighting" data-value="A shadow moved across the wall with no one standing anywhere near enough to cast it.">a shadow with nothing casting it</button>
+        <button class="choice-btn" data-group="sighting" data-value="Something watched from the tree line for over an hour, never once stepping closer.">something watching from the tree line</button>
+        <button class="choice-btn" data-group="sighting" data-value="A face appeared at the attic window, in a house that three separate searches had already confirmed was empty.">a face at the attic window</button>
+        <button class="choice-btn" data-group="sighting" data-value="A pale light moved from room to room, matching no torch or lamp that anyone in the building was carrying.">a pale light moving room to room</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 4: Skeptic theory + why it fails -->
+  <div class="stage" data-tag="ANALYSIS" id="stage-4">
+    <div class="stage-number">Part IV</div>
+    <h2>The Official Theory — And Why It Doesn't Hold Up</h2>
+    <p class="prompt">Every case file needs the boring explanation on record. Choose one — and the reason it doesn't quite fit.</p>
+    <div class="field-group">
+      <label class="field-label">The department's official theory was…</label>
+      <div class="choices" id="skeptic-choices">
+        <button class="choice-btn" data-group="skeptic" data-value="just the old pipes settling, the way they do every winter">old pipes settling</button>
+        <button class="choice-btn" data-group="skeptic" data-value="kids messing around, looking for a story to tell">kids messing around</button>
+        <button class="choice-btn" data-group="skeptic" data-value="a draft finding its way through a gap somewhere in the building">a draft through a gap</button>
+        <button class="choice-btn" data-group="skeptic" data-value="the whole thing built up in people's imaginations after one nervous witness talked">an overactive imagination</button>
+        <button class="choice-btn" data-group="skeptic" data-value="a reflection, or a trick of a streetlight nobody had noticed before">a trick of the light</button>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:10px;">
+      <label class="field-label">Except that…</label>
+      <div class="choices" id="fails-choices">
+        <button class="choice-btn" data-group="fails" data-value="the sound moved with a rhythm and direction no draft or settling pipe has ever managed">it had rhythm and direction</button>
+        <button class="choice-btn" data-group="fails" data-value="two witnesses in two different rooms reported the exact same thing within the same minute">two witnesses agreed independently</button>
+        <button class="choice-btn" data-group="fails" data-value="the object turned up in a room that had been locked the entire time">it appeared in a locked room</button>
+        <button class="choice-btn" data-group="fails" data-value="the nervous witness wasn't even in the building when the second report came in">the witness wasn't even there</button>
+        <button class="choice-btn" data-group="fails" data-value="every explanation on offer required ignoring at least one piece of physical evidence">every theory ignored some evidence</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 5: Ending + title -->
+  <div class="stage" data-tag="STATUS" id="stage-5">
+    <div class="stage-number">Part V</div>
+    <h2>How the Case Ended</h2>
+    <p class="prompt">Not every file gets closed the same way. Choose yours.</p>
+    <div class="field-group">
+      <label class="field-label">In the end…</label>
+      <div class="choices" id="ending-choices">
+        <button class="choice-btn" data-group="ending" data-value="The case was closed as unexplained. It remains the only file in the department with that word stamped on the cover.">closed as unexplained</button>
+        <button class="choice-btn" data-group="ending" data-value="A new report came in six months later, and the file was reopened. It has never been closed since.">reopened after new evidence</button>
+        <button class="choice-btn" data-group="ending" data-value="The official record now reads 'natural causes, unconfirmed' — a compromise nobody investigating that night actually believed.">an unconvincing compromise</button>
+        <button class="choice-btn" data-group="ending" data-value="The building was demolished the following spring. Nobody who worked the case has ever said why they were relieved.">the building was demolished</button>
+        <button class="choice-btn" data-group="ending" data-value="The investigating detective transferred departments within the month, and declined every request to discuss it afterward.">the detective transferred away</button>
+        <button class="choice-btn" data-group="ending" data-value="No further incidents were ever reported — but nobody who was there that night has gone back inside since.">quiet, but nobody goes back</button>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:10px;">
+      <label class="field-label">Case name (optional — give this file a title)</label>
+      <input type="text" class="case-input" id="case-title" placeholder="e.g. The Gallows Hill File…">
+    </div>
+  </div>
+
+  <!-- STAGE 6: Detective name -->
+  <div class="stage" data-tag="SIGN-OFF" id="stage-6">
+    <div class="stage-number">Part VI</div>
+    <h2>The Detective — Sign the report</h2>
+    <p class="prompt">Every case file needs a name on the cover.</p>
+    <input type="text" class="case-input" id="detective-name" placeholder="Your name…" style="max-width:300px;">
+  </div>
+
+  <button class="btn-summon" id="summon-btn" onclick="generateFile()">
+    🔎 File the Report
+  </button>
+
+  <div id="file-section">
+    <div class="file-wrap">
+      <div class="file-inner">
+        <div class="stamp-corner">CONFIDENTIAL</div>
+        <div class="file-title" id="file-title">Case File: …</div>
+        <div class="file-subtitle" id="file-detective">Filed by …</div>
+        <div class="divider" style="margin-bottom:20px;">
+          <div class="divider-icon" style="color:#3fae72;">✦</div>
+        </div>
+        <div id="story-output"></div>
+        <div class="writing-section" id="writing-task"></div>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="resetAll()">↩ Start a New Case</button>
+    <button class="print-btn" onclick="window.print()" title="Prints the case file and all writing tasks">🖨 Print Case File &amp; Writing Tasks</button>
+  </div>
+</div>
+
+<script>
+  const moteContainer = document.getElementById('motes');
+  for (let i = 0; i < 16; i++) {
+    const m = document.createElement('div');
+    m.className = 'mote';
+    m.style.cssText = `
+      left: ${Math.random() * 100}%;
+      bottom: ${Math.random() * 20}%;
+      animation-duration: ${6 + Math.random() * 9}s;
+      animation-delay: ${Math.random() * 6}s;
+      --sway: ${(Math.random() - 0.5) * 70}px;
+      width: ${2 + Math.random() * 3}px;
+      height: ${2 + Math.random() * 3}px;
+    `;
+    moteContainer.appendChild(m);
+  }
+
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.dataset.group;
+      document.querySelectorAll(`.choice-btn[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      updateProgress();
+    });
+  });
+
+  function getChoice(group) {
+    const sel = document.querySelector(`.choice-btn[data-group="${group}"].selected`);
+    return sel ? sel.dataset.value : null;
+  }
+
+  const STAGES = ['house','night','witness','sound','object','sighting','skeptic','fails','ending'];
+  function updateProgress() {
+    const filled = STAGES.filter(s => {
+      if (s === 'house' || s === 'night') return getSelectValue(s) !== '';
+      return getChoice(s);
+    }).length;
+    const pips = document.querySelectorAll('.progress-pip');
+    const score = Math.floor((filled / STAGES.length) * 6);
+    pips.forEach((p, i) => {
+      p.classList.remove('done', 'active');
+      if (i < score) p.classList.add('done');
+      else if (i === score) p.classList.add('active');
+    });
+  }
+
+  function toggleSelect(id) {
+    const sel = document.getElementById(id);
+    const isOpen = sel.classList.contains('open');
+    document.querySelectorAll('.custom-select.open').forEach(s => s.classList.remove('open'));
+    if (!isOpen) sel.classList.add('open');
+  }
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.custom-select')) {
+      document.querySelectorAll('.custom-select.open').forEach(s => s.classList.remove('open'));
+    }
+  });
+
+  document.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const select = this.closest('.custom-select');
+      const id = select.id;
+      const fieldId = id.replace('-select', '');
+      const label = document.getElementById(fieldId + '-label');
+      label.textContent = this.textContent;
+      label.classList.remove('placeholder');
+      select.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+      select.dataset.value = this.dataset.value;
+      select.dataset.title = this.dataset.title || '';
+      select.classList.remove('open');
+      updateProgress();
+    });
+  });
+
+  function getSelectValue(fieldId) {
+    const sel = document.getElementById(fieldId + '-select');
+    return sel ? (sel.dataset.value || '') : '';
+  }
+  function getSelectTitle(fieldId) {
+    const sel = document.getElementById(fieldId + '-select');
+    return sel ? (sel.dataset.title || '') : '';
+  }
+
+  function generateFile() {
+    const house    = getSelectValue('house');
+    const night    = getSelectValue('night');
+    const witness  = getChoice('witness');
+    const sound    = getChoice('sound');
+    const object   = getChoice('object');
+    const sighting = getChoice('sighting');
+    const skeptic  = getChoice('skeptic');
+    const fails    = getChoice('fails');
+    const ending   = getChoice('ending');
+    const titleInput = document.getElementById('case-title').value.trim();
+    const detective = document.getElementById('detective-name').value.trim() || 'an unnamed investigator';
+
+    if (!house || !night || !witness || !sound || !object || !sighting || !skeptic || !fails || !ending) {
+      document.getElementById('summon-btn').style.animation = 'shake 0.4s ease';
+      setTimeout(() => document.getElementById('summon-btn').style.animation = '', 500);
+      alert('The file is incomplete — complete all choices before filing the report!');
+      return;
+    }
+
+    const houseTitle = getSelectTitle('house');
+    const title = titleInput || `Case File: ${houseTitle}`;
+    document.getElementById('file-title').textContent = title;
+    document.getElementById('file-detective').textContent = `Filed by Detective ${detective}`;
+
+    const story = `
+      <p>On <span class="highlight">${night}</span>, a call came in about <span class="highlight">${house}</span>.
+      It was reported by <span class="highlight">${witness}</span>. Neighbours had already started calling it haunted, certain a ghost was behind it.</p>
+
+      <p>${sound} Whoever — or whatever — caused it <span class="highlight">must have been inside the building</span>
+      when it happened; the sound came from within the walls, not from outside them.</p>
+
+      <div class="clue-note">
+        <strong>MUST HAVE + past participle</strong>
+        Use this when you're almost certain something happened, based on strong evidence.
+        "It <em>must have been</em> inside" = the evidence makes this the only realistic explanation.
+      </div>
+
+      <p>${object} It <span class="highlight">might have been</span> left behind by chance, hours or even years
+      before anyone noticed — that's possible, if unlikely. Nobody investigating that night was willing to rule it out completely.</p>
+
+      <div class="clue-note">
+        <strong>MIGHT HAVE / COULD HAVE + past participle</strong>
+        Use this for a real possibility you can't confirm or rule out.
+        "It <em>might have been</em> left behind" = maybe, but we're not sure.
+      </div>
+
+      <p>${sighting} Whatever this was, it <span class="highlight">can't have been</span> an ordinary trick of the light
+      or an overactive imagination — not when it was reported the same way, at the same moment, by more than one person.</p>
+
+      <div class="clue-note">
+        <strong>CAN'T HAVE + past participle</strong>
+        Use this when you're almost certain something did NOT happen, or ISN'T true.
+        "It <em>can't have been</em> a trick of the light" = the evidence rules this explanation out.
+      </div>
+
+      <p>The department's official line was that it was <span class="highlight">${skeptic}</span>. Except that
+      <span class="highlight">${fails}</span> — so that explanation <span class="highlight">can't have told the whole story</span> either.</p>
+
+      <p style="font-style:italic; color:var(--night);">${ending}</p>
+    `;
+    document.getElementById('story-output').innerHTML = story;
+
+    const task = `
+      <h3>✍ Now Write Your Own Deductions</h3>
+      <p style="font-style:italic; margin-bottom:16px; color:var(--night); font-size:0.95em;">
+        Use <strong>must have</strong>, <strong>might have</strong>, and <strong>can't have</strong> + a past participle
+        to finish each sentence about your case.
+      </p>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 1 — MUST HAVE (the sound)</div>
+        <div class="frame-text">According to ${witness}, whoever — or whatever — caused the sound must have
+        <span class="blank blank-write">&nbsp;</span>.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 2 — MIGHT HAVE (the object)</div>
+        <div class="frame-text">The evidence they found might have <span class="blank blank-write">&nbsp;</span>,
+        but nobody could be sure.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 3 — CAN'T HAVE (the sighting)</div>
+        <div class="frame-text">What they saw can't have <span class="blank blank-write">&nbsp;</span>,
+        because <span class="blank blank-write">&nbsp;</span>.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 4 — The Official Theory</div>
+        <div class="frame-text">The official theory was that it was ${skeptic}, but that can't have been right, because
+        <span class="blank blank-write">&nbsp;</span>.</div>
+      </div>
+
+      <div class="sentence-frame">
+        <div class="frame-label">Sentence 5 — Your Own</div>
+        <div class="frame-text">Write your own must have / might have / can't have sentence about your case:<br>
+        <span class="blank blank-write" style="min-width:90%; display:block; margin-top:8px;">&nbsp;</span></div>
+      </div>
+    `;
+    document.getElementById('writing-task').innerHTML = task;
+
+    const fileSection = document.getElementById('file-section');
+    fileSection.style.display = 'block';
+    fileSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.querySelectorAll('.progress-pip').forEach(p => {
+      p.classList.remove('active');
+      p.classList.add('done');
+    });
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    ['house', 'night'].forEach(id => {
+      const sel = document.getElementById(id + '-select');
+      if (sel) {
+        sel.dataset.value = '';
+        sel.dataset.title = '';
+        sel.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+        const lbl = document.getElementById(id + '-label');
+        lbl.textContent = id === 'house' ? '— Choose a location —' : '— Choose a night —';
+        lbl.classList.add('placeholder');
+      }
+    });
+    document.getElementById('case-title').value = '';
+    document.getElementById('detective-name').value = '';
+    document.getElementById('file-section').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('.progress-pip').forEach((p, i) => {
+      p.classList.remove('done', 'active');
+      if (i === 0) p.classList.add('active');
+    });
+  }
+</script>
+</body>
+</html>

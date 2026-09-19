@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Curse Story Builder</title>
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <title>Curse Story Builder · STRoberts Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --ink: #1a0f00;
@@ -72,6 +72,43 @@
       text-align: center;
       margin-bottom: 40px;
     }
+
+    .brand-eyebrow {
+      font-family: 'DM Mono', 'IM Fell English', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .seasonal-badge {
+      display: inline-block;
+      font-family: 'DM Mono', 'IM Fell English', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ember);
+      background: rgba(212, 82, 10, 0.12);
+      border: 1px solid var(--ember);
+      border-radius: 20px;
+      padding: 4px 16px;
+      margin-bottom: 16px;
+    }
+
+    .attribution {
+      position: fixed;
+      bottom: 14px; right: 16px;
+      z-index: 5;
+      opacity: 0.35;
+      transition: opacity 0.3s;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--parchment);
+      letter-spacing: 0.1em;
+    }
+    .attribution:hover { opacity: 0.75; }
+    @media print { .attribution { display: none; } }
 
     .title-main {
       font-family: 'UnifrakturMaguntia', cursive;
@@ -414,6 +451,14 @@
       font-style: normal;
     }
 
+    /* Write-in answer lines — reserve real handwriting room above the line,
+       instead of relying on the underscore characters (which doubled up with
+       the border and looked like a cramped double-underline). */
+    .sentence-frame .blank-write {
+      min-height: 28px;
+      vertical-align: bottom;
+    }
+
     /* Buttons */
     .btn-summon {
       display: block;
@@ -499,6 +544,13 @@
       @page {
         size: A4;
         margin: 18mm 18mm 20mm 18mm;
+      }
+
+      /* ── Force borders/tints to print even when "Background graphics" is off ── */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
       }
 
       /* ── Hide everything except the scroll ── */
@@ -668,10 +720,12 @@
         color: #1a0f00 !important;
         font-style: italic;
         font-size: 11pt;
-        line-height: 1.8;
+        line-height: 2.4;
       }
 
-      /* ── Blanks — show as clear underlined writing lines ── */
+      /* ── Blanks — a single clean underline, no literal underscore text
+           doubling up with the border (that's what caused the cramped
+           "double line" look on the printed worksheet). ── */
       .sentence-frame .blank {
         display: inline-block;
         min-width: 140px;
@@ -681,19 +735,27 @@
         font-weight: 600;
       }
 
-      /* Sentence 5 "your own" blank — give extra writing space */
+      /* Write-in answer lines — reserve real handwriting room above the
+         line (about a quarter-inch) so students have space to write,
+         including a short second line if their answer wraps. */
+      .sentence-frame .blank-write {
+        min-height: 22pt;
+        vertical-align: bottom;
+      }
+
+      /* Sentence 5 "your own" blank — full-width, extra writing space */
       .sentence-frame .blank[style*="min-width:90%"],
       .sentence-frame .blank[style*="min-width: 90%"] {
         display: block !important;
         min-width: 100% !important;
-        min-height: 26pt;
+        min-height: 32pt;
         border-bottom: 1.2pt solid #8b1a1a !important;
         margin-top: 6pt;
       }
 
       /* ── Print-only footer note ── */
       #scroll-section::after {
-        content: 'gamepack.win  ·  Curse Story Builder  ·  Stage 6 · Unit 6 · Lesson 2';
+        content: 'STRoberts Games  ·  stroberts.uk  ·  Curse Story Builder  ·  Third Conditional Writing';
         display: block;
         margin-top: 18pt;
         text-align: center;
@@ -711,13 +773,17 @@
 <!-- Floating embers -->
 <div class="embers" id="embers"></div>
 
+<div class="attribution">STRoberts Games · stroberts.uk</div>
+
 <div class="container">
   <header>
+    <div class="brand-eyebrow">STRoberts Games</div>
+    <div class="seasonal-badge">🎃 Halloween Ghost Story</div>
     <div class="title-main">The Curse Keeper</div>
-    <div class="title-sub">A Story Building Scroll — Stage 6 · Unit 6 · Lesson 2</div>
+    <div class="title-sub">A Story Building Scroll — Third Conditional Practice</div>
     <div class="divider"><span class="divider-icon">☽</span></div>
     <p style="font-style:italic; color:var(--parchment-dark); font-size:1rem; max-width:540px; margin:0 auto; line-height:1.6;">
-      Every curse has a beginning. Build yours — then write its story using the Third Conditional.
+      Every curse has a beginning — and every curse leaves a ghost behind. Build yours this Halloween, then write its story using the Third Conditional.
     </p>
   </header>
 
@@ -1040,12 +1106,16 @@
       <p>In the year <span class="highlight">${year}</span>, in <span class="highlight">${setting}</span>, 
       a terrible darkness descended upon the people — a curse unlike any they had known.</p>
 
-      <p>It had been summoned by <span class="highlight">${caster}</span>. The reason was not 
-      difficult to understand: <span class="highlight">${reason}</span> had poisoned the town 
+      <p>It had been summoned by <span class="highlight">${caster}</span>. The reason was not
+      difficult to understand: <span class="highlight">${reason}</span> had poisoned the town
       for years, and now the land itself demanded payment.</p>
 
+      <p style="font-style:italic; color:var(--parchment-dark);">To this day, locals swear the
+      curse-caster's ghost still walks ${setting} after dark — unable to rest until the wrong
+      is undone.</p>
+
       <div class="grammar-note">
-        <strong>Third Conditional:</strong> 
+        <strong>Third Conditional:</strong>
         "If <span class="highlight">${caster}</span> <em>hadn't been</em> wronged, 
         the curse <em>would never have been</em> cast."
         — This tells us what <em>could have been avoided</em>.
@@ -1085,32 +1155,32 @@
 
       <div class="sentence-frame">
         <div class="frame-label">Sentence 1 — The Cause</div>
-        <div class="frame-text">If <span class="blank">${caster}</span> hadn't been wronged, 
-        <span class="blank">_________________________________</span>.</div>
+        <div class="frame-text">If <span class="blank">${caster}</span> hadn't been wronged,
+        <span class="blank blank-write">&nbsp;</span>.</div>
       </div>
 
       <div class="sentence-frame">
         <div class="frame-label">Sentence 2 — The Spread</div>
-        <div class="frame-text">If the curse <span class="blank">hadn't spread through ${spread}</span>, 
-        the people <span class="blank">_________________________________</span>.</div>
+        <div class="frame-text">If the curse <span class="blank">hadn't spread through ${spread}</span>,
+        the people <span class="blank blank-write">&nbsp;</span>.</div>
       </div>
 
       <div class="sentence-frame">
         <div class="frame-label">Sentence 3 — The Failed Attempt</div>
         <div class="frame-text">If the people hadn't tried <span class="blank">${attempt1}</span>,
-        <span class="blank">_________________________________</span>.</div>
+        <span class="blank blank-write">&nbsp;</span>.</div>
       </div>
 
       <div class="sentence-frame">
         <div class="frame-label">Sentence 4 — The Resolution</div>
-        <div class="frame-text">If <span class="blank">_________________________________</span>, 
+        <div class="frame-text">If <span class="blank blank-write">&nbsp;</span>,
         <span class="blank">${end}</span> would never have happened.</div>
       </div>
 
       <div class="sentence-frame">
         <div class="frame-label">Sentence 5 — Your Own</div>
         <div class="frame-text">Write your own Third Conditional sentence about your curse story:<br>
-        <span class="blank" style="min-width:90%; display:block; margin-top:8px;">_________________________________</span></div>
+        <span class="blank blank-write" style="min-width:90%; display:block; margin-top:8px;">&nbsp;</span></div>
       </div>
     `;
 
