@@ -88,6 +88,7 @@
       <div id="currentTurn">Click "New Game" to start</div>
       <div class="row" id="row"></div>
       <div class="controls" style="margin-top:0;">
+        <button class="good" id="rightBtn"   disabled>✔ Sentence Right</button>
         <button class="bad"  id="wrongBtn"   disabled>✘ Sentence Wrong</button>
         <button class="good" id="higherBtn"  disabled>⬆ Higher</button>
         <button class="bad"  id="lowerBtn"   disabled>⬇ Lower</button>
@@ -124,17 +125,6 @@
       setupScreen.style.display = 'flex';
       gameArea.style.display    = 'none';
     };
-
-    function startGame(n) {
-      numTeams    = n;
-      teamScores  = new Array(n).fill(0);
-      currentTeam = 0;
-      deck        = shuffle(buildDeck());
-      setupScreen.style.display = 'none';
-      gameArea.style.display    = 'flex';
-      updateStats();
-      dealRow();
-    }
 
     const ranks       = '23456789TJQKA';
     const suitSymbols = ['♠','♥','♦','♣'];
@@ -181,76 +171,86 @@
       rowCards.forEach((c, i) => rowEl.appendChild(renderCard(c, i > revealedUpTo)));
     }
 
+    // Rules: a team says ONE sentence at the start of its streak. If it is right,
+    // the team guesses Higher/Lower until it is wrong (a tie counts as wrong).
+    // Then the next team must say a sentence before it can start guessing.
+    const $ = id => document.getElementById(id);
+    function setPhase(phase) {            // 'sentence' | 'guess' | 'none'
+      $('rightBtn').disabled  = phase !== 'sentence';
+      $('wrongBtn').disabled  = phase !== 'sentence';
+      $('higherBtn').disabled = phase !== 'guess';
+      $('lowerBtn').disabled  = phase !== 'guess';
+      awaitingGuess = phase === 'guess';
+    }
+    function askSentence(msg) {
+      setPhase('sentence');
+      currentTurnEl.textContent = (msg ? msg + ' ' : '') + `Team ${currentTeam + 1} — say a sentence first. Right or wrong?`;
+      updateStats();
+    }
+    function askGuess(msg) {
+      setPhase('guess');
+      currentTurnEl.textContent = (msg ? msg + ' ' : '') + `Team ${currentTeam + 1} — Higher or Lower? (a tie counts as wrong)`;
+      updateStats();
+    }
+    function nextTeam() { currentTeam = (currentTeam + 1) % numTeams; }
+
     function dealRow() {
       if (deck.length < 15) deck = shuffle(buildDeck());
       rowCards     = deck.splice(0, 15);
       revealedUpTo = 0;
       renderRow();
-      awaitingSentence = false;
-      awaitingGuess    = true;
-      document.getElementById('wrongBtn').disabled   = false;
-      document.getElementById('higherBtn').disabled  = false;
-      document.getElementById('lowerBtn').disabled   = false;
-      currentTurnEl.textContent = `Team ${currentTeam + 1} — Higher or Lower? (✘ if sentence was wrong)`;
-      updateStats();
+    }
+    function newRowSameStreak() { dealRow(); }
+
+    function startGame(n) {
+      numTeams    = n;
+      teamScores  = new Array(n).fill(0);
+      currentTeam = 0;
+      deck        = shuffle(buildDeck());
+      setupScreen.style.display = 'none';
+      gameArea.style.display    = 'flex';
+      dealRow();
+      askSentence('');
     }
 
-
-    document.getElementById('wrongBtn').onclick = () => {
-      // Wrong sentence — pass to next team, no points awarded
-      currentTeam = (currentTeam + 1) % numTeams;
-      awaitingSentence = false;
-      awaitingGuess    = true;
-      document.getElementById('wrongBtn').disabled   = false;
-      document.getElementById('higherBtn').disabled  = false;
-      document.getElementById('lowerBtn').disabled   = false;
-      updateStats();
-      currentTurnEl.textContent = `Team ${currentTeam + 1} — Higher or Lower? (✘ if sentence was wrong)`;
+    $('rightBtn').onclick = () => askGuess('✔ Sentence right!');
+    $('wrongBtn').onclick = () => {      // wrong sentence: no guessing, next team says a sentence
+      nextTeam();
+      askSentence('✘ Sentence wrong.');
     };
 
     function doGuess(higher) {
       if (!awaitingGuess) return;
-      awaitingGuess = false;
-      document.getElementById('higherBtn').disabled = true;
-      document.getElementById('lowerBtn').disabled  = true;
+      setPhase('none');
       setTimeout(() => {
         const prev    = rowCards[revealedUpTo];
         revealedUpTo++;
         renderRow();
         const next    = rowCards[revealedUpTo];
+        // strictly higher / lower: a tie is a loss
         const correct = (higher && next.value > prev.value) ||
                         (!higher && next.value < prev.value);
-        if (revealedUpTo === 14) {
-          // Last card revealed — end of row
+        const tie     = next.value === prev.value;
+        if (revealedUpTo === 14) {       // last card of the row
           if (correct) {
             teamScores[currentTeam] += 20;
-            currentTurnEl.textContent = `CORRECT! Row complete! Team ${currentTeam + 1} gets +20 bonus!`;
+            updateStats();
+            currentTurnEl.textContent = `CORRECT! Row complete! Team ${currentTeam + 1} gets +20 bonus! New row…`;
+            setTimeout(() => { newRowSameStreak(); askGuess(''); }, 3000);
           } else {
-            currentTurnEl.textContent = `WRONG! Row complete! New row coming...`;
-            currentTeam = (currentTeam + 1) % numTeams;
+            nextTeam();
+            updateStats();
+            currentTurnEl.textContent = (tie ? 'TIE = LOSS! ' : 'WRONG! ') + 'Row complete! New row…';
+            setTimeout(() => { dealRow(); askSentence(''); }, 3000);
           }
-          updateStats();
-          setTimeout(dealRow, 3000);
           return;
         }
         if (correct) {
-          // Correct guess: +10, same team, straight to next Higher/Lower
           teamScores[currentTeam] += 10;
-          updateStats();
-          awaitingGuess = true;
-          document.getElementById('wrongBtn').disabled   = false;
-          document.getElementById('higherBtn').disabled  = false;
-          document.getElementById('lowerBtn').disabled   = false;
-          currentTurnEl.textContent = `✔ CORRECT! +10 — Team ${currentTeam + 1} — Higher or Lower? (✘ if sentence wrong)`;
+          askGuess('✔ CORRECT! +10');
         } else {
-          // Wrong guess: next team, no points
-          currentTeam = (currentTeam + 1) % numTeams;
-          updateStats();
-          awaitingGuess = true;
-          document.getElementById('wrongBtn').disabled   = false;
-          document.getElementById('higherBtn').disabled  = false;
-          document.getElementById('lowerBtn').disabled   = false;
-          currentTurnEl.textContent = `✘ WRONG! Team ${currentTeam + 1} — Higher or Lower? (✘ if sentence wrong)`;
+          nextTeam();
+          askSentence(tie ? '✘ TIE = LOSS!' : '✘ WRONG!');
         }
       }, 700);
     }
