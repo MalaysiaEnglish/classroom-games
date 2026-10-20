@@ -38,3 +38,15 @@ STRoberts Games sells interactive browser-based classroom games (ESL / English) 
 - Exact repo names are in MalaysiaEnglish - StrobertsGames StrobertsGames-TPT snd classroom-games there is also a game one battlememes
 all are 'run' through cloudflare
 - Exact path of the hidden-files folder - it's an html in strobertsGames called hidden-games
+
+## Local development
+
+This repository is a static site. There is no package manager, lockfile, or compile step. Shared data is `questions.js`, `content.js`, `wordlists.json`, and `style.css`. Each game is a folder with `index.html`. The homepage is `index.html`.
+
+Serve the repository root:
+
+```bash
+python3 -m http.server 8080 --bind 0.0.0.0
+```
+
+Open `http://127.0.0.1:8080/`. Cloud Agents start that server on port 8080 at boot. If the port is already in use, leave the existing server running.
