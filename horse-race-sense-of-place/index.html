@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Horse Race: Sense of Place</title>
+<style>
+
+:root{--bg-a:#0f2027;--bg-b:#203a43;--bg-c:#2c5364;--accent:#00c9a7;--accent2:#f7b731;--danger:#ef4444;--safe:#22c55e;--text:#fff;--text-dim:rgba(255,255,255,.65);--glass:rgba(255,255,255,.09);--glass-hi:rgba(255,255,255,.16);--glass-border:rgba(255,255,255,.18);--shadow:0 8px 32px rgba(0,0,0,.45);--green:#1b6b3e;--dark:#0f2027;--gold:#f7b731;--cream:#fff6dc;--ink:#1a1208;--dirt:#cfa86a}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(135deg,var(--bg-a) 0%,var(--bg-b) 50%,var(--bg-c) 100%);background-attachment:fixed;color:#fff;font-family:"Segoe UI",system-ui,Arial,sans-serif}
+button{font-family:inherit;cursor:pointer}
+#app{position:fixed;inset:0;display:grid;grid-template-rows:clamp(34px,6vh,54px) 41vh clamp(32px,5.6vh,50px) minmax(0,1fr)}
+#app.hide,#setup.hide{display:none}
+/* header */
+#top{display:flex;align-items:center;justify-content:space-between;padding:0 1.2vw;background:var(--glass);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-border)}
+#top .brand{font-weight:800;font-size:clamp(14px,2.4vh,22px);letter-spacing:.5px}
+#top .brand b{color:var(--accent)}
+#qno{font-weight:800;font-size:clamp(14px,2.6vh,24px)}
+#qno .fs{background:var(--gold);color:var(--ink);padding:.15em .6em;border-radius:99px;margin-left:.6em;font-size:.8em}
+.tools button{background:var(--glass-hi);border:1px solid var(--glass-border);color:#fff;border-radius:10px;padding:.25em .8em;margin-left:.4em;font-weight:700;font-size:clamp(12px,2vh,17px)}
+#tFull{background:#1d4ed8;border-color:#3b82f6}
+#tHome{background:#7c3aed;border-color:#a78bfa}
+.tools button.off{opacity:.55;text-decoration:line-through}
+/* track */
+#track{position:relative;background:linear-gradient(#2f8f4e,#267a41);padding:.6vh 0;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.lane{flex:1;min-height:0;display:flex;background:#1f6f3a;position:relative}
+.lbl{width:21%;min-width:0;display:flex;align-items:center;gap:.6vw;padding:0 .8vw;background:rgba(15,32,39,.88);font-weight:800;font-size:clamp(11px,2.4vh,22px);white-space:nowrap;overflow:hidden}
+.lbl .dot{flex:none;width:1.4em;height:1.4em;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:.7em;color:#fff}
+.lbl .nm{overflow:hidden;text-overflow:ellipsis}
+.lbl .st{margin-left:auto;flex:none;background:var(--gold);color:var(--ink);border-radius:99px;font-size:.62em;padding:.1em .55em;visibility:hidden}
+.lbl .st.on{visibility:visible}
+.trk{position:relative;flex:1;background:linear-gradient(var(--dirt),#c19b5c);border-bottom:1px solid rgba(255,255,255,.7);overflow:hidden}
+.tick{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(255,255,255,.35)}
+.zone{position:absolute;top:0;bottom:0;background:rgba(255,215,90,.28)}
+.fin{position:absolute;right:0;top:0;bottom:0;width:14px;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0 0/14px 14px}
+.hs{position:absolute;left:0;top:0;height:100%;transition:transform 1.7s cubic-bezier(.45,.05,.3,1);will-change:transform}
+.hs.nt{transition:none}
+.hs svg{height:100%;width:auto;display:block;overflow:visible}
+.leg{transform-origin:var(--ox) 64px}
+.run .bob{animation:bob .3s ease-in-out infinite}
+.run .lb1,.run .lf2{animation:sw .3s ease-in-out infinite alternate}
+.run .lb2,.run .lf1{animation:sw .3s ease-in-out infinite alternate-reverse}
+@keyframes sw{from{transform:rotate(-30deg)}to{transform:rotate(30deg)}}
+@keyframes bob{50%{transform:translateY(-3px)}}
+/* commentary */
+#comm{display:flex;align-items:center;gap:.8vw;padding:0 1.2vw;background:rgba(0,0,0,.4);color:#fff;font-weight:700;font-size:clamp(14px,2.7vh,26px);border-top:1px solid var(--accent);border-bottom:1px solid var(--accent);overflow:hidden}
+#comm .mic{flex:none;background:var(--accent);color:#000;border-radius:6px;padding:.05em .5em;font-size:.7em;font-weight:900;letter-spacing:1px}
+#comm span.t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .3s}
+/* panel */
+#panel{display:grid;grid-template-columns:1.6fr 1fr;gap:1vw;padding:1.2vh 1vw;min-height:0}
+#qcard{background:var(--glass);backdrop-filter:blur(10px);color:#fff;border-radius:16px;padding:1.4vh 1.4vw;display:flex;flex-direction:column;gap:1.2vh;min-height:0;border:1px solid var(--glass-border);box-shadow:var(--shadow)}
+#qsent{font-weight:800;font-size:clamp(16px,3.3vh,34px);line-height:1.18}
+#qsent .blank{display:inline-block;min-width:2.4em;border-bottom:.12em solid var(--accent);color:var(--accent);text-align:center}
+#qsent .blank.ans{background:rgba(0,201,167,.22);padding:0 .3em;border-radius:6px}
+#opts{display:grid;gap:1vw;grid-template-columns:repeat(2,1fr);flex:1;min-height:0}
+.opt{display:flex;align-items:center;gap:.6em;background:var(--glass-hi);border:2px solid var(--glass-border);border-radius:12px;padding:0 .8em;font-weight:800;font-size:clamp(13px,2.5vh,26px);line-height:1.15;min-height:0;transition:all .25s}
+.opt .l{flex:none;width:1.5em;height:1.5em;border-radius:50%;background:var(--accent);color:#000;display:grid;place-items:center;font-size:.8em}
+.opt.correct{background:var(--safe);color:#000;border-color:#4ade80;transform:scale(1.04);box-shadow:0 0 22px rgba(34,197,94,.55)}
+.opt.correct .l{background:#fff;color:#146d33}
+.opt.dim{opacity:.35}
+.opt.shimmer{animation:shim .35s infinite alternate}
+@keyframes shim{from{background:rgba(255,255,255,.14)}to{background:rgba(0,201,167,.38)}}
+#ctl{display:flex;align-items:center;gap:1vw}
+#msg{flex:1;font-size:clamp(12px,2.2vh,20px);font-weight:700;color:var(--text-dim)}
+#go{background:var(--accent);color:#000;border:0;border-radius:40px;font-weight:900;font-size:clamp(15px,2.9vh,28px);padding:.35em 1.3em;box-shadow:0 6px 24px rgba(0,201,167,.4);letter-spacing:.03em}
+#go:disabled{opacity:.4;box-shadow:none}
+#teams{background:var(--glass);backdrop-filter:blur(10px);border-radius:16px;padding:1vh .8vw;display:flex;flex-direction:column;gap:.7vh;min-height:0;border:1px solid var(--glass-border);box-shadow:var(--shadow)}
+#teams h4{margin:0;font-size:clamp(11px,1.9vh,17px);color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+#tlist{flex:1;min-height:0;display:grid;gap:.6vh .6vw;grid-auto-rows:1fr;grid-template-columns:repeat(var(--tc,1),1fr)}
+.trow{display:flex;flex-wrap:wrap;align-content:center;align-items:center;gap:.15em .5em;background:rgba(255,255,255,.07);border-radius:10px;padding:0 .5em;border:2px solid transparent;min-width:0;font-size:clamp(11px,2.2vh,20px);font-weight:700}
+#qno .fs.card{background:#7a4b00;color:#fff}
+.trow.cur{border-color:var(--accent);background:var(--glass-hi);box-shadow:0 0 14px rgba(0,201,167,.35)}
+.trow .dot{flex:none;width:1.5em;height:1.5em;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:.72em}
+.trow .nm{flex:1 1 70%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trow .res{flex:none;margin-left:2.2em;font-size:.85em;min-width:3.3em;text-align:center;border-radius:6px;padding:.05em .3em;background:rgba(0,0,0,.35);color:var(--text-dim)}
+.trow .res.lock{background:var(--accent2);color:#000}
+.trow .res.ok{background:#2e9e55;color:#fff}
+.trow .res.no{background:#c0392b;color:#fff}
+.abtns{display:flex;gap:.25em;flex:none;margin-left:auto}
+.abtns button{width:1.9em;height:1.9em;border-radius:6px;border:1px solid var(--glass-border);background:var(--glass-hi);color:#fff;font-weight:800;font-size:.85em;padding:0}
+.abtns button.sel{background:var(--accent);color:#000;border-color:var(--accent)}
+.abtns button:disabled{opacity:.3;cursor:default}
+/* setup — Classroom Games glass UI */
+#setup{position:fixed;inset:0;overflow:auto;display:flex;justify-content:center;padding:2.5vh 2vw;background:linear-gradient(135deg,var(--bg-a) 0%,var(--bg-b) 50%,var(--bg-c) 100%)}
+.sheet{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);color:#fff;width:min(780px,96vw);height:fit-content;margin:auto;padding:2.2vh 2.6vw 2.6vh;border-radius:20px;box-shadow:var(--shadow);text-align:center}
+.setup-controls{display:flex;gap:8px;justify-content:center;margin-bottom:1.4vh}
+.setup-controls button{padding:8px 18px;border:1px solid var(--glass-border);border-radius:10px;font-weight:700;font-size:clamp(.8rem,1.9vh,1rem);color:#fff;min-width:110px}
+#sFull{background:#1d4ed8;border-color:#3b82f6}
+#sHome{background:#7c3aed;border-color:#a78bfa}
+.setup-controls button:hover,.tools button:hover{filter:brightness(1.18)}
+.medal{width:clamp(64px,10vh,92px);height:clamp(64px,10vh,92px);border-radius:20px;margin:0 auto 1vh;background:linear-gradient(135deg,#166534,#a16207);display:grid;place-items:center;font-size:clamp(34px,5.6vh,54px);box-shadow:var(--shadow)}
+.eyebrow{font-weight:700;font-size:clamp(11px,1.6vh,14px);letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.sheet h1{margin:.1em 0 0;font-weight:900;font-size:clamp(34px,7vh,58px);line-height:1.05;background:linear-gradient(90deg,#fff 0%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tag{color:var(--text-dim);font-size:clamp(14px,2.2vh,19px);margin:.3em 0 1.4vh}
+.lvl{display:inline-block;font-weight:700;font-size:clamp(11px,1.7vh,14px);letter-spacing:.06em;color:var(--accent2);border:1px solid var(--accent2);border-radius:99px;padding:.25em .9em;margin-bottom:1.2vh}
+.sec{font-weight:700;font-size:clamp(11px,1.6vh,14px);letter-spacing:.12em;color:var(--accent);text-transform:uppercase;text-align:left;border-top:1px solid var(--glass-border);padding-top:1.1vh;margin:1.4vh 0 .8vh}
+.steps{list-style:none;margin:0;padding:0;text-align:left;display:grid;grid-template-columns:1fr 1fr;gap:.8vh 1.4vw}
+.steps li{display:flex;gap:.6em;align-items:flex-start;font-size:clamp(14px,2.1vh,18px);line-height:1.3}
+.steps b{flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:#000;display:grid;place-items:center;font-weight:900;font-size:.85em;margin-top:.05em}
+.row{display:flex;align-items:center;gap:.8vw;margin:.6vh 0;flex-wrap:wrap;font-weight:600;font-size:clamp(14px,2.2vh,19px);text-align:left}
+.row .lab{font-weight:700;font-size:clamp(11px,1.6vh,14px);letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase;margin-right:.2em}
+.seg button{background:var(--glass-hi);border:2px solid var(--glass-border);color:#fff;font:700 1em "Segoe UI",system-ui,Arial,sans-serif;border-radius:10px;min-width:2.3em;padding:.3em .9em;margin-right:.3em}
+.seg button.on{background:var(--accent);border-color:var(--accent);color:#000;transform:scale(1.06)}
+#names{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8vh .8vw;margin:.6vh 0}
+.nrow{display:flex;align-items:center;gap:.4em;min-width:0}
+.nrow .dot{flex:none;width:1.8em;height:1.8em;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;color:#fff;font-weight:700}
+.nrow input{flex:1 1 0;min-width:0;width:0;font:600 clamp(14px,2.2vh,19px) "Segoe UI",system-ui,Arial,sans-serif;padding:.35em .6em;border:1px solid var(--glass-border);border-radius:8px;background:rgba(255,255,255,.1);color:#fff}
+.nrow button{flex:none;background:var(--glass-hi);border:1px solid var(--glass-border);color:#fff;border-radius:8px;font-weight:700;font-size:clamp(11px,1.6vh,13px);padding:.5em .7em}
+.big{background:var(--accent);color:#000;border:0;border-radius:40px;font:900 clamp(18px,3vh,24px) "Segoe UI",system-ui,Arial,sans-serif;letter-spacing:.04em;padding:.5em 2em;box-shadow:0 6px 24px rgba(0,201,167,.4);margin-top:1.4vh}
+.big:hover{filter:brightness(1.1);transform:scale(1.03)}
+.big.alt{background:var(--glass-hi);color:#fff;border:1px solid var(--glass-border);box-shadow:none}
+.small{background:var(--glass-hi);border:1px solid var(--glass-border);color:#fff;border-radius:10px;font:700 clamp(13px,2vh,16px) "Segoe UI",system-ui,Arial,sans-serif;padding:.35em 1em}
+.keys{margin-top:1.4vh;font-size:clamp(11px,1.6vh,13px);letter-spacing:.04em;color:var(--text-dim);line-height:1.6}
+.chk{display:flex;align-items:center;gap:.4em}
+.chk input{width:1.2em;height:1.2em;accent-color:#00c9a7}
+@media(max-width:640px){.steps{grid-template-columns:1fr}#names{grid-template-columns:1fr}}
+/* overlays */
+.ov{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:20;text-align:center}
+.ov.on{display:flex}
+#photo{background:rgba(0,0,0,.78)}
+#photo h2{font-size:clamp(34px,10vh,100px);margin:0;color:var(--gold);letter-spacing:3px;animation:pf .4s infinite alternate}
+@keyframes pf{from{opacity:.6;transform:scale(.97)}to{opacity:1;transform:scale(1.03)}}
+#photo p{font-size:clamp(16px,3.4vh,34px);margin:1vh 0 0;font-weight:700}
+#win{background:rgba(15,32,39,.92)}
+#win h2{font-size:clamp(30px,9vh,90px);margin:0;color:var(--gold);text-shadow:0 5px 0 #0a2a1a}
+#win .nm{font-size:clamp(24px,7vh,70px);font-weight:800;margin:.3vh 0}
+#win .hh{height:26vh;width:auto;margin:1vh 0}
+#win .hh svg{height:100%;width:auto}
+#win p{font-size:clamp(14px,2.6vh,26px);margin:.4vh 0 1.4vh;font-weight:700}
+#win button{margin:0 .5vw}
+#conf{position:fixed;inset:0;pointer-events:none;z-index:25}
+</style>
+</head>
+<body>
+<div id="setup">
+ <div class="sheet">
+  <div class="setup-controls"><button id="sFull">&#9974; Fullscreen</button><button id="sHome">&#127968; Home</button></div>
+  <div class="medal">&#127943;</div>
+  <div class="eyebrow">Classroom Games</div>
+  <h1>Horse Race</h1>
+  <div class="tag">Sense of Place &middot; Answer together &middot; Reveal together &middot; Gallop together</div>
+  <div class="lvl">Cambridge Level 9 &middot; Unit 6 &middot; The City Sings, Grand Canyon &amp; Chasm</div>
+  <div class="sec">How it works</div>
+  <ol class="steps">
+   <li><b>1</b><span>Every team answers the same question on a whiteboard or card.</span></li>
+   <li><b>2</b><span>Tap each team's answer, then Reveal. Nobody knows who was right until then.</span></li>
+   <li><b>3</b><span>All correct horses gallop at once. Two correct in a row = 2 spaces.</span></li>
+   <li><b>4</b><span>Race cards every 4th or 5th question. Final stretch counts double. First across the line wins.</span></li>
+  </ol>
+  <div class="sec">Race setup</div>
+  <div class="row"><span class="lab">Teams</span><span class="seg" id="segT"></span><span class="lab" style="margin-left:1vw">Track</span><span class="seg" id="segL"></span></div>
+  <div class="row"><label class="chk"><input type="checkbox" id="optSound" checked> Sound</label>
+   <label class="chk"><input type="checkbox" id="optSpeech"> Spoken commentary</label></div>
+  <div class="sec">Name your horses</div>
+  <div class="row"><button class="small" id="rndAll">&#127922; Random names for all</button></div>
+  <div id="names"></div>
+  <button class="big" id="start">&#9654; Start the race</button>
+  <div class="keys">KEYS: 1-4 or A-D log the highlighted team's answer &middot; BACKSPACE undo &middot; SPACE reveal / next &middot; M mute</div>
+ </div>
+</div>
+
+<div id="app" class="hide">
+ <div id="top"><div class="brand"><b>&#127943; Horse Race</b> &middot; Sense of Place</div><div id="qno">Question 1</div>
+  <div class="tools"><button id="tSound">Sound</button><button id="tSpeech">Voice</button><button id="tQuit">Setup</button><button id="tFull">&#9974; Fullscreen</button><button id="tHome">&#127968; Home</button></div></div>
+ <div id="track"></div>
+ <div id="comm"><span class="mic">LIVE</span><span class="t" id="ct"></span></div>
+ <div id="panel">
+  <div id="qcard"><div id="qsent"></div><div id="opts"></div>
+   <div id="ctl"><div id="msg"></div><button id="go">Reveal (Space)</button></div></div>
+  <div id="teams"><h4>Log each team's card (keys 1-4 or A-D)</h4><div id="tlist"></div></div>
+ </div>
+</div>
+
+<div class="ov" id="photo"><h2>PHOTO FINISH!</h2><p id="pfp">Checking the photo...</p></div>
+<div class="ov" id="win"><h2 id="wh">WINNER!</h2><div class="hh" id="whorse"></div><div class="nm" id="wname"></div><p id="wsub"></p>
+ <div><button class="big" id="again">&#127943; Race again</button><button class="big alt" id="back">Back to setup</button></div></div>
+<canvas id="conf"></canvas>
+
+<script>
+(function(){
+"use strict";
+var FAST=new URLSearchParams(location.search).has('fast');
+var SP=FAST?0.1:1;
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms*SP);});}
+function $(id){return document.getElementById(id);}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+/* ---------- content ---------- */
+function Q(s,a,o){return {s:s,a:a,o:o};}
+var BANK=[
+Q("In the extract, the city's sounds are compared to the notes of what?","A choir singing",["A choir singing", "A rock band on stage", "A crowd at a football match", "A school assembly"]),
+Q("Each paragraph in the extract is one sentence long. What punctuation is used to list the sounds?","Commas",["Commas", "Semi-colons", "Dashes", "Full stops"]),
+Q("The extract begins and ends with the word 'Listen'. What type of sentence is this?","An imperative",["An imperative", "A rhetorical question", "A statement", "A complex sentence"]),
+Q("What is the effect of starting and ending with 'Listen'?","It frames the passage and speaks directly to the reader",["It frames the passage and speaks directly to the reader", "It shows the narrator is angry with the reader", "It slows down the pace of the middle paragraphs", "It introduces the first character"]),
+Q("'Loose drains clack-clacking like castanets' is an example of a ___.","simile",["simile", "metaphor", "personification", "pathetic fallacy"]),
+Q("Castanets belong to flamenco music. What does the comparison do to the sound of the drains?","Makes a dull sound feel musical and joyful",["Makes a dull sound feel musical and joyful", "Makes the sound seem sinister and threatening", "Makes the sound seem old and broken", "Makes the sound seem foreign and confusing"]),
+Q("Alarms 'crying their needs to the night like babies' makes the alarms seem ___.","alive and demanding",["alive and demanding", "mechanical and cold", "calm and soothing", "distant and forgotten"]),
+Q("'Waawaa-ing' imitates a sound. This is called ___.","onomatopoeia",["onomatopoeia", "alliteration", "a rhetorical question", "an extended metaphor"]),
+Q("What is a lullaby?","A gentle song to help a child sleep",["A gentle song to help a child sleep", "A song sung at a festival or wedding", "A hymn sung in a place of worship", "A song about a long journey"]),
+Q("A lament is an expression of ___.","grief or sorrow",["grief or sorrow", "protest", "celebration", "warning"]),
+Q("'Shattering' means ___.","breaking suddenly into many pieces",["breaking suddenly into many pieces", "vibrating with a deep hum", "falling heavily to the ground", "spreading out quickly"]),
+Q("Aural imagery appeals to the sense of ___.","hearing",["hearing", "sight", "touch", "smell"]),
+Q("Visual imagery appeals to the sense of ___.","sight",["sight", "hearing", "touch", "taste"]),
+Q("Alliteration is the repetition of ___ sounds at the start of nearby words.","consonant",["consonant", "vowel", "rhyming", "stressed"]),
+Q("When analysing a simile, which connotations should you list before commenting on the effect?","Both positive and negative ones",["Both positive and negative ones", "Only the positive ones", "Only the most obvious one", "Only the ones the writer intended"]),
+Q("What makes a metaphor an EXTENDED metaphor?","It is developed across the whole text",["It is developed across the whole text", "It compares three or more things", "It uses a long sentence to make a comparison", "It is repeated in the title and last line only"]),
+Q("'To what extent does the extract present the city as threatening?' What can you do?","Agree fully, partly, or disagree, if you argue well",["Agree fully, partly, or disagree, if you argue well", "Only agree, then explain why", "Only give the writer's view", "List facts without giving a view"]),
+Q("Overall, the extract presents the city as threatening AND ___.","beautiful",["beautiful", "lonely", "dull", "old-fashioned"]),
+Q("A long single sentence using commas to list sounds creates a ___ effect.","building, layered",["building, layered", "calm, spacious", "formal, distant", "sudden, shocking"]),
+Q("Imperatives like 'Listen' create a feeling of ___.","closeness, like a whisper",["closeness, like a whisper", "distance, like a lecture", "anger, like an order", "doubt, like a question"]),
+Q("Unit 6 is 'A Sense of Place'. A setting can be treated as a central ___ in a story.","character",["character", "narrator", "plot", "message"]),
+Q("In 'A Love Letter to the Grand Canyon', how old was the writer on his first visit?","19",["19", "17", "21", "25"]),
+Q("On his first visit, the writer 'snapped a few shots and headed to ___'.","Las Vegas",["Las Vegas", "Phoenix", "Los Angeles", "Flagstaff"]),
+Q("What does the two-visit structure suggest?","Some things need time to be appreciated",["Some things need time to be appreciated", "First impressions are always right", "Famous places are usually disappointing", "Short visits are best"]),
+Q("Floating through narrow corridors of rock was 'humbling'. How did the writer feel?","Small and modest",["Small and modest", "Uneasy and lost", "Amused and relaxed", "Proud and powerful"]),
+Q("In Romantic literature, 'the sublime' is nature inspiring ___.","awe, a mix of wonder and fear",["awe, a mix of wonder and fear", "calm and comfort", "joy and excitement", "sadness and regret"]),
+Q("Romantic paintings of the sublime often show a ___ dwarfed by a vast landscape.","small human figure",["small human figure", "powerful ruler", "herd of animals", "ship's crew"]),
+Q("'Awe' is a feeling of ___.","wonder mixed with fear or respect",["wonder mixed with fear or respect", "surprise mixed with amusement", "sadness mixed with longing", "pride mixed with relief"]),
+Q("The writer says rock formations 'melt away like ice sculptures' over millions of years. What idea does this suggest?","Human time and scale are insignificant",["Human time and scale are insignificant", "Nature is fragile and easily damaged", "The canyon should be protected", "Beautiful things never last"]),
+Q("Personification gives nature ___.","human qualities",["human qualities", "animal behaviour", "sound effects", "a larger size"]),
+Q("Which sentence uses personification?","The wind sighed through the gnarled trees.",["The wind sighed through the gnarled trees.", "The river was as wide as a road.", "Rocks rose steeply on both sides.", "The cliffs were red and enormous."]),
+Q("'Gnarled' describes something that is ___.","rough, twisted and knobbly",["rough, twisted and knobbly", "dry, brittle and dead", "tall, thin and bare", "dark, thick and heavy"]),
+Q("'Cascading' water ___.","falls in a flowing rush",["falls in a flowing rush", "spreads out thinly", "drips slowly", "swirls in circles"]),
+Q("'Wilted' flowers are ___.","drooping and weak",["drooping and weak", "dry and dusty", "faded in colour", "blown over by wind"]),
+Q("The article shows the canyon is not 'static'. 'Static' means ___.","not moving or changing",["not moving or changing", "silent", "fragile", "ancient"]),
+Q("Both the Grand Canyon and Coober Pedy articles suggest places can teach us about ___.","life and things beyond ordinary experience",["life and things beyond ordinary experience", "money and success", "how to be a good tourist", "the dangers of nature"]),
+Q("Which is NOT a meaning of 'chasm' in the lesson?","A narrow path between two cliffs",["A narrow path between two cliffs", "A very deep hole", "An unbridgeable gap between people", "A very bad situation that will not improve"]),
+Q("In 'Chasm', who is the focal character?","Adrian",["Adrian", "Janice", "The narrator", "Both equally"]),
+Q("'Chasm' is told in the ___ person.","third",["third", "first", "second", "first and third"]),
+Q("Because Adrian is the focal character, we see Janice through ___.","his point of view",["his point of view", "Janice's own point of view", "an objective narrator who sees both equally", "the reader's own experience"]),
+Q("Adrian calls the canyon 'just some brown rocks'. This shows he is ___.","bored and unmoved",["bored and unmoved", "frightened and nervous", "amused and relaxed", "envious of Janice"]),
+Q("Janice says the canyon makes her feel at peace and sad. This shows she is ___.","deeply moved",["deeply moved", "afraid of heights", "jealous of Adrian", "impatient to leave"]),
+Q("In 'Chasm', the physical chasm is a spatial metaphor for the ___ between the characters.","emotional distance",["emotional distance", "danger they are in", "long journey they have made", "difference in their ages"]),
+Q("When analysing dialogue, you should always consider ___.","context: what is said and what is thought",["context: what is said and what is thought", "only the exact words spoken", "how long each speech is", "whether the characters agree"]),
+Q("Adrian says he feels 'nothing' without thinking. Why is this devastating?","It is said casually, which shows how distant they are",["It is said casually, which shows how distant they are", "It is cruel on purpose", "It shows he is hiding something", "It shows he is tired of the trip"])
+];
+var COLORS=[{n:"Red",c:"#d6403a",coat:"#8b4a2b"},{n:"Blue",c:"#2f6fd6",coat:"#5b3a24"},{n:"Green",c:"#2e9e55",coat:"#b9863f"},{n:"Yellow",c:"#e8a911",coat:"#46352c"},{n:"Purple",c:"#8a4fd3",coat:"#9a9ea4"},{n:"Orange",c:"#ee7c2b",coat:"#7a4f2e"}];
+var NAMES=["Sir Trots-a-Lot","Thunder Biscuit","Lightning Lucy","Captain Hooves","Pepper Storm","Mighty Muffin","Duke of Dash","Turbo Toast","Lady Whirlwind","Rocket Pudding","Prince Pancake","Wobbly Wendy","Hay Fever","Gravy Train","Comet Cookie","Marmalade Dash","Professor Neigh","Gallop Poll","Cheddar Chaser","Sugar Rush","Noodle Knight","Crumble Crusher"];
+
+/* ---------- audio ---------- */
+var AC=null,master=null,nbuf=null,soundOn=true;
+function audioInit(){
+ if(AC)return;
+ try{AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=soundOn?0.8:0;master.connect(AC.destination);
+  nbuf=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate);var d=nbuf.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;}catch(e){AC=null;}
+}
+function setSound(on){soundOn=on;if(master)master.gain.value=on?0.8:0;$("tSound").classList.toggle("off",!on);}
+function tone(f,t0,dur,type,vol,f2){
+ if(!AC)return;var o=AC.createOscillator(),g=AC.createGain();o.type=type||"sine";o.frequency.setValueAtTime(f,AC.currentTime+t0);
+ if(f2)o.frequency.exponentialRampToValueAtTime(f2,AC.currentTime+t0+dur);
+ g.gain.setValueAtTime(0.0001,AC.currentTime+t0);g.gain.exponentialRampToValueAtTime(vol||0.2,AC.currentTime+t0+0.015);g.gain.exponentialRampToValueAtTime(0.0001,AC.currentTime+t0+dur);
+ o.connect(g);g.connect(master);o.start(AC.currentTime+t0);o.stop(AC.currentTime+t0+dur+0.05);
+}
+function noise(t0,dur,freq,q,vol,type){
+ if(!AC)return;var s=AC.createBufferSource();s.buffer=nbuf;var f=AC.createBiquadFilter();f.type=type||"bandpass";f.frequency.value=freq;f.Q.value=q||1;var g=AC.createGain();
+ g.gain.setValueAtTime(0.0001,AC.currentTime+t0);g.gain.exponentialRampToValueAtTime(vol,AC.currentTime+t0+Math.min(0.03,dur/3));g.gain.exponentialRampToValueAtTime(0.0001,AC.currentTime+t0+dur);
+ s.connect(f);f.connect(g);g.connect(master);s.start(AC.currentTime+t0,Math.random());s.stop(AC.currentTime+t0+dur+0.05);
+}
+function crowd(dur,vol){if(!AC)return;var t=AC.currentTime;
+ var s=AC.createBufferSource();s.buffer=nbuf;s.loop=true;var f=AC.createBiquadFilter();f.type="bandpass";f.frequency.value=1500;f.Q.value=0.9;
+ var g=AC.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol*0.35,t+0.25);g.gain.setValueAtTime(vol*0.35,t+dur-0.4);g.gain.linearRampToValueAtTime(0.0001,t+dur);
+ var l=AC.createOscillator(),lg=AC.createGain();l.frequency.value=6+Math.random()*5;lg.gain.value=vol*0.25;l.connect(lg);lg.connect(g.gain);
+ s.connect(f);f.connect(g);g.connect(master);s.start(t);s.stop(t+dur+0.1);l.start(t);l.stop(t+dur+0.1);
+ var n=Math.floor(dur*38);for(var i=0;i<n;i++){var r=Math.random(),at=r*dur,env=Math.sin(Math.PI*Math.min(1,at/dur));noise(at,0.02+Math.random()*0.025,1700+Math.random()*2800,0.8,vol*(0.5+Math.random())*(0.3+env),"bandpass");}
+ var c=Math.max(1,Math.floor(dur*1.3));for(var k=0;k<c;k++){var ct=0.2+Math.random()*(dur-0.6),fr=380+Math.random()*320;tone(fr,ct,0.35+Math.random()*0.25,"sawtooth",vol*0.12,fr+120+Math.random()*120);}
+}
+function drumroll(dur){var n=Math.floor(dur*18);for(var i=0;i<n;i++){var t=i/18*(1-0.25*i/n);noise(t,0.07,240,1.2,0.05+0.12*i/n,"lowpass");}}
+function hoofs(dur){var t=0;while(t<dur){noise(t,0.09,160,2,0.35,"lowpass");noise(t+0.11,0.09,190,2,0.3,"lowpass");noise(t+0.22,0.09,150,2,0.38,"lowpass");t+=0.45;}}
+function ding(){tone(880,0,0.35,"sine",0.22);tone(1320,0.02,0.4,"sine",0.12);}
+function buzz(){tone(120,0,0.3,"sawtooth",0.14,90);}
+function click(){tone(660,0,0.06,"square",0.07);}
+function fanfare(){var n=[523,659,784,1047,784,1047,1319];n.forEach(function(f,i){tone(f,i*0.16,0.22,"square",0.11);});tone(1047,1.2,0.7,"square",0.1);noise(1.2,1.4,2500,0.5,0.1);}
+function camera(){noise(0,0.05,3500,1,0.25);noise(0.12,0.05,2500,1,0.2);}
+
+/* ---------- speech ---------- */
+var speechOn=false,voice=null;
+function pickVoice(){if(!window.speechSynthesis)return;var vs=speechSynthesis.getVoices();voice=vs.filter(function(v){return /en[-_]GB/i.test(v.lang);})[0]||vs.filter(function(v){return /^en/i.test(v.lang);})[0]||null;}
+if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function waitSpeech(max){return new Promise(function(res){if(!speechOn||!window.speechSynthesis){res();return;}var t0=Date.now();(function chk(){if(!speechSynthesis.speaking&&!speechSynthesis.pending||Date.now()-t0>(max||9000)){res();return;}setTimeout(chk,150);})();});}
+function say(t){if(!speechOn||!window.speechSynthesis)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t.replace(/\bin a row\b/gi,"in a roe").replace(/\bwho read\b/gi,"who red"));u.lang="en-GB";if(voice)u.voice=voice;var ex=(t.match(/!/g)||[]).length;u.rate=ex?1.14:1.04;u.pitch=ex>=2?1.45:(ex?1.3:1.1);u.volume=1;speechSynthesis.speak(u);}catch(e){}}
+function setSpeech(on){speechOn=on;$("tSpeech").classList.toggle("off",!on);if(!on&&window.speechSynthesis)speechSynthesis.cancel();}
+
+/* ---------- horse svg ---------- */
+function horseSVG(coat,silks,num,dark){
+ var coat2=dark;
+ return '<svg viewBox="0 0 170 110" xmlns="http://www.w3.org/2000/svg"><g class="bob">'+
+ '<path d="M46 48 Q20 50 22 86 Q30 64 40 60 Q36 76 41 90 Q52 68 54 56 Z" fill="'+coat2+'"/>'+
+ '<g class="leg lb2" style="--ox:64px"><path d="M60 64 L68 64 L66 93 L61 93 Z" fill="'+coat2+'"/><path d="M60 93 L67 93 L68 98 L59 98 Z" fill="#222"/></g>'+
+ '<g class="leg lf2" style="--ox:114px"><path d="M110 62 L118 62 L116 93 L111 93 Z" fill="'+coat2+'"/><path d="M110 93 L117 93 L118 98 L109 98 Z" fill="#222"/></g>'+
+ '<ellipse cx="82" cy="56" rx="40" ry="18" fill="'+coat+'"/>'+
+ '<g class="leg lb1" style="--ox:58px"><path d="M54 64 L62 64 L60 93 L55 93 Z" fill="'+coat+'"/><path d="M54 93 L61 93 L62 98 L53 98 Z" fill="#222"/></g>'+
+ '<g class="leg lf1" style="--ox:108px"><path d="M104 62 L112 62 L110 93 L105 93 Z" fill="'+coat+'"/><path d="M104 93 L111 93 L112 98 L103 98 Z" fill="#222"/></g>'+
+ '<path d="M104 48 L124 18 L142 26 L122 62 Z" fill="'+coat+'"/>'+
+ '<path d="M104 46 L122 14 L128 18 L112 52 Z" fill="'+coat2+'"/>'+
+ '<path d="M128 14 L156 28 Q163 36 154 43 L146 41 L126 31 Z" fill="'+coat+'"/>'+
+ '<path d="M132 15 L135 3 L141 17 Z" fill="'+coat+'"/>'+
+ '<circle cx="143" cy="27" r="2.2" fill="#111"/><circle cx="156" cy="36" r="1.4" fill="#222"/>'+
+ '<rect x="70" y="42" width="24" height="15" rx="4" fill="'+silks+'" stroke="#fff" stroke-width="1.2"/>'+
+ '<text x="82" y="53.5" font-size="11" text-anchor="middle" fill="#fff" font-weight="800" font-family="Trebuchet MS,Arial">'+num+'</text>'+
+ '<path d="M78 42 L90 20 L101 24 L91 46 Z" fill="'+silks+'"/>'+
+ '<path d="M95 29 L120 34" stroke="'+silks+'" stroke-width="4.5" stroke-linecap="round"/>'+
+ '<circle cx="99" cy="15" r="6.5" fill="#f2c9a0"/><path d="M92 14 A7.5 7.5 0 0 1 107 14 L108 17 L92 17 Z" fill="'+silks+'"/>'+
+ '</g></svg>';
+}
+function darker(hex){var n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;r=Math.floor(r*0.7);g=Math.floor(g*0.7);b=Math.floor(b*0.7);return "rgb("+r+","+g+","+b+")";}
+
+/* ---------- state ---------- */
+var S={nTeams:4,N:12,teams:[],names:[],order:[],qi:0,q:null,ans:[],ptr:0,phase:"setup",finalStretch:false,busy:false};
+
+/* ---------- setup ---------- */
+function randName(taken){var pool=NAMES.filter(function(n){return taken.indexOf(n)<0;});return pool[Math.floor(Math.random()*pool.length)]||"Horse";}
+function buildSetup(){
+ var segT=$("segT");segT.innerHTML="";
+ [2,3,4,5,6].forEach(function(n){var b=document.createElement("button");b.textContent=n;b.className=n===S.nTeams?"on":"";b.onclick=function(){S.nTeams=n;buildSetup();};segT.appendChild(b);});
+ var segL=$("segL");segL.innerHTML="";
+ [12,15].forEach(function(n){var b=document.createElement("button");b.textContent=n+" spaces";b.className=n===S.N?"on":"";b.onclick=function(){S.N=n;buildSetup();};segL.appendChild(b);});
+ while(S.names.length<6)S.names.push(randName(S.names));
+ var nm=$("names");nm.innerHTML="";
+ for(var i=0;i<S.nTeams;i++){(function(i){
+  var r=document.createElement("div");r.className="nrow";
+  r.innerHTML='<div class="dot" style="background:'+COLORS[i].c+'">'+(i+1)+'</div><input maxlength="22" value="'+S.names[i].replace(/"/g,"&quot;")+'" aria-label="Horse name '+(i+1)+'"><button>Random</button>';
+  var inp=r.querySelector("input");inp.oninput=function(){S.names[i]=inp.value;};
+  r.querySelector("button").onclick=function(){var t=S.names.slice(0,S.nTeams);S.names[i]=randName(t);inp.value=S.names[i];};
+  nm.appendChild(r);})(i);}
+}
+$("rndAll").onclick=function(){S.names=[];for(var i=0;i<6;i++)S.names.push(randName(S.names));buildSetup();};
+$("optSound").onchange=function(){setSound(this.checked);};
+$("optSpeech").onchange=function(){setSpeech(this.checked);};
+
+/* ---------- game build ---------- */
+function startGame(){
+ audioInit();setSound($("optSound").checked);setSpeech($("optSpeech").checked);
+ S.teams=[];
+ for(var i=0;i<S.nTeams;i++){var nm=(S.names[i]||"").trim()||randName(S.names);S.teams.push({i:i,name:nm,c:COLORS[i].c,cn:COLORS[i].n,coat:COLORS[i].coat,pos:0,raw:0,streak:0});}
+ S.order=shuffle(BANK.map(function(q,i){return i;}));S.qi=0;S.busy=false;S.nextCard=0;S.lastCard=null;
+ $("setup").classList.add("hide");$("app").classList.remove("hide");
+ $("win").classList.remove("on");$("photo").classList.remove("on");stopConfetti();
+ buildTrack();buildTeamList();
+ setComm("And they are under starter's orders! It's "+nameList(S.teams.map(function(t){return t.name;}))+". First question coming up.");
+ nextQuestion();
+}
+function nameList(a){if(a.length<=1)return a.join("");return a.slice(0,-1).join(", ")+" and "+a[a.length-1];}
+function buildTrack(){
+ var tr=$("track");tr.innerHTML="";
+ S.teams.forEach(function(t){
+  var l=document.createElement("div");l.className="lane";
+  l.innerHTML='<div class="lbl"><div class="dot" style="background:'+t.c+'">'+(t.i+1)+'</div><div class="nm">'+esc(t.name)+'</div><div class="st" id="st'+t.i+'"></div></div>'+
+   '<div class="trk" id="trk'+t.i+'"><div class="zone"></div><div class="fin"></div><div class="hs nt" id="hs'+t.i+'">'+horseSVG(t.coat,t.c,t.i+1,darker(t.coat))+'</div></div>';
+  tr.appendChild(l);
+ });
+ layout();
+}
+function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function xFor(t,p){
+ var trk=$("trk"+t.i),hs=$("hs"+t.i),w=trk.clientWidth,hw=hs.firstChild.getBoundingClientRect().width;
+ var x0=4,xmax=w-14-0.953*hw;return x0+(p/S.N)*(xmax-x0);
+}
+function layout(){
+ if(!S.teams.length||$("app").classList.contains("hide"))return;
+ S.teams.forEach(function(t){
+  var trk=$("trk"+t.i),hs=$("hs"+t.i);
+  trk.querySelectorAll(".tick").forEach(function(e){e.remove();});
+  var hw=hs.firstChild.getBoundingClientRect().width,w=trk.clientWidth;
+  for(var p=1;p<S.N;p++){var d=document.createElement("div");d.className="tick";d.style.left=(xFor(t,p)+0.953*hw)+"px";trk.insertBefore(d,trk.firstChild);}
+  var z=trk.querySelector(".zone");var zl=xFor(t,S.N-3)+0.953*hw;z.style.left=zl+"px";z.style.width=(w-14-zl)+"px";
+  var had=hs.classList.contains("nt");hs.classList.add("nt");hs.style.transform="translateX("+xFor(t,t.pos)+"px)";
+  void hs.offsetWidth;if(!had&&S.phase!=="setup")hs.classList.remove("nt");
+ });
+ S.teams.forEach(function(t){$("hs"+t.i).classList.remove("nt");});
+}
+window.addEventListener("resize",layout);
+function buildTeamList(){
+ var tl=$("tlist");tl.innerHTML="";tl.style.setProperty("--tc",S.teams.length>3?2:1);
+ S.teams.forEach(function(t){
+  var r=document.createElement("div");r.className="trow";r.id="tr"+t.i;
+  r.innerHTML='<div class="dot" style="background:'+t.c+'">'+(t.i+1)+'</div><div class="nm">'+esc(t.name)+'</div><div class="res" id="rs'+t.i+'">waiting</div><div class="abtns" id="ab'+t.i+'"></div>';
+  r.onclick=function(){if(S.phase==="ask"){S.ptr=t.i;refreshTeams();}};
+  tl.appendChild(r);
+ });
+}
+
+/* ---------- questions ---------- */
+var CARDS={
+ sprint:{t:"SPRINT: +1 EXTRA SPACE",m:"Sprint card! Every correct answer moves 1 extra space.",c:"It's a sprint! Every correct answer gets an extra space this round."},
+ mud:{t:"MUD: NO STREAK BONUS",m:"Mud card! Streak bonuses are switched off this round.",c:"The track is heavy with mud! No streak bonuses this round."},
+ headwind:{t:"HEADWIND: LEADER SLOWED",m:"Headwind card! The leader gets no streak bonus this round.",c:"A headwind hits the front-runner! No streak bonus for the leader this round."},
+ tailwind:{t:"TAILWIND: LAST PLACE +1",m:"Tailwind card! Horses in last place get 1 extra space if correct.",c:"A tailwind for the back markers! Last place gets an extra space if they get it right."}
+};
+var JL=["The judges are checking the answers...","Hold your breath, the cards are being checked...","Heads up, the stewards are looking at the answers...","Nobody knows yet. Who got it right?","The tension builds as the answers are checked...","Here come the results. Eyes on the track!","Let's see who read the question properly...","A hush falls over the crowd..."],lastJL=-1;
+function judgeLine(){var i;do{i=Math.floor(Math.random()*JL.length);}while(i===lastJL);lastJL=i;return JL[i];}
+function nextQuestion(){
+ if(S.qi>=S.order.length){S.order=shuffle(S.order);S.qi=0;}
+ var raw=BANK[S.order[S.qi]];S.qi++;
+ var opts=shuffle(raw.o.map(function(t){return {t:t,ok:t===raw.a};}));
+ S.q={s:raw.s,opts:opts,ai:opts.findIndex(function(o){return o.ok;})};
+ S.ans=S.teams.map(function(){return -1;});S.ptr=0;S.phase="ask";S.busy=false;
+ var lead=Math.max.apply(null,S.teams.map(function(t){return t.pos;}));
+ S.finalStretch=lead>=S.N-3;
+ var minp=Math.min.apply(null,S.teams.map(function(t){return t.pos;}));
+ S.card=null;
+ if(!S.nextCard)S.nextCard=4+Math.floor(Math.random()*2);
+ if(!S.finalStretch&&S.qi>=S.nextCard){
+  var pool=["sprint","mud"];if(lead>minp)pool.push("headwind","tailwind");
+  pool=pool.filter(function(c){return c!==S.lastCard;});
+  S.card=pool[Math.floor(Math.random()*pool.length)];S.lastCard=S.card;S.nextCard=S.qi+4+Math.floor(Math.random()*2);
+ }
+ $("qno").innerHTML="Question "+(S.qi)+(S.finalStretch?'<span class="fs">FINAL STRETCH: DOUBLE</span>':"")+(S.card?'<span class="fs card">'+CARDS[S.card].t+'</span>':"");
+ renderQ(-1);
+ $("go").textContent="Reveal (Space)";$("go").disabled=true;
+ $("msg").textContent=S.finalStretch?"Final stretch! Every correct answer moves 2 spaces.":"Teams answer on a card, then log each letter.";
+ if(S.card){$("msg").textContent=CARDS[S.card].m;setComm(CARDS[S.card].c);}
+ if(S.finalStretch)setComm("Into the final stretch! Double points from here, every correct answer counts twice.");
+ refreshTeams();
+}
+function renderQ(correctIdx,shimmer){
+ var q=S.q,initial=/(^|[.!?]\s)___/.test(q.s),html=esc(q.s).replace("___",'<span class="blank'+(correctIdx>=0?" ans":"")+'">'+(correctIdx>=0?(q.opts[correctIdx].t==="no article"?"\u2014":esc(initial?cap(q.opts[correctIdx].t):q.opts[correctIdx].t)):"&nbsp;")+"</span>");
+ $("qsent").innerHTML=html;
+ var o=$("opts");o.style.setProperty("--no",q.opts.length);o.innerHTML="";
+ q.opts.forEach(function(op,i){var d=document.createElement("div");d.className="opt"+(shimmer?" shimmer":"")+(correctIdx>=0?(i===correctIdx?" correct":" dim"):"");d.innerHTML='<span class="l">'+"ABCD"[i]+"</span><span>"+esc(initial?cap(op.t):op.t)+"</span>";o.appendChild(d);});
+}
+function cap(t){return t.charAt(0).toUpperCase()+t.slice(1);}
+function allLogged(){return S.ans.every(function(a){return a>=0;});}
+function refreshTeams(){
+ S.teams.forEach(function(t){
+  var row=$("tr"+t.i),rs=$("rs"+t.i),ab=$("ab"+t.i);
+  row.classList.toggle("cur",S.phase==="ask"&&S.ptr===t.i);
+  if(S.phase==="ask"||S.phase==="suspense"){rs.className="res"+(S.ans[t.i]>=0?" lock":"");rs.textContent=S.ans[t.i]>=0?"LOCKED":"waiting";}
+  ab.innerHTML="";
+  S.q.opts.forEach(function(op,i){var b=document.createElement("button");b.textContent="ABCD"[i];b.className=S.ans[t.i]===i?"sel":"";b.disabled=S.phase!=="ask";
+   b.onclick=function(e){e.stopPropagation();if(S.phase==="ask")logAnswer(t.i,i);};ab.appendChild(b);});
+ });
+ if(S.phase==="ask"){var n=S.ans.filter(function(a){return a<0;}).length;$("go").disabled=false;
+  $("go").textContent=n===0?"Reveal (Space)":"Reveal anyway ("+n+" not logged)";}
+}
+function logAnswer(ti,oi){
+ if(S.phase!=="ask"||oi>=S.q.opts.length)return;
+ S.ans[ti]=oi;click();
+ var nxt=-1;for(var k=1;k<=S.teams.length;k++){var j=(ti+k)%S.teams.length;if(S.ans[j]<0){nxt=j;break;}}
+ S.ptr=nxt>=0?nxt:ti;
+ refreshTeams();
+ $("msg").textContent=allLogged()?"All cards logged. Press Space to reveal!":"";
+}
+function undo(){
+ if(S.phase!=="ask")return;
+ var last=-1;for(var k=S.ptr-1+S.teams.length;k>=S.ptr-S.teams.length+0;k--){var j=((k%S.teams.length)+S.teams.length)%S.teams.length;if(S.ans[j]>=0){last=j;break;}}
+ if(last<0)return;S.ans[last]=-1;S.ptr=last;refreshTeams();
+}
+
+/* ---------- reveal ---------- */
+function setComm(t){var e=$("ct");e.style.opacity=0;setTimeout(function(){e.textContent=t;e.style.opacity=1;},120);say(t);}
+async function reveal(){
+ if(S.phase!=="ask"||S.busy)return;
+ S.busy=true;S.phase="suspense";refreshTeams();$("go").disabled=true;
+ $("msg").textContent="Eyes up...";
+ setComm(judgeLine());
+ renderQ(-1,true);drumroll(2.6);crowd(3.2,0.12);
+ await sleep(2700);
+ renderQ(S.q.ai);ding();$("msg").textContent="";
+ await sleep(900);
+ var correct=S.teams.map(function(t){return S.ans[t.i]===S.q.ai;});
+ var ord=shuffle(S.teams.map(function(t){return t.i;}));
+ for(var k=0;k<ord.length;k++){
+  var i=ord[k],rs=$("rs"+i),a=S.ans[i];
+  rs.textContent=(a>=0?"ABCD"[a]+" ":"")+(correct[i]?"✓":"✗");rs.className="res "+(correct[i]?"ok":"no");
+  if(correct[i])ding();else buzz();
+  await sleep(550);
+ }
+ await sleep(500);
+ /* move */
+ var moves=[];
+ var mxP=Math.max.apply(null,S.teams.map(function(t){return t.pos;})),mnP=Math.min.apply(null,S.teams.map(function(t){return t.pos;}));
+ S.teams.forEach(function(t){
+  if(correct[t.i]){t.streak++;var steps=S.finalStretch?2:1,cd=S.card,isLead=t.pos===mxP&&mxP>mnP,isLast=t.pos===mnP&&mxP>mnP;
+   if(t.streak>=2&&cd!=="mud"&&!(cd==="headwind"&&isLead))steps+=1;
+   if(cd==="sprint")steps+=1;if(cd==="tailwind"&&isLast)steps+=1;moves.push({t:t,steps:steps});t.raw+=steps;t.pos=Math.min(S.N,t.raw);}
+  else t.streak=0;
+ });
+ hoofs(1.9);crowd(2.6,0.16);
+ S.teams.forEach(function(t){var hs=$("hs"+t.i),mv=moves.some(function(m){return m.t===t;});if(mv)hs.classList.add("run");hs.style.transform="translateX("+xFor(t,t.pos)+"px)";});
+ $("msg").textContent=moves.length?"They're off!":"Nobody moves.";
+ await sleep(1900);
+ S.teams.forEach(function(t){$("hs"+t.i).classList.remove("run");var st=$("st"+t.i);st.textContent="STREAK "+t.streak;st.classList.toggle("on",t.streak>=2);});
+ setComm(commentary(moves,correct));
+ /* finish? */
+ var fin=S.teams.filter(function(t){return t.raw>=S.N;});
+ if(fin.length){await finish(fin);return;}
+ S.phase="done";S.busy=false;$("go").disabled=false;$("go").textContent="Next question (Space)";$("msg").textContent="";
+}
+function commentary(moves,correct){
+ var T=S.teams,nc=correct.filter(Boolean).length,pick=function(a){return a[Math.floor(Math.random()*a.length)];};
+ var movers=moves.map(function(m){return m.t.name;}),out=[];
+ if(nc===0)out.push(pick(["Oh no! Nobody got it and nobody moves. The crowd gasps!","Not a single horse moves! What a stumble from the whole field!"]));
+ else if(nc===T.length)out.push(pick(["Everybody got it! They all surge forward together!","Clean sweep! The whole field gallops on, still level!"]));
+ else out.push(pick([nameList(movers)+(movers.length>1?" surge":" surges")+" ahead!",nameList(movers)+(movers.length>1?" are":" is")+" away, and the others are left standing!","Great answer"+(movers.length>1?"s":"")+" from "+nameList(movers)+"!"]));
+ var hot=T.filter(function(t){return t.streak>=2;}).sort(function(a,b){return b.streak-a.streak;})[0];
+ if(hot)out.push(hot.name+" is on fire, that's "+hot.streak+" in a row!");
+ var mx=Math.max.apply(null,T.map(function(t){return t.pos;})),leaders=T.filter(function(t){return t.pos===mx;});
+ if(mx>0){if(leaders.length===1){var second=Math.max.apply(null,T.filter(function(t){return t!==leaders[0];}).map(function(t){return t.pos;}));var gap=mx-second;out.push(leaders[0].name+" leads"+(gap>0?" by "+gap+" space"+(gap>1?"s":""):"")+".");}
+  else if(leaders.length<T.length)out.push(nameList(leaders.map(function(t){return t.name;}))+" are level at the front.");}
+ var mn=Math.min.apply(null,T.map(function(t){return t.pos;})),last=T.filter(function(t){return t.pos===mn;});
+ if(last.length===1&&mx-mn>=2)out.push(last[0].name+" brings up the rear. Come on!");
+ return out.slice(0,2).join(" ");
+}
+async function finish(fin){
+ S.phase="finish";
+ var winners=fin;
+ if(fin.length>1){
+  $("photo").classList.add("on");$("pfp").textContent="Checking the photo...";camera();
+  setComm("It's a photo finish! "+nameList(fin.map(function(t){return t.name;}))+" hit the line together!");
+  await sleep(2600);await waitSpeech(9000);camera();
+  var best=Math.max.apply(null,fin.map(function(t){return t.raw;}));
+  winners=fin.filter(function(t){return t.raw===best;});
+  setComm(winners.length===1?"The judges have it... "+winners[0].name+" wins by a nose!":"Too close to call. It is a dead heat!");
+  $("pfp").textContent=winners.length===1?"The winner by a nose: "+winners[0].name+"!":"Too close to call. A dead heat!";
+  await sleep(1500);await waitSpeech(9000);await sleep(400);$("photo").classList.remove("on");
+ }
+ showWinner(winners);
+}
+function showWinner(w){
+ var names=nameList(w.map(function(t){return t.name;}));
+ $("wh").textContent=w.length>1?"DEAD HEAT!":"WINNER!";
+ $("wname").textContent=names;
+ $("whorse").innerHTML=horseSVG(w[0].coat,w[0].c,w[0].i+1,darker(w[0].coat));
+ $("whorse").querySelector("svg").parentNode.classList.add("run");
+ $("wsub").textContent=w.length>1?"Joint winners! Well played, everyone.":"Across the line first. Well played, everyone!";
+ $("win").classList.add("on");fanfare();crowd(4,0.2);startConfetti();
+ setComm((w.length>1?"A dead heat between ":"And the winner is ")+names+"! What a race!");
+ S.busy=false;
+}
+$("again").onclick=function(){startGame();};
+$("back").onclick=toSetup;
+$("tQuit").onclick=toSetup;
+function toSetup(){S.phase="setup";stopConfetti();$("win").classList.remove("on");$("photo").classList.remove("on");$("app").classList.add("hide");$("setup").classList.remove("hide");if(window.speechSynthesis)speechSynthesis.cancel();buildSetup();}
+$("tSound").onclick=function(){audioInit();setSound(!soundOn);};
+$("tSpeech").onclick=function(){setSpeech(!speechOn);};
+$("start").onclick=startGame;
+$("go").onclick=function(){if(S.phase==="ask")reveal();else if(S.phase==="done"&&!S.busy)nextQuestion();};
+
+/* ---------- keys ---------- */
+document.addEventListener("keydown",function(e){
+ var tg=e.target&&e.target.tagName;if(tg==="INPUT"||tg==="TEXTAREA")return;
+ if(e.key==="m"||e.key==="M"){audioInit();setSound(!soundOn);return;}
+ if($("app").classList.contains("hide"))return;
+ if(e.key===" "||e.code==="Space"){e.preventDefault();if(S.phase==="ask"&&allLogged())reveal();else if(S.phase==="done"&&!S.busy)nextQuestion();return;}
+ if(S.phase!=="ask")return;
+ var lk=e.key.length===1?"abcd".indexOf(e.key.toLowerCase()):-1;
+ if(e.key>="1"&&e.key<="4"){logAnswer(S.ptr,parseInt(e.key,10)-1);}
+ else if(lk>=0&&!e.ctrlKey&&!e.metaKey&&!e.altKey){logAnswer(S.ptr,lk);}
+ else if(e.key==="Backspace"){e.preventDefault();undo();}
+ else if(e.key==="ArrowRight"||e.key==="ArrowDown"){S.ptr=(S.ptr+1)%S.teams.length;refreshTeams();}
+ else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){S.ptr=(S.ptr+S.teams.length-1)%S.teams.length;refreshTeams();}
+});
+
+/* ---------- confetti ---------- */
+var cv=$("conf"),cx=cv.getContext("2d"),parts=[],raf=0;
+function startConfetti(){cv.width=innerWidth;cv.height=innerHeight;parts=[];var cols=["#f2b632","#d6403a","#2f6fd6","#2e9e55","#8a4fd3","#fff"];
+ for(var i=0;i<180;i++)parts.push({x:Math.random()*cv.width,y:-Math.random()*cv.height,vx:(Math.random()-.5)*2,vy:2+Math.random()*4,r:4+Math.random()*6,c:cols[i%cols.length],a:Math.random()*6});
+ cancelAnimationFrame(raf);(function f(){cx.clearRect(0,0,cv.width,cv.height);parts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.a+=.1;if(p.y>cv.height){p.y=-10;p.x=Math.random()*cv.width;}cx.save();cx.translate(p.x,p.y);cx.rotate(p.a);cx.fillStyle=p.c;cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);cx.restore();});raf=requestAnimationFrame(f);})();}
+function stopConfetti(){cancelAnimationFrame(raf);cx.clearRect(0,0,cv.width,cv.height);}
+
+/* ---------- collection nav ---------- */
+function goHome(){window.location.href="../index.html";}
+function toggleFS(){var d=document;if(d.fullscreenElement){d.exitFullscreen();}else if(d.documentElement.requestFullscreen){d.documentElement.requestFullscreen();}}
+$("sHome").onclick=goHome;$("tHome").onclick=goHome;$("sFull").onclick=toggleFS;$("tFull").onclick=toggleFS;
+
+buildSetup();
+window.__HR=S;
+})();
+</script>
+</body>
+</html>
