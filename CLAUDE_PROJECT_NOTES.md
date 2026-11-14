@@ -119,6 +119,10 @@ Every game page typically has:
 
 - **November 2026**: Added `horse-race-sense-of-place` (L9 Unit 6 team quiz — 45 questions on 'The City Sings', 'A Love Letter to the Grand Canyon' and 'Chasm': imagery, personification, point of view, vocab). Teams log answers on cards, all correct horses gallop together; streak bonus, race cards, double final stretch, photo finish. Single self-contained file with the shared teal glass-card palette (no `style.css` dependency, no external fonts); Fullscreen + Home buttons. Linked in the S9 U6 'A Sense of Place' card in `index.html`.
 
+- **November 2026**: Added `horse-race-reported-speech` (Grammar Stakes: Reported Speech, CEFR B1 — 41 questions on tense/time shifts, reported questions, commands and reporting verbs). Gamepack port of the standalone TPT horse race: same engine as `horse-race-sense-of-place` (teal glass-card palette, no external fonts, Fullscreen + Home buttons) but keeps the newer features from the TPT build (sampled sound effects, voice picker, Enter to reveal, 4-column options). Single self-contained file. Linked in the S6 U2 'At the Movies' card in `index.html`, beside Direct Cut.
+
+- **November 2026**: Added generic `horse-race` (toolkit). Same engine as `horse-race-reported-speech` / `horse-race-sense-of-place`, but the questions come from `../questions.js` / `sheet-loader.js` via a Level → Unit → Topic → Lesson picker on the setup screen (uses `getQuestionsForFilter`-style logic: topics visible from page load, lessons only once a unit is chosen). At race start the picked pool is turned into the race bank (answer + up to 3 distractors, de-duplicated, shuffled each question); the pool reshuffles if the race outlasts it. Long questions/options auto-shrink to fit. Single file, keeps the sampled sound effects and voice picker. Linked in the toolkit grid in `index.html` after Evil.
+
 ## Star Hunt — design notes
 - **Mechanics**: 7×7 grid, hidden star. Teams click cells to reveal hot/warm/cold hints. Each click costs 1 point (starts at 40). Finding the star scores remaining points.
 - **Special cells**: +5 (green), −5 (red), 🔄 Reset (purple — new grid, score stays)
